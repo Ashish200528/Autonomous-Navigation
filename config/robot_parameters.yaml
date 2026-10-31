@@ -1,0 +1,31 @@
+# Phase 0 inventory. Null physical parameters are unresolved, not zero.
+robot:
+  mass_kg: null
+  height_m: null
+  footprint:
+    length_m: null
+    width_m: null
+  wheel_radius_m: null
+  wheel_separation_m: null
+  max_linear_velocity_mps: null
+  max_angular_velocity_radps: null
+sensors:
+  camera:
+    position_xyz_m: null
+    orientation_rpy_rad: null
+    resolution_px: null
+    horizontal_fov_deg: null
+    calibration_file: null
+  imu:
+    noise_model: null
+    covariance_source: null
+mission:
+  map_frame: map
+  nominal_start_pose_xyyaw: [0.0, 0.0, 0.0]
+  baseline_goal_map_xyyaw: [2.0, 0.0, 0.0] # provisional; verify world bounds
+  parking_position_tolerance_m: 0.20 # provisional starting target
+  parking_yaw_tolerance_deg: 10 # provisional starting target
+  parking_dwell_s: 5 # provisional starting target
+sensing_profiles:
+  - REFERENCE
+  - REALISTIC

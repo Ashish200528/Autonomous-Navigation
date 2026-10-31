@@ -1,0 +1,78 @@
+version: 1
+units: {distance: m, angle: rad}
+seed_sets:
+  smoke: [101]
+  repeatability: [101, 202, 303]
+scenarios:
+  - id: S00
+    name: empty_open_arena_known_pose
+    status: planned
+    sensor_profile: REFERENCE
+    map_mode: static_known
+    seed_set: smoke
+    start_xyyaw: [0.0, 0.0, 0.0]
+    goal_xyyaw: [2.0, 0.0, 0.0]
+    pass_evidence: goal reached, no collisions, pose and drive checks
+  - id: S01
+    name: box_blocks_direct_path
+    status: planned
+    sensor_profile: REFERENCE
+    map_mode: static_known
+    seed_set: smoke
+    pass_evidence: replan around box or explicit safe stop; no collision
+  - id: S02
+    name: unrecognized_random_objects
+    status: planned
+    sensor_profile: REALISTIC
+    map_mode: online_or_local
+    seed_set: repeatability
+    pass_evidence: class-agnostic occupancy; no semantic dependency
+  - id: S03
+    name: left_center_right_constriction
+    status: planned
+    sensor_profile: REALISTIC
+    map_mode: online_or_local
+    seed_set: smoke
+    pass_evidence: choose a footprint-safe corridor or stop
+  - id: S04
+    name: randomized_known_start
+    status: planned
+    sensor_profile: REFERENCE
+    map_mode: static_known
+    seed_set: repeatability
+    pass_evidence: pose initialized per seed; goal reached or safe failure
+  - id: S05
+    name: dynamic_obstacle
+    status: planned
+    sensor_profile: REALISTIC
+    map_mode: online_or_local
+    seed_set: repeatability
+    pass_evidence: react/replan without scripted controller truth
+  - id: S06
+    name: poor_texture_shadow_occlusion
+    status: planned
+    sensor_profile: REALISTIC
+    map_mode: online_or_local
+    seed_set: repeatability
+    pass_evidence: unknown behavior and false-clear count reported
+  - id: S07
+    name: temporary_sensor_loss
+    status: planned
+    sensor_profile: REALISTIC
+    map_mode: online_or_local
+    seed_set: repeatability
+    pass_evidence: stop safely when RGB, IMU or odometry is lost
+  - id: S08
+    name: final_parking_bay_fiducial_optional
+    status: planned
+    sensor_profile: REALISTIC
+    map_mode: static_known
+    seed_set: repeatability
+    pass_evidence: final pose error and stationary dwell reported
+  - id: S09
+    name: no_traversable_route
+    status: planned
+    sensor_profile: REALISTIC
+    map_mode: online_or_local
+    seed_set: repeatability
+    pass_evidence: safe failure, no collision, no infinite spinning

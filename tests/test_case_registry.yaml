@@ -1,0 +1,28 @@
+version: 1
+status: planned; no tests executed in Phase 0
+registry:
+  - id: T00
+    phase: 1
+    name: ros_talker_listener
+    scenario_id: null
+    pass_evidence: talker and listener exchange a message; preserve exit codes
+  - id: T01
+    phase: 1
+    name: gazebo_empty_world
+    scenario_id: null
+    pass_evidence: Gazebo Harmonic empty world starts; record headless and GUI result
+  - id: T02
+    phase: 1
+    name: rviz2_startup
+    scenario_id: null
+    pass_evidence: RViz2 opens under WSLg or headless/display limitation is reported
+  - id: T03
+    phase: 1
+    name: nav2_sample_simulation
+    scenario_id: S00
+    pass_evidence: sample can be launched and is inspected before custom robot work
+  - id: T04
+    phase: 2
+    name: differential_drive_motion
+    scenario_id: S00
+    pass_evidence: straight, reverse, rotation and collision behavior checked
