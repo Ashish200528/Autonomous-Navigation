@@ -1,0 +1,103 @@
+[WARN] [1793486928.681659172] [rosbag2_storage_mcap]: attempted to read in receive timestamp order with no message index
+{
+  "classification": "REFERENCE",
+  "simulator": "Packaged TurtleBot3 Waffle, Nav2 Jazzy, Gazebo Harmonic headless",
+  "navigation_inputs": "Static occupancy map and simulated laser scan; Gazebo ground-truth pose was not used for navigation",
+  "initial_pose_map": {
+    "frame": "map",
+    "x": -2.0,
+    "y": -0.5,
+    "yaw_rad": 0.0
+  },
+  "initial_amcl_pose_map": {
+    "x": -1.9750376980571898,
+    "y": -0.5351215391975612,
+    "z": 0.0
+  },
+  "goal_map": {
+    "frame": "map",
+    "x": 2.0,
+    "y": -0.5,
+    "yaw_rad": 0.0
+  },
+  "action": {
+    "name": "/navigate_to_pose",
+    "status": "SUCCEEDED",
+    "error_code": 0,
+    "feedback_pose_count": 919,
+    "first_feedback_xy": {
+      "x": -1.9750376980571895,
+      "y": -0.5351215391975612
+    },
+    "last_feedback_xy": {
+      "x": 1.7539803603559818,
+      "y": -0.6031263016590218
+    },
+    "feedback_net_map_displacement_m": 3.729638096074333,
+    "feedback_duration_s": 9.180000000000007,
+    "last_distance_remaining_m": 0.27071064710617065
+  },
+  "final_amcl_pose_map": {
+    "x": 1.7727840748027122,
+    "y": -0.6526467559753553,
+    "z": 0.0
+  },
+  "final_amcl_xy_error_to_goal_m": 0.27372999246165763,
+  "final_odometry_pose": {
+    "x": 3.863524702858741,
+    "y": -0.09901117060358805,
+    "z": 0.0
+  },
+  "odometry_net_displacement_from_recorded_initial_to_postflight_m": 3.8647929585963268,
+  "odometry_partial_bag_displacement_m": 1.5282308502465822,
+  "commands": {
+    "/cmd_vel": {
+      "sample_count": 78,
+      "nonzero_sample_count": 78,
+      "max_abs_linear_x_mps": 0.49166107177734375,
+      "max_abs_angular_z_radps": 0.07317716628313065
+    },
+    "/cmd_vel_nav": {
+      "sample_count": 80,
+      "nonzero_sample_count": 80,
+      "max_abs_linear_x_mps": 0.49166107177734375,
+      "max_abs_angular_z_radps": 0.07317716628313065
+    }
+  },
+  "map_corridor": {
+    "all_samples_known_free": true,
+    "sample_count": 161,
+    "free_sample_count": 161,
+    "resolution_m": 0.05000000074505806
+  },
+  "recording": {
+    "format": "MCAP",
+    "duration_s": 23.484337337000003,
+    "bag_end_sim_time_s": 113.76,
+    "last_goal_feedback_sim_time_s": 118.944,
+    "covers_full_goal": false,
+    "partial_capture_note": "The MCAP stopped before the final action feedback. Full motion and result are taken from the action feedback log and live postflight pose snapshots.",
+    "topic_message_counts": {
+      "/clock": 7190,
+      "/odom": 599,
+      "/amcl_pose": 6,
+      "/cmd_vel_nav": 80,
+      "/cmd_vel": 78
+    },
+    "bag_directory": "docs/evidence/nav2-reference-trial-bag",
+    "telemetry_csv": "docs/evidence/nav2-reference-trial-telemetry.csv"
+  },
+  "lifecycle_and_costmap_evidence": {
+    "postflight_log": "docs/evidence/nav2-reference-trial-postflight.log",
+    "after_initial_pose_log": "docs/evidence/nav2-reference-trial-after-initialpose.log",
+    "map_corridor_log": "docs/evidence/nav2-reference-trial-map-check.log"
+  },
+  "checks": {
+    "action_succeeded_and_error_code_zero": true,
+    "map_corridor_known_free": true,
+    "odometry_and_velocity_motion_observed": true,
+    "final_amcl_xy_error_at_most_0_30m": true,
+    "telemetry_topics_recorded": true
+  },
+  "overall_reference_goal_pass": true
+}

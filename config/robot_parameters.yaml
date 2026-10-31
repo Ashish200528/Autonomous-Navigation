@@ -1,5 +1,7 @@
-# Phase 0 inventory. Null physical parameters are unresolved, not zero.
+# Measured hardware values remain unresolved. The simulation_model block contains
+# explicitly provisional design values used only to build the Phase 2 test robot.
 robot:
+  measurement_status: unresolved_not_measured
   mass_kg: null
   height_m: null
   footprint:
@@ -9,6 +11,32 @@ robot:
   wheel_separation_m: null
   max_linear_velocity_mps: null
   max_angular_velocity_radps: null
+  simulation_model:
+    status: design_placeholder_not_measured
+    note: Replace every value after measuring the physical vehicle; do not use for sim-to-real claims. Footprint includes simulated wheel and caster envelopes.
+    chassis_length_m: 0.32
+    chassis_width_m: 0.24
+    chassis_height_m: 0.08
+    chassis_mass_kg: 2.0
+    wheel_radius_m: 0.04
+    wheel_width_m: 0.025
+    wheel_mass_kg: 0.15
+    wheel_separation_m: 0.28
+    wheel_x_m: -0.04
+    max_linear_velocity_mps: 0.25
+    max_angular_velocity_radps: 1.0
+    odom_publish_frequency_hz: 30.0
+    caster_x_m: 0.19
+    caster_radius_m: 0.025
+    caster_mass_kg: 0.05
+    camera_xyz_m: [0.10, 0.0, 0.10]
+    camera_rpy_rad: [0.0, 0.0, 0.0]
+    camera_status: placeholder_frame_only_no_sensor
+    footprint_xy_m:
+      - [0.215, 0.1525]
+      - [0.215, -0.1525]
+      - [-0.16, -0.1525]
+      - [-0.16, 0.1525]
 sensors:
   camera:
     position_xyz_m: null

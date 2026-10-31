@@ -1,74 +1,137 @@
-# Phase 0 and Phase 1 setup report
+# Phase 0, Phase 1, and Phase 2 report
 
-**Date:** 2026-11-01 (Asia/Calcutta)
-**Project:** /home/ashish/AutonomousNavigationCar on Ubuntu-24.04 in E:/WSL/Ubuntu-24.04
-**Scope:** Roadmap Phase 0 plus initial Phase 1 environment, package setup, and integration smoke checks. The attached roadmap was treated as project reference material; the user's constraints govern machine changes.
+Date: 2026-11-01 (Asia/Calcutta)
+Project: /home/ashish/AutonomousNavigationCar on Ubuntu-24.04 at E:/WSL/Ubuntu-24.04
+Branch: main
+Scope: Phase 0 baseline, complete Phase 1 reference navigation validation, and first Phase 2 differential-drive robot test.
 
 ## Outcome
 
-- Phase 0 repository and planning baseline: PASS. Local Git repository exists on main; baseline tag v0.1-phase0 remains at the Phase 0 handoff. Physical robot measurements remain unresolved placeholders.
-- Phase 1 platform/environment gate: PASS. WSL2, Ubuntu 24.04.5, memory, E: storage, GPU visibility, and WSLg were checked.
-- Requested stack install: PASS. ROS 2 Jazzy, Gazebo Harmonic/Sim 8.15.0, ros_gz, RViz2, Nav2, robot-localization, SLAM Toolbox, and the packaged TurtleBot3 simulation installed.
-- Phase 1 integration smoke gate: PASS within its stated limits. ROS talker/listener exchanged messages; Gazebo headless empty world initialized; RViz2 opened under WSLg; the packaged Nav2 TurtleBot3 sample launched and published expected simulation data.
-- Full autonomous drive-to-goal, custom robot, measured vehicle dynamics, and parking acceptance: NOT TESTED. No custom robot was implemented.
+- Phase 0 planning baseline: PASS. The independent repository remains tagged v0.1-phase0. Physical hardware values remain unresolved.
+- Phase 1 environment gate: PASS. WSL2 Ubuntu 24.04.5, ROS 2 Jazzy, Gazebo Harmonic, ros_gz, RViz2, Nav2, the packaged TurtleBot3 simulator, and available resources were checked.
+- Phase 1 Task A reference navigation: PASS. Nav2 accepted a map-frame goal and returned SUCCEEDED with error code 0. Localization, known-free corridor, nonzero controller output, odometry motion, and final AMCL pose were checked.
+- Phase 2 Task B custom robot: PASS WITH LIMITS. The custom differential-drive robot built and spawned headlessly. Forward, reverse, rotation, odometry, base TF, and a physical wall stop passed. The configured contact sensor and ROS bridge produced zero contact messages; odometry also diverged under the wall stall. These limits are recorded below.
+- Phase 3 has not started. The camera link is only a placeholder frame; no camera or IMU sensor is simulated.
 
-## Changes
+## Scope and integrity
 
-- Created the independent repository tree and planning/configuration/scenario/test documentation at /home/ashish/AutonomousNavigationCar. The Phase 0 tag is v0.1-phase0.
-- Installed packages from the official ROS 2 Jazzy/Noble repository using --no-install-recommends. The ROS-supported Gazebo Harmonic vendor packages were used; a separate OSRF apt source was not added.
-- Added scripts/source_ros_jazzy.sh so ROS is sourced only in a project terminal. No global ~/.bashrc setting was changed.
-- Updated README, environment inventory, test registry, evidence index, and this report.
-- No edits to the existing Arduino UNO Q application; no push to a remote; no Windows/WSL restart.
+The supplied roadmap and task text governed the phase gates. Gazebo entity state was used only by the Phase 2 test evaluator. Neither Nav2 nor a perception/controller node received Gazebo ground-truth pose or obstacle geometry. The Nav2 run is labeled REFERENCE because it used the packaged map and simulated laser scan; it is not evidence of RGB-only navigation. All custom vehicle dimensions are design placeholders, not measured hardware values.
 
-## Machine and storage findings
+No package installation, system-wide upgrade, Windows/WSL restart, or Arduino UNO Q application change was made during these validation tasks. Gazebo was stopped cleanly after tests. No Phase 2 screenshot was saved; tests were headless.
 
-- Windows 11 build 10.0.26200.9711; WSL 2.5.9.0 / kernel 6.6.87.2-1; Ubuntu 24.04.5 LTS (Noble); Linux account ashish.
-- WSL exposes 3,669,200 kB RAM (about 3.5 GiB) and 1,048,576 kB swap. After the install and smoke checks, 3,211,992 kB RAM and 1,047,016 kB swap remained available.
-- E: had 52.77 GiB free after installation. The distro's ext4.vhdx file length was 8,132,755,456 bytes (7.57 GiB). The guest's 1 TiB virtual ext4 report is not the physical E: capacity.
-- GTX 1650 (4 GiB) and WSLg were visible. RViz2 reported OpenGL 4.5 and displayed successfully. The graphics vendor/acceleration was not independently measured. RViz2 emitted a non-fatal /run/user/1000 permission warning; no system permission change was made.
+## Environment and resources
 
-## Installed versions
+| Item | Verified |
+|---|---|
+| Windows distribution | Windows 11 |
+| WSL | Default version 2; Ubuntu-24.04 is running as WSL 2 |
+| Ubuntu | 24.04.5 LTS, Noble; Linux user ashish |
+| Project | /home/ashish/AutonomousNavigationCar |
+| ROS | ROS_DISTRO=jazzy; ros-jazzy-ros-base 0.11.0 |
+| Gazebo | Harmonic / Gazebo Sim 8.15.0 |
+| ros_gz | ros-jazzy-ros-gz 1.0.24 |
+| Nav2 | 1.3.13 |
+| RViz2 | 14.1.24 |
+| GPU visible to WSL | NVIDIA GeForce GTX 1650, 4096 MiB, driver 592.82 |
+| WSL resources after final test | 3.5 GiB total RAM, about 3.0 GiB available; 1.0 GiB swap free |
+| E: storage after tests | About 53 GiB free |
 
-- ROS_DISTRO=jazzy; ros-jazzy-ros-base 0.11.0-1noble.20261006.035407.
-- ros-jazzy-rviz2 14.1.24-1noble.20260915.204213.
-- Gazebo Sim 8.15.0 (Harmonic); ros-jazzy-ros-gz 1.0.24-1noble.20261006.041805.
-- navigation2 and nav2-bringup 1.3.13; minimal TurtleBot3 sim 1.0.1.
-- robot-localization 3.8.3; SLAM Toolbox 2.8.5; ros-dev-tools 1.0.3.
-- dpkg --audit returned no unfinished package configuration.
+The separate Phase 1 environment report records the earlier installation transactions and WSLg visual check. No new apt packages were needed for Phase 2.
 
-The ROS base/RViz transaction added 506 packages and upgraded 29 packages (235 MB downloaded; about 808 MB additional disk). The simulator/Nav2 transaction added 836 packages and upgraded 24 packages (559 MB downloaded; about 2.7 GB additional disk). No full Ubuntu upgrade was run.
+## Phase 1 Task A: REFERENCE Nav2 goal
 
-## Smoke-test results
+The packaged TurtleBot3 Waffle/Nav2 sample was run headlessly. It used its static occupancy map and simulated laser scan. The straight corridor was checked against the live /map before sending the goal.
 
-| Test | Result | Evidence and limit |
-|---|---|---|
-| T00 ROS talker/listener | PASS | Six talker messages were published and four were received by the listener. Logs and counts are in docs/evidence/ros-talker.log, ros-listener.log, and ros-talker-listener-result.txt. Both processes were stopped after the receive window. |
-| T01 Gazebo empty world | PASS | Gazebo Sim Server v8.15.0 loaded its installed empty.sdf, initialized world empty, and advertised world control/create services before the deliberate 12-second bound. Startup log is docs/evidence/gazebo-headless.log. |
-| T02 RViz2 / WSLg | PASS | RViz2 opened and rendered under WSLg with OpenGL 4.5. The screenshot was inspected in the setup conversation but is not stored as a repository image. Startup output is docs/evidence/rviz2.log. |
-| T03 Nav2 TurtleBot3 sample | PASS for launch/data smoke only | The headless launch initialized robot_state_publisher, loaded Nav2 localization, and reported Entity creation successful. Direct topic probes received /clock, /odom, /tf, and /scan messages; Gazebo listed the corresponding topics. Logs: docs/evidence/nav2-headless.log, nav2-diagnostic-launch.log, nav2-diagnostic-graph.log. No AMCL initial pose or navigation goal was sent, so map-frame localization and goal performance remain untested. |
-| T04 Phase 2 differential-drive behavior | NOT RUN | Future phase. |
+| Measure | Result |
+|---|---|
+| Initial map pose | (-2.0, -0.5, 0.0 rad) |
+| Initial AMCL estimate | (-1.9750, -0.5351) m |
+| Goal | (2.0, -0.5, 0.0 rad) in map |
+| Corridor occupancy | 161 of 161 samples were known free; 0.025 m sample spacing; map resolution 0.05 m |
+| NavigateToPose | SUCCEEDED; error code 0 |
+| Action feedback | 919 poses; 9.18 simulated seconds; 3.7296 m map-frame displacement |
+| Final AMCL estimate | (1.7728, -0.6526) m |
+| Final AMCL XY error | 0.2737 m; within this trial's declared 0.30 m acceptance check |
+| Controller output | 78 nonzero /cmd_vel samples and 80 nonzero /cmd_vel_nav samples |
+| Recorded topics | /clock, /odom, /amcl_pose, /cmd_vel, and /cmd_vel_nav |
 
-The first Nav2 launch log includes early transform lookup warnings. The later live probe confirmed odometry, transforms, and laser data flowing. The headless smoke did not provide an AMCL initial pose, so it did not test the map-to-odom localization transform or a goal. RViz2 was tested separately rather than concurrently with Gazebo/Nav2 to keep within the 3.5 GiB WSL memory cap.
+Nav2 lifecycle, map-to-odom TF, and costmap availability were captured after the initial pose was applied. An earlier diagnostic launch without an early initial pose timed out during planner lifecycle startup. The passing run publishes the initial pose early enough for localization to initialize.
 
-## Errors and limitations
+The MCAP bag is partial: it ended at simulated time 113.76 s, before the last action feedback at 118.944 s. The full goal result and movement evidence therefore come from the action feedback log and live postflight pose snapshots, not from the bag alone. The 0.30 m check belongs to this reference goal test; it does not replace the provisional 0.20 m parking target or validate parking.
 
-- Non-elevated WSL commands initially returned Wsl/E_ACCESSDENIED. The checks/installations succeeded through the authorized WSL access route.
-- An initial repository helper invocation returned E: Invalid operation update; a direct apt-get update succeeded. Package configuration completed and dpkg --audit was clean.
-- APT's non-interactive session fell back from Dialog to Readline; installation completed.
-- RViz2 reported /run/user/1000 permissions 0755 rather than 0700, but the GUI remained usable. Do not infer discrete GPU acceleration from the OpenGL version alone.
-- The Nav2 sample smoke is not an autonomous-navigation result. Initial pose, goal selection, path completion, safety stop, and parking remain to be exercised.
+Evidence: docs/evidence/nav2-reference-trial-summary.json, nav2-reference-trial-goal.log, nav2-reference-trial-map-check.json, nav2-reference-trial-postflight.log, nav2-reference-trial-telemetry.csv, and nav2-reference-trial-bag/.
 
-## Phase 1 gate
+## Phase 2 Task B: custom differential-drive robot
 
-The roadmap's environment and launchability checks are satisfied: ROS nodes communicated, Gazebo initialized headlessly, RViz2 rendered under WSLg, and the packaged Nav2 simulation launched and exposed expected simulator topics. The phase result is a verified software baseline, not a claim that the project's own car is implemented or has passed navigation tests.
+Three ROS 2 packages were added under simulation/ros2_ws/src:
 
-## Next
+- anc_description: Xacro model and installed link to the root robot-parameter YAML.
+- anc_gazebo: a small headless world with ground and a static wall.
+- anc_bringup: server launch, robot spawn, robot_state_publisher, and ros_gz topic bridges.
 
-Begin the next roadmap phase with a measured robot model and a project-specific world. Keep Nav2 test runs headless by default; enable GUI only for focused inspection. Before claiming navigation success, supply an AMCL initial pose, send a map-frame goal, and preserve the result plus pose/trajectory metrics.
+The robot has a box chassis, two driven wheels, a passive spherical caster, a camera frame placeholder, Gazebo DiffDrive, wheel odometry, and a single base TF chain. The test world loads Gazebo Harmonic's Contact system. The contact endpoint is advertised, but no contact messages were observed in the trial.
 
-## References used
+Simulation-only values in config/robot_parameters.yaml remain explicitly labeled placeholders: chassis 0.32 x 0.24 x 0.08 m and 2.0 kg; wheel radius 0.04 m, width 0.025 m, mass 0.15 kg, separation 0.28 m, and axle x -0.04 m; caster x 0.19 m, radius 0.025 m, mass 0.05 kg; speed limits 0.25 m/s and 1.0 rad/s. The conservative footprint rectangle includes the simulated wheel and caster envelope. These are not measurements or sim-to-real specifications.
 
-- ROS 2 Jazzy deb installation: https://github.com/ros2/ros2_documentation/blob/jazzy/source/Installation/Ubuntu-Install-Debs.rst
+### Build and model checks
+
+- colcon build --symlink-install --packages-up-to anc_bringup: 3 packages finished.
+- python3 -m py_compile scripts/phase2_motion_test.py: passed.
+- xacro expansion and check_urdf: parsed successfully; root link and child links were reported.
+- gz sdf -k simulation/ros2_ws/src/anc_gazebo/worlds/phase2_test_world.sdf: Valid.
+- ROS graph included /clock, /cmd_vel, /contacts, /odom, /tf, and /tf_static; /gzserver/get_entity_state was available for evaluator-only measurements.
+- tf2_echo odom base_link resolved through the dynamic and static transforms. /tf had publishers from Gazebo bridge and robot_state_publisher; /tf_static had robot_state_publisher.
+
+### Motion and collision results
+
+The final run passed all 10 required checks in docs/evidence/phase2-motion-results.json:
+
+| Check | Measured result |
+|---|---|
+| Forward command | Truth delta x +0.30035 m; odometry delta x +0.30030 m |
+| Reverse command | Truth delta x -0.29951 m; odometry delta x -0.30030 m |
+| In-place rotation | Truth yaw +1.10063 rad; odometry yaw +1.20120 rad |
+| Wall approach | Expected robot center x 0.735 m from the configured robot envelope and world wall geometry |
+| Wall stop | Evaluator x 0.735 m; position error 0.000 m; final forward velocity about -0.00000056 m/s |
+| Maximum sampled x during approach | 0.735025 m; no tunneling past the wall |
+| Maximum absolute roll/pitch | 0.00401 rad |
+| Odometry messages | 564 |
+
+The chassis stayed upright and the physics constraint held the robot at the calculated wall contact plane while forward commands continued. The ROS contact topic had a publisher, but the test recorded 0 contact messages and 0 wall contact events. Therefore the wall stop is supported by the geometry-derived evaluator pose and near-zero velocity, not by contact-sensor telemetry. A zero sensor count is not reported as a zero-collision count.
+
+During the wall stall, wheel odometry advanced to x=1.40039 m while evaluator pose remained at x=0.735 m. The wheels continued rotating against the wall and odometry followed that motion. Odometry matches forward and reverse travel away from the obstacle, but stall/slip accuracy is not validated. Rotation odometry also differs from evaluator yaw by about 0.10 rad. These results are a basic motion check, not a calibrated dynamics result.
+
+## Reproduction commands
+
+In the WSL project directory:
+
+~~~bash
+source /opt/ros/jazzy/setup.bash
+cd /home/ashish/AutonomousNavigationCar
+cd simulation/ros2_ws
+colcon build --symlink-install --packages-up-to anc_bringup
+source install/setup.bash
+ros2 launch anc_bringup sim.launch.py
+~~~
+
+In a second WSL terminal while the launch is active:
+
+~~~bash
+source /opt/ros/jazzy/setup.bash
+cd /home/ashish/AutonomousNavigationCar
+source simulation/ros2_ws/install/setup.bash
+python3 scripts/phase2_motion_test.py
+~~~
+
+The Phase 1 sample launch used headless mode. The map-corridor check and bag summarizer are scripts/check_reference_map_corridor.py and scripts/summarize_nav2_reference_bag.py. Full output and telemetry are indexed in docs/evidence/README.md.
+
+## Official references
+
+- ROS 2 Jazzy installation: https://docs.ros.org/en/jazzy/Installation/Ubuntu-Install-Debs.html
 - ROS 2 Jazzy and Gazebo Harmonic pairing: https://gazebosim.org/docs/harmonic/ros_installation/
-- Gazebo ROS vendor packages: https://gazebosim.org/docs/harmonic/ros2_gz_vendor_pkgs/
 - Nav2 Jazzy quickstart: https://docs.nav2.org/jazzy/getting_started/quickstart/quickstart/
+- Gazebo Harmonic contact sensor and system plugin: https://gazebosim.org/docs/harmonic/sensors/
+
+## Next recommended task
+
+Proceed to Phase 3 sensor simulation: add RGB image and CameraInfo, IMU, bridge configuration, and timestamp/TF frequency checks. Keep the profiles named REFERENCE and REALISTIC, keep Gazebo truth evaluator-only, and retain FREE/OCCUPIED/UNKNOWN semantics. Before using contact events as a collision metric, diagnose why the configured contact sensor emitted no messages. Before claiming odometry accuracy under contact or slip, define and test a wheel-slip model.

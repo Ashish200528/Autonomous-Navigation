@@ -1,0 +1,59 @@
+robot name is: anc_robot
+---------- Successfully Parsed XML ---------------
+root Link: base_footprint has 1 child(ren)
+    child(1):  base_link
+        child(1):  camera_link
+        child(2):  caster_link
+        child(3):  left_wheel_link
+        child(4):  right_wheel_link
+== gazebo sdf help ==
+Utilities for SDF files.
+
+  gz sdf [options]
+
+Options:
+
+  -k [ --check ] arg                Check if an SDFormat file is valid.
+  -d [ --describe ] [SPEC VERSION]  Print the aggregated SDFormat spec description. Default version (1.11).
+  -g [ --graph ] <pose, frame> arg  Print the PoseRelativeTo or FrameAttachedTo graph. (WARNING: This is for advanced
+                                    use only and the output may change without any promise of stability)
+  --inertial-stats arg              Prints moment of inertia, centre of mass, and total mass from a model sdf file.
+  -p [ --print ] arg                Print converted arg. Note the quaternion representation of the
+                                    rotational part of poses and unit vectors will be normalized.
+      -i [ --preserve-includes ]    Preserve included tags when printing converted arg (does not preserve merge-includes).
+      --degrees                     Pose rotation angles are printed in degrees.
+      --expand-auto-inertials       Prints auto-computed inertial values for simple shapes. For meshes and other unsupported
+                                    shapes, the default inertial values will be printed.
+      --snap-to-degrees arg         Snap pose rotation angles to this specified interval in degrees. This value must be
+                                    larger than 0, less than or equal to 360, and larger than the defined snap tolerance.
+      --snap-tolerance arg          Used in conjunction with --snap-to-degrees, specifies the tolerance at which snapping
+                                    occurs. This value must be larger than 0, less than 360, and less than the defined
+                                    degrees value to snap to. If unspecified, its default value is 0.01.
+      --precision arg               Set the output stream precision for floating point numbers. The arg must be a positive integer.
+  -h [ --help ]                     Print this help message.
+  --force-version <VERSION>         Use a specific library version.
+  --versions                        Show the available versions.
+    -h "Print this help message,
+        --help",
+    -k, --check arg                  Check if an SDFormat file is valid.
+        --inertial-stats arg         Prints moment of inertia, centre of mass, and total mass from a model sdf file.
+    -d, --describe [VERSION]         Print the aggregated SDFormat spec description. Default version (1.11)
+    -p, --print                      Print converted arg
+    -i, --preserve-includes          Preserve included tags when printing converted arg (does not preserve merge-includes)
+        --degrees                    Printed pose rotations are will be in degrees
+        --expand-auto-inertials      Auto-computed inertial values will be printed
+        --snap-to-degrees arg        Printed rotations are snapped to specified degree intervals
+        --snap-tolerance arg         Printed rotations are snapped if they are within this specified tolerance
+        --precision arg              Set the output stream precision for floating point numbers.
+    -g, --graph type                 Print PoseRelativeTo or FrameAttachedTo graph
+== world validation ==
+<sdf version='1.11'>
+  <world name='anc_phase2_test'>
+    <physics name='phase2_physics' type='ignored'>
+      <max_step_size>0.002</max_step_size>
+      <real_time_factor>1</real_time_factor>
+      <real_time_update_rate>500</real_time_update_rate>
+    </physics>
+    <plugin name='gz::sim::systems::Physics' filename='gz-sim-physics-system'/>
+    <plugin name='gz::sim::systems::UserCommands' filename='gz-sim-user-commands-system'/>
+    <plugin name='gz::sim::systems::SceneBroadcaster' filename='gz-sim-scene-broadcaster-system'/>

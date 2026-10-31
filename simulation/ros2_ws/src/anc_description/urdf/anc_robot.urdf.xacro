@@ -1,0 +1,119 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="anc_robot">
+  <xacro:property name="cfg" value="${xacro.load_yaml('$(find anc_description)/config/robot_parameters.yaml')}"/>
+  <xacro:property name="sim" value="${cfg['robot']['simulation_model']}"/>
+  <xacro:property name="L" value="${sim['chassis_length_m']}"/>
+  <xacro:property name="W" value="${sim['chassis_width_m']}"/>
+  <xacro:property name="H" value="${sim['chassis_height_m']}"/>
+  <xacro:property name="M" value="${sim['chassis_mass_kg']}"/>
+  <xacro:property name="R" value="${sim['wheel_radius_m']}"/>
+  <xacro:property name="WW" value="${sim['wheel_width_m']}"/>
+  <xacro:property name="WM" value="${sim['wheel_mass_kg']}"/>
+  <xacro:property name="T" value="${sim['wheel_separation_m']}"/>
+  <xacro:property name="WX" value="${sim['wheel_x_m']}"/>
+  <xacro:property name="V" value="${sim['max_linear_velocity_mps']}"/>
+  <xacro:property name="OMEGA" value="${sim['max_angular_velocity_radps']}"/>
+  <xacro:property name="HZ" value="${sim['odom_publish_frequency_hz']}"/>
+  <xacro:property name="CX" value="${sim['caster_x_m']}"/>
+  <xacro:property name="CR" value="${sim['caster_radius_m']}"/>
+  <xacro:property name="CM" value="${sim['caster_mass_kg']}"/>
+  <xacro:property name="CXYZ" value="${sim['camera_xyz_m']}"/>
+  <xacro:property name="CRPY" value="${sim['camera_rpy_rad']}"/>
+  <xacro:property name="IXX" value="${M * (W**2 + H**2) / 12.0}"/>
+  <xacro:property name="IYY" value="${M * (L**2 + H**2) / 12.0}"/>
+  <xacro:property name="IZZ" value="${M * (L**2 + W**2) / 12.0}"/>
+  <xacro:property name="WI" value="${WM * (3.0 * R**2 + WW**2) / 12.0}"/>
+  <xacro:property name="WJ" value="${0.5 * WM * R**2}"/>
+  <material name="blue"><color rgba="0.08 0.28 0.72 1.0"/></material>
+  <material name="black"><color rgba="0.08 0.08 0.08 1.0"/></material>
+  <material name="gray"><color rgba="0.3 0.3 0.3 1.0"/></material>
+
+  <link name="base_footprint"/>
+  <link name="base_link">
+    <inertial><mass value="${M}"/>
+      <inertia ixx="${IXX}" ixy="0" ixz="0" iyy="${IYY}" iyz="0" izz="${IZZ}"/>
+    </inertial>
+    <visual><geometry><box size="${L} ${W} ${H}"/></geometry><material name="blue"/></visual>
+    <collision name="chassis_collision"><geometry><box size="${L} ${W} ${H}"/></geometry></collision>
+  </link>
+  <joint name="base_footprint_to_base_link" type="fixed">
+    <parent link="base_footprint"/><child link="base_link"/>
+    <origin xyz="0 0 ${H / 2.0 + R}"/>
+  </joint>
+
+  <xacro:macro name="drive_wheel" params="side sign">
+    <link name="${side}_wheel_link">
+      <inertial><mass value="${WM}"/>
+        <inertia ixx="${WI}" ixy="0" ixz="0" iyy="${WJ}" iyz="0" izz="${WI}"/>
+      </inertial>
+      <visual><origin rpy="1.57079632679 0 0"/>
+        <geometry><cylinder radius="${R}" length="${WW}"/></geometry><material name="black"/>
+      </visual>
+      <collision name="${side}_wheel_collision"><origin rpy="1.57079632679 0 0"/>
+        <geometry><cylinder radius="${R}" length="${WW}"/></geometry>
+      </collision>
+    </link>
+    <joint name="${side}_wheel_joint" type="continuous">
+      <parent link="base_link"/><child link="${side}_wheel_link"/>
+      <origin xyz="${WX} ${sign * T / 2.0} ${ -R}"/>
+      <axis xyz="0 1 0"/><limit effort="20.0" velocity="20.0"/>
+      <dynamics damping="0.02" friction="0.0"/>
+    </joint>
+  </xacro:macro>
+  <xacro:drive_wheel side="left" sign="${1}"/>
+  <xacro:drive_wheel side="right" sign="${-1}"/>
+
+  <link name="caster_link">
+    <inertial><mass value="${CM}"/>
+      <inertia ixx="${0.4 * CM * CR**2}" ixy="0" ixz="0"
+               iyy="${0.4 * CM * CR**2}" iyz="0" izz="${0.4 * CM * CR**2}"/>
+    </inertial>
+    <visual><geometry><sphere radius="${CR}"/></geometry><material name="black"/></visual>
+    <collision name="caster_collision"><geometry><sphere radius="${CR}"/></geometry></collision>
+  </link>
+  <joint name="caster_fixed_joint" type="fixed">
+    <parent link="base_link"/><child link="caster_link"/>
+    <origin xyz="${CX} 0 ${CR - H / 2.0 - R}"/>
+  </joint>
+
+  <link name="camera_link">
+    <inertial><mass value="0.01"/>
+      <inertia ixx="0.000001" ixy="0" ixz="0" iyy="0.000001" iyz="0" izz="0.000001"/>
+    </inertial>
+    <visual><geometry><box size="0.04 0.04 0.025"/></geometry><material name="gray"/></visual>
+  </link>
+  <joint name="camera_fixed_joint" type="fixed">
+    <parent link="base_link"/><child link="camera_link"/>
+    <origin xyz="${CXYZ[0]} ${CXYZ[1]} ${CXYZ[2]}" rpy="${CRPY[0]} ${CRPY[1]} ${CRPY[2]}"/>
+  </joint>
+
+  <gazebo reference="base_link">
+    <mu1>0.8</mu1><mu2>0.8</mu2>
+    <sensor name="chassis_contact" type="contact">
+      <always_on>true</always_on><update_rate>25</update_rate>
+      <!-- Gazebo merges the fixed base joint; reference its resulting SDF collisions. -->
+      <contact>
+        <collision>base_footprint_fixed_joint_lump__chassis_collision_collision</collision>
+        <collision>base_footprint_fixed_joint_lump__caster_collision_collision_1</collision>
+      </contact>
+      <topic>/model/anc_robot/contacts</topic>
+    </sensor>
+  </gazebo>
+  <gazebo reference="left_wheel_link"><mu1>1.2</mu1><mu2>1.2</mu2></gazebo>
+  <gazebo reference="right_wheel_link"><mu1>1.2</mu1><mu2>1.2</mu2></gazebo>
+  <gazebo reference="caster_link"><mu1>0.2</mu1><mu2>0.2</mu2></gazebo>
+
+  <gazebo>
+    <plugin filename="gz-sim-diff-drive-system" name="gz::sim::systems::DiffDrive">
+      <left_joint>left_wheel_joint</left_joint><right_joint>right_wheel_joint</right_joint>
+      <wheel_separation>${T}</wheel_separation><wheel_radius>${R}</wheel_radius>
+      <odom_publish_frequency>${HZ}</odom_publish_frequency>
+      <topic>/model/anc_robot/cmd_vel</topic>
+      <odom_topic>/model/anc_robot/odom</odom_topic>
+      <tf_topic>/model/anc_robot/tf</tf_topic>
+      <frame_id>odom</frame_id><child_frame_id>base_footprint</child_frame_id>
+      <min_linear_velocity>${-V}</min_linear_velocity><max_linear_velocity>${V}</max_linear_velocity>
+      <min_angular_velocity>${-OMEGA}</min_angular_velocity><max_angular_velocity>${OMEGA}</max_angular_velocity>
+    </plugin>
+  </gazebo>
+</robot>

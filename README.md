@@ -1,50 +1,73 @@
 # Autonomous Navigation Car Simulation
 
-Independent simulation project for the Autonomous Navigation Car. The existing Arduino UNO Q application is out of scope and must remain untouched.
+Independent simulation project for the Autonomous Navigation Car. The existing Arduino UNO Q application is out of scope and was not changed.
 
-## Mission
+## Mission and constraints
 
 Navigate an open indoor arena with arbitrary obstacles from a start pose to a map-frame goal, replan when needed, stop safely when required inputs are stale or uncertain, and park within a measured tolerance. The realistic profile must not use simulator truth, perfect depth, hidden obstacle locations, or an ideal range feed as controller inputs.
 
-## Baseline decisions
-
-- Host: Windows 11 + WSL2 Ubuntu 24.04 LTS.
-- Simulation stack: ROS 2 Jazzy, Gazebo Harmonic, ros_gz, RViz2, Nav2.
-- Robot: differential drive; chassis dimensions and dynamics remain explicit configuration placeholders until measured.
-- Goal: map-frame coordinate, with known initial map transform for the first baseline; unknown-pose acquisition is a separate experiment.
-- Sensor profiles: REFERENCE for clearly labeled ideal/reference sensing; REALISTIC for camera/odometry/IMU inputs. Never merge their results.
-- Perception state: FREE, OCCUPIED, UNKNOWN; unknown is never treated as clear.
-
-See docs/decisions.md, docs/requirements.md, docs/configuration.md, docs/metrics.md, and docs/issues.md for the frozen planning baseline and open questions.
+All hardware measurements remain unresolved. The Phase 2 model uses explicitly documented placeholders only. The camera is currently a TF frame placeholder with no simulated image; no IMU is implemented yet. REFERENCE and REALISTIC profiles must stay separate, and FREE, OCCUPIED, and UNKNOWN must remain distinct.
 
 ## Repository layout
 
-- simulation/ros2_ws/src/: future ROS packages for description, Gazebo, bringup, perception, localization, navigation, and evaluation.
-- simulation/scenarios/: seeded scenario registry and future worlds.
-- simulation/data/: future logs and calibration artifacts; do not commit large raw recordings without review.
-- hardware/uno_q/: future adapters only; preserve the existing UNO Q application.
-- scripts/: project-scoped environment and future reproducible scenario scripts.
-- tests/: test registry and future automated checks.
-- config/robot_parameters.yaml: configuration inventory; null values are intentional unresolved placeholders.
+- simulation/ros2_ws/src/ contains the implemented Phase 2 description, Gazebo, and bringup packages, plus future package slots.
+- simulation/scenarios/ contains the scenario registry and future seeded worlds.
+- simulation/data/ is for future logs and calibration artifacts; review large raw files before committing.
+- hardware/uno_q/ is reserved for future adapters; keep the existing UNO Q application intact.
+- scripts/ contains project-scoped ROS setup and repeatable evaluation scripts.
+- config/robot_parameters.yaml is the source of truth for measured and provisional model parameters.
 
 ## Start a project shell
 
-From a WSL terminal:
+From WSL:
 
-    cd /home/ashish/AutonomousNavigationCar
-    source scripts/source_ros_jazzy.sh
-    echo $ROS_DISTRO
+~~~bash
+cd /home/ashish/AutonomousNavigationCar
+source scripts/source_ros_jazzy.sh
+~~~
 
-The project-scoped script sources ROS 2 Jazzy only in the current terminal. It does not alter the user's global shell startup file.
+The script sources ROS 2 Jazzy only in the current terminal and does not alter the user's global shell startup file.
 
-## Headless packaged sample
+## Phase 1 REFERENCE navigation test
 
-To launch the installed TurtleBot3/Nav2 sample without RViz:
+The packaged TurtleBot3/Nav2 sample was run headlessly with an early AMCL initial pose and a map-frame goal. The saved result is in docs/evidence/nav2-reference-trial-summary.json. This uses the packaged static map and simulated scan; it is not an RGB-only result. The action returned SUCCEEDED with error code 0 and final AMCL XY error 0.2737 m against the trial's 0.30 m acceptance check. The bag is partial; the action log and live postflight snapshot support completion.
 
-    ros2 launch nav2_bringup tb3_simulation_launch.py headless:=True use_rviz:=False
+## Phase 2 custom robot
 
-The sample starts Gazebo Harmonic and the Nav2 stack. The initial-pose estimate is still an input to localization; the smoke run did not submit an initial pose or navigation goal. It is a stack check, not a project navigation result.
+Build the three implemented packages:
+
+~~~bash
+cd /home/ashish/AutonomousNavigationCar
+source scripts/source_ros_jazzy.sh
+cd simulation/ros2_ws
+colcon build --symlink-install --packages-up-to anc_bringup
+source install/setup.bash
+~~~
+
+Launch the headless Gazebo world in one WSL terminal:
+
+~~~bash
+cd /home/ashish/AutonomousNavigationCar
+source scripts/source_ros_jazzy.sh
+source simulation/ros2_ws/install/setup.bash
+ros2 launch anc_bringup sim.launch.py
+~~~
+
+Run the motion and wall-stop checks from another terminal while the launch remains active:
+
+~~~bash
+cd /home/ashish/AutonomousNavigationCar
+source scripts/source_ros_jazzy.sh
+source simulation/ros2_ws/install/setup.bash
+python3 scripts/phase2_motion_test.py
+~~~
+
+The final run passed forward, reverse, in-place rotation, odometry, stability, TF, and geometry-based wall-stop checks. The robot center stopped at x=0.735 m, the expected contact plane for the current placeholder footprint. Gazebo's contact topic emitted zero messages, so collision evidence comes from the evaluator-only pose and near-zero velocity. Odometry also advanced while the robot was stalled at the wall. See docs/PHASE_REPORT.md and docs/evidence/README.md for values and limitations.
 
 ## Current status
 
-Phase 0 planning baseline is complete and tagged v0.1-phase0. The Phase 1 environment and integration smoke checks are recorded in docs/PHASE_REPORT.md and docs/environment.md. ROS 2 Jazzy, Gazebo Harmonic, ros_gz, RViz2, Nav2, robot-localization, SLAM Toolbox, and the packaged TurtleBot3 sample are installed in the E:-hosted WSL distro. T00-T03 are recorded as passing within their stated smoke-test limits; no custom vehicle or end-to-end goal run has been completed.
+- Phase 0 baseline: complete and tagged v0.1-phase0.
+- Phase 1 environment and REFERENCE Nav2 goal: PASS.
+- Phase 2 custom differential-drive motion and wall stop: PASS WITH LIMITS.
+- No Phase 3 sensors, realistic perception, custom Nav2 configuration, unknown-pose acquisition, or parking state machine has been implemented.
+- No remote push was made. Current branch is main.

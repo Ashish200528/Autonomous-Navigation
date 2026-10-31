@@ -1,5 +1,5 @@
 version: 1
-status: "Phase 1 environment/integration smoke gate complete; full navigation goal behavior remains untested."
+status: "Phase 1 REFERENCE Nav2 goal PASS; Phase 2 custom differential-drive motion and wall-stop PASS WITH LIMITS."
 registry:
   - id: T00
     phase: 1
@@ -29,17 +29,32 @@ registry:
       - docs/evidence/rviz2.log
   - id: T03
     phase: 1
-    name: nav2_sample_simulation
+    name: nav2_sample_reference_goal
     scenario_id: S00
-    status: PASS_WITH_LIMITS
-    result: "Headless TurtleBot3/Nav2 launch created the robot and live probes received /clock, /odom, /tf, and /scan. No initial pose or navigation goal was submitted."
+    status: PASS
+    result: "REFERENCE TurtleBot3/Nav2 goal from map (-2.0,-0.5) to (2.0,-0.5) returned SUCCEEDED/error 0; all 161 corridor samples were known free; final AMCL XY error 0.2737 m against the declared 0.30 m check. MCAP is partial."
     evidence:
-      - docs/evidence/nav2-headless.log
-      - docs/evidence/nav2-diagnostic-launch.log
-      - docs/evidence/nav2-diagnostic-graph.log
+      - docs/evidence/nav2-reference-trial-goal.log
+      - docs/evidence/nav2-reference-trial-summary.json
+      - docs/evidence/nav2-reference-trial-map-check.json
+      - docs/evidence/nav2-reference-trial-postflight.log
+      - docs/evidence/nav2-reference-trial-telemetry.csv
+      - docs/evidence/nav2-reference-trial-bag
   - id: T04
     phase: 2
-    name: differential_drive_motion
+    name: differential_drive_motion_and_wall_stop
     scenario_id: S00
-    status: NOT_RUN
-    pass_evidence: "Straight, reverse, rotation, and collision behavior checked."
+    status: PASS_WITH_LIMITS
+    result: "All 10 required checks passed: truth forward +0.30035 m, reverse -0.29951 m, rotation +1.10063 rad; wall stop at expected x=0.735 m with no tunneling; max tilt 0.00401 rad. Contact sensor emitted zero messages; wheel odometry advanced under wall stall."
+    evidence:
+      - docs/evidence/phase2-motion-results.json
+      - docs/evidence/phase2-motion-test.log
+      - docs/evidence/phase2-motion-telemetry.csv
+      - docs/evidence/phase2-simulation-launch-final.log
+      - docs/evidence/phase2-build-caster-contact-fix.log
+      - docs/evidence/phase2-final-validation.log
+      - docs/evidence/phase2-tf-check.log
+      - docs/evidence/phase2-motion-first-attempt.json
+      - docs/evidence/phase2-motion-second-attempt.json
+      - docs/evidence/phase2-motion-third-attempt.json
+      - docs/evidence/phase2-motion-fourth-attempt.json

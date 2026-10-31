@@ -1,0 +1,85 @@
+== spawn and bridge result ==
+[INFO] [parameter_bridge-3]: process started with pid [2632]
+[parameter_bridge-3] [INFO] [1793487364.539067736] [anc_parameter_bridge]: Creating GZ->ROS Bridge: [/clock (gz.msgs.Clock) -> /clock (rosgraph_msgs/msg/Clock)] (Lazy 0)
+[parameter_bridge-3] [INFO] [1793487364.542894887] [anc_parameter_bridge]: Creating ROS->GZ Bridge: [/cmd_vel (geometry_msgs/msg/Twist) -> /model/anc_robot/cmd_vel (gz.msgs.Twist)] (Lazy 0)
+[parameter_bridge-3] [INFO] [1793487364.546280109] [anc_parameter_bridge]: Creating GZ->ROS Bridge: [/model/anc_robot/odom (gz.msgs.Odometry) -> /odom (nav_msgs/msg/Odometry)] (Lazy 0)
+[parameter_bridge-3] [INFO] [1793487364.551305663] [anc_parameter_bridge]: Creating GZ->ROS Bridge: [/model/anc_robot/tf (gz.msgs.Pose_V) -> /tf (tf2_msgs/msg/TFMessage)] (Lazy 0)
+[parameter_bridge-3] [INFO] [1793487364.553532251] [anc_parameter_bridge]: Creating GZ->ROS Bridge: [/model/anc_robot/contacts (gz.msgs.Contacts) -> /contacts (ros_gz_interfaces/msg/Contacts)] (Lazy 0)
+[create-4] [INFO] [1793487367.460886499] [spawn_anc_robot]: Waiting messages on topic [robot_description].
+[create-4] [INFO] [1793487368.111456553] [spawn_anc_robot]: Entity creation successful.
+[gzserver-1] [1;32m[Msg] [0m[1;32mDiffDrive subscribing to twist messages on [[0m[1;32m/model/anc_robot/cmd_vel[0m[1;32m][0m[1;32m[0m
+== ROS nodes ==
+/anc_parameter_bridge
+/gzserver
+/robot_state_publisher
+== topics ==
+/clock [rosgraph_msgs/msg/Clock]
+/cmd_vel [geometry_msgs/msg/Twist]
+/contacts [ros_gz_interfaces/msg/Contacts]
+/joint_states [sensor_msgs/msg/JointState]
+/odom [nav_msgs/msg/Odometry]
+/parameter_events [rcl_interfaces/msg/ParameterEvent]
+/robot_description [std_msgs/msg/String]
+/rosout [rcl_interfaces/msg/Log]
+/tf [tf2_msgs/msg/TFMessage]
+/tf_static [tf2_msgs/msg/TFMessage]
+== state service ==
+/gzserver/get_entity_state
+== odom ==
+pose:
+  position:
+    x: -6.322690407993494e-06
+    y: -9.902542633353372e-32
+    z: 0.0
+  orientation:
+    x: 0.0
+    y: 0.0
+    z: -1.0757318430129614e-18
+    w: 1.0
+covariance:
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+---
+== baseline evaluator pose ==
+requester: making request: simulation_interfaces.srv.GetEntityState_Request(entity='anc_robot')
+
+response:
+simulation_interfaces.srv.GetEntityState_Response(result=simulation_interfaces.msg.Result(result=1, error_message=''), state=simulation_interfaces.msg.EntityState(header=std_msgs.msg.Header(stamp=builtin_interfaces.msg.Time(sec=17, nanosec=212000000), frame_id='world'), pose=geometry_msgs.msg.Pose(position=geometry_msgs.msg.Point(x=0.00167727, y=1.33822e-17, z=0.00891576), orientation=geometry_msgs.msg.Quaternion(x=5.611138823148687e-15, y=0.14897586568118348, z=-4.0366649670224385e-15, w=0.9888408322093815)), twist=geometry_msgs.msg.Twist(linear=geometry_msgs.msg.Vector3(x=9.90898e-09, y=4.50897e-20, z=1.83028e-07), angular=geometry_msgs.msg.Vector3(x=-9.49405e-18, y=1.1114e-06, z=-4.90659e-18)), acceleration=geometry_msgs.msg.Accel(linear=geometry_msgs.msg.Vector3(x=0.0, y=0.0, z=0.0), angular=geometry_msgs.msg.Vector3(x=0.0, y=0.0, z=0.0))))
+
+== memory ==
+MemAvailable:    2991720 kB
+SwapFree:        1048576 kB
