@@ -1,28 +1,45 @@
 version: 1
-status: planned; no tests executed in Phase 0
+status: "Phase 1 environment/integration smoke gate complete; full navigation goal behavior remains untested."
 registry:
   - id: T00
     phase: 1
     name: ros_talker_listener
     scenario_id: null
-    pass_evidence: talker and listener exchange a message; preserve exit codes
+    status: PASS
+    result: "Six messages published; four received during the bounded listener window."
+    evidence:
+      - docs/evidence/ros-talker.log
+      - docs/evidence/ros-listener.log
+      - docs/evidence/ros-talker-listener-result.txt
   - id: T01
     phase: 1
     name: gazebo_empty_world
     scenario_id: null
-    pass_evidence: Gazebo Harmonic empty world starts; record headless and GUI result
+    status: PASS
+    result: "Gazebo Sim 8.15.0 loaded empty.sdf and initialized the empty world headlessly; execution was deliberately bounded."
+    evidence:
+      - docs/evidence/gazebo-headless.log
   - id: T02
     phase: 1
     name: rviz2_startup
     scenario_id: null
-    pass_evidence: RViz2 opens under WSLg or headless/display limitation is reported
+    status: PASS
+    result: "RViz2 opened under WSLg and reported OpenGL 4.5; screenshot inspected in the setup conversation, not stored in the repo."
+    evidence:
+      - docs/evidence/rviz2.log
   - id: T03
     phase: 1
     name: nav2_sample_simulation
     scenario_id: S00
-    pass_evidence: sample can be launched and is inspected before custom robot work
+    status: PASS_WITH_LIMITS
+    result: "Headless TurtleBot3/Nav2 launch created the robot and live probes received /clock, /odom, /tf, and /scan. No initial pose or navigation goal was submitted."
+    evidence:
+      - docs/evidence/nav2-headless.log
+      - docs/evidence/nav2-diagnostic-launch.log
+      - docs/evidence/nav2-diagnostic-graph.log
   - id: T04
     phase: 2
     name: differential_drive_motion
     scenario_id: S00
-    pass_evidence: straight, reverse, rotation and collision behavior checked
+    status: NOT_RUN
+    pass_evidence: "Straight, reverse, rotation, and collision behavior checked."
