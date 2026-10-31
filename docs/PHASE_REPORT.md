@@ -28,7 +28,7 @@ Observed: WSL 2; Ubuntu 24.04.5 (`noble`); WSL memory 3.50 GiB total / 3.07 GiB 
 
 - Requirements, decisions, unresolved questions, config inventory, scenario/metric registry: **PASS** (created; physical measurements remain explicitly unresolved).
 - Independent project tree: **PASS** (created in new Linux home path).
-- Versioned Git repository/tag: pending initial commit at report creation; record commit/tag before accepting Phase 0.
+- Versioned Git repository and baseline tag `v0.1-phase0`: PASS (local commits; no remote push).
 - Reproducible simulation: **NOT TESTED**; Phase 0 is a plan/repository gate, not a simulation result.
 
 ## Initial Phase 1 status
