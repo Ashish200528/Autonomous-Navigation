@@ -173,3 +173,34 @@ scenarios:
     expected_free_corridors: []
     route_expected: false
     pass_evidence: "A static divider leaves a body-width-infeasible wall gap; this is geometry validation only, not a safe-stop test."
+
+phase6_navigation:
+  profile: ORACLE_REFERENCE
+  map_source: "Per-run rasterization of the deterministic scenario geometry; available only to the reference launch."
+  localization_source: "Phase 4 known-start map-to-odom plus wheel/IMU EKF odometry; no AMCL."
+  status_note: "Phase 5 sensor_profile fields above remain historical metadata and are not rewritten."
+  scenarios:
+    - id: S00
+      status: PASS
+      seed: 101
+      run_id: s00-reference-final-stop-check
+    - id: S01
+      status: PASS
+      seed: 101
+      run_id: s01-reference-final-stop-check
+    - id: S02
+      status: PASS
+      seed: 101
+      run_id: s02-reference-final-stop-check
+    - id: S03
+      status: PASS
+      seed: 101
+      run_id: s03-reference-final-stop-check
+    - id: S04
+      status: PASS
+      seed: 202
+      run_id: s04-reference-final-stop-check
+    - id: S09
+      status: PASS_EXPECTED_NO_ROUTE
+      seed: 101
+      run_id: s09-reference-seed101-pose-odom-stop

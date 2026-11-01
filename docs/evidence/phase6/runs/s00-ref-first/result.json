@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "run_id": "s00-ref-first",
+  "phase": 6,
+  "scenario_id": "S00",
+  "navigation_profile": "ORACLE_REFERENCE",
+  "classification": "FAIL_STARTUP_DIAGNOSTIC",
+  "status": "FAIL",
+  "navigation_attempted": false,
+  "action": null,
+  "runner_error": "Nav2 controller_server exited during startup: InvalidParameterTypeException on local_costmap height; the costmap parameter was declared integer but configured as decimal.",
+  "evidence": {
+    "launch_log": "launch.log",
+    "world": "world.sdf",
+    "reference_map": "oracle_reference_map.yaml",
+    "rosbag_started": false,
+    "corrective_change": "Changed local costmap width and height from decimal YAML values to integers; the Nav2 costmap declaration requires integer parameters on this Jazzy install."
+  },
+  "shutdown": {
+    "signal": "SIGINT",
+    "group_gone": true,
+    "forced": false,
+    "note": "The controller process had already exited. The interrupted diagnostic launch was stopped; shutdown log includes Python KeyboardInterrupt traces from ROS nodes."
+  }
+}

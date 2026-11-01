@@ -1,4 +1,4 @@
-# Open issues before Phase 5
+# Open issues after Phase 6
 
 ## Resolved through Phase 3
 
@@ -16,6 +16,10 @@
 
 - Phase 5 added six bounded worlds, deterministic layout generation, geometry/no-route validation, evaluator-only truth capture, known-start spawn/TF, and cleanly terminated headless trials. It did not test navigation or safe stopping.
 
+## Resolved through Phase 6 reference navigation
+
+- Nav2 completed the selected S00-S04 reference goals and aborted the static S09 no-route goal within the declared bound. The S09 run recorded nonzero travel before the abort and a truth-twist/odometry discrepancy; see the Phase 6 report and per-run result.
+
 ## P0 before hardware-faithful claims or transfer
 
 - Measure chassis footprint, height, mass, wheel radius, wheel separation, and center of mass. Current simulation values are placeholders.
@@ -23,7 +27,7 @@
 - Measure IMU noise/bias and derive estimator covariance from hardware data.
 - Define hardware watchdog and independent electrical emergency stop before any motor integration.
 
-## P1 before navigation/perception experiments
+## P1 before hardware-faithful navigation/perception experiments
 
 - Reduce wheel-odometry divergence under slip. Phase 4 low-friction trial measured +0.4705 m wheel error with zero chassis displacement; EKF output followed the wheel estimate. Do not replace odometry with simulator pose.
 - Improve rectangle closure and raw rotation calibration. The accepted Phase 4 final7 truth ended 0.134 m / 0.980 rad from start; filtered endpoint error exceeded raw odometry in that run. This supersedes the earlier 0.127 m / 0.882 rad summary.
@@ -35,10 +39,10 @@
 ## P2 for later navigation experiments
 
 - Add unknown-pose acquisition separately from the known-initial-pose baseline.
-- Phase 5 completed seeded geometry worlds for S00-S04 and S09 plus a headless scenario harness. Dynamic obstacles, safe-stop behavior, perception, and parking remain later-phase work.
+- Phase 5 completed seeded geometry worlds for S00-S04 and S09 plus a headless scenario harness. Phase 6 added an ORACLE_REFERENCE Nav2 baseline and one bounded static no-route abort. Dynamic obstacles, RGB perception, unknown-pose localization, general sensor-loss safe stopping, and parking remain later-phase work.
 - Implement class-agnostic RGB FREE/OCCUPIED/UNKNOWN perception; never treat UNKNOWN as CLEAR.
 - Implement a realistic sensor-constrained local costmap and replanning path.
 - Define parking tolerance and dwell using measured footprint, then test stationary pose error.
 - Plan UNO Q adapters only after simulation interfaces and regression checks are stable.
 
-Phase 4 is complete with limits. Phase 5 world generation and scenario validation are complete with limits; Phase 6 perception/navigation, unknown-pose acquisition, safe-stop behavior, and parking remain unstarted.
+Phase 4 is complete with limits. Phase 5 world generation and scenario validation are complete with limits. Phase 6 selected reference navigation cases passed with limits; RGB perception, unknown-pose acquisition, general safe-stop behavior, and parking remain unimplemented.

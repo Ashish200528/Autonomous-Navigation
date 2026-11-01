@@ -1,0 +1,361 @@
+{
+  "phase": 6,
+  "date": "2026-11-02",
+  "profile": "ORACLE_REFERENCE",
+  "overall_status": "PASS_WITH_LIMITS",
+  "scenario_count": 6,
+  "scenarios": [
+    {
+      "scenario_id": "S00",
+      "seed": 101,
+      "run_id": "s00-reference-final-stop-check",
+      "status": "PASS",
+      "classification": "PASS",
+      "run_directory": "runs/s00-reference-final-stop-check",
+      "action": {
+        "accepted": true,
+        "status": "SUCCEEDED",
+        "error_code": 0,
+        "timed_out": false,
+        "number_of_recoveries": 0
+      },
+      "metrics": {
+        "wall_elapsed_s": 25.946,
+        "truth_path_length_m": 1.8534,
+        "final_xy_goal_error_m": 0.1466,
+        "final_localization_drift_xy_m": 0.0014,
+        "minimum_conservative_clearance_m": 1.7326,
+        "contact_collision_events": 0,
+        "post_action_robot_stopped": true,
+        "post_action_settle_time_s": 0.601,
+        "post_action_settle_window_expired": false,
+        "post_action_truth_pose_window": {
+          "duration_s": 0.801,
+          "sample_count": 5,
+          "xy_delta_m": 0.00938,
+          "yaw_delta_rad": 3e-05
+        },
+        "post_action_raw_odom_velocity": [
+          0.0,
+          0.0
+        ],
+        "post_action_filtered_odom_velocity": [
+          0.0003760180836532376,
+          0.0003590590591633241
+        ],
+        "post_action_truth_twist_stopped": true,
+        "max_abs_cmd_vel_linear_x_mps": 0.18,
+        "max_abs_cmd_vel_angular_z_radps": 0.0005
+      },
+      "shutdown": {
+        "child_sigkill_escalated": false,
+        "child_sigterm_escalated": false,
+        "forced": false,
+        "gazebo_child_shutdown_clean": true,
+        "group_gone": true,
+        "returncode": 0,
+        "signal": "SIGINT"
+      },
+      "limitations": []
+    },
+    {
+      "scenario_id": "S01",
+      "seed": 101,
+      "run_id": "s01-reference-final-stop-check",
+      "status": "PASS",
+      "classification": "PASS",
+      "run_directory": "runs/s01-reference-final-stop-check",
+      "action": {
+        "accepted": true,
+        "status": "SUCCEEDED",
+        "error_code": 0,
+        "timed_out": false,
+        "number_of_recoveries": 0
+      },
+      "metrics": {
+        "wall_elapsed_s": 49.273,
+        "truth_path_length_m": 6.1406,
+        "final_xy_goal_error_m": 0.1621,
+        "final_localization_drift_xy_m": 0.0156,
+        "minimum_conservative_clearance_m": 0.1129,
+        "contact_collision_events": 0,
+        "post_action_robot_stopped": true,
+        "post_action_settle_time_s": 1.206,
+        "post_action_settle_window_expired": false,
+        "post_action_truth_pose_window": {
+          "duration_s": 0.99,
+          "sample_count": 6,
+          "xy_delta_m": 0.0,
+          "yaw_delta_rad": 0.0
+        },
+        "post_action_raw_odom_velocity": [
+          0.0,
+          0.0
+        ],
+        "post_action_filtered_odom_velocity": [
+          -0.0009640128123460626,
+          0.0002705625409831189
+        ],
+        "post_action_truth_twist_stopped": true,
+        "max_abs_cmd_vel_linear_x_mps": 0.18,
+        "max_abs_cmd_vel_angular_z_radps": 0.45
+      },
+      "shutdown": {
+        "child_sigkill_escalated": true,
+        "child_sigterm_escalated": true,
+        "forced": false,
+        "gazebo_child_shutdown_clean": false,
+        "group_gone": true,
+        "returncode": 0,
+        "signal": "SIGINT"
+      },
+      "limitations": [
+        "Gazebo required launch-managed signal escalation during shutdown; the runner still verified the simulation process group was gone."
+      ]
+    },
+    {
+      "scenario_id": "S02",
+      "seed": 101,
+      "run_id": "s02-reference-final-stop-check",
+      "status": "PASS",
+      "classification": "PASS",
+      "run_directory": "runs/s02-reference-final-stop-check",
+      "action": {
+        "accepted": true,
+        "status": "SUCCEEDED",
+        "error_code": 0,
+        "timed_out": false,
+        "number_of_recoveries": 0
+      },
+      "metrics": {
+        "wall_elapsed_s": 54.923,
+        "truth_path_length_m": 6.644,
+        "final_xy_goal_error_m": 0.1559,
+        "final_localization_drift_xy_m": 0.029,
+        "minimum_conservative_clearance_m": 0.119,
+        "contact_collision_events": 0,
+        "post_action_robot_stopped": true,
+        "post_action_settle_time_s": 0.805,
+        "post_action_settle_window_expired": false,
+        "post_action_truth_pose_window": {
+          "duration_s": 0.81,
+          "sample_count": 5,
+          "xy_delta_m": 0.00098,
+          "yaw_delta_rad": 0.02437
+        },
+        "post_action_raw_odom_velocity": [
+          0.0,
+          0.0
+        ],
+        "post_action_filtered_odom_velocity": [
+          -0.0008709554278000368,
+          0.001048612399745931
+        ],
+        "post_action_truth_twist_stopped": true,
+        "max_abs_cmd_vel_linear_x_mps": 0.18,
+        "max_abs_cmd_vel_angular_z_radps": 0.45
+      },
+      "shutdown": {
+        "child_sigkill_escalated": false,
+        "child_sigterm_escalated": false,
+        "forced": false,
+        "gazebo_child_shutdown_clean": true,
+        "group_gone": true,
+        "returncode": 0,
+        "signal": "SIGINT"
+      },
+      "limitations": []
+    },
+    {
+      "scenario_id": "S03",
+      "seed": 101,
+      "run_id": "s03-reference-final-stop-check",
+      "status": "PASS",
+      "classification": "PASS",
+      "run_directory": "runs/s03-reference-final-stop-check",
+      "action": {
+        "accepted": true,
+        "status": "SUCCEEDED",
+        "error_code": 0,
+        "timed_out": false,
+        "number_of_recoveries": 0
+      },
+      "metrics": {
+        "wall_elapsed_s": 76.984,
+        "truth_path_length_m": 9.0862,
+        "final_xy_goal_error_m": 0.1744,
+        "final_localization_drift_xy_m": 0.0605,
+        "minimum_conservative_clearance_m": 0.0155,
+        "contact_collision_events": 0,
+        "post_action_robot_stopped": true,
+        "post_action_settle_time_s": 0.807,
+        "post_action_settle_window_expired": false,
+        "post_action_truth_pose_window": {
+          "duration_s": 0.809,
+          "sample_count": 5,
+          "xy_delta_m": 0.00118,
+          "yaw_delta_rad": 0.02932
+        },
+        "post_action_raw_odom_velocity": [
+          0.0,
+          0.0
+        ],
+        "post_action_filtered_odom_velocity": [
+          -0.0009685622625475394,
+          -0.00034924045977694987
+        ],
+        "post_action_truth_twist_stopped": true,
+        "max_abs_cmd_vel_linear_x_mps": 0.18,
+        "max_abs_cmd_vel_angular_z_radps": 0.45
+      },
+      "shutdown": {
+        "child_sigkill_escalated": false,
+        "child_sigterm_escalated": false,
+        "forced": false,
+        "gazebo_child_shutdown_clean": true,
+        "group_gone": true,
+        "returncode": 0,
+        "signal": "SIGINT"
+      },
+      "limitations": []
+    },
+    {
+      "scenario_id": "S04",
+      "seed": 202,
+      "run_id": "s04-reference-final-stop-check",
+      "status": "PASS",
+      "classification": "PASS",
+      "run_directory": "runs/s04-reference-final-stop-check",
+      "action": {
+        "accepted": true,
+        "status": "SUCCEEDED",
+        "error_code": 0,
+        "timed_out": false,
+        "number_of_recoveries": 0
+      },
+      "metrics": {
+        "wall_elapsed_s": 57.537,
+        "truth_path_length_m": 6.1103,
+        "final_xy_goal_error_m": 0.0801,
+        "final_localization_drift_xy_m": 0.0636,
+        "minimum_conservative_clearance_m": 0.1065,
+        "contact_collision_events": 0,
+        "post_action_robot_stopped": true,
+        "post_action_settle_time_s": 1.206,
+        "post_action_settle_window_expired": false,
+        "post_action_truth_pose_window": {
+          "duration_s": 0.99,
+          "sample_count": 6,
+          "xy_delta_m": 0.0,
+          "yaw_delta_rad": 0.0
+        },
+        "post_action_raw_odom_velocity": [
+          0.0,
+          0.0
+        ],
+        "post_action_filtered_odom_velocity": [
+          -0.0008876507300152565,
+          -0.0007869983026731134
+        ],
+        "post_action_truth_twist_stopped": true,
+        "max_abs_cmd_vel_linear_x_mps": 0.18,
+        "max_abs_cmd_vel_angular_z_radps": 0.45
+      },
+      "shutdown": {
+        "child_sigkill_escalated": false,
+        "child_sigterm_escalated": false,
+        "forced": false,
+        "gazebo_child_shutdown_clean": true,
+        "group_gone": true,
+        "returncode": 0,
+        "signal": "SIGINT"
+      },
+      "limitations": []
+    },
+    {
+      "scenario_id": "S09",
+      "seed": 101,
+      "run_id": "s09-reference-seed101-pose-odom-stop",
+      "status": "PASS_EXPECTED_NO_ROUTE",
+      "classification": "PASS_EXPECTED_NO_ROUTE",
+      "run_directory": "runs/s09-reference-seed101-pose-odom-stop",
+      "action": {
+        "accepted": true,
+        "status": "ABORTED",
+        "error_code": 208,
+        "timed_out": false,
+        "number_of_recoveries": 15
+      },
+      "metrics": {
+        "wall_elapsed_s": 29.921,
+        "truth_path_length_m": 0.4562,
+        "final_xy_goal_error_m": 6.0822,
+        "final_localization_drift_xy_m": 0.0804,
+        "minimum_conservative_clearance_m": 0.5128,
+        "contact_collision_events": 0,
+        "post_action_robot_stopped": true,
+        "post_action_settle_time_s": 0.602,
+        "post_action_settle_window_expired": false,
+        "post_action_truth_pose_window": {
+          "duration_s": 0.986,
+          "sample_count": 6,
+          "xy_delta_m": 0.0,
+          "yaw_delta_rad": 0.0
+        },
+        "post_action_raw_odom_velocity": [
+          0.0,
+          0.0
+        ],
+        "post_action_filtered_odom_velocity": [
+          8.742434155917482e-05,
+          0.0012646366056324743
+        ],
+        "post_action_truth_twist_stopped": false,
+        "max_abs_cmd_vel_linear_x_mps": 0.15,
+        "max_abs_cmd_vel_angular_z_radps": 0.6
+      },
+      "shutdown": {
+        "child_sigkill_escalated": false,
+        "child_sigterm_escalated": false,
+        "forced": false,
+        "gazebo_child_shutdown_clean": true,
+        "group_gone": true,
+        "returncode": 0,
+        "signal": "SIGINT"
+      },
+      "limitations": []
+    }
+  ],
+  "validation": {
+    "colcon_build": {
+      "status": "PASS",
+      "command": "colcon build --symlink-install --packages-up-to anc_navigation",
+      "packages_finished": 5,
+      "log": "build-final.log"
+    },
+    "python_compile": {
+      "status": "PASS",
+      "log": "static-validation.log"
+    },
+    "static_acceptance": {
+      "status": "PASS",
+      "checks": 19,
+      "log": "static-validation.log"
+    },
+    "xacro_camera_toggle": {
+      "status": "PASS",
+      "camera_disabled_sensor_count": 0,
+      "camera_enabled_sensor_count": 1,
+      "imu_sensor_count_in_each_mode": 1,
+      "log": "xacro-camera-toggle.log"
+    }
+  },
+  "scope_limitations": [
+    "The reference occupancy map is generated from exact scenario geometry; this is an oracle baseline, not RGB perception or unknown-map navigation.",
+    "Localization uses the known spawn pose and Phase 4 wheel/IMU EKF; unknown-start localization and AMCL are outside this phase.",
+    "S03's conservative minimum clearance is 0.0155 m and should not be treated as a hardware-safe margin.",
+    "S09 aborted an unreachable goal without timing out or collision, after 15 recoveries and about 0.456 m of truth path. Its Gazebo entity-state twist disagreed with unchanged truth pose, zero raw odometry, near-zero filtered odometry, and zero commands; all observations are recorded.",
+    "The final S01 run required launch-managed SIGTERM/SIGKILL escalation for the Gazebo child, although its process group exited and no processes remained.",
+    "No hardware watchdog, electrical emergency stop, camera-only navigation, dynamic obstacle behavior, sensor-loss recovery, or parking behavior was tested."
+  ]
+}

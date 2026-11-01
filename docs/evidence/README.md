@@ -1,4 +1,4 @@
-# Phase 1 through Phase 4 evidence index
+# Phase 1 through Phase 6 evidence index
 
 Evidence below was captured from the E:-hosted Ubuntu-24.04 WSL distro. Phase 1 navigation used the packaged REFERENCE sensor profile. Phase 2/3/4 entity-state data appears only in test evaluators and is not an input to localization, navigation, or perception.
 
@@ -82,3 +82,20 @@ Only the Phase 4 evaluator calls /gzserver/get_entity_state. The EKF and wheel a
 - Canonical worlds: simulation/scenarios/worlds/s00_empty_open_arena.sdf, s01_single_box_detour.sdf, s02_random_simple_objects.sdf, s03_constricted_occlusion.sdf, s04_seeded_known_start.sdf, and s09_no_route.sdf.
 - phase5/default-world-regression/: controlled launch without overrides; phase2_wall, zero spawn/map-to-odom, sensor startup, evaluator truth agreement, and clean shutdown passed. The earlier coreutils-timeout diagnostic is preserved as phase5/default-world-timeout-diagnostic.log because its second interrupt caused forced escalation; it is not counted as an accepted run.
 - Every accepted live run captured evaluator truth in its local result.json; the runner did not publish truth or entity layouts to ROS, command the robot, or attempt navigation. Each accepted process group exited cleanly after SIGINT.
+
+
+## Phase 6 reference Nav2 navigation
+
+- phase6/build-final.log: final colcon build of the five packages up to anc_navigation.
+- phase6/static-validation.log: Python syntax and 19 Phase 6 static acceptance checks.
+- phase6/xacro-camera-toggle.log: XML-based Xacro check for camera-off/on modes and IMU preservation.
+- phase6/phase6-summary.json and phase6/README.md: accepted scenario table, aggregate measurements, evidence paths, and limits.
+- phase6/runs/s00-reference-final-stop-check/: straight open-arena NavigateToPose gate.
+- phase6/runs/s01-reference-final-stop-check/: box detour.
+- phase6/runs/s02-reference-final-stop-check/: seeded simple-object obstacle course.
+- phase6/runs/s03-reference-final-stop-check/: constricted route and final clean-shutdown verification.
+- phase6/runs/s04-reference-final-stop-check/: randomized known-start trial.
+- phase6/runs/s09-reference-seed101-pose-odom-stop/: unreachable static goal, bounded Nav2 abort, settled pose/odometry/zero-command check.
+- Each accepted run contains result.json, world/map files, truth trajectory, logs, costmaps/trace images where available, and an MCAP rosbag. Earlier failed diagnostic attempts are retained under the same runs/ directory and are not counted as accepted results.
+
+The ORACLE_REFERENCE map is generated from the exact scenario geometry and the known spawn pose is supplied to the localization baseline. This verifies custom-car Nav2 planning against a privileged reference map; it does not validate RGB perception, unknown-map navigation, unknown-start localization, parking, or sim-to-real behavior. S03's minimum conservative clearance was about 0.0155 m. S09's Gazebo truth twist disagreed with stable pose and near-zero odometry while command topics were zero; see its result.json. No GUI screenshot was captured because these trials were headless; the run-specific map/layout and navigation trace PNGs are saved.

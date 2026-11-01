@@ -407,12 +407,17 @@ def run(args):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--mode", choices=("stationary", "navigation"), default="stationary")
     parser.add_argument("--scenario", required=True, choices=("S00", "S01", "S02", "S03", "S04", "S09"))
     parser.add_argument("--seed", required=True, type=int)
     parser.add_argument("--run-id", required=True)
     parser.add_argument("--duration-s", type=float, default=5.0)
     parser.add_argument("--startup-timeout-s", type=float, default=75.0)
+    parser.add_argument("--navigation-timeout-s", type=float, default=100.0)
     args = parser.parse_args()
+    if args.mode == "navigation":
+        from phase6_navigation_runner import run as run_navigation
+        sys.exit(run_navigation(args))
     sys.exit(run(args))
 
 

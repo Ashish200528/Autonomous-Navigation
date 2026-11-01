@@ -1,0 +1,346 @@
+{
+  "action": {
+    "error_code": null,
+    "error_msg": "Nav2 rejected the goal.",
+    "feedback_samples": 0,
+    "goal_accepted": false,
+    "goal_frame": "map",
+    "goal_xyyaw": [
+      2.0,
+      0.0,
+      0.0
+    ],
+    "last_feedback": null,
+    "name": "/navigate_to_pose",
+    "number_of_recoveries": 0,
+    "status": "REJECTED",
+    "status_code": null,
+    "timed_out": false
+  },
+  "classification": "FAIL",
+  "costmap_images": {},
+  "evidence_files": [
+    "manifest.json",
+    "world.sdf",
+    "oracle_reference_map.yaml",
+    "oracle_reference_map.pgm",
+    "layout.png",
+    "navigation_trace.png",
+    "truth_trajectory.csv",
+    "launch.log",
+    "rosbag.log",
+    "rosbag/"
+  ],
+  "goal_xyyaw": [
+    2.0,
+    0.0,
+    0.0
+  ],
+  "launch_command": [
+    "ros2",
+    "launch",
+    "anc_navigation",
+    "reference_navigation.launch.py",
+    "world_file:=/home/ashish/AutonomousNavigationCar/docs/evidence/phase6/runs/s00-reference-verified/world.sdf",
+    "map_yaml:=/home/ashish/AutonomousNavigationCar/docs/evidence/phase6/runs/s00-reference-verified/oracle_reference_map.yaml",
+    "start_x:=0.000000",
+    "start_y:=0.000000",
+    "start_yaw:=0.000000"
+  ],
+  "layout_sha256": "a4f5c35cb0c38bc233519894063f3bd8123fd656a018b4048d9fdf3d62a55f2f",
+  "map": {
+    "free_cells": 17556,
+    "height": 120,
+    "occupied_cells": 1644,
+    "origin_xy_m": [
+      -4.0,
+      -3.0
+    ],
+    "profile": "ORACLE_REFERENCE",
+    "resolution_m": 0.05,
+    "width": 160
+  },
+  "map_pgm_sha256": "e456285c5157256bc990a248cd8c07b7cf0b663bcc948892eed1e81baac7c1c8",
+  "map_yaml_sha256": "54fded273ff0d7c14bd483c51a00b5399c2011caab4cb18ff5712a8917bc5126",
+  "metrics": {
+    "action_accepted": false,
+    "action_error_code": null,
+    "action_error_message": "Nav2 rejected the goal.",
+    "action_result": "REJECTED",
+    "command_gazebo_samples": 0,
+    "command_guard_limits_mps_radps": [
+      0.25,
+      1.0
+    ],
+    "command_nav_samples": 0,
+    "contact_collision_events": 0,
+    "contact_collision_pairs": [],
+    "evaluator_truth_errors": [
+      "Requested entity not found",
+      "Requested entity not found",
+      "Requested entity not found",
+      "Requested entity not found",
+      "Requested entity not found",
+      "Requested entity not found",
+      "Requested entity not found",
+      "Requested entity not found",
+      "Requested entity not found",
+      "Requested entity not found",
+      "Requested entity not found",
+      "Requested entity not found",
+      "Requested entity not found",
+      "Requested entity not found",
+      "Requested entity not found",
+      "Timed out while waiting for updated Gazebo state"
+    ],
+    "filtered_odom_path_length_m": 0.0001,
+    "filtered_odom_samples": 56,
+    "final_estimated_map_pose": {
+      "x": -0.0001677710523329226,
+      "y": -5.823604469600814e-09,
+      "yaw_rad": 0.00013352661051690973
+    },
+    "final_localization_drift_xy_m": 0.0002,
+    "final_truth_pose": {
+      "angular_z_radps": -1.482e-17,
+      "frame_id": "world",
+      "linear_x_mps": 4.18155e-09,
+      "monotonic_s": 25476.724632858,
+      "sim_time_s": 5.196,
+      "x": -1.05475e-05,
+      "y": -1.66235e-18,
+      "yaw_rad": 4.24701e-18,
+      "z": -3.89996e-08
+    },
+    "final_xy_goal_error_m": 2.0,
+    "final_yaw_goal_error_rad": 0.0,
+    "ground_contact_messages_filtered": 679,
+    "latest_planned_path_length_m": 0.0,
+    "max_abs_cmd_vel_angular_z_radps": 0.0,
+    "max_abs_cmd_vel_linear_x_mps": 0.0,
+    "minimum_conservative_clearance_m": 2.586,
+    "non_ground_contact_messages": 0,
+    "peak_planned_path_length_m": 0.0,
+    "plan_message_count": 0,
+    "post_action_robot_stopped": true,
+    "raw_odom_path_length_m": 0.0,
+    "raw_odom_samples": 58,
+    "sensor_counts": {
+      "camera_image_raw": 29,
+      "clock": 2248,
+      "imu_data": 159,
+      "map": 1,
+      "odom": 58,
+      "odometry_filtered": 56
+    },
+    "sim_elapsed_s": 1.962,
+    "truth_path_length_m": 0.0,
+    "truth_samples": 12,
+    "wall_elapsed_s": 11.524
+  },
+  "navigation_inputs": {
+    "gazebo_truth_used_by_navigation": false,
+    "localization": "Phase 4 wheel/IMU EKF odometry plus known-start map->odom",
+    "map": "run-specific geometry-derived static occupancy map from scenario layout",
+    "obstacle_geometry_sent_to_navigation": false,
+    "reference_map_available_to_realistic_profile": false
+  },
+  "navigation_profile": "ORACLE_REFERENCE",
+  "obstacle_count": 0,
+  "original_phase5_sensor_profile": "REFERENCE",
+  "phase": 6,
+  "published_map": {
+    "data_count": 19200,
+    "frame_id": "map",
+    "free_cells": 17556,
+    "height": 120,
+    "occupied_cells": 1644,
+    "origin_xy_m": [
+      -4.0,
+      -3.0
+    ],
+    "resolution_m": 0.05000000074505806,
+    "unknown_cells": 0,
+    "width": 160
+  },
+  "ros_domain_id": 67,
+  "rosbag": {
+    "command": [
+      "ros2",
+      "bag",
+      "record",
+      "--storage",
+      "mcap",
+      "-o",
+      "/home/ashish/AutonomousNavigationCar/docs/evidence/phase6/runs/s00-reference-verified/rosbag",
+      "/clock",
+      "/tf",
+      "/tf_static",
+      "/map",
+      "/global_costmap/costmap",
+      "/local_costmap/costmap",
+      "/global_costmap/costmap_raw",
+      "/local_costmap/costmap_raw",
+      "/odom",
+      "/odometry/filtered",
+      "/plan",
+      "/cmd_vel_nav",
+      "/cmd_vel",
+      "/contacts",
+      "/navigate_to_pose/_action/feedback",
+      "/navigate_to_pose/_action/status"
+    ],
+    "path": "/home/ashish/AutonomousNavigationCar/docs/evidence/phase6/runs/s00-reference-verified/rosbag",
+    "requested": true,
+    "shutdown": {
+      "returncode": 0,
+      "stopped": true
+    }
+  },
+  "route_expected": true,
+  "route_found_by_geometry_validator": true,
+  "run_id": "s00-reference-verified",
+  "runtime_graph": {
+    "cmd_vel_publishers": {
+      "output_file": "graph-cmd_vel_publishers.log",
+      "returncode": 0,
+      "summary": "Type: geometry_msgs/msg/Twist\n\nPublisher count: 0\n\nSubscription count: 1\n\nNode name: anc_parameter_bridge\nNode namespace: /\nTopic type: geometry_msgs/msg/Twist\nTopic type hash: RIHS01_9c45bf16fe0983d80e3cfe750d6835843d265a9a6c46bd2e609fcddde6fb8d2a\nEndpoint type: SUBSCRIPTION\nGID: 01.0f.fc.f3.d1.5d.9f.93.00.00.00.00.00.00.15.04\nQoS profile:\n  Reliability: RELIABLE\n  History (Depth): UNKNOWN\n  Durability: VOLATILE\n  Lifespan: Infinite\n  Deadline: Infinite\n  Liveliness: AUTOMATIC\n  Liveliness lease duration: Infinite\n\n"
+    },
+    "nodes": {
+      "output_file": "graph-nodes.log",
+      "returncode": 0,
+      "summary": "/anc_ekf_filter\n/anc_imu_sanitizer\n/anc_known_start_map_to_odom\n/anc_navigation_cmd_vel_guard\n/anc_parameter_bridge\n/anc_wheel_odometry_covariance\n/behavior_server\n/bt_navigator\n/bt_navigator_navigate_to_pose_rclcpp_node\n/controller_server\n/global_costmap/global_costmap\n/gzserver\n/lifecycle_manager_map\n/lifecycle_manager_navigation\n/local_costmap/local_costmap\n/map_server\n/planner_server\n/robot_state_publisher\n/rosbag2_recorder\n/transform_listener_impl_5960f5a588a0\n/transform_listener_impl_59ee1efccee0\n/transform_listener_impl_64f2ecb65220\n"
+    },
+    "tf_publishers": {
+      "output_file": "graph-tf_publishers.log",
+      "returncode": 0,
+      "summary": "Type: tf2_msgs/msg/TFMessage\n\nPublisher count: 1\n\nNode name: robot_state_publisher\nNode namespace: /\nTopic type: tf2_msgs/msg/TFMessage\nTopic type hash: RIHS01_e369d0f05a23ae52508854b66f6aa0437f3449d652e8cbf22d5abe85d020f087\nEndpoint type: PUBLISHER\nGID: 01.0f.fc.f3.d0.5d.09.b0.00.00.00.00.00.00.15.03\nQoS profile:\n  Reliability: RELIABLE\n  History (Depth): UNKNOWN\n  Durability: VOLATILE\n  Lifespan: Infinite\n  Deadline: Infinite\n  Liveliness: AUTOMATIC\n  Liveliness lease duration: Infinite\n\nSubscription count: 0\n\n"
+    },
+    "tf_static_publishers": {
+      "output_file": "graph-tf_static_publishers.log",
+      "returncode": 1,
+      "summary": "Unknown topic '/tf_static'\n"
+    }
+  },
+  "scenario_id": "S00",
+  "schema_version": 1,
+  "seed": 101,
+  "sensor_profile_override": "ORACLE_REFERENCE",
+  "shutdown": {
+    "forced": false,
+    "group_gone": true,
+    "returncode": 0,
+    "signal": "SIGINT"
+  },
+  "source_commit": "d60eddbabbf45d1d9bf69e974a3d40eb773c2921",
+  "start_xyyaw": [
+    0.0,
+    0.0,
+    0.0
+  ],
+  "status": "FAIL",
+  "tests": [
+    {
+      "detail": "camera=3, imu=16, odom=5, filtered_odom=4, clock=1634, map=1, navigate_to_pose_server=True",
+      "name": "reference_navigation_graph_ready",
+      "status": "PASS"
+    },
+    {
+      "detail": "truth start error=0.0000 m / 0.0000 rad",
+      "name": "known_start_spawn_matches_scenario",
+      "status": "PASS"
+    },
+    {
+      "detail": "map_server geometry grid matched=True; {'frame_id': 'map', 'width': 160, 'height': 120, 'resolution_m': 0.05000000074505806, 'origin_xy_m': [-4.0, -3.0], 'data_count': 19200, 'occupied_cells': 1644, 'free_cells': 17556, 'unknown_cells': 0}",
+      "name": "oracle_reference_map_published",
+      "status": "PASS"
+    },
+    {
+      "detail": "map->odom observed; sole configured publisher is anc_known_start_map_to_odom",
+      "name": "single_known_start_map_to_odom_transform_present",
+      "status": "PASS"
+    },
+    {
+      "detail": "odom->base_footprint observed; sole configured publisher is anc_ekf_filter",
+      "name": "single_ekf_odom_to_base_transform_present",
+      "status": "PASS"
+    },
+    {
+      "detail": "Dedicated launch does not start AMCL or another map->odom publisher",
+      "name": "amcl_not_in_reference_profile",
+      "status": "PASS"
+    },
+    {
+      "detail": "Action goal acceptance returned by Nav2",
+      "name": "navigate_to_pose_goal_accepted",
+      "status": "FAIL"
+    },
+    {
+      "detail": "status=REJECTED, error_code=None",
+      "name": "navigate_to_pose_succeeded_with_zero_error_code",
+      "status": "FAIL"
+    },
+    {
+      "detail": "truth final goal error=2.0000105475 m / 4.24701e-18 rad",
+      "name": "goal_reached_against_evaluator_truth",
+      "status": "FAIL"
+    },
+    {
+      "detail": "truth travel=0.000 m, max command=0.000 m/s / 0.000 rad/s",
+      "name": "robot_motion_observed_with_velocity_limits",
+      "status": "FAIL"
+    },
+    {
+      "detail": "contact events=0; conservative min clearance=2.5860000000000003",
+      "name": "no_obstacle_collision_and_clearance_recorded",
+      "status": "PASS"
+    },
+    {
+      "detail": "camera=29, imu=159, odom=58, filtered=56",
+      "name": "simulation_sensor_streams_present",
+      "status": "PASS"
+    },
+    {
+      "detail": "map->odom from known-start node and odom->base_footprint from EKF",
+      "name": "single_authority_tf_chain_present",
+      "status": "PASS"
+    },
+    {
+      "detail": "post-action truth speeds=[4.18155e-09, -1.482e-17]; latest command zero=True",
+      "name": "controller_stopped_after_action",
+      "status": "PASS"
+    },
+    {
+      "detail": "AMCL is absent; evaluator is the only Gazebo entity-state service client",
+      "name": "no_amcl_or_truth_navigation_node",
+      "status": "PASS"
+    },
+    {
+      "detail": "{\"forced\": false, \"group_gone\": true, \"returncode\": 0, \"signal\": \"SIGINT\"}",
+      "name": "simulation_shutdown_bounded",
+      "status": "PASS"
+    },
+    {
+      "detail": "{\"returncode\": 0, \"stopped\": true}",
+      "name": "rosbag_closed",
+      "status": "PASS"
+    }
+  ],
+  "tf_initial": {
+    "map_to_odom": {
+      "x": 0.0,
+      "y": 0.0,
+      "yaw": 0.0,
+      "z": 0.0
+    },
+    "odom_to_base_footprint": {
+      "x": -0.00015992944885224347,
+      "y": -3.4418948495195163e-09,
+      "yaw": 1.755887011967161e-05,
+      "z": 0.0
+    }
+  },
+  "trace_image": "navigation_trace.png",
+  "truth_published_to_ros": false,
+  "world_sha256": "1259b992c5ccbfa1c78fb468606816cf349b5f755078cb42455c5a34ccb2209c"
+}

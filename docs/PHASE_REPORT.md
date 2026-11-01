@@ -1,9 +1,9 @@
 # Autonomous Navigation Car simulation phase report
 
-Date: 2026-11-01 (Asia/Calcutta)
+Date: 2026-11-02 (Asia/Calcutta)
 Project: /home/ashish/AutonomousNavigationCar on Ubuntu-24.04 at E:/WSL/Ubuntu-24.04
 Branch: main
-Scope: Phase 0 baseline through Phase 5 reproducible simulation worlds and scenario harness.
+Scope: Phase 0 baseline through Phase 6 reference-only Nav2 navigation.
 
 ## Outcome
 
@@ -14,12 +14,13 @@ Scope: Phase 0 baseline through Phase 5 reproducible simulation worlds and scena
 - Phase 3 sensor simulation and ROS interfaces: PASS WITH LIMITS. RGB/CameraInfo, sanitized IMU, clock, odometry, joint states, TF, wall contact, RViz, and a bounded bag were verified. Sensor parameters remain provisional.
 - Phase 4 odometry, state estimation, and known-start localization: PASS WITH LIMITS. The wheel/gyro EKF reduced motion RMSE and wall-stall x error in the accepted run, but did not correct wheel slip and was worse than raw odometry at the non-closing rectangle endpoint.
 - Phase 5 reproducible simulation worlds and scenario harness: PASS WITH LIMITS. Six bounded worlds, deterministic seeded layouts, geometry route/no-route checks, four headless runs, known-start TF, sensor streams, evaluator-only truth, and clean shutdown were verified. No navigation or perception was attempted.
+- Phase 6 REFERENCE Nav2 navigation: PASS WITH LIMITS. The selected S00/S01/S02/S03/S04/S09 trials passed using a per-run geometry-derived oracle map, known-start EKF TF, headless Gazebo, collision/clearance/truth evaluation, rosbag evidence, and bounded teardown. This is not RGB or unknown-map navigation.
 
 ## Scope and integrity
 
-The supplied roadmap and task text governed the phase gates. Gazebo entity state was used only by the Phase 2/3/4/5 test evaluators. Neither Nav2, localization nodes, nor a perception/controller node received Gazebo ground-truth pose or obstacle geometry. The Nav2 run is labeled REFERENCE because it used the packaged map and simulated laser scan; it is not evidence of RGB-only navigation. All custom vehicle dimensions are design placeholders, not measured hardware values.
+The supplied roadmap and task text governed the phase gates. Gazebo entity state is consumed only by test evaluators. Phase 6 explicitly supplies Nav2 a per-run ORACLE_REFERENCE occupancy grid rasterized from deterministic scenario geometry and a known spawn pose; Gazebo truth pose and obstacle geometry are not published to the navigation graph. This is a reference planning baseline, not RGB perception, unknown-map navigation, or hardware-faithful localization. All custom vehicle dimensions are design placeholders, not measured hardware values.
 
-No package installation, system-wide upgrade, Windows/WSL restart, or Arduino UNO Q application change was made during these validation tasks. Gazebo was stopped cleanly after tests. No Phase 2 screenshot was saved; tests were headless.
+No package installation, system-wide upgrade, Windows/WSL restart, or Arduino UNO Q application change was made during these validation tasks. All final simulation process groups exited and no processes remained; the final S01 run required launch-managed SIGTERM/SIGKILL escalation for its Gazebo child, as recorded in its result.json. No Phase 2 screenshot was saved; tests were headless.
 
 ## Environment and resources
 
@@ -324,4 +325,35 @@ python3 scripts/phase5_default_world_smoke.py
 
 ## Next recommended task
 
-Phase 5 scenario generation and harness checks are complete with limits; they do not support a navigation claim. Before hardware-faithful work, measure the chassis, wheel geometry, encoder behavior, camera calibration, and IMU noise/bias; use measurements to retune covariances and friction; and add tests for missing/stale wheel input. Keep the known-start baseline and evaluator-only truth boundary. Phase 6 perception/navigation, unknown-pose acquisition, safe-stop behavior, and parking remain unstarted.
+Phase 5 geometry generation and harness checks are complete with limits. The Phase 6 ORACLE_REFERENCE Nav2 baseline passes its selected cases with limits; it does not establish RGB-only navigation or sim-to-real readiness. Next, resolve the S09 truth-twist/odometry discrepancy, improve clearance and drift margins, and measure chassis, wheel, encoder, camera, and IMU properties before hardware-faithful work. Unknown-start localization, RGB perception, dynamic obstacles, sensor-loss recovery, parking, and hardware emergency stop remain future phases.
+
+## Phase 6: REFERENCE Nav2 navigation
+
+### Result
+
+Status: PASS WITH LIMITS for the selected scenario set. The custom car used Nav2 NavigateToPose with NavFn planning, Regulated Pure Pursuit, a bounded command guard, wheel/IMU EKF odometry, and a known-start map-to-odom transform. The camera is disabled only in this headless Phase 6 launch to reduce rendering load; existing simulator defaults and Phase 3/5 camera tests remain unchanged. Nav2 received a per-run 5 cm occupancy map generated from scenario geometry. It did not receive Gazebo entity-state truth or obstacle geometry as ROS inputs.
+
+| Scenario | Run ID | Action outcome | Truth path | Min clearance | Contacts | Localization drift |
+|---|---|---|---:|---:|---:|---:|
+| S00 | s00-reference-final-stop-check | SUCCEEDED | 1.853 m | 1.7326 m | 0 | 0.001 m |
+| S01 | s01-reference-final-stop-check | SUCCEEDED | 6.141 m | 0.1129 m | 0 | 0.016 m |
+| S02 | s02-reference-final-stop-check | SUCCEEDED | 6.644 m | 0.1190 m | 0 | 0.029 m |
+| S03 | s03-reference-final-stop-check | SUCCEEDED | 9.086 m | 0.0155 m | 0 | 0.060 m |
+| S04 | s04-reference-final-stop-check | SUCCEEDED | 6.110 m | 0.1065 m | 0 | 0.064 m |
+| S09 | s09-reference-seed101-pose-odom-stop | ABORTED (expected no-route; error 208, 15 recoveries) | 0.456 m | 0.5128 m | 0 | 0.080 m |
+
+All six final-code runs have individual result.json and MCAP evidence under docs/evidence/phase6/runs/. S00-S04 returned SUCCEEDED with error code 0; S09 returned ABORTED with error code 208, not SUCCEEDED, and did not time out. Every run's simulation process group exited and no simulation processes remained. The final S01 run records launch-managed SIGTERM/SIGKILL escalation of its Gazebo child; see its result limitations. The complete summary is docs/evidence/phase6/phase6-summary.json.
+
+### Validation
+
+- colcon build --symlink-install --packages-up-to anc_navigation: 5 packages finished; see docs/evidence/phase6/build-final.log.
+- Python syntax compilation and 19 Phase 6 static acceptance checks passed; see docs/evidence/phase6/static-validation.log.
+- Both Xacro camera modes parsed: zero RGB camera sensors with camera disabled, one with it enabled, and one IMU in both modes; see docs/evidence/phase6/xacro-camera-toggle.log.
+- MCAP inspection confirmed one known-start map-to-odom edge on /tf_static and the recorded odom-to-base_footprint edge on /tf. The live /tf publisher graph contained anc_ekf_filter and robot_state_publisher only; the EKF is the sole configured publisher for odom-to-base_footprint.
+- The command guard stayed within 0.25 m/s and 1.0 rad/s. No non-ground contact collisions were recorded.
+
+### Limits and remaining work
+
+S03 had the smallest conservative clearance at 0.0155 m, and should be treated as a very tight path in this placeholder geometry. S03 and S04 final localization drift was about 0.060 m and 0.064 m, respectively. S09 required 15 Nav2 recoveries and moved about 0.456 m along its bounded failed attempt before stopping; it is evidence of a static no-route abort, not zero movement or a general emergency-stop test. Its final Gazebo entity-state twist reported about 0.102 rad/s angular velocity while the truth pose was unchanged over the final 0.986 s, raw odometry was zero, filtered odometry was near zero, and command topics were zero. The discrepancy is preserved in the run result and must be resolved before using entity-state twist as a stop signal.
+
+This phase does not implement RGB FREE/OCCUPIED/UNKNOWN perception, unknown-start localization, dynamic obstacles, sensor-loss recovery, parking, hardware watchdog, or an electrical emergency stop. Chassis/wheel geometry, camera calibration, IMU noise/bias, and wheel slip remain open sim-to-real limits.

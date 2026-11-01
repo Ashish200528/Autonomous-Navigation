@@ -14,7 +14,7 @@ All hardware measurements remain unresolved. The Phase 2 robot geometry and Phas
 - simulation/scenarios/ contains the scenario registry and six generated Phase 5 SDF worlds.
 - simulation/data/ is for future logs and calibration artifacts; review large raw files before committing.
 - hardware/uno_q/ is reserved for future adapters; keep the existing UNO Q application intact.
-- scripts/ contains project-scoped ROS setup, Phase 2-4 checks, and the seeded Phase 5 generator, validator, and headless runner.
+- scripts/ contains project-scoped ROS setup, Phase 2-4 checks, the seeded Phase 5 harness, and the Phase 6 Nav2 reference runner.
 - config/robot_parameters.yaml is the source of truth for measured and provisional model parameters.
 
 ## Start a project shell
@@ -143,4 +143,4 @@ Each run writes world.sdf, manifest.json, layout.png, launch.log, and result.jso
 - Phase 3 sensor simulation and ROS interfaces: PASS WITH LIMITS; see the phase report for provisional sensor assumptions and odometry/contact constraints.
 - Phase 4 known-start wheel/IMU localization: PASS WITH LIMITS.
 - Phase 5 reproducible worlds and scenario harness: PASS WITH LIMITS; see docs/PHASE_REPORT.md and docs/evidence/README.md.
-- Phase 6 perception/navigation, unknown-pose acquisition, safe-stop behavior, and parking have not been started.
+- Phase 6 selected ORACLE_REFERENCE Nav2 scenarios S00-S04 and S09: PASS WITH LIMITS; see docs/PHASE_REPORT.md and docs/evidence/phase6/README.md. RGB perception, unknown-pose acquisition, general safe-stop behavior, and parking remain unimplemented.

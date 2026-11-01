@@ -44,6 +44,7 @@ def generate_launch_description():
             "robot_description": Command([
                 FindExecutable(name="xacro"), " ", robot_xacro,
                 " wheel_surface_mu:=", LaunchConfiguration("wheel_surface_mu"),
+                " camera_enabled:=", LaunchConfiguration("camera_enabled"),
             ]),
             "use_sim_time": True,
         }],
@@ -87,6 +88,10 @@ def generate_launch_description():
         DeclareLaunchArgument(
             "wheel_surface_mu", default_value="1.2",
             description="Test-only Gazebo wheel surface friction coefficient.",
+        ),
+        DeclareLaunchArgument(
+            "camera_enabled", default_value="true",
+            description="Enable RGB camera sensor; Phase 6 reference navigation disables it to reduce headless rendering load.",
         ),
         DeclareLaunchArgument(
             "world_file", default_value=default_world,

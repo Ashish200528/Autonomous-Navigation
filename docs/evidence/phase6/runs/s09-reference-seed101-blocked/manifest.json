@@ -1,0 +1,101 @@
+{
+  "arena": {
+    "clearance_margin_m": 0.05,
+    "grid_resolution_m": 0.1,
+    "inner_bounds_xy": [
+      -3.85,
+      3.85,
+      -2.85,
+      2.85
+    ],
+    "outer_bounds_xy": [
+      -4.0,
+      4.0,
+      -3.0,
+      3.0
+    ],
+    "robot_circumscribed_radius_m": 0.264,
+    "wall_height_m": 1.2
+  },
+  "corridor_results": [],
+  "expected_free_corridors": [],
+  "goal_xyyaw": [
+    3.0,
+    0.0,
+    0.0
+  ],
+  "layout_sha256": "2a3147ff0063458347fd2c31b78f4d07bc90ce1081605c28637bc842eeec021f",
+  "map_mode": "online_or_local",
+  "navigation_attempted": false,
+  "navigation_map_pgm": "/home/ashish/AutonomousNavigationCar/docs/evidence/phase6/runs/s09-reference-seed101-blocked/oracle_reference_map.pgm",
+  "navigation_map_yaml": "/home/ashish/AutonomousNavigationCar/docs/evidence/phase6/runs/s09-reference-seed101-blocked/oracle_reference_map.yaml",
+  "navigation_profile": "ORACLE_REFERENCE",
+  "obstacles": [
+    {
+      "name": "obstacle_01",
+      "pose_xyyaw": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "shape": "box",
+      "size_xyz": [
+        0.25,
+        5.6,
+        1.1
+      ],
+      "static": true
+    }
+  ],
+  "route_expected": false,
+  "route_validation": {
+    "found": false,
+    "grid_cells": 0,
+    "grid_resolution_m": 0.1,
+    "path_xy": []
+  },
+  "scenario_id": "S09",
+  "scenario_name": "no_traversable_route",
+  "schema_version": 1,
+  "seed": 101,
+  "sensor_profile": "REALISTIC",
+  "start_xyyaw": [
+    -3.0,
+    0.0,
+    0.0
+  ],
+  "validation": {
+    "checks": [
+      {
+        "detail": "start center has at least 0.314 m clearance from arena bounds and every obstacle.",
+        "name": "start_footprint_clearance",
+        "passed": true
+      },
+      {
+        "detail": "goal center has at least 0.314 m clearance from arena bounds and every obstacle.",
+        "name": "goal_footprint_clearance",
+        "passed": true
+      },
+      {
+        "detail": "box physical footprint lies inside the room.",
+        "name": "obstacle_01_inside_arena",
+        "passed": true
+      },
+      {
+        "detail": "10 cm footprint-inflated grid found=False; expected=False.",
+        "name": "route_validity_matches_registry",
+        "passed": true
+      },
+      {
+        "detail": "The divider and room bounds leave no footprint-clear route.",
+        "name": "scenario_has_no_route",
+        "passed": true
+      }
+    ],
+    "passed": true
+  },
+  "validity": "no_route",
+  "world_file": "/home/ashish/AutonomousNavigationCar/docs/evidence/phase6/runs/s09-reference-seed101-blocked/world.sdf",
+  "world_sha256": "98a0f75bafdfee7bef77267528b1127f26b99cbd1c6954129dfca81b78f3eb5f",
+  "world_type": "blocked_divider"
+}

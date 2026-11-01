@@ -1,0 +1,130 @@
+{
+  "status": "PASS",
+  "result": "/home/ashish/AutonomousNavigationCar/docs/evidence/phase3-sensor-smoke-phase6-baseline.json",
+  "telemetry": "/home/ashish/AutonomousNavigationCar/docs/evidence/phase3-sensor-telemetry-phase6-baseline.csv",
+  "checks": [
+    {
+      "name": "camera image exists",
+      "status": "PASS",
+      "detail": {
+        "path": "docs/evidence/phase3-camera-frame-phase6-baseline.png",
+        "frame_id": "camera_optical_frame",
+        "stamp_s": 11.156,
+        "width": 320,
+        "height": 240,
+        "encoding": "rgb8",
+        "unique_rgb_pixels": 92,
+        "channel_extrema": [
+          [
+            75,
+            164
+          ],
+          [
+            44,
+            164
+          ],
+          [
+            30,
+            164
+          ]
+        ],
+        "capture_stage": "pre-contact stationary camera frame"
+      }
+    },
+    {
+      "name": "rendered RGB scene",
+      "status": "PASS",
+      "detail": "92 distinct pixel colors"
+    },
+    {
+      "name": "camera dimensions and frame",
+      "status": "PASS",
+      "detail": "320x240, frame=camera_optical_frame"
+    },
+    {
+      "name": "camera and CameraInfo frequency",
+      "status": "PASS",
+      "detail": "image=15.15 Hz, info=15.15 Hz; expected about 15 Hz"
+    },
+    {
+      "name": "sensor timestamps monotonic",
+      "status": "PASS",
+      "detail": "strictly increasing camera, CameraInfo and IMU simulation stamps"
+    },
+    {
+      "name": "camera frame and calibration",
+      "status": "PASS",
+      "detail": "CameraInfo frame, K/P/D lengths and plumb_bob model"
+    },
+    {
+      "name": "camera calibration values",
+      "status": "PASS",
+      "detail": "fx=277.128, fy=277.128, expected 277.128 px for provisional 60 deg HFOV"
+    },
+    {
+      "name": "IMU frequency",
+      "status": "PASS",
+      "detail": "99.53 Hz; expected about 100 Hz"
+    },
+    {
+      "name": "IMU orientation truth suppressed",
+      "status": "PASS",
+      "detail": "zero quaternion and covariance[0] = -1 on /imu/data; frame imu_link"
+    },
+    {
+      "name": "IMU configured covariance",
+      "status": "PASS",
+      "detail": "gyro variance 4e-6 (0.002 rad/s sigma), acceleration variance 4e-4 (0.02 m/s^2 sigma)"
+    },
+    {
+      "name": "IMU stationary gravity convention",
+      "status": "PASS",
+      "detail": "stationary mean acceleration x/y/z = 0.001/-0.000/9.800 m/s^2"
+    },
+    {
+      "name": "odometry interface and frequency",
+      "status": "PASS",
+      "detail": "383 messages at 29.41 Hz; expected 30 Hz from robot_parameters.yaml; frames odom/base_footprint"
+    },
+    {
+      "name": "wheel joint states",
+      "status": "PASS",
+      "detail": "last names=['left_wheel_joint', 'right_wheel_joint'], rate=487.15 Hz"
+    },
+    {
+      "name": "simulation clock",
+      "status": "PASS",
+      "detail": "6335 increasing /clock messages"
+    },
+    {
+      "name": "TF chain and wheel frames",
+      "status": "PASS",
+      "detail": "missing=[], conflicting_children=[]"
+    },
+    {
+      "name": "dynamic TF timestamp freshness",
+      "status": "PASS",
+      "detail": "latest clock=24.160s, newest dynamic TF=24.150s"
+    },
+    {
+      "name": "reproducible wall stall",
+      "status": "PASS",
+      "detail": "evaluator pose={'sim_time_s': 24.25, 'frame_id': 'world', 'x': 0.735, 'y': -2.57137e-14, 'z': -4.24557e-08, 'yaw_rad': -7.220019999999998e-15, 'linear_x_mps': -5.43759e-07, 'angular_z_radps': 9.05927e-15}; expected x about 0.735 m; error=None"
+    },
+    {
+      "name": "wall contact telemetry",
+      "status": "PASS",
+      "detail": "6337 contact messages; 8625 contact records; 2289 messages and 2289 records include phase2_wall; first={'wall_elapsed_s': 9.592522884999198, 'collision1': 'anc_robot::base_footprint::base_footprint_fixed_joint_lump__caster_collision_collision_1', 'collision2': 'phase2_wall::wall::wall_collision', 'max_depth_m': 0.00023170078610317696}"
+    },
+    {
+      "name": "wheel odometry stall characterization",
+      "status": "PASS",
+      "detail": "wheel odometry/evaluator comparison={'odom_x_m': 1.1870294504921488, 'evaluator_x_m': 0.735, 'x_divergence_m': 0.4520294504921488, 'odom_yaw_rad': 0.0, 'evaluator_yaw_rad': -7.220019999999998e-15, 'yaw_divergence_rad': 7.220019999999998e-15}; evaluator data used only by this test"
+    },
+    {
+      "name": "sensor timestamps not stale",
+      "status": "PASS",
+      "detail": "age behind /clock [image, CameraInfo, IMU, odom] = [0.182, 0.116, 0.114, 0.128] s"
+    }
+  ]
+}

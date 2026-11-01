@@ -2,6 +2,7 @@
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="anc_robot">
   <xacro:property name="cfg" value="${xacro.load_yaml('$(find anc_description)/config/robot_parameters.yaml')}"/>
   <xacro:property name="sim" value="${cfg['robot']['simulation_model']}"/>
+  <xacro:arg name="camera_enabled" default="true"/>
   <xacro:arg name="wheel_surface_mu" default="${sim['wheel_surface_mu']}"/>
   <xacro:property name="L" value="${sim['chassis_length_m']}"/>
   <xacro:property name="W" value="${sim['chassis_width_m']}"/>
@@ -127,6 +128,7 @@
     <origin xyz="${IMU_XYZ[0]} ${IMU_XYZ[1]} ${IMU_XYZ[2]}" rpy="${IMU_RPY[0]} ${IMU_RPY[1]} ${IMU_RPY[2]}"/>
   </joint>
 
+  <xacro:if value="$(arg camera_enabled)">
   <gazebo reference="camera_link">
     <sensor name="anc_rgb_camera" type="camera">
       <always_on>true</always_on>
@@ -149,6 +151,7 @@
       </camera>
     </sensor>
   </gazebo>
+  </xacro:if>
 
   <gazebo reference="imu_link">
     <sensor name="anc_imu" type="imu">
