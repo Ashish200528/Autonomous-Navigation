@@ -1,0 +1,503 @@
+{
+  "run_id": "phase4-final-model",
+  "profile": "REALISTIC",
+  "mode": "headless Gazebo Harmonic",
+  "camera": {
+    "image_count": 191,
+    "image_rate_hz": 15.151515151515149,
+    "camera_info_count": 191,
+    "camera_info_rate_hz": 15.151515151515149,
+    "frame": "camera_optical_frame",
+    "provisional_horizontal_fov_rad": 1.0471975512,
+    "resolution": [
+      320,
+      240
+    ],
+    "image_evidence": {
+      "path": "docs/evidence/phase3-camera-frame-phase4-final-model.png",
+      "frame_id": "camera_optical_frame",
+      "stamp_s": 25.676,
+      "width": 320,
+      "height": 240,
+      "encoding": "rgb8",
+      "unique_rgb_pixels": 92,
+      "channel_extrema": [
+        [
+          75,
+          164
+        ],
+        [
+          44,
+          164
+        ],
+        [
+          30,
+          164
+        ]
+      ],
+      "capture_stage": "pre-contact stationary camera frame"
+    }
+  },
+  "imu": {
+    "count": 1260,
+    "rate_hz": 100.0,
+    "frame": "imu_link",
+    "orientation": "unavailable; Gazebo truth-derived quaternion suppressed",
+    "stationary_sample_count": 200
+  },
+  "odometry": {
+    "count": 372,
+    "rate_hz": 29.411764705882344,
+    "frame": "odom",
+    "child_frame": "base_footprint",
+    "stall_comparison": {
+      "odom_x_m": 1.1747894505215248,
+      "evaluator_x_m": 0.735,
+      "x_divergence_m": 0.43978945052152485,
+      "odom_yaw_rad": -7.260282405039677e-20,
+      "evaluator_yaw_rad": -7.149229999999998e-15,
+      "yaw_divergence_rad": 7.149157397175947e-15
+    }
+  },
+  "joint_states": {
+    "count": 6199,
+    "rate_hz": 493.6285441223319,
+    "names": [
+      "left_wheel_joint",
+      "right_wheel_joint"
+    ]
+  },
+  "clock": {
+    "count": 6210,
+    "latest_s": 38.386
+  },
+  "tf": {
+    "edges": [
+      [
+        "base_footprint",
+        "base_link"
+      ],
+      [
+        "base_link",
+        "camera_link"
+      ],
+      [
+        "base_link",
+        "caster_link"
+      ],
+      [
+        "base_link",
+        "imu_link"
+      ],
+      [
+        "base_link",
+        "left_wheel_link"
+      ],
+      [
+        "base_link",
+        "right_wheel_link"
+      ],
+      [
+        "camera_link",
+        "camera_optical_frame"
+      ],
+      [
+        "map",
+        "odom"
+      ],
+      [
+        "odom",
+        "base_footprint"
+      ]
+    ],
+    "conflicts": [],
+    "missing": []
+  },
+  "contact": {
+    "message_count": 6236,
+    "messages_with_wall_contact": 2238,
+    "contact_record_count": 8473,
+    "wall_event_count": 2238,
+    "wall_event_sample": [
+      {
+        "wall_elapsed_s": 8.325092875000337,
+        "collision1": "anc_robot::base_footprint::base_footprint_fixed_joint_lump__caster_collision_collision_1",
+        "collision2": "phase2_wall::wall::wall_collision",
+        "max_depth_m": 0.0002317007861048423
+      },
+      {
+        "wall_elapsed_s": 8.326826941000036,
+        "collision1": "anc_robot::base_footprint::base_footprint_fixed_joint_lump__caster_collision_collision_1",
+        "collision2": "phase2_wall::wall::wall_collision",
+        "max_depth_m": 0.0002297044439694626
+      },
+      {
+        "wall_elapsed_s": 8.32885468600034,
+        "collision1": "anc_robot::base_footprint::base_footprint_fixed_joint_lump__caster_collision_collision_1",
+        "collision2": "phase2_wall::wall::wall_collision",
+        "max_depth_m": 0.00022770432610180052
+      },
+      {
+        "wall_elapsed_s": 8.33117388699975,
+        "collision1": "anc_robot::base_footprint::base_footprint_fixed_joint_lump__caster_collision_collision_1",
+        "collision2": "phase2_wall::wall::wall_collision",
+        "max_depth_m": 0.00022570525143499748
+      },
+      {
+        "wall_elapsed_s": 8.332938723000552,
+        "collision1": "anc_robot::base_footprint::base_footprint_fixed_joint_lump__caster_collision_collision_1",
+        "collision2": "phase2_wall::wall::wall_collision",
+        "max_depth_m": 0.00022370574957613493
+      },
+      {
+        "wall_elapsed_s": 8.335152601001028,
+        "collision1": "anc_robot::base_footprint::base_footprint_fixed_joint_lump__caster_collision_collision_1",
+        "collision2": "phase2_wall::wall::wall_collision",
+        "max_depth_m": 0.00022170624770905673
+      },
+      {
+        "wall_elapsed_s": 8.337067100999775,
+        "collision1": "anc_robot::base_footprint::base_footprint_fixed_joint_lump__caster_collision_collision_1",
+        "collision2": "phase2_wall::wall::wall_collision",
+        "max_depth_m": 0.00021970674584264466
+      },
+      {
+        "wall_elapsed_s": 8.339110504000928,
+        "collision1": "anc_robot::base_footprint::base_footprint_fixed_joint_lump__caster_collision_collision_1",
+        "collision2": "phase2_wall::wall::wall_collision",
+        "max_depth_m": 0.00021770724397689872
+      },
+      {
+        "wall_elapsed_s": 8.341393849999804,
+        "collision1": "anc_robot::base_footprint::base_footprint_fixed_joint_lump__caster_collision_collision_1",
+        "collision2": "phase2_wall::wall::wall_collision",
+        "max_depth_m": 0.0002157077421117079
+      },
+      {
+        "wall_elapsed_s": 8.343364213000314,
+        "collision1": "anc_robot::base_footprint::base_footprint_fixed_joint_lump__caster_collision_collision_1",
+        "collision2": "phase2_wall::wall::wall_collision",
+        "max_depth_m": 0.0002137082402471832
+      },
+      {
+        "wall_elapsed_s": 8.345439959000942,
+        "collision1": "anc_robot::base_footprint::base_footprint_fixed_joint_lump__caster_collision_collision_1",
+        "collision2": "phase2_wall::wall::wall_collision",
+        "max_depth_m": 0.00021170873838321363
+      },
+      {
+        "wall_elapsed_s": 8.34762510300061,
+        "collision1": "anc_robot::base_footprint::base_footprint_fixed_joint_lump__caster_collision_collision_1",
+        "collision2": "phase2_wall::wall::wall_collision",
+        "max_depth_m": 0.00020970923651979917
+      },
+      {
+        "wall_elapsed_s": 8.354655826000453,
+        "collision1": "anc_robot::base_footprint::base_footprint_fixed_joint_lump__caster_collision_collision_1",
+        "collision2": "phase2_wall::wall::wall_collision",
+        "max_depth_m": 0.00020770973465693982
+      },
+      {
+        "wall_elapsed_s": 8.355966037001053,
+        "collision1": "anc_robot::base_footprint::base_footprint_fixed_joint_lump__caster_collision_collision_1",
+        "collision2": "phase2_wall::wall::wall_collision",
+        "max_depth_m": 0.00020571023279463557
+      },
+      {
+        "wall_elapsed_s": 8.35720176399991,
+        "collision1": "anc_robot::base_footprint::base_footprint_fixed_joint_lump__caster_collision_collision_1",
+        "collision2": "phase2_wall::wall::wall_collision",
+        "max_depth_m": 0.00020371073093288644
+      },
+      {
+        "wall_elapsed_s": 8.35826264500065,
+        "collision1": "anc_robot::base_footprint::base_footprint_fixed_joint_lump__caster_collision_collision_1",
+        "collision2": "phase2_wall::wall::wall_collision",
+        "max_depth_m": 0.00020171122907169242
+      },
+      {
+        "wall_elapsed_s": 8.359435921000113,
+        "collision1": "anc_robot::base_footprint::base_footprint_fixed_joint_lump__caster_collision_collision_1",
+        "collision2": "phase2_wall::wall::wall_collision",
+        "max_depth_m": 0.0001997117272109425
+      },
+      {
+        "wall_elapsed_s": 8.361145519000274,
+        "collision1": "anc_robot::base_footprint::base_footprint_fixed_joint_lump__caster_collision_collision_1",
+        "collision2": "phase2_wall::wall::wall_collision",
+        "max_depth_m": 0.00019771510804194453
+      },
+      {
+        "wall_elapsed_s": 8.362286696999945,
+        "collision1": "anc_robot::base_footprint::base_footprint_fixed_joint_lump__caster_collision_collision_1",
+        "collision2": "phase2_wall::wall::wall_collision",
+        "max_depth_m": 0.00019573845484804203
+      },
+      {
+        "wall_elapsed_s": 8.36351322200062,
+        "collision1": "anc_robot::base_footprint::base_footprint_fixed_joint_lump__caster_collision_collision_1",
+        "collision2": "phase2_wall::wall::wall_collision",
+        "max_depth_m": 0.0001937815681889929
+      }
+    ],
+    "events": [
+      {
+        "wall_elapsed_s": 0.006745332000718918,
+        "collision1": "anc_robot::base_footprint::base_footprint_fixed_joint_lump__caster_collision_collision_1",
+        "collision2": "ground_plane::ground::ground_collision",
+        "max_depth_m": 6.977611519826121e-08
+      },
+      {
+        "wall_elapsed_s": 0.009647236000091652,
+        "collision1": "anc_robot::base_footprint::base_footprint_fixed_joint_lump__caster_collision_collision_1",
+        "collision2": "ground_plane::ground::ground_collision",
+        "max_depth_m": 6.977611519826121e-08
+      },
+      {
+        "wall_elapsed_s": 0.01220806099991023,
+        "collision1": "anc_robot::base_footprint::base_footprint_fixed_joint_lump__caster_collision_collision_1",
+        "collision2": "ground_plane::ground::ground_collision",
+        "max_depth_m": 6.977611519826121e-08
+      },
+      {
+        "wall_elapsed_s": 0.014484400000583264,
+        "collision1": "anc_robot::base_footprint::base_footprint_fixed_joint_lump__caster_collision_collision_1",
+        "collision2": "ground_plane::ground::ground_collision",
+        "max_depth_m": 6.977611519826121e-08
+      },
+      {
+        "wall_elapsed_s": 0.017034690999935265,
+        "collision1": "anc_robot::base_footprint::base_footprint_fixed_joint_lump__caster_collision_collision_1",
+        "collision2": "ground_plane::ground::ground_collision",
+        "max_depth_m": 6.977611519826121e-08
+      },
+      {
+        "wall_elapsed_s": 0.022339631999784615,
+        "collision1": "anc_robot::base_footprint::base_footprint_fixed_joint_lump__caster_collision_collision_1",
+        "collision2": "ground_plane::ground::ground_collision",
+        "max_depth_m": 6.977611519826121e-08
+      },
+      {
+        "wall_elapsed_s": 0.029174293000323814,
+        "collision1": "anc_robot::base_footprint::base_footprint_fixed_joint_lump__caster_collision_collision_1",
+        "collision2": "ground_plane::ground::ground_collision",
+        "max_depth_m": 6.977611519826121e-08
+      },
+      {
+        "wall_elapsed_s": 0.031401901000208454,
+        "collision1": "anc_robot::base_footprint::base_footprint_fixed_joint_lump__caster_collision_collision_1",
+        "collision2": "ground_plane::ground::ground_collision",
+        "max_depth_m": 6.977611519826121e-08
+      },
+      {
+        "wall_elapsed_s": 0.033265985000980436,
+        "collision1": "anc_robot::base_footprint::base_footprint_fixed_joint_lump__caster_collision_collision_1",
+        "collision2": "ground_plane::ground::ground_collision",
+        "max_depth_m": 6.977611519826121e-08
+      },
+      {
+        "wall_elapsed_s": 0.03625556200131541,
+        "collision1": "anc_robot::base_footprint::base_footprint_fixed_joint_lump__caster_collision_collision_1",
+        "collision2": "ground_plane::ground::ground_collision",
+        "max_depth_m": 6.977611519826121e-08
+      },
+      {
+        "wall_elapsed_s": 0.03851615900020988,
+        "collision1": "anc_robot::base_footprint::base_footprint_fixed_joint_lump__caster_collision_collision_1",
+        "collision2": "ground_plane::ground::ground_collision",
+        "max_depth_m": 6.977611519826121e-08
+      },
+      {
+        "wall_elapsed_s": 0.040457463001075666,
+        "collision1": "anc_robot::base_footprint::base_footprint_fixed_joint_lump__caster_collision_collision_1",
+        "collision2": "ground_plane::ground::ground_collision",
+        "max_depth_m": 6.977611519826121e-08
+      },
+      {
+        "wall_elapsed_s": 0.04275268499986851,
+        "collision1": "anc_robot::base_footprint::base_footprint_fixed_joint_lump__caster_collision_collision_1",
+        "collision2": "ground_plane::ground::ground_collision",
+        "max_depth_m": 6.977611519826121e-08
+      },
+      {
+        "wall_elapsed_s": 0.04383250300088548,
+        "collision1": "anc_robot::base_footprint::base_footprint_fixed_joint_lump__caster_collision_collision_1",
+        "collision2": "ground_plane::ground::ground_collision",
+        "max_depth_m": 6.977611519826121e-08
+      },
+      {
+        "wall_elapsed_s": 0.045440370000505936,
+        "collision1": "anc_robot::base_footprint::base_footprint_fixed_joint_lump__caster_collision_collision_1",
+        "collision2": "ground_plane::ground::ground_collision",
+        "max_depth_m": 6.977611519826121e-08
+      },
+      {
+        "wall_elapsed_s": 0.04680461899988586,
+        "collision1": "anc_robot::base_footprint::base_footprint_fixed_joint_lump__caster_collision_collision_1",
+        "collision2": "ground_plane::ground::ground_collision",
+        "max_depth_m": 6.977611519826121e-08
+      },
+      {
+        "wall_elapsed_s": 0.04765263100125594,
+        "collision1": "anc_robot::base_footprint::base_footprint_fixed_joint_lump__caster_collision_collision_1",
+        "collision2": "ground_plane::ground::ground_collision",
+        "max_depth_m": 6.977611519826121e-08
+      },
+      {
+        "wall_elapsed_s": 0.04904786800034344,
+        "collision1": "anc_robot::base_footprint::base_footprint_fixed_joint_lump__caster_collision_collision_1",
+        "collision2": "ground_plane::ground::ground_collision",
+        "max_depth_m": 6.977611519826121e-08
+      },
+      {
+        "wall_elapsed_s": 0.050456642000426655,
+        "collision1": "anc_robot::base_footprint::base_footprint_fixed_joint_lump__caster_collision_collision_1",
+        "collision2": "ground_plane::ground::ground_collision",
+        "max_depth_m": 6.977611519826121e-08
+      },
+      {
+        "wall_elapsed_s": 0.05126461100007873,
+        "collision1": "anc_robot::base_footprint::base_footprint_fixed_joint_lump__caster_collision_collision_1",
+        "collision2": "ground_plane::ground::ground_collision",
+        "max_depth_m": 6.977611519826121e-08
+      }
+    ],
+    "robot_collision_test": "forward command toward fixed phase2_wall"
+  },
+  "evaluator_only_truth": {
+    "sim_time_s": 38.336,
+    "frame_id": "world",
+    "x": 0.735,
+    "y": -2.57549e-14,
+    "z": -4.24557e-08,
+    "yaw_rad": -7.149229999999998e-15,
+    "linear_x_mps": -5.43759e-07,
+    "angular_z_radps": 9.02117e-15
+  },
+  "checks": [
+    {
+      "name": "camera image exists",
+      "status": "PASS",
+      "detail": {
+        "path": "docs/evidence/phase3-camera-frame-phase4-final-model.png",
+        "frame_id": "camera_optical_frame",
+        "stamp_s": 25.676,
+        "width": 320,
+        "height": 240,
+        "encoding": "rgb8",
+        "unique_rgb_pixels": 92,
+        "channel_extrema": [
+          [
+            75,
+            164
+          ],
+          [
+            44,
+            164
+          ],
+          [
+            30,
+            164
+          ]
+        ],
+        "capture_stage": "pre-contact stationary camera frame"
+      }
+    },
+    {
+      "name": "rendered RGB scene",
+      "status": "PASS",
+      "detail": "92 distinct pixel colors"
+    },
+    {
+      "name": "camera dimensions and frame",
+      "status": "PASS",
+      "detail": "320x240, frame=camera_optical_frame"
+    },
+    {
+      "name": "camera and CameraInfo frequency",
+      "status": "PASS",
+      "detail": "image=15.15 Hz, info=15.15 Hz; expected about 15 Hz"
+    },
+    {
+      "name": "sensor timestamps monotonic",
+      "status": "PASS",
+      "detail": "strictly increasing camera, CameraInfo and IMU simulation stamps"
+    },
+    {
+      "name": "camera frame and calibration",
+      "status": "PASS",
+      "detail": "CameraInfo frame, K/P/D lengths and plumb_bob model"
+    },
+    {
+      "name": "camera calibration values",
+      "status": "PASS",
+      "detail": "fx=277.128, fy=277.128, expected 277.128 px for provisional 60 deg HFOV"
+    },
+    {
+      "name": "IMU frequency",
+      "status": "PASS",
+      "detail": "100.00 Hz; expected about 100 Hz"
+    },
+    {
+      "name": "IMU orientation truth suppressed",
+      "status": "PASS",
+      "detail": "zero quaternion and covariance[0] = -1 on /imu/data; frame imu_link"
+    },
+    {
+      "name": "IMU configured covariance",
+      "status": "PASS",
+      "detail": "gyro variance 4e-6 (0.002 rad/s sigma), acceleration variance 4e-4 (0.02 m/s^2 sigma)"
+    },
+    {
+      "name": "IMU stationary gravity convention",
+      "status": "PASS",
+      "detail": "stationary mean acceleration x/y/z = 0.001/0.000/9.801 m/s^2"
+    },
+    {
+      "name": "odometry interface and frequency",
+      "status": "PASS",
+      "detail": "372 messages at 29.41 Hz; expected 30 Hz from robot_parameters.yaml; frames odom/base_footprint"
+    },
+    {
+      "name": "wheel joint states",
+      "status": "PASS",
+      "detail": "last names=['left_wheel_joint', 'right_wheel_joint'], rate=493.63 Hz"
+    },
+    {
+      "name": "simulation clock",
+      "status": "PASS",
+      "detail": "6197 increasing /clock messages"
+    },
+    {
+      "name": "TF chain and wheel frames",
+      "status": "PASS",
+      "detail": "missing=[], conflicting_children=[]"
+    },
+    {
+      "name": "dynamic TF timestamp freshness",
+      "status": "PASS",
+      "detail": "latest clock=38.280s, newest dynamic TF=38.266s"
+    },
+    {
+      "name": "reproducible wall stall",
+      "status": "PASS",
+      "detail": "evaluator pose={'sim_time_s': 38.336, 'frame_id': 'world', 'x': 0.735, 'y': -2.57549e-14, 'z': -4.24557e-08, 'yaw_rad': -7.149229999999998e-15, 'linear_x_mps': -5.43759e-07, 'angular_z_radps': 9.02117e-15}; expected x about 0.735 m; error=None"
+    },
+    {
+      "name": "wall contact telemetry",
+      "status": "PASS",
+      "detail": "6236 contact messages; 8473 contact records; 2238 messages and 2238 records include phase2_wall; first={'wall_elapsed_s': 8.325092875000337, 'collision1': 'anc_robot::base_footprint::base_footprint_fixed_joint_lump__caster_collision_collision_1', 'collision2': 'phase2_wall::wall::wall_collision', 'max_depth_m': 0.0002317007861048423}"
+    },
+    {
+      "name": "wheel odometry stall characterization",
+      "status": "PASS",
+      "detail": "wheel odometry/evaluator comparison={'odom_x_m': 1.1747894505215248, 'evaluator_x_m': 0.735, 'x_divergence_m': 0.43978945052152485, 'odom_yaw_rad': -7.260282405039677e-20, 'evaluator_yaw_rad': -7.149229999999998e-15, 'yaw_divergence_rad': 7.149157397175947e-15}; evaluator data used only by this test"
+    },
+    {
+      "name": "sensor timestamps not stale",
+      "status": "PASS",
+      "detail": "age behind /clock [image, CameraInfo, IMU, odom] = [0.17, 0.17, 0.106, 0.11] s"
+    }
+  ],
+  "status": "PASS"
+}

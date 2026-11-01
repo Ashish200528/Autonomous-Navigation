@@ -1,0 +1,203 @@
+{
+  "status": "PASS_WITH_LIMITS",
+  "mode": "normal",
+  "summary": "/home/ashish/AutonomousNavigationCar/docs/evidence/phase4-localization-normal-final7.json",
+  "telemetry": "/home/ashish/AutonomousNavigationCar/docs/evidence/phase4-localization-normal-final7.csv",
+  "plot": "/home/ashish/AutonomousNavigationCar/docs/evidence/phase4-localization-normal-final7.png",
+  "rates_hz": {
+    "raw_odom": 29.41176470588235,
+    "wheel_odometry": 29.41176470588235,
+    "filtered": 29.979504378610027,
+    "imu": 97.25848563968668
+  },
+  "checks": [
+    {
+      "name": "raw, covariance-qualified wheel, filtered odometry and IMU received",
+      "status": "PASS",
+      "detail": {
+        "raw": 1579,
+        "wheel": 1579,
+        "filtered": 1610,
+        "imu": 5216
+      }
+    },
+    {
+      "name": "raw and wheel streams share exact stamps for >=98% of the smaller stream",
+      "status": "PASS",
+      "detail": {
+        "matched": 1579,
+        "raw_samples": 1579,
+        "wheel_samples": 1579,
+        "raw_unmatched_samples": 0,
+        "wheel_unmatched_samples": 0,
+        "shared_coverage_of_smaller_stream": 1.0
+      }
+    },
+    {
+      "name": "wheel velocity covariance is nonzero and pose is excluded",
+      "status": "PASS",
+      "detail": {
+        "vx_variance": 0.0004,
+        "vy_variance": 0.01,
+        "pose_x_variance": 1000000.0
+      }
+    },
+    {
+      "name": "sanitized IMU orientation stays unavailable",
+      "status": "PASS",
+      "detail": {
+        "orientation_covariance_0": -1.0
+      }
+    },
+    {
+      "name": "IMU dropout stops data, EKF continues, and input recovers",
+      "status": "PASS",
+      "detail": {
+        "imu_during_dropout": 0,
+        "filtered_during_dropout": 42,
+        "imu_recovered": true
+      }
+    },
+    {
+      "name": "simulation clock and sensor stamps are monotonic",
+      "status": "PASS",
+      "detail": {
+        "clock": true,
+        "topics": {
+          "raw": true,
+          "wheel": true,
+          "filtered": true,
+          "imu": true
+        }
+      }
+    },
+    {
+      "name": "EKF output rate is stable",
+      "status": "PASS",
+      "detail": {
+        "filtered_rate_hz": 29.979504378610027,
+        "target_hz": 30.0
+      }
+    },
+    {
+      "name": "filtered odometry is fresh against /clock",
+      "status": "PASS",
+      "detail": {
+        "latest_clock_s": 64.53,
+        "latest_filtered_s": 64.52,
+        "age_s": 0.010000000000005116
+      }
+    },
+    {
+      "name": "filtered covariance remains finite and nonnegative",
+      "status": "PASS",
+      "detail": {
+        "samples_checked": 1610
+      }
+    },
+    {
+      "name": "known-start TF chain has required edges and no parent conflicts",
+      "status": "PASS",
+      "detail": {
+        "map_to_odom_identity": true,
+        "odom_to_base_footprint_edge_present": true,
+        "tf_topic_publisher_nodes": [
+          "anc_ekf_filter",
+          "robot_state_publisher"
+        ],
+        "per_edge_publisher_gid_available": false,
+        "static_edges_missing": [],
+        "frame_parent_conflicts": {}
+      }
+    },
+    {
+      "name": "filtered pose has no one-sample jumps",
+      "status": "PASS",
+      "detail": {
+        "jump_count": 0,
+        "examples": [],
+        "limits": {
+          "position_m": 0.1,
+          "yaw_rad": 0.3
+        }
+      }
+    },
+    {
+      "name": "straight, in-place rotation, rectangle, and return are recorded",
+      "status": "PASS",
+      "detail": {
+        "straight_end_truth": {
+          "topic": "truth",
+          "scenario": "normal",
+          "phase": "straight_out",
+          "sim_time_s": 19.634,
+          "x": 0.281794,
+          "y": -1.34495e-15,
+          "z": -3.15685e-08,
+          "yaw": -5.017869999999999e-15,
+          "vx": 0.00199958,
+          "vy": -4.80817e-19,
+          "wz": -4.02687e-17,
+          "frame_id": "world"
+        },
+        "rotation_end_truth": {
+          "topic": "truth",
+          "scenario": "normal",
+          "phase": "rotation_ccw",
+          "sim_time_s": 26.132,
+          "x": -0.0323617,
+          "y": 0.039183,
+          "z": -3.15008e-08,
+          "yaw": 1.36745,
+          "vx": -0.00251515,
+          "vy": -0.00148669,
+          "wz": 0.0387324,
+          "frame_id": "world"
+        },
+        "return_to_start": {
+          "truth_xy_error_m": 0.13386533469773365,
+          "truth_yaw_error_rad": 0.9799790000000002,
+          "raw_xy_error_m": 0.07645419336470285,
+          "raw_yaw_error_rad": 0.5011853167817171,
+          "filtered_xy_error_m": 0.15964009148607158,
+          "filtered_yaw_error_rad": 0.9756690911862503
+        }
+      }
+    },
+    {
+      "name": "wall stall is stationary and the EKF reduces raw wheel drift",
+      "status": "PASS",
+      "detail": {
+        "evaluator_x_m": 0.56624,
+        "evaluator_y_m": -0.807398,
+        "evaluator_yaw_rad": -0.9802099999999999,
+        "raw_odom_x_m": 0.9560604450996234,
+        "filtered_x_m": 0.586614928700159,
+        "raw_minus_truth_m": 0.38982044509962344,
+        "filtered_minus_truth_m": 0.020374928700159,
+        "evaluator_linear_speed_mps": 9.43083e-11
+      }
+    }
+  ],
+  "motion_raw_xy_rmse_m": 0.15009562419401043,
+  "motion_filtered_xy_rmse_m": 0.048089926579222474,
+  "return_to_start": {
+    "truth_xy_error_m": 0.13386533469773365,
+    "truth_yaw_error_rad": 0.9799790000000002,
+    "raw_xy_error_m": 0.07645419336470285,
+    "raw_yaw_error_rad": 0.5011853167817171,
+    "filtered_xy_error_m": 0.15964009148607158,
+    "filtered_yaw_error_rad": 0.9756690911862503
+  },
+  "wall_stall": {
+    "evaluator_x_m": 0.56624,
+    "evaluator_y_m": -0.807398,
+    "evaluator_yaw_rad": -0.9802099999999999,
+    "raw_odom_x_m": 0.9560604450996234,
+    "filtered_x_m": 0.586614928700159,
+    "raw_minus_truth_m": 0.38982044509962344,
+    "filtered_minus_truth_m": 0.020374928700159,
+    "evaluator_linear_speed_mps": 9.43083e-11
+  },
+  "wheel_slip": null
+}

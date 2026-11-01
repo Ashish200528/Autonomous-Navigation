@@ -1,6 +1,6 @@
-# Phase 1 through Phase 3 evidence index
+# Phase 1 through Phase 4 evidence index
 
-Evidence below was captured from the E:-hosted Ubuntu-24.04 WSL distro. Phase 1 navigation used the packaged REFERENCE sensor profile. Phase 2/3 entity-state data appears only in test evaluators and is not an input to navigation or perception.
+Evidence below was captured from the E:-hosted Ubuntu-24.04 WSL distro. Phase 1 navigation used the packaged REFERENCE sensor profile. Phase 2/3/4 entity-state data appears only in test evaluators and is not an input to localization, navigation, or perception.
 
 ## Phase 1 environment checks
 
@@ -56,3 +56,15 @@ No Phase 2 screenshot or video was produced because these tests were intentional
 - phase3-rosbag-record-short.log records the oversized high-rate capture attempt. Large interrupted/overflow MCAP attempts are kept locally under ignored evidence directories; they are not part of the accepted capture.
 
 The Gazebo contact test counts repeated contact records while the robot remains in contact; they are not unique collision episodes. The final smoke result reports wall-specific contact messages separately from other contacts.
+
+## Phase 4 localization
+
+- phase4-baseline-environment.log, phase4-baseline-build.log, phase4-baseline-launch.log, and phase4-baseline-phase3-smoke.log: baseline environment/build and accepted Phase 3 behavior before Phase 4 edits.
+- phase4-build-final.log and phase4-validation-final.log: final four-package build and static validation, including Python/YAML, covariance dimensions/types, Xacro/URDF/SDF, wheel friction, world, and launch arguments.
+- phase4-localization-normal-final7.json, phase4-localization-normal-final7.csv, phase4-localization-normal-final7.png, phase4-normal-launch-final7.log, and phase4-normal-test-final7.log: accepted normal trajectory, stationary IMU, dropout/recovery, wall stall, and rectangle-return measurements.
+- phase4-localization-slip-final4.json, phase4-localization-slip-final4.csv, phase4-localization-slip-final4.png, phase4-slip-launch-final4.log, and phase4-slip-test-final4.log: accepted low-friction wheel-slip trial.
+- phase3-sensor-smoke-phase4-final-model.json, phase3-sensor-telemetry-phase4-final-model.csv, phase3-camera-frame-phase4-final-model.png, and phase4-final-phase3-smoke.log: Phase 3 regression on the corrected Phase 4 model; 20/20 checks passed.
+- phase4-tf-publisher-info-final4.log and phase4-ekf-node-info-final4.log: topic-level TF publisher and EKF graph/subscription inspection. Graph logs show anc_ekf_filter and robot_state_publisher on /tf; EKF inputs are /odometry/wheel and /imu/data. Jazzy rclpy MessageInfo did not expose publisher_gid per TF message, so no per-edge owner is claimed.
+- phase4-normal-launch-attempt*.log, phase4-localization-normal-attempt*.json/.csv/.png, phase4-slip-launch-attempt*.log, phase4-localization-slip-attempt*.json/.csv/.png, and earlier final*.log/JSON files: preserved iterations, including an EKF YAML numeric-type startup failure, initial wall assertion mismatch, subscriber-count/GID instrumentation corrections, and friction conversion diagnostics. The final7 normal and final4 slip artifacts above are authoritative. phase4-normal-test-final6.log preserves a failed summary-formatting attempt; no result JSON was written by that attempt.
+
+Only the Phase 4 evaluator calls /gzserver/get_entity_state. The EKF and wheel adapter consume only /odometry/wheel and /imu/data. Ground truth is retained as evaluator evidence, not published to ROS. Test JSON source_commit records baseline Git HEAD at measurement time; Phase 4 changes were uncommitted working-tree content then.

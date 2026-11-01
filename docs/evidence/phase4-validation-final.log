@@ -1,0 +1,68 @@
+Python compile: PASS (4 files)
+YAML parse: PASS (4 files); EKF Q=225 float entries, initial P=15 float entries
+$ ROS model/launch validation: xacro; check_urdf; gz sdf -p/-k; ros2 launch --show-args
+exit_code=0
+robot name is: anc_robot
+---------- Successfully Parsed XML ---------------
+root Link: base_footprint has 1 child(ren)
+    child(1):  base_link
+        child(1):  camera_link
+            child(1):  camera_optical_frame
+        child(2):  caster_link
+        child(3):  imu_link
+        child(4):  left_wheel_link
+        child(5):  right_wheel_link
+converted default SDF contains 2 mu=1.2 entries
+Valid.
+Arguments (pass arguments as '<name>:=<value>'):
+
+    'wheel_surface_mu':
+        Test-only Gazebo wheel surface friction coefficient.
+        (default: '1.2')
+
+    'world_sdf_file':
+        Path to the SDF world file
+        (default: '')
+
+    'world_sdf_string':
+        SDF world string
+        (default: '')
+
+    'container_name':
+        Name of container that nodes will load in if use composition
+        (default: 'ros_gz_container')
+
+    'create_own_container':
+        Whether we should start our own ROS container when using composition.
+        (default: 'False')
+
+    'use_composition':
+        Use composed bringup if True
+        (default: 'False')
+
+    'initial_sim_time':
+        The initial simulation time
+        (default: '0.0')
+
+    'verbosity_level':
+        The verbosity level of the Gazebo server (0=FATAL, 4=DEBUG)
+        (default: '4')
+
+    'use_sim_time':
+        no description given
+        (default: 'true')
+
+    'known_start_x':
+        no description given
+        (default: '0.0')
+
+    'known_start_y':
+        no description given
+        (default: '0.0')
+
+    'known_start_yaw':
+        no description given
+        (default: '0.0')
+stderr:
+[1;33mWarning [Utils.cc:132][0m [/sdf/model[@name="anc_robot"]/link[@name="base_footprint"]/sensor[@name="anc_rgb_camera"]/gz_frame_id:/tmp/anc-phase4-final.urdf:L0]: XML Element[gz_frame_id], child of element[sensor], not defined in SDF. Copying[gz_frame_id] as children of [sensor].
+[1;33mWarning [Utils.cc:132][0m [/sdf/model[@name="anc_robot"]/link[@name="base_footprint"]/sensor[@name="anc_imu"]/gz_frame_id:/tmp/anc-phase4-final.urdf:L0]: XML Element[gz_frame_id], child of element[sensor], not defined in SDF. Copying[gz_frame_id] as children of [sensor].

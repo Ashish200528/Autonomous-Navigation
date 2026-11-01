@@ -1,9 +1,9 @@
-# Phase 0 through Phase 3 report
+# Autonomous Navigation Car simulation phase report
 
 Date: 2026-11-01 (Asia/Calcutta)
 Project: /home/ashish/AutonomousNavigationCar on Ubuntu-24.04 at E:/WSL/Ubuntu-24.04
 Branch: main
-Scope: Phase 0 planning baseline, Phase 1 reference navigation validation, Phase 2 custom differential-drive robot, and Phase 3 sensor simulation/ROS interfaces.
+Scope: Phase 0 baseline, Phase 1 reference navigation, Phase 2 custom robot, Phase 3 sensor interfaces, and Phase 4 known-start localization.
 
 ## Outcome
 
@@ -11,11 +11,12 @@ Scope: Phase 0 planning baseline, Phase 1 reference navigation validation, Phase
 - Phase 1 environment gate: PASS. WSL2 Ubuntu 24.04.5, ROS 2 Jazzy, Gazebo Harmonic, ros_gz, RViz2, Nav2, the packaged TurtleBot3 simulator, and available resources were checked.
 - Phase 1 Task A reference navigation: PASS. Nav2 accepted a map-frame goal and returned SUCCEEDED with error code 0. Localization, known-free corridor, nonzero controller output, odometry motion, and final AMCL pose were checked.
 - Phase 2 Task B custom robot: PASS WITH LIMITS. The custom differential-drive robot built and spawned headlessly. Forward, reverse, rotation, odometry, base TF, and a physical wall stop passed. The configured contact sensor and ROS bridge produced zero contact messages; odometry also diverged under the wall stall. These limits are recorded below.
-- Phase 3 sensor simulation and ROS interfaces: PASS WITH LIMITS. RGB/CameraInfo, sanitized IMU, clock, odometry, joint states, TF, wall contact, RViz, and a bounded bag were verified. Sensor parameters remain provisional and wall-stall odometry still diverges.
+- Phase 3 sensor simulation and ROS interfaces: PASS WITH LIMITS. RGB/CameraInfo, sanitized IMU, clock, odometry, joint states, TF, wall contact, RViz, and a bounded bag were verified. Sensor parameters remain provisional.
+- Phase 4 odometry, state estimation, and known-start localization: PASS WITH LIMITS. The wheel/gyro EKF reduced motion RMSE and wall-stall x error in the accepted run, but did not correct wheel slip and was worse than raw odometry at the non-closing rectangle endpoint.
 
 ## Scope and integrity
 
-The supplied roadmap and task text governed the phase gates. Gazebo entity state was used only by the Phase 2/3 test evaluators. Neither Nav2 nor a perception/controller node received Gazebo ground-truth pose or obstacle geometry. The Nav2 run is labeled REFERENCE because it used the packaged map and simulated laser scan; it is not evidence of RGB-only navigation. All custom vehicle dimensions are design placeholders, not measured hardware values.
+The supplied roadmap and task text governed the phase gates. Gazebo entity state was used only by the Phase 2/3/4 test evaluators. Neither Nav2, localization nodes, nor a perception/controller node received Gazebo ground-truth pose or obstacle geometry. The Nav2 run is labeled REFERENCE because it used the packaged map and simulated laser scan; it is not evidence of RGB-only navigation. All custom vehicle dimensions are design placeholders, not measured hardware values.
 
 No package installation, system-wide upgrade, Windows/WSL restart, or Arduino UNO Q application change was made during these validation tasks. Gazebo was stopped cleanly after tests. No Phase 2 screenshot was saved; tests were headless.
 
@@ -103,7 +104,7 @@ During the wall stall, wheel odometry advanced to x=1.40039 m while evaluator po
 
 ## Phase 3 Task C: sensor simulation and ROS interfaces
 
-**Outcome: PASS WITH LIMITS.** No Phase 4 or later work was started.
+**Outcome: PASS WITH LIMITS.** Phase 4 changes were followed by a Phase 3 regression on the corrected model; no Phase 5 work was started.
 
 ### RGB camera
 
@@ -139,6 +140,49 @@ The final automated test passed every check in docs/evidence/phase3-sensor-smoke
 - Overall Phase 3: **PASS WITH LIMITS** because camera calibration/noise and IMU assumptions are provisional, raw Gazebo orientation is excluded rather than sensor-disabled, odometry diverges under stall, and repeated contact records are not unique collision episodes.
 - The project retains separate REFERENCE and REALISTIC profile labels; Phase 3 does not add perception or navigation behavior.
 
+## Phase 4: odometry, state estimation, and known-start localization
+
+**Outcome: PASS WITH LIMITS.** A new anc_localization package provides the wheel covariance adapter, robot_localization EKF configuration, and known-start launch. The Phase 4 test is headless and uses Gazebo truth only from the evaluator script.
+
+### Estimator and transform ownership
+
+- /odom is preserved as raw Gazebo DiffDrive output. anc_wheel_odometry_covariance republishes its twist on /odometry/wheel with provisional velocity variances: vx=0.0004 m^2/s^2 and vy=0.01 m^2/s^2. Pose covariance is marked unused with a large variance.
+- robot_localization runs at 30 Hz with a 0.25 s sensor timeout and two_d_mode. It consumes /odometry/wheel vx/vy plus sanitized /imu/data angular_velocity.z. It does not consume wheel pose, raw Gazebo pose, IMU orientation, or ground truth.
+- The sanitized IMU marks orientation unavailable. Known start initializes map -> odom at [0, 0, 0]. The EKF publishes odom -> base_footprint; robot_state_publisher owns robot link transforms. The Gazebo /tf bridge for DiffDrive was removed to prevent a second configured writer of the odom edge.
+- The evaluator checks required edges, static map-to-odom identity, and parent conflicts. Jazzy rclpy MessageInfo did not provide publisher_gid, so per-edge publisher attribution is unavailable in this evidence. Topic-level graph logs show /tf publishers anc_ekf_filter and robot_state_publisher; launch/config assigns odom -> base_footprint to the EKF.
+
+The filter is not given /gzserver/get_entity_state. Only scripts/phase4_localization_test.py calls that service. Truth stays in local CSV/JSON evaluation output.
+
+### Measurements
+
+Accepted normal evidence: phase4-localization-normal-final7.json/.csv/.png and phase4-normal-launch-final7.log and phase4-normal-test-final7.log. Accepted slip evidence: phase4-localization-slip-final4.json/.csv/.png and phase4-slip-launch-final4.log and phase4-slip-test-final4.log.
+
+| Measure | Result |
+|---|---:|
+| Raw / wheel / filtered / IMU rates | 29.41 / 29.41 / 29.98 / 97.26 Hz |
+| Motion XY RMSE, raw -> filtered | 0.15010 m -> 0.04809 m |
+| Motion yaw RMSE, raw -> filtered | 0.28447 rad -> 0.01530 rad |
+| Mean filtered sigma x / y / yaw | 0.0704 m / 0.1091 m / 0.02908 rad |
+| Stationary gyro z mean / standard deviation | -0.000013 / 0.001921 rad/s; configured variance is 0.000004 rad^2/s^2 |
+| IMU dropout | 0 IMU messages during dropout; 74 filtered outputs during dropout; 105 IMU messages after recovery |
+| Physical wall stall | Truth speed about zero; raw x error +0.3898 m; filtered x error +0.0204 m |
+| Rectangle return endpoint | Truth itself ended 0.134 m and 0.980 rad from start; raw error 0.0765 m / 0.501 rad, filtered error 0.1596 m / 0.976 rad |
+| Low-friction slip, mu=0.001 | Truth chassis delta 0.000 m; raw odometry +0.4705 m; filtered +0.4681 m |
+
+The estimator improved aggregate motion RMSE and wall-stall x error in this run. It performed worse than raw odometry at the rectangle endpoint, where the test truth trajectory itself did not close. During slip, the fused estimate followed biased wheel speed because the available gyro only measures yaw rate and does not independently observe forward motion. This demonstrates the limitation instead of correcting it with simulator truth.
+
+The test verified monotonic clock/sensor stamps, approximately shared /odom and /odometry/wheel stamps, stable filtered output, finite covariance, no large one-sample pose jumps, required TF chain presence, and IMU dropout/recovery. The timestamp comparison matches shared observed stamps rather than assuming separate subscribers receive equal message counts. Wheel-input dropout/staleness, multi-seed confidence, and statistical covariance calibration remain untested. Process noise, initial covariance, and wheel variances are provisional simulation tuning, not hardware calibration.
+
+### Build, regression, and environment
+
+- colcon build --symlink-install --packages-up-to anc_bringup: 4 packages finished.
+- Static validation passed for Python compilation, YAML, EKF covariance dimensions/types, Xacro and check_urdf, default SDF wheel friction, Gazebo world SDF, and launch arguments. Full output: docs/evidence/phase4-build-final.log and phase4-validation-final.log.
+- Phase 3 regression on the corrected model passed 20/20 checks. See phase3-sensor-smoke-phase4-final-model.json, phase3-sensor-telemetry-phase4-final-model.csv, phase3-camera-frame-phase4-final-model.png, and phase4-final-phase3-smoke.log.
+- Final test environment reported 3.5 GiB WSL RAM total, about 3.0 GiB available, and unused 1 GiB swap. Gazebo remained headless; no system-wide install/upgrade or WSL restart was done.
+- The Phase 4 trajectories were kept headless; no Phase 4-specific RViz screenshot was captured. The quantitative plots are saved with the normal and slip evidence; the earlier Phase 3 RViz screenshot remains indexed.
+
+The Phase 4 test JSON records source HEAD 0e019ac38e0747b3856d474c93ad00c124631cb3, the accepted Phase 3 base commit. Phase 4 files were working-tree changes during measurements and are committed separately after validation.
+
 ## Reproduction commands
 
 In the WSL project directory:
@@ -161,6 +205,33 @@ source simulation/ros2_ws/install/setup.bash
 python3 scripts/phase2_motion_test.py
 ~~~
 
+Phase 4 normal replay, as executed for the accepted final7 evidence:
+
+~~~bash
+# Terminal 1
+cd /home/ashish/AutonomousNavigationCar
+source scripts/source_ros_jazzy.sh
+source simulation/ros2_ws/install/setup.bash
+ros2 launch anc_bringup sim.launch.py
+~~~
+
+~~~bash
+# Terminal 2
+cd /home/ashish/AutonomousNavigationCar
+source scripts/source_ros_jazzy.sh
+source simulation/ros2_ws/install/setup.bash
+python3 scripts/phase4_localization_test.py --mode normal --run-id phase4-localization-normal-final7
+~~~
+
+The accepted slip replay used a fresh Gazebo process:
+
+~~~bash
+ros2 launch anc_bringup sim.launch.py wheel_surface_mu:=0.001
+python3 scripts/phase4_localization_test.py --mode slip --run-id phase4-localization-slip-final4 --slip-mu 0.001 --slip-speed 0.25 --slip-duration 2
+~~~
+
+At evidence capture, git rev-parse HEAD returned 0e019ac38e0747b3856d474c93ad00c124631cb3. The Phase 4 changes were present as working-tree edits during those tests. The final commit hash is recorded by the repository commit and in the completion message.
+
 The Phase 1 sample launch used headless mode. The map-corridor check and bag summarizer are scripts/check_reference_map_corridor.py and scripts/summarize_nav2_reference_bag.py. Full output and telemetry are indexed in docs/evidence/README.md.
 
 ## Official references
@@ -171,8 +242,11 @@ The Phase 1 sample launch used headless mode. The map-corridor check and bag sum
 - Gazebo Harmonic sensor and contact systems: https://gazebosim.org/docs/harmonic/sensors/
 - Gazebo Sim contact system runtime-spawn ordering diagnosis: https://github.com/gazebosim/gz-sim/issues/2223
 - ros_gz supported bridge types: https://github.com/gazebosim/ros_gz/blob/ros2/ros_gz_bridge/README.md
+- robot_localization sensor configuration: https://github.com/cra-ros-pkg/robot_localization/blob/rolling-devel/doc/configuring_robot_localization.rst
+- robot_localization state-estimation nodes: https://github.com/cra-ros-pkg/robot_localization/blob/rolling-devel/doc/state_estimation_nodes.rst
+- SDFormat URDF extensions and wheel friction conversion: https://sdformat.org/tutorials/specification/sdformat_urdf_extensions/1.6/
 - Gazebo Harmonic camera frame and CameraInfo migration notes: https://gazebosim.org/docs/harmonic/migrating_gazebo_classic_ros2_packages/
 
 ## Next recommended task
 
-Review the Phase 3 implementation and evidence before starting Phase 4. Preserve REFERENCE/REALISTIC separation and Gazebo truth isolation. Before hardware-faithful or sim-to-real claims, measure the physical chassis, camera calibration, and IMU noise; improve wheel odometry under slip/stall; and define contact-event semantics. Phase 4 remains unstarted.
+Phase 5 is not ready for a hardware-faithful navigation claim. First measure the chassis, wheel geometry, encoder behavior, camera calibration, and IMU noise/bias; use those measurements to retune covariances and friction; and add tests for missing/stale wheel input and multiple trajectory seeds. Keep the known-start baseline and evaluator-only truth boundary. Phase 5 perception/navigation, unknown-pose acquisition, and parking remain unstarted.

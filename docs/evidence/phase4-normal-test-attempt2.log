@@ -1,0 +1,196 @@
+{
+  "status": "PASS_WITH_LIMITS",
+  "mode": "normal",
+  "summary": "/home/ashish/AutonomousNavigationCar/docs/evidence/phase4-localization-normal-attempt2.json",
+  "telemetry": "/home/ashish/AutonomousNavigationCar/docs/evidence/phase4-localization-normal-attempt2.csv",
+  "plot": "/home/ashish/AutonomousNavigationCar/docs/evidence/phase4-localization-normal-attempt2.png",
+  "rates_hz": {
+    "raw_odom": 29.41176470588235,
+    "wheel_odometry": 29.41176470588235,
+    "filtered": 29.9841073635882,
+    "imu": 97.2467349099894
+  },
+  "checks": [
+    {
+      "name": "raw, covariance-qualified wheel, filtered odometry and IMU received",
+      "status": "PASS",
+      "detail": {
+        "raw": 1667,
+        "wheel": 1667,
+        "filtered": 1699,
+        "imu": 5511
+      }
+    },
+    {
+      "name": "wheel adapter preserves exact raw simulation timestamps",
+      "status": "PASS",
+      "detail": {
+        "matched": 1667,
+        "wheel_samples": 1667
+      }
+    },
+    {
+      "name": "wheel velocity covariance is nonzero and pose is excluded",
+      "status": "PASS",
+      "detail": {
+        "vx_variance": 0.0004,
+        "vy_variance": 0.01,
+        "pose_x_variance": 1000000.0
+      }
+    },
+    {
+      "name": "sanitized IMU orientation stays unavailable",
+      "status": "PASS",
+      "detail": {
+        "orientation_covariance_0": -1.0
+      }
+    },
+    {
+      "name": "IMU dropout stops data, EKF continues, and input recovers",
+      "status": "PASS",
+      "detail": {
+        "imu_during_dropout": 0,
+        "filtered_during_dropout": 45,
+        "imu_recovered": true
+      }
+    },
+    {
+      "name": "simulation clock and sensor stamps are monotonic",
+      "status": "PASS",
+      "detail": {
+        "clock": true,
+        "topics": {
+          "raw": true,
+          "wheel": true,
+          "filtered": true,
+          "imu": true
+        }
+      }
+    },
+    {
+      "name": "EKF output rate is stable",
+      "status": "PASS",
+      "detail": {
+        "filtered_rate_hz": 29.9841073635882,
+        "target_hz": 30.0
+      }
+    },
+    {
+      "name": "filtered odometry is fresh against /clock",
+      "status": "PASS",
+      "detail": {
+        "latest_clock_s": 61.288,
+        "latest_filtered_s": 61.25,
+        "age_s": 0.0379999999999967
+      }
+    },
+    {
+      "name": "filtered covariance remains finite and nonnegative",
+      "status": "PASS",
+      "detail": {
+        "samples_checked": 1699
+      }
+    },
+    {
+      "name": "known-start TF chain has unique edge ownership",
+      "status": "PASS",
+      "detail": {
+        "map_to_odom_identity": true,
+        "odom_to_base_footprint_owner_count": 1,
+        "owner_nodes": [
+          "unknown"
+        ],
+        "static_edges_missing": [],
+        "duplicate_edges": {
+          "dynamic": {},
+          "static": {}
+        }
+      }
+    },
+    {
+      "name": "filtered pose has no one-sample jumps",
+      "status": "PASS",
+      "detail": {
+        "jump_count": 0,
+        "examples": [],
+        "limits": {
+          "position_m": 0.1,
+          "yaw_rad": 0.3
+        }
+      }
+    },
+    {
+      "name": "straight, in-place rotation, rectangle, and return are recorded",
+      "status": "PASS",
+      "detail": {
+        "straight_end_truth": {
+          "topic": "truth",
+          "scenario": "normal",
+          "phase": "straight_out",
+          "sim_time_s": 13.83,
+          "x": 0.293994,
+          "y": -8.63834e-16,
+          "z": -3.15639e-08,
+          "yaw": -2.91151e-15,
+          "vx": 0.00199958,
+          "vy": -2.7686e-18,
+          "wz": 2.95264e-17,
+          "frame_id": "world"
+        },
+        "rotation_end_truth": {
+          "topic": "truth",
+          "scenario": "normal",
+          "phase": "rotation_ccw",
+          "sim_time_s": 20.686,
+          "x": -0.0346765,
+          "y": 0.0395296,
+          "z": -3.15007e-08,
+          "yaw": 1.41615,
+          "vx": -0.00297879,
+          "vy": -0.00147414,
+          "wz": 0.0503382,
+          "frame_id": "world"
+        },
+        "return_to_start": {
+          "truth_xy_error_m": 0.08589245607731824,
+          "truth_yaw_error_rad": 0.5895380000000003,
+          "raw_xy_error_m": 0.014576224342218096,
+          "raw_yaw_error_rad": 0.07618531647680472,
+          "filtered_xy_error_m": 0.10280315735615847,
+          "filtered_yaw_error_rad": 0.5915439291774103
+        }
+      }
+    },
+    {
+      "name": "wall approach reached the physical stop plane",
+      "status": "PASS",
+      "detail": {
+        "evaluator_x_m": 0.75031,
+        "raw_odom_x_m": 1.174645878187318,
+        "filtered_x_m": 0.9399013926444733,
+        "raw_minus_truth_m": 0.4243358781873179,
+        "filtered_minus_truth_m": 0.18959139264447322,
+        "evaluator_linear_speed_mps": -5.78529e-07
+      }
+    }
+  ],
+  "motion_raw_xy_rmse_m": 0.17094019773146454,
+  "motion_filtered_xy_rmse_m": 0.05375133487955333,
+  "return_to_start": {
+    "truth_xy_error_m": 0.08589245607731824,
+    "truth_yaw_error_rad": 0.5895380000000003,
+    "raw_xy_error_m": 0.014576224342218096,
+    "raw_yaw_error_rad": 0.07618531647680472,
+    "filtered_xy_error_m": 0.10280315735615847,
+    "filtered_yaw_error_rad": 0.5915439291774103
+  },
+  "wall_stall": {
+    "evaluator_x_m": 0.75031,
+    "raw_odom_x_m": 1.174645878187318,
+    "filtered_x_m": 0.9399013926444733,
+    "raw_minus_truth_m": 0.4243358781873179,
+    "filtered_minus_truth_m": 0.18959139264447322,
+    "evaluator_linear_speed_mps": -5.78529e-07
+  },
+  "wheel_slip": null
+}

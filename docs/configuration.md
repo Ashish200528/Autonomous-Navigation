@@ -47,4 +47,23 @@ Measured hardware values remain null in config/robot_parameters.yaml until they 
 
 The published covariance diagonals are generated from the configured provisional noise variances. Re-measure and recalibrate before using them in a state estimator.
 
+## Phase 4 localization parameters
+
+All values below are simulation assumptions. EKF tuning was checked against Gazebo scenarios only and is not hardware-calibrated.
+
+| Setting | Value | Purpose / limitation |
+|---|---:|---|
+| Raw odometry input | /odom | Gazebo DiffDrive output, retained as raw comparison |
+| Wheel odometry output | /odometry/wheel | Same stamp, pose, and twist relayed with explicit covariance |
+| Wheel vx variance | 0.0004 m^2/s^2 | Provisional; standard deviation 0.02 m/s |
+| Wheel vy variance | 0.01 m^2/s^2 | Provisional; standard deviation 0.10 m/s |
+| Unused wheel pose covariance | 1,000,000 | Prevents EKF from using simulator wheel pose as a localization measurement |
+| EKF inputs | /odometry/wheel vx/vy; /imu/data angular_velocity.z | No wheel pose, raw Gazebo pose, or IMU orientation |
+| EKF frequency / timeout | 30 Hz / 0.25 s | Filter remains active during tested IMU-only dropout while wheel data continues |
+| Frames | map -> odom -> base_footprint -> base_link | Known-start map -> odom is identity at [0,0,0]; unknown-pose acquisition is not implemented |
+| Wheel surface friction | mu=1.2 default; mu=0.001 slip test | Simulation values; slip test intentionally demonstrates uncorrected wheel motion |
+| Slip test command | 0.25 m/s for 2 s | Test setting, not a physical motor recommendation |
+
+Process-noise and initial-estimate covariance arrays are provisional in anc_localization/config/ekf.yaml. Measure wheel/IMU performance before hardware use. At mu=0.001 the chassis stayed stationary while wheel odometry advanced 0.4705 m and filtered odometry advanced 0.4681 m.
+
 Update the YAML and this table together when hardware is measured or a simulation assumption changes.

@@ -15,6 +15,7 @@ from sensor_msgs.msg import Imu
 class ImuSanitizer(Node):
     def __init__(self):
         super().__init__("anc_imu_sanitizer")
+        self.declare_parameter("publish_enabled", True)
         self.publisher = self.create_publisher(
             Imu, "/imu/data", qos_profile_sensor_data
         )
@@ -25,6 +26,9 @@ class ImuSanitizer(Node):
         self.count = 0
 
     def on_imu(self, source):
+        # Runtime disable is used by Phase 4 dropout tests; it never alters data.
+        if not bool(self.get_parameter("publish_enabled").value):
+            return
         message = Imu()
         message.header = source.header
         message.orientation.x = 0.0

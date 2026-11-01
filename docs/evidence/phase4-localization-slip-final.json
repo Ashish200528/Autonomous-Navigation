@@ -1,0 +1,794 @@
+{
+  "status": "FAIL",
+  "mode": "slip",
+  "source_commit": "0e019ac38e0747b3856d474c93ad00c124631cb3",
+  "evaluator_truth_policy": "Only this test calls /gzserver/get_entity_state; truth is saved to local evidence and is not published or consumed by the EKF.",
+  "configuration": {
+    "estimator": "robot_localization EKF",
+    "frequency_hz": 30.0,
+    "sensor_timeout_s": 0.25,
+    "two_d_mode": true,
+    "world_frame": "odom",
+    "base_link_frame": "base_footprint",
+    "known_start_map_pose_xyyaw": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "wheel_inputs": [
+      "/odometry/wheel.twist.linear.x",
+      "/odometry/wheel.twist.linear.y"
+    ],
+    "wheel_velocity_variances": {
+      "x_m2ps2": 0.0004,
+      "y_m2ps2": 0.01
+    },
+    "imu_input": "/imu/data.angular_velocity.z only; orientation unavailable",
+    "imu_angular_velocity_z_variance_rad2ps2": 4e-06
+  },
+  "rates_hz": {
+    "raw_odom": 29.41176470588236,
+    "wheel_odometry": 29.411764705882366,
+    "filtered": 29.629629629629626,
+    "imu": 99.37984496124027
+  },
+  "timing": {
+    "latest_clock_s": 24.286,
+    "latest_filtered_s": 24.28,
+    "filtered_age_s": 0.006000000000000227,
+    "monotonic": {
+      "raw": true,
+      "wheel": true,
+      "filtered": true,
+      "imu": true,
+      "clock": true
+    }
+  },
+  "imu_dropout": {
+    "requested": false,
+    "during_count": null,
+    "filtered_count": null,
+    "imu_recovery_count": null
+  },
+  "stationary_imu_noise": {
+    "stationary_sample_count": 373,
+    "gyro_z_mean_radps": 8.710270703940622e-05,
+    "gyro_z_stddev_radps": 0.0019490728617278285,
+    "gyro_z_covariance_variance": 3.999999989900971e-06,
+    "accel_x_mean_mps2": 0.0003413593817949285,
+    "accel_y_mean_mps2": -0.0004795648979757196,
+    "accel_z_mean_mps2": 9.798145192950615
+  },
+  "raw_odometry_vs_evaluator": {
+    "samples": 190,
+    "xy_rmse_m": 0.3329193201815599,
+    "xy_mean_m": 0.24884450506545655,
+    "xy_max_m": 0.49600503131939133,
+    "yaw_rmse_rad": 4.634010211355529e-15,
+    "yaw_abs_mean_rad": 4.6340102110031965e-15,
+    "yaw_abs_max_rad": 4.634188310825527e-15,
+    "endpoint_xy_error_m": 0.49600503131939133,
+    "endpoint_yaw_error_rad": 4.633979577706382e-15,
+    "mean_squared_normalized_error": {
+      "x": null,
+      "y": null,
+      "yaw": null
+    },
+    "mean_estimator_sigma": {
+      "x_m": 0.0,
+      "y_m": 0.0,
+      "yaw_rad": 0.0
+    }
+  },
+  "filtered_vs_evaluator": {
+    "samples": 193,
+    "xy_rmse_m": 0.33028223198638484,
+    "xy_mean_m": 0.2466936396468974,
+    "xy_max_m": 0.493068264917864,
+    "yaw_rmse_rad": 0.000381226943989888,
+    "yaw_abs_mean_rad": 0.0002978818560935056,
+    "yaw_abs_max_rad": 0.0008489941926359837,
+    "endpoint_xy_error_m": 0.4929068425536073,
+    "endpoint_yaw_error_rad": 0.0003812772002207712,
+    "mean_squared_normalized_error": {
+      "x": 77.2181280691146,
+      "y": 4.8044998573449144e-08,
+      "yaw": 0.0003292360205306528
+    },
+    "mean_estimator_sigma": {
+      "x_m": 0.03611782339295989,
+      "y_m": 0.08669513025419304,
+      "yaw_rad": 0.021893625657514973
+    }
+  },
+  "motion_raw_vs_evaluator": {
+    "samples": 79,
+    "xy_rmse_m": 0.3035971370811152,
+    "xy_mean_m": 0.2468847782170193,
+    "xy_max_m": 0.49600503131939133,
+    "yaw_rmse_rad": 4.633990682671895e-15,
+    "yaw_abs_mean_rad": 4.63399068256871e-15,
+    "yaw_abs_max_rad": 4.634109657766139e-15,
+    "endpoint_xy_error_m": 0.49600503131939133,
+    "endpoint_yaw_error_rad": 4.633979577706382e-15,
+    "mean_squared_normalized_error": {
+      "x": null,
+      "y": null,
+      "yaw": null
+    },
+    "mean_estimator_sigma": {
+      "x_m": 0.0,
+      "y_m": 0.0,
+      "yaw_rad": 0.0
+    }
+  },
+  "motion_filtered_vs_evaluator": {
+    "samples": 81,
+    "xy_rmse_m": 0.2982474974571073,
+    "xy_mean_m": 0.24088329989452303,
+    "xy_max_m": 0.4922730181646519,
+    "yaw_rmse_rad": 0.0002674734129927403,
+    "yaw_abs_mean_rad": 0.0001939410832405902,
+    "yaw_abs_max_rad": 0.0007001509336943836,
+    "endpoint_xy_error_m": 0.4922730181646519,
+    "endpoint_yaw_error_rad": 7.045177429373811e-05,
+    "mean_squared_normalized_error": {
+      "x": 65.9256644671462,
+      "y": 9.037596839949413e-08,
+      "yaw": 0.00016539105832632817
+    },
+    "mean_estimator_sigma": {
+      "x_m": 0.03588473746577908,
+      "y_m": 0.08601692724984457,
+      "yaw_rad": 0.021772735377359916
+    }
+  },
+  "phase_metrics": {
+    "stationary_before_slip": {
+      "raw": {
+        "samples": 55,
+        "xy_rmse_m": 5.031443751076278e-06,
+        "xy_mean_m": 5.031443751076277e-06,
+        "xy_max_m": 5.031443751076676e-06,
+        "yaw_rmse_rad": 4.634069451730299e-15,
+        "yaw_abs_mean_rad": 4.634069451202215e-15,
+        "yaw_abs_max_rad": 4.634188310825527e-15,
+        "endpoint_xy_error_m": 5.031443751076676e-06,
+        "endpoint_yaw_error_rad": 4.6339765525887136e-15,
+        "mean_squared_normalized_error": {
+          "x": null,
+          "y": null,
+          "yaw": null
+        },
+        "mean_estimator_sigma": {
+          "x_m": 0.0,
+          "y_m": 0.0,
+          "yaw_rad": 0.0
+        }
+      },
+      "filtered": {
+        "samples": 55,
+        "xy_rmse_m": 8.371749345527412e-05,
+        "xy_mean_m": 8.37174934143207e-05,
+        "xy_max_m": 8.372092949337644e-05,
+        "yaw_rmse_rad": 0.0006095570197975422,
+        "yaw_abs_mean_rad": 0.0005963834306003908,
+        "yaw_abs_max_rad": 0.0008489941926359837,
+        "endpoint_xy_error_m": 8.371483425936351e-05,
+        "endpoint_yaw_error_rad": 0.00044404595647476577,
+        "mean_squared_normalized_error": {
+          "x": 5.946929516185362e-06,
+          "y": 1.6705718382925538e-17,
+          "yaw": 0.000849594588575319
+        },
+        "mean_estimator_sigma": {
+          "x_m": 0.034343771437128336,
+          "y_m": 0.08185912745380072,
+          "yaw_rad": 0.020975513511364226
+        }
+      },
+      "start_truth": {
+        "topic": "truth",
+        "scenario": "slip",
+        "phase": "stationary_before_slip",
+        "sim_time_s": 18.138,
+        "x": -1.0917e-05,
+        "y": -8.80136e-16,
+        "z": -6.23365e-08,
+        "yaw": 4.63391e-15,
+        "vx": 4.23612e-09,
+        "vy": 1.21942e-18,
+        "wz": 3.88896e-14,
+        "frame_id": "world"
+      },
+      "end_truth": {
+        "topic": "truth",
+        "scenario": "slip",
+        "phase": "stationary_before_slip",
+        "sim_time_s": 20.036,
+        "x": -1.0917e-05,
+        "y": -8.80136e-16,
+        "z": -6.23365e-08,
+        "yaw": 4.63391e-15,
+        "vx": 4.23612e-09,
+        "vy": 1.21942e-18,
+        "wz": 3.88896e-14,
+        "frame_id": "world"
+      },
+      "start_raw": {
+        "topic": "raw",
+        "sim_time_s": 18.198,
+        "x": -5.885556248924102e-06,
+        "y": 3.5609000399991936e-26,
+        "z": 0.0,
+        "yaw": -2.1478335448234036e-19,
+        "vx": 5.929230630780102e-19,
+        "vy": 0.0,
+        "wz": -9.075353006296074e-19,
+        "pose_var_x": 0.0,
+        "pose_var_y": 0.0,
+        "pose_var_yaw": 0.0,
+        "twist_var_x": 0.0,
+        "twist_var_y": 0.0,
+        "twist_var_yaw": 0.0,
+        "frame_id": "odom",
+        "child_frame_id": "base_footprint",
+        "scenario": "slip",
+        "phase": "stationary_before_slip"
+      },
+      "end_raw": {
+        "topic": "raw",
+        "sim_time_s": 20.034,
+        "x": -5.885556248923325e-06,
+        "y": 3.5609000399867987e-26,
+        "z": 0.0,
+        "yaw": -6.655258871283733e-20,
+        "vx": 3.8116482626443515e-19,
+        "vy": 0.0,
+        "wz": -9.075353006296074e-19,
+        "pose_var_x": 0.0,
+        "pose_var_y": 0.0,
+        "pose_var_yaw": 0.0,
+        "twist_var_x": 0.0,
+        "twist_var_y": 0.0,
+        "twist_var_yaw": 0.0,
+        "frame_id": "odom",
+        "child_frame_id": "base_footprint",
+        "scenario": "slip",
+        "phase": "stationary_before_slip"
+      },
+      "start_filtered": {
+        "topic": "filtered",
+        "sim_time_s": 18.18,
+        "x": -9.463692717500061e-05,
+        "y": 3.3309342807173375e-10,
+        "z": 0.0,
+        "yaw": 0.0005562142758721577,
+        "vx": 1.6092829837639224e-07,
+        "vy": 0.0,
+        "wz": -0.0003437637923640724,
+        "pose_var_x": 0.001120314358072156,
+        "pose_var_y": 0.00633939863031667,
+        "pose_var_yaw": 0.00042132250887382254,
+        "twist_var_x": 8.278404689298873e-05,
+        "twist_var_y": 0.0005873693333815963,
+        "twist_var_yaw": 8.006332591025697e-07,
+        "frame_id": "odom",
+        "child_frame_id": "base_footprint",
+        "scenario": "slip",
+        "phase": "startup"
+      },
+      "end_filtered": {
+        "topic": "filtered",
+        "sim_time_s": 20.01,
+        "x": -9.463183425870472e-05,
+        "y": 3.3211914089027307e-10,
+        "z": 0.0,
+        "yaw": 0.0004440459564793997,
+        "vx": 1.4687475186833532e-07,
+        "vy": 0.0,
+        "wz": 0.00027461262513647934,
+        "pose_var_x": 0.0012367179799878556,
+        "pose_var_y": 0.007051285752569476,
+        "pose_var_yaw": 0.0004579958010158823,
+        "twist_var_x": 7.978242917792289e-05,
+        "twist_var_y": 0.0005817218719688618,
+        "twist_var_yaw": 7.999999988778861e-07,
+        "frame_id": "odom",
+        "child_frame_id": "base_footprint",
+        "scenario": "slip",
+        "phase": "stationary_before_slip"
+      },
+      "duration_requested_s": 1.5
+    },
+    "low_friction_slip_drive": {
+      "raw": {
+        "samples": 69,
+        "xy_rmse_m": 0.3248528431528752,
+        "xy_mean_m": 0.2826644516624205,
+        "xy_max_m": 0.49600503131939133,
+        "yaw_rmse_rad": 4.633979577706382e-15,
+        "yaw_abs_mean_rad": 4.633979577706382e-15,
+        "yaw_abs_max_rad": 4.633979577706382e-15,
+        "endpoint_xy_error_m": 0.49600503131939133,
+        "endpoint_yaw_error_rad": 4.633979577706382e-15,
+        "mean_squared_normalized_error": {
+          "x": null,
+          "y": null,
+          "yaw": null
+        },
+        "mean_estimator_sigma": {
+          "x_m": 0.0,
+          "y_m": 0.0,
+          "yaw_rad": 0.0
+        }
+      },
+      "filtered": {
+        "samples": 71,
+        "xy_rmse_m": 0.31855919207637245,
+        "xy_mean_m": 0.2747987334898888,
+        "xy_max_m": 0.4922730181646519,
+        "yaw_rmse_rad": 0.00016200178294870096,
+        "yaw_abs_mean_rad": 0.00013318372050135193,
+        "yaw_abs_max_rad": 0.00040066126415519557,
+        "endpoint_xy_error_m": 0.4922730181646519,
+        "endpoint_yaw_error_rad": 7.045177429373811e-05,
+        "mean_squared_normalized_error": {
+          "x": 75.21096843000103,
+          "y": 1.0310497803072445e-07,
+          "yaw": 5.584552267934432e-05
+        },
+        "mean_estimator_sigma": {
+          "x_m": 0.03623723392781278,
+          "y_m": 0.0869459950426905,
+          "yaw_rad": 0.02195580599735242
+        }
+      },
+      "start_truth": {
+        "topic": "truth",
+        "scenario": "slip",
+        "phase": "low_friction_slip_drive",
+        "sim_time_s": 20.036,
+        "x": -1.0917e-05,
+        "y": -8.80136e-16,
+        "z": -6.23365e-08,
+        "yaw": 4.63391e-15,
+        "vx": 4.23612e-09,
+        "vy": 1.21942e-18,
+        "wz": 3.88896e-14,
+        "frame_id": "world"
+      },
+      "end_truth": {
+        "topic": "truth",
+        "scenario": "slip",
+        "phase": "low_friction_slip_drive",
+        "sim_time_s": 22.324,
+        "x": -1.0917e-05,
+        "y": -8.80136e-16,
+        "z": -6.23365e-08,
+        "yaw": 4.63391e-15,
+        "vx": 4.23612e-09,
+        "vy": 1.21942e-18,
+        "wz": 3.88896e-14,
+        "frame_id": "world"
+      },
+      "start_raw": {
+        "topic": "raw",
+        "sim_time_s": 20.034,
+        "x": -5.885556248923325e-06,
+        "y": 3.5609000399867987e-26,
+        "z": 0.0,
+        "yaw": -6.655258871283733e-20,
+        "vx": 3.8116482626443515e-19,
+        "vy": 0.0,
+        "wz": -9.075353006296074e-19,
+        "pose_var_x": 0.0,
+        "pose_var_y": 0.0,
+        "pose_var_yaw": 0.0,
+        "twist_var_x": 0.0,
+        "twist_var_y": 0.0,
+        "twist_var_yaw": 0.0,
+        "frame_id": "odom",
+        "child_frame_id": "base_footprint",
+        "scenario": "slip",
+        "phase": "stationary_before_slip"
+      },
+      "end_raw": {
+        "topic": "raw",
+        "sim_time_s": 22.38,
+        "x": 0.49599411431939133,
+        "y": -3.451050674762158e-20,
+        "z": 0.0,
+        "yaw": -6.957770638160268e-20,
+        "vx": 0.0,
+        "vy": 0.0,
+        "wz": 0.0,
+        "pose_var_x": 0.0,
+        "pose_var_y": 0.0,
+        "pose_var_yaw": 0.0,
+        "twist_var_x": 0.0,
+        "twist_var_y": 0.0,
+        "twist_var_yaw": 0.0,
+        "frame_id": "odom",
+        "child_frame_id": "base_footprint",
+        "scenario": "slip",
+        "phase": "low_friction_slip_drive"
+      },
+      "start_filtered": {
+        "topic": "filtered",
+        "sim_time_s": 20.04,
+        "x": -9.463230823795443e-05,
+        "y": 3.3152023346116543e-10,
+        "z": 0.0,
+        "yaw": 0.0003969906474776685,
+        "vx": 1.4302629690033415e-07,
+        "vy": 0.0,
+        "wz": -0.0006030935445781867,
+        "pose_var_x": 0.0012385804462731107,
+        "pose_var_y": 0.007061687249563432,
+        "pose_var_yaw": 0.0004585969986063419,
+        "twist_var_x": 7.776368996815391e-05,
+        "twist_var_y": 0.0005776542577634767,
+        "twist_var_yaw": 7.999999988778861e-07,
+        "frame_id": "odom",
+        "child_frame_id": "base_footprint",
+        "scenario": "slip",
+        "phase": "low_friction_slip_drive"
+      },
+      "end_filtered": {
+        "topic": "filtered",
+        "sim_time_s": 22.38,
+        "x": 0.49226210086559613,
+        "y": 1.715908384766684e-05,
+        "z": 0.0,
+        "yaw": -7.045177428910421e-05,
+        "vx": 0.03194829391035027,
+        "vy": 0.0,
+        "wz": 0.000162959384805246,
+        "pose_var_x": 0.0013874557768569398,
+        "pose_var_y": 0.008086520722333804,
+        "pose_var_yaw": 0.000505490700154701,
+        "twist_var_x": 7.47614819325546e-05,
+        "twist_var_y": 0.0005720676454294486,
+        "twist_var_yaw": 7.999999988778861e-07,
+        "frame_id": "odom",
+        "child_frame_id": "base_footprint",
+        "scenario": "slip",
+        "phase": "low_friction_slip_drive"
+      },
+      "duration_requested_s": 2.0
+    },
+    "stationary_after_slip": {
+      "raw": {
+        "samples": 56,
+        "xy_rmse_m": 0.49600503131939133,
+        "xy_mean_m": 0.49600503131939133,
+        "xy_max_m": 0.49600503131939133,
+        "yaw_rmse_rad": 4.633979577706382e-15,
+        "yaw_abs_mean_rad": 4.633979577706383e-15,
+        "yaw_abs_max_rad": 4.633979577706382e-15,
+        "endpoint_xy_error_m": 0.49600503131939133,
+        "endpoint_yaw_error_rad": 4.633979577706382e-15,
+        "mean_squared_normalized_error": {
+          "x": null,
+          "y": null,
+          "yaw": null
+        },
+        "mean_estimator_sigma": {
+          "x_m": 0.0,
+          "y_m": 0.0,
+          "yaw_rad": 0.0
+        }
+      },
+      "filtered": {
+        "samples": 57,
+        "xy_rmse_m": 0.49290738871520917,
+        "xy_mean_m": 0.4929073806711762,
+        "xy_max_m": 0.493068264917864,
+        "yaw_rmse_rad": 0.0001786286800691273,
+        "yaw_abs_mean_rad": 0.00015755932983398742,
+        "yaw_abs_max_rad": 0.0003812772002207712,
+        "endpoint_xy_error_m": 0.4929068425536073,
+        "endpoint_yaw_error_rad": 0.0003812772002207712,
+        "mean_squared_normalized_error": {
+          "x": 167.7740275161255,
+          "y": 3.424967163855869e-08,
+          "yaw": 5.996796256738376e-05
+        },
+        "mean_estimator_sigma": {
+          "x_m": 0.038065244803589346,
+          "y_m": 0.0920273155409584,
+          "yaw_rad": 0.022908732463517354
+        }
+      },
+      "start_truth": {
+        "topic": "truth",
+        "scenario": "slip",
+        "phase": "stationary_after_slip",
+        "sim_time_s": 22.426,
+        "x": -1.0917e-05,
+        "y": -8.80136e-16,
+        "z": -6.23365e-08,
+        "yaw": 4.63391e-15,
+        "vx": 4.23612e-09,
+        "vy": 1.21942e-18,
+        "wz": 3.88896e-14,
+        "frame_id": "world"
+      },
+      "end_truth": {
+        "topic": "truth",
+        "scenario": "slip",
+        "phase": "stationary_after_slip",
+        "sim_time_s": 24.228,
+        "x": -1.0917e-05,
+        "y": -8.80136e-16,
+        "z": -6.23365e-08,
+        "yaw": 4.63391e-15,
+        "vx": 4.23612e-09,
+        "vy": 1.21942e-18,
+        "wz": 3.88896e-14,
+        "frame_id": "world"
+      },
+      "start_raw": {
+        "topic": "raw",
+        "sim_time_s": 22.414,
+        "x": 0.49599411431939133,
+        "y": -3.451050674762158e-20,
+        "z": 0.0,
+        "yaw": -6.957770638160268e-20,
+        "vx": 0.0,
+        "vy": 0.0,
+        "wz": 0.0,
+        "pose_var_x": 0.0,
+        "pose_var_y": 0.0,
+        "pose_var_yaw": 0.0,
+        "twist_var_x": 0.0,
+        "twist_var_y": 0.0,
+        "twist_var_yaw": 0.0,
+        "frame_id": "odom",
+        "child_frame_id": "base_footprint",
+        "scenario": "slip",
+        "phase": "stationary_after_slip"
+      },
+      "end_raw": {
+        "topic": "raw",
+        "sim_time_s": 24.284,
+        "x": 0.49599411431939133,
+        "y": -3.451050674762158e-20,
+        "z": 0.0,
+        "yaw": -6.957770638160268e-20,
+        "vx": 0.0,
+        "vy": 0.0,
+        "wz": 0.0,
+        "pose_var_x": 0.0,
+        "pose_var_y": 0.0,
+        "pose_var_yaw": 0.0,
+        "twist_var_x": 0.0,
+        "twist_var_y": 0.0,
+        "twist_var_yaw": 0.0,
+        "frame_id": "odom",
+        "child_frame_id": "base_footprint",
+        "scenario": "slip",
+        "phase": "stationary_after_slip"
+      },
+      "start_filtered": {
+        "topic": "filtered",
+        "sim_time_s": 22.414,
+        "x": 0.4923818917599174,
+        "y": 1.7123042275447274e-05,
+        "z": 0.0,
+        "yaw": -9.5763064388521e-05,
+        "vx": 0.025980143660239718,
+        "vy": 0.0,
+        "wz": -0.0004646966839923575,
+        "pose_var_x": 0.0013896197733272034,
+        "pose_var_y": 0.008100297150241286,
+        "pose_var_yaw": 0.0005061721733399805,
+        "twist_var_x": 7.476182556606027e-05,
+        "twist_var_y": 0.0005720749544463745,
+        "twist_var_yaw": 8.799999988778861e-07,
+        "frame_id": "odom",
+        "child_frame_id": "base_footprint",
+        "scenario": "slip",
+        "phase": "stationary_after_slip"
+      },
+      "end_filtered": {
+        "topic": "filtered",
+        "sim_time_s": 24.28,
+        "x": 0.4928959252599151,
+        "y": 1.701545756600988e-05,
+        "z": 0.0,
+        "yaw": 0.00038127720022540506,
+        "vx": -0.0001589381742278344,
+        "vy": 0.0,
+        "wz": 0.0008952199990044437,
+        "pose_var_x": 0.0015087799702753631,
+        "pose_var_y": 0.008840366947757675,
+        "pose_var_yaw": 0.0005435667821141911,
+        "twist_var_x": 8.994903944553732e-05,
+        "twist_var_y": 0.0006031316710006961,
+        "twist_var_yaw": 7.999999988778861e-07,
+        "frame_id": "odom",
+        "child_frame_id": "base_footprint",
+        "scenario": "slip",
+        "phase": "stationary_after_slip"
+      },
+      "duration_requested_s": 1.5
+    }
+  },
+  "return_to_start": null,
+  "wall_stall": null,
+  "wheel_slip": {
+    "wheel_surface_mu": 0.001,
+    "requested_drive_speed_mps": 0.25,
+    "requested_drive_duration_s": 2.0,
+    "evaluator_x_delta_m": 0.0,
+    "raw_odom_x_delta_m": 0.49599999987564025,
+    "filtered_x_delta_m": 0.4923567331738341,
+    "raw_minus_truth_delta_m": 0.49599999987564025,
+    "filtered_minus_truth_delta_m": 0.4923567331738341
+  },
+  "tf": {
+    "dynamic_edges": {
+      "base_link->left_wheel_link": [
+        "unknown"
+      ],
+      "base_link->right_wheel_link": [
+        "unknown"
+      ],
+      "odom->base_footprint": [
+        "unknown"
+      ]
+    },
+    "static_edges": {
+      "map->odom": [
+        "unknown"
+      ],
+      "base_footprint->base_link": [
+        "unknown"
+      ],
+      "base_link->camera_link": [
+        "unknown"
+      ],
+      "camera_link->camera_optical_frame": [
+        "unknown"
+      ],
+      "base_link->caster_link": [
+        "unknown"
+      ],
+      "base_link->imu_link": [
+        "unknown"
+      ]
+    },
+    "odom_to_base_footprint_owner_nodes": [
+      "unknown"
+    ],
+    "required_static_edges_missing": [],
+    "duplicates": {
+      "dynamic": {},
+      "static": {}
+    }
+  },
+  "checks": [
+    {
+      "name": "raw, covariance-qualified wheel, filtered odometry and IMU received",
+      "status": "PASS",
+      "detail": {
+        "raw": 190,
+        "wheel": 191,
+        "filtered": 193,
+        "imu": 642
+      }
+    },
+    {
+      "name": "wheel adapter preserves exact raw simulation timestamps",
+      "status": "FAIL",
+      "detail": {
+        "matched": 190,
+        "wheel_samples": 191
+      }
+    },
+    {
+      "name": "wheel velocity covariance is nonzero and pose is excluded",
+      "status": "PASS",
+      "detail": {
+        "vx_variance": 0.0004,
+        "vy_variance": 0.01,
+        "pose_x_variance": 1000000.0
+      }
+    },
+    {
+      "name": "sanitized IMU orientation stays unavailable",
+      "status": "PASS",
+      "detail": {
+        "orientation_covariance_0": -1.0
+      }
+    },
+    {
+      "name": "IMU stream remains available during slip trial",
+      "status": "PASS",
+      "detail": {
+        "imu_samples": 642
+      }
+    },
+    {
+      "name": "simulation clock and sensor stamps are monotonic",
+      "status": "PASS",
+      "detail": {
+        "clock": true,
+        "topics": {
+          "raw": true,
+          "wheel": true,
+          "filtered": true,
+          "imu": true
+        }
+      }
+    },
+    {
+      "name": "EKF output rate is stable",
+      "status": "PASS",
+      "detail": {
+        "filtered_rate_hz": 29.629629629629626,
+        "target_hz": 30.0
+      }
+    },
+    {
+      "name": "filtered odometry is fresh against /clock",
+      "status": "PASS",
+      "detail": {
+        "latest_clock_s": 24.286,
+        "latest_filtered_s": 24.28,
+        "age_s": 0.006000000000000227
+      }
+    },
+    {
+      "name": "filtered covariance remains finite and nonnegative",
+      "status": "PASS",
+      "detail": {
+        "samples_checked": 193
+      }
+    },
+    {
+      "name": "known-start TF chain has unique edge ownership",
+      "status": "PASS",
+      "detail": {
+        "map_to_odom_identity": true,
+        "odom_to_base_footprint_owner_count": 1,
+        "owner_nodes": [
+          "unknown"
+        ],
+        "static_edges_missing": [],
+        "duplicate_edges": {
+          "dynamic": {},
+          "static": {}
+        }
+      }
+    },
+    {
+      "name": "filtered pose has no one-sample jumps",
+      "status": "PASS",
+      "detail": {
+        "jump_count": 0,
+        "examples": [],
+        "limits": {
+          "position_m": 0.1,
+          "yaw_rad": 0.3
+        }
+      }
+    },
+    {
+      "name": "low-friction trial induced measurable wheel slip (>=0.05 m)",
+      "status": "PASS",
+      "detail": {
+        "wheel_surface_mu": 0.001,
+        "requested_drive_speed_mps": 0.25,
+        "requested_drive_duration_s": 2.0,
+        "evaluator_x_delta_m": 0.0,
+        "raw_odom_x_delta_m": 0.49599999987564025,
+        "filtered_x_delta_m": 0.4923567331738341,
+        "raw_minus_truth_delta_m": 0.49599999987564025,
+        "filtered_minus_truth_delta_m": 0.4923567331738341
+      }
+    }
+  ]
+}

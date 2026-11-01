@@ -21,6 +21,7 @@ robot:
     wheel_radius_m: 0.04
     wheel_width_m: 0.025
     wheel_mass_kg: 0.15
+    wheel_surface_mu: 1.2 # Provisional Gazebo contact friction; not measured hardware.
     wheel_separation_m: 0.28
     wheel_x_m: -0.04
     max_linear_velocity_mps: 0.25
@@ -68,6 +69,20 @@ sensors:
     linear_acceleration_bias_mean_mps2: 0.0
     linear_acceleration_bias_stddev_mps2: 0.0
     covariance_policy: ROS covariance diagonals reflect provisional SDF noise variances; they are not physically calibrated.
+localization:
+  status: provisional_known_start_not_hardware_measured
+  known_start_map_pose_xyyaw: [0.0, 0.0, 0.0]
+  wheel_odometry_input: /odom
+  wheel_odometry_output: /odometry/wheel
+  wheel_linear_x_stddev_mps: 0.02
+  wheel_lateral_y_stddev_mps: 0.10
+  imu_input: /imu/data
+  imu_fused_variable: angular_velocity_z_only
+  ekf_frequency_hz: 30.0
+  sensor_timeout_s: 0.25
+  wheel_slip_test_surface_mu: 0.001 # Verified SDFormat wheel surface coefficient for traction-loss test.
+  wheel_slip_test_linear_x_mps: 0.25
+  wheel_slip_test_duration_s: 2.0
 mission:
   map_frame: map
   nominal_start_pose_xyyaw: [0.0, 0.0, 0.0]

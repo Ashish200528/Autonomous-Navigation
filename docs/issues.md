@@ -1,4 +1,4 @@
-# Open issues and next phase
+# Open issues before Phase 5
 
 ## Resolved through Phase 3
 
@@ -9,6 +9,8 @@
 - Phase 3 RGB camera and CameraInfo, IMU, clock, odometry, wheel joint states, and the full robot TF chain publish at verified rates.
 - The Phase 2 contact gap was diagnosed. Gazebo's Contact system was loaded after UserCommands, so sensors on the runtime-spawned robot were not registered. Loading UserCommands before Contact and bridging the actual scoped contact topic restored wall-contact telemetry.
 - RViz2 displayed the camera image and robot frames while headless Gazebo ran.
+- Phase 4 added known-start EKF localization using wheel vx/vy and sanitized gyro z, with truth isolated to the evaluator. Aggregate motion RMSE and wall-stall x error improved in the accepted single run.
+- The corrected model passed the Phase 3 regression: 20/20 sensor smoke checks.
 
 ## P0 before hardware-faithful claims or transfer
 
@@ -19,8 +21,8 @@
 
 ## P1 before navigation/perception experiments
 
-- Reduce wheel-odometry divergence under wall stall/slip; Phase 3 measured +0.46115 m at the wall. Do not replace odometry with simulator pose.
-- Investigate and model rotation error; the Phase 2 trial differed by about 0.10057 rad.
+- Reduce wheel-odometry divergence under slip. Phase 4 low-friction trial measured +0.4705 m wheel error with zero chassis displacement; EKF output followed the wheel estimate. Do not replace odometry with simulator pose.
+- Improve rectangle closure and raw rotation calibration. Phase 4 truth ended 0.127 m / 0.882 rad from start; filtered endpoint error exceeded raw odometry in that run.
 - Validate sensor behavior over multiple seeds, longer runs, and camera viewpoints.
 - Measure or tune contact report semantics before treating repeated contact points as collision episodes.
 - Test Gazebo's GUI and RViz2 running together; Phase 3 used headless Gazebo with RViz2.
@@ -35,4 +37,4 @@
 - Define parking tolerance and dwell using measured footprint, then test stationary pose error.
 - Plan UNO Q adapters only after simulation interfaces and regression checks are stable.
 
-Phase 4 and later work remain out of scope until Phase 3 has been reviewed.
+Phase 4 is complete with limits; Phase 5 perception/navigation, unknown-pose acquisition, and parking remain unstarted.

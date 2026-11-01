@@ -1,5 +1,5 @@
 version: 1
-status: "Phase 1 REFERENCE Nav2 goal PASS; Phase 2 differential-drive PASS WITH LIMITS; Phase 3 sensor interfaces PASS WITH LIMITS."
+status: "Phase 1 REFERENCE Nav2 goal PASS; Phase 2 differential-drive PASS WITH LIMITS; Phase 3 sensor interfaces PASS WITH LIMITS; Phase 4 known-start localization PASS WITH LIMITS."
 registry:
   - id: T00
     phase: 1
@@ -75,3 +75,26 @@ registry:
       - docs/evidence/phase3-sensor-build-final-verified.log
       - docs/evidence/phase3-validation-final.log
       - docs/evidence/phase3-rviz.log
+  - id: T06
+    phase: 4
+    name: wheel_imu_known_start_localization
+    scenario_id: S00
+    status: PASS_WITH_LIMITS
+    result: "Normal motion XY RMSE improved from 0.15010 m raw to 0.04809 m filtered; yaw RMSE from 0.28447 rad to 0.01530 rad. Wall-stall x error reduced from +0.3898 m to +0.0204 m. Filter was worse at the rectangle endpoint; at mu=0.001 slip, truth displacement was 0 m while filtered odometry advanced +0.4681 m. IMU dropout/recovery, timing, covariance finiteness, no pose jumps, and TF chain checks passed. Covariances remain provisional."
+    evidence:
+      - docs/evidence/phase4-localization-normal-final7.json
+      - docs/evidence/phase4-localization-normal-final7.csv
+      - docs/evidence/phase4-localization-normal-final7.png
+      - docs/evidence/phase4-normal-launch-final7.log
+      - docs/evidence/phase4-normal-test-final7.log
+      - docs/evidence/phase4-localization-slip-final4.json
+      - docs/evidence/phase4-localization-slip-final4.csv
+      - docs/evidence/phase4-localization-slip-final4.png
+      - docs/evidence/phase4-slip-launch-final4.log
+      - docs/evidence/phase4-slip-test-final4.log
+      - docs/evidence/phase4-build-final.log
+      - docs/evidence/phase4-validation-final.log
+      - docs/evidence/phase4-final-phase3-smoke.log
+      - docs/evidence/phase3-sensor-smoke-phase4-final-model.json
+      - docs/evidence/phase4-tf-publisher-info-final4.log
+      - docs/evidence/phase4-ekf-node-info-final4.log

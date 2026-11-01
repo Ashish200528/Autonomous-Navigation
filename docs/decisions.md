@@ -1,6 +1,6 @@
 # Decisions and assumptions
 
-Status: Phase 0 baseline with verified Phase 1 and Phase 2 results. Changes to the implementation track should be evidence-backed and recorded here.
+Status: Phase 0 baseline and verified Phase 1 through Phase 4 results. Changes to the implementation track should be evidence-backed and recorded here.
 
 | ID | Decision | Rationale / status |
 |---|---|---|
@@ -16,13 +16,18 @@ Status: Phase 0 baseline with verified Phase 1 and Phase 2 results. Changes to t
 | D-10 | Keep simulator truth and collision evaluation in evaluator-only outputs. | Phase 2 truth was used only by the motion evaluator; controller and navigation code did not subscribe to it. |
 | D-11 | Stop on stale/unavailable required perception or pose inputs. | Fail-safe simulation behavior; hardware still requires independent electrical watchdog/E-stop. |
 | D-12 | Start with a low-memory/headless-first environment. | WSL has about 3.5 GiB RAM. RViz2 was checked separately; concurrent Gazebo GUI/RViz use remains untested. |
+| D-13 | Use a known-start identity map -> odom transform for the initial localization baseline. | Unknown-pose acquisition remains separate. |
+| D-14 | Fuse wheel vx/vy from /odometry/wheel and sanitized gyro z from /imu/data only. | IMU orientation is unavailable; wheel pose, raw Gazebo pose, and evaluator truth are excluded from the EKF. |
+| D-15 | Assign odom -> base_footprint to the EKF. | Gazebo DiffDrive TF bridge is removed; launch config assigns the EKF the dynamic edge. Per-edge publisher GID cannot be correlated from current RMW MessageInfo. |
+| D-16 | Keep ground truth inside test evaluators. | Phase 4 evaluator calls GetEntityState and writes local comparison evidence; estimator nodes do not receive that data. |
 
 ## Unresolved decisions
 
 - Real chassis dimensions, mass, footprint, center of mass, wheel radius/separation, friction, encoder model, and acceleration limits.
 - Camera mount XYZ/RPY, resolution, frame rate, horizontal FOV, intrinsics, and distortion.
 - IMU noise/bias and odometry covariance.
-- Gazebo contact-sensor message path; no contact messages were observed in the Phase 2 trial.
-- Wheel slip and odometry behavior under a hard obstacle stop.
+- Gazebo contact-event semantics; repeated contact records are telemetry, not unique episodes.
+- Wheel slip remains uncorrected by the available sensors; Phase 4 measured about 0.468 m false displacement with the chassis stationary.
+- Covariance calibration across hardware measurements, multiple seeds, and missing/stale wheel input.
 - Scenario arena set, unknown-pose acquisition, realistic perception, safe-stop policy, and parking validation.
 - Whether WSLg performance is sufficient for Gazebo GUI and RViz concurrently.

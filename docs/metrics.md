@@ -30,6 +30,23 @@ The robot stopped at the geometry-derived wall contact plane: expected center x=
 
 Under the wall stall, odometry advanced to x=1.40039 m while evaluator pose remained at x=0.735 m. Wheel motion and world pose therefore diverged under contact/slip. Odometry accuracy under stall is not validated.
 
+## Phase 4 localization results
+
+One accepted normal run and one induced low-friction run are single-run observations, not statistical guarantees. The evaluator obtains truth from Gazebo only inside scripts/phase4_localization_test.py.
+
+| Measure | Raw | Filtered | Interpretation |
+|---|---:|---:|---|
+| Motion XY RMSE | 0.15010 m | 0.04809 m | Improved in this trajectory |
+| Motion yaw RMSE | 0.28447 rad | 0.01530 rad | Improved in this trajectory |
+| Mean reported sigma (x/y/yaw) | n/a | 0.0704 m / 0.1091 m / 0.02908 rad | Provisional covariance, not hardware-calibrated |
+| Wall-stall longitudinal error | +0.3898 m | +0.0204 m | Filter reduced raw drift in this test |
+| Rectangle endpoint XY/yaw error | 0.0765 m / 0.501 rad | 0.1596 m / 0.976 rad | Filter was worse; Gazebo truth itself missed its start by 0.134 m / 0.980 rad |
+| Low-friction slip error, mu=0.001 | +0.4705 m | +0.4681 m | Chassis displacement was 0 m; EKF did not reject slip |
+
+The normal run recorded raw/wheel/filtered/IMU rates of 29.41/29.41/29.98/97.19 Hz. During IMU dropout, zero IMU messages arrived while 77 filtered outputs were published; 112 IMU messages arrived after recovery. Stationary gyro-z standard deviation was 0.001967 rad/s against configured variance 4e-6 rad^2/s^2. Reported filtered mean squared normalized errors were below 1 in this run, but the trajectories are insufficient for a covariance calibration claim.
+
+The known-start TF chain was present and had no conflicting child parents. Topic-level publishers were recorded, but per-edge publisher GID was unavailable in Jazzy rclpy MessageInfo. This check does not claim per-edge runtime publisher attribution. Missing/stale wheel input, multi-seed covariance consistency, and unknown-start recovery remain untested.
+
 Experiment record schema: run_id, seed, scenario_id, software_commit, sensor_profile, map_mode, start_x, start_y, start_yaw, goal_x, goal_y, goal_yaw, success, collision_count, elapsed_s, path_length_m, min_clearance_m, replans, final_position_error_m, final_yaw_error_deg, perception_fps, false_clear_count, false_blocked_count, outcome_reason, rosbag_path, video_path.
 
 

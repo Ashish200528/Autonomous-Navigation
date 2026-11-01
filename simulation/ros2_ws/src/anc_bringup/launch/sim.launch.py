@@ -1,7 +1,7 @@
 from launch import LaunchDescription
-from launch.actions import IncludeLaunchDescription, TimerAction
+from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription, TimerAction
 from launch.launch_description_sources import PythonLaunchDescriptionSource
-from launch.substitutions import Command, FindExecutable, PathJoinSubstitution
+from launch.substitutions import Command, FindExecutable, LaunchConfiguration, PathJoinSubstitution
 from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
 
@@ -15,6 +15,9 @@ def generate_launch_description():
     ])
     bridge_config = PathJoinSubstitution([
         FindPackageShare("anc_bringup"), "config", "bridge.yaml"
+    ])
+    localization_launch = PathJoinSubstitution([
+        FindPackageShare("anc_localization"), "launch", "localization.launch.py"
     ])
 
     gazebo = IncludeLaunchDescription(
@@ -34,7 +37,10 @@ def generate_launch_description():
         name="robot_state_publisher",
         output="screen",
         parameters=[{
-            "robot_description": Command([FindExecutable(name="xacro"), " ", robot_xacro]),
+            "robot_description": Command([
+                FindExecutable(name="xacro"), " ", robot_xacro,
+                " wheel_surface_mu:=", LaunchConfiguration("wheel_surface_mu"),
+            ]),
             "use_sim_time": True,
         }],
     )
@@ -52,6 +58,15 @@ def generate_launch_description():
         output="screen",
         parameters=[{"use_sim_time": True}],
     )
+    localization = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(localization_launch),
+        launch_arguments={
+            "use_sim_time": "true",
+            "known_start_x": "0.0",
+            "known_start_y": "0.0",
+            "known_start_yaw": "0.0",
+        }.items(),
+    )
     spawn = Node(
         package="ros_gz_sim",
         executable="create",
@@ -65,9 +80,14 @@ def generate_launch_description():
         ],
     )
     return LaunchDescription([
+        DeclareLaunchArgument(
+            "wheel_surface_mu", default_value="1.2",
+            description="Test-only Gazebo wheel surface friction coefficient.",
+        ),
         gazebo,
         state_publisher,
         bridge,
         imu_sanitizer,
+        localization,
         TimerAction(period=4.0, actions=[spawn]),
     ])

@@ -2,6 +2,7 @@
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="anc_robot">
   <xacro:property name="cfg" value="${xacro.load_yaml('$(find anc_description)/config/robot_parameters.yaml')}"/>
   <xacro:property name="sim" value="${cfg['robot']['simulation_model']}"/>
+  <xacro:arg name="wheel_surface_mu" default="${sim['wheel_surface_mu']}"/>
   <xacro:property name="L" value="${sim['chassis_length_m']}"/>
   <xacro:property name="W" value="${sim['chassis_width_m']}"/>
   <xacro:property name="H" value="${sim['chassis_height_m']}"/>
@@ -13,6 +14,7 @@
   <xacro:property name="WX" value="${sim['wheel_x_m']}"/>
   <xacro:property name="V" value="${sim['max_linear_velocity_mps']}"/>
   <xacro:property name="OMEGA" value="${sim['max_angular_velocity_radps']}"/>
+  <xacro:property name="WHEEL_MU" value="$(arg wheel_surface_mu)"/>
   <xacro:property name="HZ" value="${sim['odom_publish_frequency_hz']}"/>
   <xacro:property name="CX" value="${sim['caster_x_m']}"/>
   <xacro:property name="CR" value="${sim['caster_radius_m']}"/>
@@ -69,7 +71,8 @@
       <visual><origin rpy="1.57079632679 0 0"/>
         <geometry><cylinder radius="${R}" length="${WW}"/></geometry><material name="black"/>
       </visual>
-      <collision name="${side}_wheel_collision"><origin rpy="1.57079632679 0 0"/>
+      <!-- Unnamed wheel collision lets libsdformat apply the link-level friction extension. -->
+      <collision><origin rpy="1.57079632679 0 0"/>
         <geometry><cylinder radius="${R}" length="${WW}"/></geometry>
       </collision>
     </link>
@@ -180,8 +183,8 @@
       </contact>
     </sensor>
   </gazebo>
-  <gazebo reference="left_wheel_link"><mu1>1.2</mu1><mu2>1.2</mu2></gazebo>
-  <gazebo reference="right_wheel_link"><mu1>1.2</mu1><mu2>1.2</mu2></gazebo>
+  <gazebo reference="left_wheel_link"><mu1>${WHEEL_MU}</mu1><mu2>${WHEEL_MU}</mu2></gazebo>
+  <gazebo reference="right_wheel_link"><mu1>${WHEEL_MU}</mu1><mu2>${WHEEL_MU}</mu2></gazebo>
   <gazebo reference="caster_link"><mu1>0.2</mu1><mu2>0.2</mu2></gazebo>
 
   <gazebo>

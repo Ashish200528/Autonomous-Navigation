@@ -1,0 +1,152 @@
+{
+  "status": "PASS_WITH_LIMITS",
+  "mode": "slip",
+  "summary": "/home/ashish/AutonomousNavigationCar/docs/evidence/phase4-localization-slip-final4.json",
+  "telemetry": "/home/ashish/AutonomousNavigationCar/docs/evidence/phase4-localization-slip-final4.csv",
+  "plot": "/home/ashish/AutonomousNavigationCar/docs/evidence/phase4-localization-slip-final4.png",
+  "rates_hz": {
+    "raw_odom": 29.411764705882362,
+    "wheel_odometry": 29.41176470588235,
+    "filtered": 29.999999999999996,
+    "imu": 100.0
+  },
+  "checks": [
+    {
+      "name": "raw, covariance-qualified wheel, filtered odometry and IMU received",
+      "status": "PASS",
+      "detail": {
+        "raw": 195,
+        "wheel": 180,
+        "filtered": 202,
+        "imu": 568
+      }
+    },
+    {
+      "name": "raw and wheel streams share exact stamps for >=98% of the smaller stream",
+      "status": "PASS",
+      "detail": {
+        "matched": 180,
+        "raw_samples": 195,
+        "wheel_samples": 180,
+        "raw_unmatched_samples": 15,
+        "wheel_unmatched_samples": 0,
+        "shared_coverage_of_smaller_stream": 1.0
+      }
+    },
+    {
+      "name": "wheel velocity covariance is nonzero and pose is excluded",
+      "status": "PASS",
+      "detail": {
+        "vx_variance": 0.0004,
+        "vy_variance": 0.01,
+        "pose_x_variance": 1000000.0
+      }
+    },
+    {
+      "name": "sanitized IMU orientation stays unavailable",
+      "status": "PASS",
+      "detail": {
+        "orientation_covariance_0": -1.0
+      }
+    },
+    {
+      "name": "IMU stream remains available during slip trial",
+      "status": "PASS",
+      "detail": {
+        "imu_samples": 568
+      }
+    },
+    {
+      "name": "simulation clock and sensor stamps are monotonic",
+      "status": "PASS",
+      "detail": {
+        "clock": true,
+        "topics": {
+          "raw": true,
+          "wheel": true,
+          "filtered": true,
+          "imu": true
+        }
+      }
+    },
+    {
+      "name": "EKF output rate is stable",
+      "status": "PASS",
+      "detail": {
+        "filtered_rate_hz": 29.999999999999996,
+        "target_hz": 30.0
+      }
+    },
+    {
+      "name": "filtered odometry is fresh against /clock",
+      "status": "PASS",
+      "detail": {
+        "latest_clock_s": 19.754,
+        "latest_filtered_s": 19.73,
+        "age_s": 0.02400000000000091
+      }
+    },
+    {
+      "name": "filtered covariance remains finite and nonnegative",
+      "status": "PASS",
+      "detail": {
+        "samples_checked": 202
+      }
+    },
+    {
+      "name": "known-start TF chain has required edges and no parent conflicts",
+      "status": "PASS",
+      "detail": {
+        "map_to_odom_identity": true,
+        "odom_to_base_footprint_edge_present": true,
+        "tf_topic_publisher_nodes": [
+          "anc_ekf_filter",
+          "robot_state_publisher"
+        ],
+        "per_edge_publisher_gid_available": false,
+        "static_edges_missing": [],
+        "frame_parent_conflicts": {}
+      }
+    },
+    {
+      "name": "filtered pose has no one-sample jumps",
+      "status": "PASS",
+      "detail": {
+        "jump_count": 0,
+        "examples": [],
+        "limits": {
+          "position_m": 0.1,
+          "yaw_rad": 0.3
+        }
+      }
+    },
+    {
+      "name": "low-friction trial induced measurable wheel slip (>=0.05 m)",
+      "status": "PASS",
+      "detail": {
+        "wheel_surface_mu": 0.001,
+        "requested_drive_speed_mps": 0.25,
+        "requested_drive_duration_s": 2.0,
+        "evaluator_x_delta_m": 0.0,
+        "raw_odom_x_delta_m": 0.470499999882034,
+        "filtered_x_delta_m": 0.4680828869430108,
+        "raw_minus_truth_delta_m": 0.470499999882034,
+        "filtered_minus_truth_delta_m": 0.4680828869430108
+      }
+    }
+  ],
+  "motion_raw_xy_rmse_m": 0.26467088608583517,
+  "motion_filtered_xy_rmse_m": 0.2551438523237478,
+  "return_to_start": null,
+  "wall_stall": null,
+  "wheel_slip": {
+    "wheel_surface_mu": 0.001,
+    "requested_drive_speed_mps": 0.25,
+    "requested_drive_duration_s": 2.0,
+    "evaluator_x_delta_m": 0.0,
+    "raw_odom_x_delta_m": 0.470499999882034,
+    "filtered_x_delta_m": 0.4680828869430108,
+    "raw_minus_truth_delta_m": 0.470499999882034,
+    "filtered_minus_truth_delta_m": 0.4680828869430108
+  }
+}
