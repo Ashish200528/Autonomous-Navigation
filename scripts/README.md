@@ -51,3 +51,18 @@ python3 scripts/phase7_rgb_dataset.py --run-id phase7-replay-unique --scenarios 
 ~~~
 
 The runner starts bounded headless Gazebo cases, captures RGB and classifier outputs, queries simulator geometry only in the offline evaluator, records per-view metrics and the live ROS graph contract, then shuts down each process group. anc_perception/realistic_perception.launch.py is separate from Phase 6 ORACLE_REFERENCE; do not interpret its output as a costmap or autonomous navigation input. Accepted run and topic contract are indexed in docs/evidence/README.md.
+
+## Phase 8 REALISTIC_RGB_ONLY stop-only tests
+
+Build and run static geometry checks:
+
+~~~bash
+cd /home/ashish/AutonomousNavigationCar
+source scripts/source_ros_jazzy.sh
+cd simulation/ros2_ws
+colcon build --symlink-install
+cd ../..
+python3 tests/phase8_safety_validation.py
+~~~
+
+The live harness launches the separate anc_realistic_navigation/phase8_realistic.launch.py, submits a nonzero request only to /cmd_vel/requested, then verifies the sole /cmd_vel publisher remains zero and checks evaluator-only pose. Use unique run IDs and scenario worlds; examples are indexed in docs/evidence/phase8/README.md. Phase 8 code cannot unlock movement. The correct result is STOP/BLOCKED; do not count these stationary checks as navigation.

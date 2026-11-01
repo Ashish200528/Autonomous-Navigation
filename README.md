@@ -156,6 +156,25 @@ Use a new run ID for each dataset replay. Evidence is indexed in docs/evidence/R
 
 The accepted 12-view run recorded zero false-FREE pixels in evaluator-known occupied regions and 88.0% useful free coverage on known floor, with 100% occupied precision but 26.7% occupied recall. UNKNOWN covered 81.0% of all pixels. P7C1 failed closed to all UNKNOWN when calibrated floor support was not observable. Assessment: PASS WITH LIMITS. The method is tied to simulated floor appearance and a 0.50-0.60 m ground band; it provides no arbitrary obstacle depth, navigation, or obstacle avoidance.
 
+## Phase 8 REALISTIC_RGB_ONLY stop-only baseline
+
+Phase 8 adds a conservative base-relative traversability grid and a single safe-stop supervisor. The feasibility gate is BLOCKED for motion: the 0.50-0.60 m ground band projects to a roughly 0.09 m free patch behind a 0.389 m UNKNOWN gap, and hard-stop distance is not measured. The accepted behavior is STOP. Nine bounded live tests passed: all 1,052 actual /cmd_vel samples were zero and evaluator displacement stayed below 0.000011 m. This is not goal-reaching navigation.
+
+The Phase 8 launch starts without a known-start map-to-odom transform, Nav2, or a reference map. See docs/phase8-feasibility.md, docs/roadmap-status.md, and docs/evidence/phase8/README.md.
+
+Build and launch in WSL:
+
+~~~bash
+cd /home/ashish/AutonomousNavigationCar
+source scripts/source_ros_jazzy.sh
+cd simulation/ros2_ws
+colcon build --symlink-install
+source install/setup.bash
+ros2 launch anc_realistic_navigation phase8_realistic.launch.py
+~~~
+
+Reproduce static checks with python3 tests/phase8_safety_validation.py. The live harness is tests/phase8_live_safety_test.py; each run uses a unique --run-id and records JSON, CSV, launch logs, resource samples, and evaluator-only truth under docs/evidence/phase8/runs/.
+
 ## Current status
 
 - Phase 0 baseline: complete and tagged v0.1-phase0.
@@ -165,4 +184,5 @@ The accepted 12-view run recorded zero false-FREE pixels in evaluator-known occu
 - Phase 4 known-start wheel/IMU localization: PASS WITH LIMITS.
 - Phase 5 reproducible worlds and scenario harness: PASS WITH LIMITS; see docs/PHASE_REPORT.md and docs/evidence/README.md.
 - Phase 6 selected ORACLE_REFERENCE Nav2 scenarios S00-S04 and S09: PASS WITH LIMITS; see docs/PHASE_REPORT.md and docs/evidence/phase6/README.md.
-- Phase 7 RGB-only FREE/OCCUPIED/UNKNOWN perception: PASS WITH LIMITS; see docs/PHASE_REPORT.md and docs/phase7-perception-architecture.md. Phase 8 navigation using perception has not started.
+- Phase 7 RGB-only FREE/OCCUPIED/UNKNOWN perception: PASS WITH LIMITS; see docs/PHASE_REPORT.md and docs/phase7-perception-architecture.md.
+- Phase 8 local RGB map and zero-command safe-stop baseline: PASS WITH LIMITS. Autonomous motion and goal-reaching are BLOCKED by the feasibility gate; see docs/phase8-feasibility.md.

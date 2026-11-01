@@ -1,6 +1,6 @@
 # Decisions and assumptions
 
-Status: Phase 0 baseline and verified Phase 1 through Phase 7 results with stated limits. Changes to the implementation track should be evidence-backed and recorded here.
+Status: Phase 0 baseline and verified Phase 1 through Phase 8 stop-only results with stated limits. Phase 8 autonomous motion remains blocked by the feasibility gate. Changes to the implementation track should be evidence-backed and recorded here.
 
 | ID | Decision | Rationale / status |
 |---|---|---|
@@ -23,6 +23,9 @@ Status: Phase 0 baseline and verified Phase 1 through Phase 7 results with state
 | D-17 | Make Phase 7 RGB perception class-agnostic and fail closed to UNKNOWN. | Runtime uses camera RGB/CameraInfo plus clock age only; simulator truth stays in a separate offline evaluator. |
 | D-18 | Limit FREE ground projection to the calibrated 0.50-0.60 m forward band. | Camera height/pitch, pinhole, and planar-floor assumptions are provisional; ambiguous or unsupported pixels remain UNKNOWN. This is not metric depth. |
 | D-19 | Keep REALISTIC_RGB_ONLY perception separate from ORACLE_REFERENCE navigation. | Phase 6 reference maps/costmaps remain intact; Phase 7 does not start navigation. |
+| D-20 | Preserve unsupported local grid cells as UNKNOWN and project only high-confidence FREE pixels. | RGB obstacle appearance has no metric range; treating it as a metric occupied cell would overstate what the sensor provides. |
+| D-21 | Keep Phase 8 motion locked behind a feasibility gate and publish unconditional zero velocity in the accepted stop-only profile. | Current FREE patch is disconnected/too short and braking distance is unmeasured; no autonomous motion is justified. |
+| D-22 | Keep Phase 8 separate from ORACLE_REFERENCE and omit the known-start map-to-odom transform. | The realistic profile has no reference map or privileged initial localization; Phase 6 remains a separate comparison. |
 
 ## Unresolved decisions
 
@@ -32,5 +35,5 @@ Status: Phase 0 baseline and verified Phase 1 through Phase 7 results with state
 - Gazebo contact-event semantics; repeated contact records are telemetry, not unique episodes.
 - Wheel slip remains uncorrected by the available sensors; Phase 4 measured about 0.468 m false displacement with the chassis stationary.
 - Covariance calibration across hardware measurements, multiple seeds, and missing/stale wheel input.
-- Scenario arena set, unknown-pose acquisition, improved RGB perception recall/calibration, realistic costmap and navigation, safe-stop policy, and parking validation.
+- Scenario arena set, unknown-pose acquisition, improved RGB perception recall/calibration, evidence sufficient to pass the motion gate, RGB-only navigation, and parking validation.
 - Whether WSLg performance is sufficient for Gazebo GUI and RViz concurrently.

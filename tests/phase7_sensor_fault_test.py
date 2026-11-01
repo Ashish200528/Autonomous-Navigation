@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Exercise runtime fail-closed behavior for absent and stale RGB."""
+import argparse
 import json
 import threading
 import time
@@ -95,6 +96,14 @@ def wait_for(predicate, timeout, label):
 
 
 def main():
+    parser = argparse.ArgumentParser(description="Exercise RGB fail-closed behavior.")
+    parser.add_argument(
+        "--output", type=Path,
+        default=Path(__file__).resolve().parents[1]
+        / "docs/evidence/phase7/fault-injection.json",
+        help="JSON output path (defaults to the Phase 7 accepted evidence path)",
+    )
+    args = parser.parse_args()
     rclpy.init()
     perception = RGBPerceptionNode()
     harness = FaultHarness()
@@ -165,10 +174,32 @@ def main():
             "mask_stamp_s": harness.mask_stamp_ns / 1e9,
             "confidence_values": sorted(int(v) for v in np.unique(harness.confidence)),
         }
+
+        harness.publish_camera(2.5)
+        time.sleep(0.10)
+        for _ in range(4):
+            harness.publish_floor_rgb(2.5)
+            time.sleep(0.08)
+        wait_for(
+            lambda: harness.health is not None and harness.health.get("valid") is True,
+            2.0, "fresh RGB recovery after stale timestamp",
+        )
+        wait_for(
+            lambda: harness.mask is not None and np.count_nonzero(harness.mask == 0) > 5000
+            and harness.confidence is not None and np.any(harness.confidence > 0),
+            0.5, "recovered FREE mask and confidence",
+        )
+        result["checks"]["stale_to_fresh_recovery"] = {
+            "pass": True,
+            "health": dict(harness.health),
+            "free_pixels": int(np.count_nonzero(harness.mask == 0)),
+            "confidence_nonzero_pixels": int(np.count_nonzero(harness.confidence > 0)),
+            "mask_stamp_s": harness.mask_stamp_ns / 1e9,
+        }
         result["status"] = "PASS"
     finally:
         result["health_messages"] = len(harness.health_history)
-        output = Path(__file__).resolve().parents[1] / "docs/evidence/phase7/fault-injection.json"
+        output = args.output.expanduser().resolve()
         output.parent.mkdir(parents=True, exist_ok=True)
         output.write_text(json.dumps(result, indent=2, sort_keys=True) + "\n")
         executor.shutdown(timeout_sec=2.0)

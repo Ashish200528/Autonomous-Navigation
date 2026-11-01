@@ -19,4 +19,11 @@
 - Added the separate anc_perception REALISTIC_RGB_ONLY profile with conservative FREE/OCCUPIED/UNKNOWN masks, confidence, overlay, and health.
 - Added offline-only geometry evaluation, fixed-seed RGB dataset capture, and live missing/stale RGB fault checks.
 - Validated six packages, 13 static checks, and 12 captured views; documented measured limits in docs/PHASE_REPORT.md and docs/evidence/README.md.
-- Kept ORACLE_REFERENCE navigation separate; Phase 8 was not started.
+- Kept ORACLE_REFERENCE navigation separate.
+
+## Phase 8 RGB-constrained stop-only baseline - 2026-11-02
+
+- Added the separate anc_realistic_navigation package, base_link-relative RGB FREE/UNKNOWN grid, freshness and localization invalidation, and a hard-locked single /cmd_vel safe-stop supervisor.
+- Disabled known-start map-to-odom TF in the Phase 8 launch while preserving the shared launch default for Phase 6.
+- Added projection, live stop, camera fault/recovery, localization dropout, command watchdog, scenario-repeat, and Phase 6 reference-regression evidence.
+- Classified Phase 8 PASS WITH LIMITS for stop-only behavior; autonomous motion remains BLOCKED by a disconnected free patch and unmeasured braking distance.

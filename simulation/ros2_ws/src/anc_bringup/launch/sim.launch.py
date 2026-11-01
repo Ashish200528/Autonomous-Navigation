@@ -70,6 +70,7 @@ def generate_launch_description():
             "known_start_x": start_x,
             "known_start_y": start_y,
             "known_start_yaw": start_yaw,
+            "publish_known_start_tf": LaunchConfiguration("publish_known_start_tf"),
         }.items(),
     )
     spawn = Node(
@@ -103,6 +104,8 @@ def generate_launch_description():
                               description="Known-start robot world Y in meters."),
         DeclareLaunchArgument("start_yaw", default_value="0.0",
                               description="Known-start robot world yaw in radians."),
+        DeclareLaunchArgument("publish_known_start_tf", default_value="true",
+                              description="Publish the test-only known-start map-to-odom transform."),
         gazebo,
         state_publisher,
         bridge,

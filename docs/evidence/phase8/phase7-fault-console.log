@@ -1,0 +1,216 @@
+{
+  "checks": {
+    "fresh_rgb": {
+      "free_pixels": 5120,
+      "health": {
+        "camera_height_assumption_m": 0.18,
+        "camera_info_stamp_s": 2.0,
+        "camera_pitch_down_assumption_rad": 0.0,
+        "camera_sim_age_s": 0.0,
+        "camera_wall_age_s": 0.0,
+        "clock_use": "timestamp-age only; not a geometric sensor",
+        "counts": {
+          "floor_seed_px": 1228,
+          "free_px": 5120,
+          "ground_band_px": 5120,
+          "occupied_px": 0,
+          "total_px": 76800,
+          "unknown_px": 71680
+        },
+        "floor_color_threshold_lab_weighted": 16.0,
+        "floor_component_largest_px": 5120,
+        "floor_component_min_area_px": 4000,
+        "floor_reference_lab": [
+          171.0,
+          128.0,
+          128.0
+        ],
+        "floor_seed_gradient_threshold": 22.0,
+        "floor_seed_support_tolerance_lab_weighted": 30.0,
+        "forbidden_inputs": [
+          "odometry",
+          "IMU",
+          "Gazebo entity state",
+          "depth",
+          "oracle map",
+          "scenario geometry"
+        ],
+        "ground_projection_valid_forward_band_m": [
+          0.5,
+          0.6
+        ],
+        "image_stamp_s": 2.0,
+        "input_topics": [
+          "/camera/image_raw",
+          "/camera/camera_info",
+          "/clock"
+        ],
+        "intrinsics": {
+          "cx_px": 160.0,
+          "cy_px": 120.0,
+          "fx_px": 277.128,
+          "fy_px": 277.128
+        },
+        "mask_encoding": "mono8: FREE=0, OCCUPIED=100, UNKNOWN=255",
+        "measured_wall_fps": 9.517,
+        "node": "anc_rgb_perception",
+        "processed_frames": 4,
+        "processing_latency_ms": 10.365,
+        "profile": "REALISTIC_RGB_ONLY",
+        "reason": "ok",
+        "status": "VALID",
+        "unknown_confidence_value": 0,
+        "valid": true
+      },
+      "pass": true
+    },
+    "missing_rgb": {
+      "confidence_values": [
+        0
+      ],
+      "health": {
+        "camera_info_stamp_s": null,
+        "camera_sim_age_s": null,
+        "camera_wall_age_s": null,
+        "clock_use": "timestamp-age only; not a geometric sensor",
+        "forbidden_inputs": [
+          "odometry",
+          "IMU",
+          "Gazebo entity state",
+          "depth",
+          "oracle map",
+          "scenario geometry"
+        ],
+        "image_stamp_s": null,
+        "input_topics": [
+          "/camera/image_raw",
+          "/camera/camera_info",
+          "/clock"
+        ],
+        "mask_encoding": "mono8: FREE=0, OCCUPIED=100, UNKNOWN=255",
+        "measured_wall_fps": 0.0,
+        "node": "anc_rgb_perception",
+        "processed_frames": 0,
+        "processing_latency_ms": null,
+        "profile": "REALISTIC_RGB_ONLY",
+        "reason": "no_rgb_received",
+        "status": "INVALID_UNKNOWN",
+        "unknown_confidence_value": 0,
+        "valid": false
+      },
+      "mask_stamp_s": 0.0,
+      "mask_values": [
+        255
+      ],
+      "pass": true
+    },
+    "stale_timestamp": {
+      "confidence_values": [
+        0
+      ],
+      "health": {
+        "camera_info_stamp_s": 2.0,
+        "camera_sim_age_s": 0.5,
+        "camera_wall_age_s": 0.132375,
+        "clock_use": "timestamp-age only; not a geometric sensor",
+        "forbidden_inputs": [
+          "odometry",
+          "IMU",
+          "Gazebo entity state",
+          "depth",
+          "oracle map",
+          "scenario geometry"
+        ],
+        "image_stamp_s": 2.0,
+        "input_topics": [
+          "/camera/image_raw",
+          "/camera/camera_info",
+          "/clock"
+        ],
+        "mask_encoding": "mono8: FREE=0, OCCUPIED=100, UNKNOWN=255",
+        "measured_wall_fps": 9.517,
+        "node": "anc_rgb_perception",
+        "processed_frames": 4,
+        "processing_latency_ms": null,
+        "profile": "REALISTIC_RGB_ONLY",
+        "reason": "rgb_sim_timestamp_stale",
+        "status": "INVALID_UNKNOWN",
+        "unknown_confidence_value": 0,
+        "valid": false
+      },
+      "mask_stamp_s": 2.0,
+      "mask_values": [
+        255
+      ],
+      "pass": true
+    },
+    "stale_to_fresh_recovery": {
+      "confidence_nonzero_pixels": 5120,
+      "free_pixels": 5120,
+      "health": {
+        "camera_height_assumption_m": 0.18,
+        "camera_info_stamp_s": 2.5,
+        "camera_pitch_down_assumption_rad": 0.0,
+        "camera_sim_age_s": 0.0,
+        "camera_wall_age_s": 0.0,
+        "clock_use": "timestamp-age only; not a geometric sensor",
+        "counts": {
+          "floor_seed_px": 1228,
+          "free_px": 5120,
+          "ground_band_px": 5120,
+          "occupied_px": 0,
+          "total_px": 76800,
+          "unknown_px": 71680
+        },
+        "floor_color_threshold_lab_weighted": 16.0,
+        "floor_component_largest_px": 5120,
+        "floor_component_min_area_px": 4000,
+        "floor_reference_lab": [
+          171.0,
+          128.0,
+          128.0
+        ],
+        "floor_seed_gradient_threshold": 22.0,
+        "floor_seed_support_tolerance_lab_weighted": 30.0,
+        "forbidden_inputs": [
+          "odometry",
+          "IMU",
+          "Gazebo entity state",
+          "depth",
+          "oracle map",
+          "scenario geometry"
+        ],
+        "ground_projection_valid_forward_band_m": [
+          0.5,
+          0.6
+        ],
+        "image_stamp_s": 2.5,
+        "input_topics": [
+          "/camera/image_raw",
+          "/camera/camera_info",
+          "/clock"
+        ],
+        "intrinsics": {
+          "cx_px": 160.0,
+          "cy_px": 120.0,
+          "fx_px": 277.128,
+          "fy_px": 277.128
+        },
+        "mask_encoding": "mono8: FREE=0, OCCUPIED=100, UNKNOWN=255",
+        "measured_wall_fps": 7.825,
+        "node": "anc_rgb_perception",
+        "processed_frames": 7,
+        "processing_latency_ms": 7.415,
+        "profile": "REALISTIC_RGB_ONLY",
+        "reason": "ok",
+        "status": "VALID",
+        "unknown_confidence_value": 0,
+        "valid": true
+      },
+      "mask_stamp_s": 2.5,
+      "pass": true
+    }
+  },
+  "health_messages": 9,
+  "status": "PASS"
+}

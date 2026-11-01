@@ -1,0 +1,167 @@
+{
+  "assessment": "BLOCKED_FOR_AUTONOMOUS_MOTION_STOP_ONLY_BASELINE_REQUIRED",
+  "blockers": [
+    "FREE patch is disconnected from robot footprint by an UNKNOWN region.",
+    "Observed FREE patch is shorter than reaction distance plus the explicit 0.20 m margin at 0.18 m/s, even before braking distance.",
+    "Phase 7 challenge aggregate retains high UNKNOWN coverage and low occupied recall.",
+    "RGB OCCUPIED pixels have no defensible metric range; they remain UNKNOWN in metric cells and trigger a stop reason.",
+    "No dedicated free-space emergency-braking distance measurement exists; Phase 6 goal settling is not a hard-stop test."
+  ],
+  "braking": {
+    "hard_stop_distance_m": null,
+    "hard_stop_distance_measured": false,
+    "phase6_reference_proxy": {
+      "interpretation": "goal-controller settling only; not an abrupt sensor-loss braking test",
+      "max_command_speed_mps": 0.18,
+      "post_action_truth_delta_m": 0.01018,
+      "settle_time_s": 0.602,
+      "window_s": 0.81
+    },
+    "required_clear_distance_formula": "v*(camera_age_p95 + processing_p95 + supervisor_period) + braking_distance + 0.20 m margin"
+  },
+  "camera_assumptions": {
+    "camera_forward_offset_from_base_link_m": 0.1,
+    "camera_height_above_floor_m": 0.18,
+    "camera_pitch_down_rad": 0.0,
+    "distortion": "zero simulated pinhole",
+    "fx_fy_px": [
+      277.1281433105469,
+      277.12815284729004
+    ],
+    "horizontal_fov_rad": 1.0471975512,
+    "map_frame": "base_link",
+    "principal_point_px": [
+      160.0,
+      120.0
+    ],
+    "resolution_px": [
+      320,
+      240
+    ]
+  },
+  "dataset": "docs/evidence/phase7/dataset/phase8-rgb-s00-20261102/dataset-results.json",
+  "decision": "Do not authorize realistic movement. Publish only justified local FREE cells, leave all other metric cells UNKNOWN, and require zero motor command until a continuous footprint-clear stopping corridor is demonstrable.",
+  "gate": "STOP_ONLY",
+  "localization": {
+    "interpretation": "known-start single-run values do not bound slip or unknown-start error",
+    "phase4_normal_filtered_xy_max_error_m": 0.08437945886536681,
+    "phase4_normal_filtered_xy_rmse_m": 0.04529930162766203,
+    "phase4_normal_mean_sigma_xy_m": {
+      "x_m": 0.0694494466020042,
+      "y_m": 0.10661754738738166,
+      "yaw_rad": 0.02852190561967504
+    },
+    "phase4_slip_filtered_endpoint_error_m": 0.4682575894171611,
+    "phase6_s00_reference_drift_m": 0.0011
+  },
+  "observed_free_projection": {
+    "view_count": 2,
+    "views": [
+      {
+        "case_id": "s00-seed101-rgb-only",
+        "free_patch_projection": {
+          "base_link_x_m": [
+            0.6038693688132545,
+            0.6938460418156215
+          ],
+          "base_link_y_m": [
+            -0.3407142974392033,
+            0.342857154655802
+          ],
+          "connected_free_path_from_footprint": false,
+          "free_grid_cells_at_0_02m": 166,
+          "lateral_extent_m": 0.6835714520950054,
+          "longitudinal_extent_m": 0.089976673002367,
+          "unknown_gap_from_robot_front_m": 0.3888693688132545
+        },
+        "predicted_free_pixels": 5120,
+        "predicted_occupied_pixels": 24000,
+        "reason": "ok",
+        "status": "VALID",
+        "unlocalized_occupied_evidence_blocks_motion": true,
+        "viewpoint_id": "view_start"
+      },
+      {
+        "case_id": "s00-seed101-rgb-only",
+        "free_patch_projection": {
+          "base_link_x_m": [
+            0.6038693688132545,
+            0.6938460418156215
+          ],
+          "base_link_y_m": [
+            -0.3407142974392033,
+            0.342857154655802
+          ],
+          "connected_free_path_from_footprint": false,
+          "free_grid_cells_at_0_02m": 166,
+          "lateral_extent_m": 0.6835714520950054,
+          "longitudinal_extent_m": 0.089976673002367,
+          "unknown_gap_from_robot_front_m": 0.3888693688132545
+        },
+        "predicted_free_pixels": 5120,
+        "predicted_occupied_pixels": 23670,
+        "reason": "ok",
+        "status": "VALID",
+        "unlocalized_occupied_evidence_blocks_motion": true,
+        "viewpoint_id": "view_turned"
+      }
+    ]
+  },
+  "phase": 8,
+  "phase7_challenge_metrics": {
+    "false_free_rate": 0.0,
+    "occupied_recall": 0.266704209852077,
+    "unknown_coverage": 0.8098068576388889,
+    "useful_free_coverage_on_known_floor": 0.8801333952177127
+  },
+  "robot_assumptions": {
+    "front_envelope_x_m": 0.215,
+    "half_width_envelope_y_m": 0.1525,
+    "max_linear_speed_mps": 0.25,
+    "source": "config/robot_parameters.yaml simulation_model; placeholder, not hardware measured"
+  },
+  "timing": {
+    "camera_sim_age_p95_s": 0.053799999999999855,
+    "combined_reaction_delay_p95_s": 0.13368379999999985,
+    "processing_latency_p95_s": 0.029883799999999974,
+    "speed_reaction_distance_table": [
+      {
+        "braking_distance_measured_m": null,
+        "lower_bound_before_braking_m": 0.20668419,
+        "margin_m": 0.2,
+        "reaction_only_distance_m": 0.006684189999999993,
+        "required_clear_distance_m": null,
+        "speed_mps": 0.05,
+        "status": "BLOCKED_BRAKING_DISTANCE_UNMEASURED"
+      },
+      {
+        "braking_distance_measured_m": null,
+        "lower_bound_before_braking_m": 0.21336838,
+        "margin_m": 0.2,
+        "reaction_only_distance_m": 0.013368379999999985,
+        "required_clear_distance_m": null,
+        "speed_mps": 0.1,
+        "status": "BLOCKED_BRAKING_DISTANCE_UNMEASURED"
+      },
+      {
+        "braking_distance_measured_m": null,
+        "lower_bound_before_braking_m": 0.224063084,
+        "margin_m": 0.2,
+        "reaction_only_distance_m": 0.024063083999999974,
+        "required_clear_distance_m": null,
+        "speed_mps": 0.18,
+        "status": "BLOCKED_BRAKING_DISTANCE_UNMEASURED"
+      },
+      {
+        "braking_distance_measured_m": null,
+        "lower_bound_before_braking_m": 0.23342094999999996,
+        "margin_m": 0.2,
+        "reaction_only_distance_m": 0.03342094999999996,
+        "required_clear_distance_m": null,
+        "speed_mps": 0.25,
+        "status": "BLOCKED_BRAKING_DISTANCE_UNMEASURED"
+      }
+    ],
+    "supervisor_period_s": 0.05
+  }
+}

@@ -1,0 +1,328 @@
+{
+  "actual_cmd_vel": {
+    "nonzero_samples": 0,
+    "publisher_nodes": [
+      "/anc_realistic_safe_stop_supervisor"
+    ],
+    "samples": 129,
+    "zero_samples": 129
+  },
+  "camera_enabled": true,
+  "camera_metrics": 14.804,
+  "camera_sim_age_s": 0.018,
+  "checks": {
+    "camera_health_valid": true,
+    "evaluator_truth_displacement_le_0_02m": true,
+    "every_actual_cmd_vel_sample_zero": true,
+    "no_known_start_map_to_odom_transform": true,
+    "occupancy_grid_never_marks_obstacles": true,
+    "perception_state_reports_forward_unknown_block": true,
+    "requested_nonzero_command_seen": true,
+    "runtime_graph_has_no_nav2_nodes": true,
+    "single_cmd_vel_publisher_is_phase8_supervisor": true,
+    "some_geometrically_projected_free_cells": true,
+    "supervisor_reports_motion_lock": true,
+    "unlocalized_occupied_evidence_blocks": true
+  },
+  "contact_telemetry": {
+    "collision_pair_examples": [
+      {
+        "collision1": "anc_robot::base_footprint::base_footprint_fixed_joint_lump__caster_collision_collision_1",
+        "collision2": "ground_plane::ground::ground_collision",
+        "max_depth_m": 3.361938674970727e-05
+      }
+    ],
+    "ground_or_surface_events": 1616,
+    "messages": 1616,
+    "non_ground_contact_events": 0
+  },
+  "duration_s": 3.0,
+  "evaluator_displacement_m": 8.741779999999999e-19,
+  "evaluator_truth_after": {
+    "angular_z_radps": -1.25223e-17,
+    "linear_x_mps": 4.18155e-09,
+    "sim_time_s": 6.448,
+    "source": "Gazebo GetEntityState evaluator-only; not subscribed by runtime nodes",
+    "x_m": -3.00001,
+    "y_m": -1.38052e-18,
+    "yaw_quaternion": [
+      -9.400100000249057e-15,
+      1.0080599999999982e-07,
+      2.4720575864805874e-18,
+      0.9999999999999949
+    ],
+    "z_m": -3.89996e-08
+  },
+  "evaluator_truth_before": {
+    "angular_z_radps": 6.93732e-18,
+    "linear_x_mps": 4.18155e-09,
+    "sim_time_s": 3.5,
+    "source": "Gazebo GetEntityState evaluator-only; not subscribed by runtime nodes",
+    "x_m": -3.00001,
+    "y_m": -5.06342e-19,
+    "yaw_quaternion": [
+      -7.896850005599763e-15,
+      1.4642449999476773e-05,
+      5.558772312311733e-19,
+      0.9999999998927993
+    ],
+    "z_m": -1.1963e-06
+  },
+  "evaluator_truth_runtime_input": false,
+  "evaluator_truth_used_at_runtime": false,
+  "grid_counts": {
+    "free": 164,
+    "occupied": 0,
+    "unknown": 5461
+  },
+  "launch_command": [
+    "ros2",
+    "launch",
+    "anc_realistic_navigation",
+    "phase8_realistic.launch.py",
+    "world_file:=/home/ashish/AutonomousNavigationCar/simulation/scenarios/worlds/s01_single_box_detour.sdf",
+    "start_x:=-3.0",
+    "start_y:=0.0",
+    "start_yaw:=0.0",
+    "camera_enabled:=true",
+    "odometry_topic:=/odometry/filtered"
+  ],
+  "launch_shutdown": {
+    "return_code": 0,
+    "signal": "SIGINT"
+  },
+  "localization_runtime_input": "/odometry/filtered",
+  "map_state": {
+    "block_reasons": [
+      "unlocalized_occupied_evidence",
+      "forward_corridor_not_proven_free",
+      "phase8_motion_lock_stop_only"
+    ],
+    "camera_transform": {
+      "quaternion_base": [
+        -0.5,
+        0.49999999999755174,
+        -0.5,
+        0.5000000000024483
+      ],
+      "translation_base_m": [
+        0.1,
+        0.0,
+        0.1
+      ]
+    },
+    "counts": {
+      "free_grid_cells": 164,
+      "free_image_pixels": 5120,
+      "grid_occupied_cells": 0,
+      "grid_unknown_cells": 5461,
+      "high_confidence_free_pixels": 5120,
+      "occupied_image_pixels_unlocalized": 16326,
+      "projected_free_pixels": 5120,
+      "unknown_image_pixels": 55354
+    },
+    "grid": {
+      "height": 75,
+      "origin_xy_m": [
+        0.0,
+        -0.75
+      ],
+      "resolution_m": 0.02,
+      "snapshot_only": true,
+      "stale_cells_fused": false,
+      "width": 75
+    },
+    "input_contract": {
+      "camera_info": "/camera/camera_info",
+      "clock": "/clock",
+      "confidence": "/perception/confidence",
+      "filtered_odometry": "/odometry/filtered",
+      "health": "/perception/health",
+      "mask": "/perception/image_mask",
+      "tf": "base_link <- camera_optical_frame"
+    },
+    "input_failures": [],
+    "map_frame": "base_link",
+    "map_semantics": {
+      "FREE": 0,
+      "OCCUPIED": 100,
+      "UNKNOWN": -1
+    },
+    "motion_authorized": false,
+    "node": "anc_local_traversability",
+    "occupied_image_evidence_is_metric": false,
+    "profile": "REALISTIC_RGB_ONLY_STOP_ONLY",
+    "reason": "phase8_motion_lock_stop_only",
+    "runtime_uses_world_map_or_truth": false,
+    "status": "STOP"
+  },
+  "perception_health": {
+    "camera_height_assumption_m": 0.18,
+    "camera_info_stamp_s": 6.404,
+    "camera_pitch_down_assumption_rad": 0.0,
+    "camera_sim_age_s": 0.018,
+    "camera_wall_age_s": 0.0,
+    "clock_use": "timestamp-age only; not a geometric sensor",
+    "counts": {
+      "floor_seed_px": 1228,
+      "free_px": 5120,
+      "ground_band_px": 5120,
+      "occupied_px": 16326,
+      "total_px": 76800,
+      "unknown_px": 55354
+    },
+    "floor_color_threshold_lab_weighted": 16.0,
+    "floor_component_largest_px": 5120,
+    "floor_component_min_area_px": 4000,
+    "floor_reference_lab": [
+      171.0,
+      128.0,
+      128.0
+    ],
+    "floor_seed_gradient_threshold": 22.0,
+    "floor_seed_support_tolerance_lab_weighted": 30.0,
+    "forbidden_inputs": [
+      "odometry",
+      "IMU",
+      "Gazebo entity state",
+      "depth",
+      "oracle map",
+      "scenario geometry"
+    ],
+    "ground_projection_valid_forward_band_m": [
+      0.5,
+      0.6
+    ],
+    "image_stamp_s": 6.404,
+    "input_topics": [
+      "/camera/image_raw",
+      "/camera/camera_info",
+      "/clock"
+    ],
+    "intrinsics": {
+      "cx_px": 160.0,
+      "cy_px": 120.0,
+      "fx_px": 277.1281433105469,
+      "fy_px": 277.12815284729004
+    },
+    "mask_encoding": "mono8: FREE=0, OCCUPIED=100, UNKNOWN=255",
+    "measured_wall_fps": 14.804,
+    "node": "anc_rgb_perception",
+    "processed_frames": 50,
+    "processing_latency_ms": 9.601,
+    "profile": "REALISTIC_RGB_ONLY",
+    "reason": "ok",
+    "status": "VALID",
+    "unknown_confidence_value": 0,
+    "valid": true
+  },
+  "perception_latency_ms": 9.601,
+  "phase": 8,
+  "request_count": 1890,
+  "requested_velocity_mps": 0.1,
+  "resources": {
+    "max_sampled_process_cpu_percent": 95.2,
+    "max_sampled_process_rss_kib": 715184,
+    "mem_available_kib_end": 2296356,
+    "mem_available_kib_start": 1987936,
+    "process_samples": 30
+  },
+  "run_id": "s01-box-stop",
+  "scenario": "S01",
+  "seed": 101,
+  "status": "PASS",
+  "supervisor_state": {
+    "actual_output": {
+      "angular_x": 0.0,
+      "angular_y": 0.0,
+      "angular_z": 0.0,
+      "linear_x": 0.0,
+      "linear_y": 0.0,
+      "linear_z": 0.0
+    },
+    "actual_output_zero": true,
+    "latest_requested_command": {
+      "angular_z_radps": 0.0,
+      "finite": true,
+      "linear_x_mps": 0.1,
+      "nonzero": true
+    },
+    "motion_authorized": false,
+    "navigation_state": {
+      "block_reasons": [
+        "unlocalized_occupied_evidence",
+        "forward_corridor_not_proven_free",
+        "phase8_motion_lock_stop_only"
+      ],
+      "camera_transform": {
+        "quaternion_base": [
+          -0.5,
+          0.49999999999755174,
+          -0.5,
+          0.5000000000024483
+        ],
+        "translation_base_m": [
+          0.1,
+          0.0,
+          0.1
+        ]
+      },
+      "counts": {
+        "free_grid_cells": 164,
+        "free_image_pixels": 5120,
+        "grid_occupied_cells": 0,
+        "grid_unknown_cells": 5461,
+        "high_confidence_free_pixels": 5120,
+        "occupied_image_pixels_unlocalized": 16326,
+        "projected_free_pixels": 5120,
+        "unknown_image_pixels": 55354
+      },
+      "grid": {
+        "height": 75,
+        "origin_xy_m": [
+          0.0,
+          -0.75
+        ],
+        "resolution_m": 0.02,
+        "snapshot_only": true,
+        "stale_cells_fused": false,
+        "width": 75
+      },
+      "input_contract": {
+        "camera_info": "/camera/camera_info",
+        "clock": "/clock",
+        "confidence": "/perception/confidence",
+        "filtered_odometry": "/odometry/filtered",
+        "health": "/perception/health",
+        "mask": "/perception/image_mask",
+        "tf": "base_link <- camera_optical_frame"
+      },
+      "input_failures": [],
+      "map_frame": "base_link",
+      "map_semantics": {
+        "FREE": 0,
+        "OCCUPIED": 100,
+        "UNKNOWN": -1
+      },
+      "motion_authorized": false,
+      "node": "anc_local_traversability",
+      "occupied_image_evidence_is_metric": false,
+      "profile": "REALISTIC_RGB_ONLY_STOP_ONLY",
+      "reason": "phase8_motion_lock_stop_only",
+      "runtime_uses_world_map_or_truth": false,
+      "status": "STOP"
+    },
+    "navigation_state_fresh": true,
+    "node": "anc_realistic_safe_stop_supervisor",
+    "output_command_topic": "/cmd_vel",
+    "phase8_motion_lock": true,
+    "published_zero_commands": 129,
+    "reason": "phase8_feasibility_gate_failed",
+    "requested_command_count": 1890,
+    "requested_command_fresh": true,
+    "requested_command_topic": "/cmd_vel/requested",
+    "status": "STOP",
+    "watchdog_state": "command_received_stop_only"
+  },
+  "unlocalized_occupied_image_pixels": 16326
+}

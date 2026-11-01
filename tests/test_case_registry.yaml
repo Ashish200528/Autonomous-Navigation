@@ -1,5 +1,5 @@
 version: 2
-status: "Phase 1 REFERENCE Nav2 goal PASS; Phase 2 differential-drive PASS WITH LIMITS; Phase 3 sensor interfaces PASS WITH LIMITS; Phase 4 known-start localization PASS WITH LIMITS; Phase 5 scenario harness PASS WITH LIMITS; Phase 6 ORACLE_REFERENCE navigation PASS WITH LIMITS; Phase 7 RGB-only perception PASS WITH LIMITS."
+status: "Phase 1 REFERENCE Nav2 goal PASS; Phase 2 differential-drive PASS WITH LIMITS; Phase 3 sensor interfaces PASS WITH LIMITS; Phase 4 known-start localization PASS WITH LIMITS; Phase 5 scenario harness PASS WITH LIMITS; Phase 6 ORACLE_REFERENCE navigation PASS WITH LIMITS; Phase 7 RGB-only perception PASS WITH LIMITS; Phase 8 REALISTIC_RGB_ONLY stop-only baseline PASS WITH LIMITS; Phase 8 motion gate BLOCKED."
 registry:
   - id: T00
     phase: 1
@@ -169,3 +169,43 @@ registry:
       - docs/evidence/phase7/fault-injection.json
       - docs/evidence/phase7/fault-injection.log
       - tests/phase7_sensor_fault_test.py
+
+  - id: T13
+    phase: 8
+    name: rgb_local_traversability_projection_and_fail_closed_static_validation
+    scenario_id: null
+    status: PASS
+    result: "7/7 checks passed: only high-confidence FREE is projected; unobserved and RGB-obstacle cells remain UNKNOWN; low confidence and invalid distortion fail closed."
+    evidence:
+      - docs/evidence/phase8/phase8-static-validation.json
+      - docs/evidence/phase8/phase8-static-validation.log
+      - tests/phase8_safety_validation.py
+  - id: T14
+    phase: 8
+    name: realistic_rgb_stop_only_live_scenarios_and_command_authority
+    scenario_id: "S00,S01,S02,S03,S09"
+    status: PASS_WITH_LIMITS
+    result: "Nine bounded headless stop trials passed, including S02 seeds 101 and 202. All 1,052 observed cmd_vel samples were zero; maximum evaluator-only displacement was 0.00001055 m. No Nav2, known-start map-to-odom, competing command publisher, or non-ground contact event was observed. Motion was intentionally not enabled."
+    evidence:
+      - docs/evidence/phase8/phase8-summary.json
+      - docs/evidence/phase8/runs/
+      - tests/phase8_live_safety_test.py
+  - id: T15
+    phase: 8
+    name: missing_camera_localization_command_timeout_and_stale_input_recovery
+    scenario_id: S00
+    status: PASS
+    result: "Camera absence and missing filtered localization produced all-UNKNOWN maps; command timeout and stale RGB remained stopped; fresh RGB recovered perception. Supervisor remained the sole zero-command publisher."
+    evidence:
+      - docs/evidence/phase8/phase8-summary.json
+      - docs/evidence/phase8/phase7-fault-injection.json
+      - docs/evidence/phase8/phase7-fault-console.log
+  - id: T16
+    phase: 6
+    name: oracle_reference_s00_regression_after_phase8_launch_isolation
+    scenario_id: S00
+    status: PASS
+    result: "Separate Phase 6 ORACLE_REFERENCE regression succeeded: NavigateToPose path 1.8546 m, final goal error 0.1454 m, clearance 1.7314 m, localization drift 0.0019 m, and zero collision events. This is not RGB-only navigation evidence."
+    evidence:
+      - docs/evidence/phase6/runs/phase8-final-reference-s00-20261102/result.json
+      - docs/evidence/phase6/runs/phase8-final-reference-s00-20261102/launch.log

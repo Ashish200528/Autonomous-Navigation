@@ -1,4 +1,4 @@
-# Open issues after Phase 7
+# Open issues after Phase 8 stop-only baseline
 
 ## Resolved through Phase 3
 
@@ -27,6 +27,13 @@
 - Verified missing/stale RGB fails closed to UNKNOWN and confidence zero; static checks passed 13/13 and the final six-case dataset completed with clean shutdowns.
 - Accepted only as PASS WITH LIMITS: zero false-FREE on known occupied pixels and useful floor coverage were measured, but occupied recall is 26.67%, total UNKNOWN coverage is 80.98%, and P7C1 returned all UNKNOWN when floor support was unobservable.
 
+## Resolved through Phase 8 stop-only baseline
+
+- Added a camera-only local traversability snapshot that preserves unsupported space as UNKNOWN, plus a separate 20 Hz safe-stop supervisor with sole cmd_vel authority.
+- Static projection checks passed 7/7; nine bounded S00/S01/S02/S03/S09 headless stop trials passed with 1,052/1,052 zero command samples and no movement beyond the 0.02 m stop tolerance.
+- Camera absence, missing filtered localization, command timeout, stale RGB, fresh-input recovery, sole command authority, no Nav2, and no known-start map-to-odom were checked.
+- Phase 8 is accepted only as PASS WITH LIMITS for stop-only. Autonomous motion remains blocked: observed FREE cells do not connect to the footprint, and emergency-braking distance is unmeasured.
+
 ## P0 before hardware-faithful claims or transfer
 
 - Measure chassis footprint, height, mass, wheel radius, wheel separation, and center of mass. Current simulation values are placeholders.
@@ -48,8 +55,8 @@
 - Add unknown-pose acquisition separately from the known-initial-pose baseline.
 - Phase 5 completed seeded geometry worlds for S00-S04 and S09 plus a headless scenario harness. Phase 6 added an ORACLE_REFERENCE Nav2 baseline and one bounded static no-route abort. Dynamic obstacles, RGB perception, unknown-pose localization, general sensor-loss safe stopping, and parking remain later-phase work.
 - Improve Phase 7 RGB perception recall and test camera/floor calibration under varied lighting and real hardware; preserve UNKNOWN as distinct from FREE.
-- Implement a realistic sensor-constrained local costmap and replanning path.
+- Improve camera-derived free-space coverage and occupied recall; then demonstrate a continuous footprint-clear local corridor with a measured braking-distance bound before enabling any motion or replanning.
 - Define parking tolerance and dwell using measured footprint, then test stationary pose error.
 - Plan UNO Q adapters only after simulation interfaces and regression checks are stable.
 
-Phase 4 is complete with limits. Phase 5 world generation and scenario validation are complete with limits. Phase 6 selected reference navigation cases and Phase 7 RGB-only perception passed with limits. Phase 8 navigation using perception, unknown-pose acquisition, general safe-stop behavior, and parking remain unimplemented.
+Phase 4 localization, Phase 5 scenario validation, Phase 6 selected reference navigation, and Phase 7 RGB-only perception are complete with stated limits. Phase 8 added and verified a stop-only baseline. RGB-only movement, unknown-pose acquisition, parking, and hardware transfer remain unimplemented; the motion gate is blocked by insufficient connected free-space evidence and unmeasured braking distance.

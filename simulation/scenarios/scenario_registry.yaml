@@ -239,3 +239,24 @@ phase7_rgb_perception:
       viewpoints: [view_start, view_turned]
   accepted_run_id: accepted-phase7-final-verified
   result: "12 views; PASS WITH LIMITS. P7C1 was invalid/UNKNOWN because calibrated floor support was not observable."
+
+phase8_realistic_stop_only:
+  profile: REALISTIC_RGB_ONLY_STOP_ONLY
+  status: PASS_WITH_LIMITS_STOP_ONLY
+  motion_gate: BLOCKED
+  motion_attempted: false
+  runtime_data_boundary: "Only RGB perception, CameraInfo, clock, filtered wheel/IMU localization, and camera TF feed runtime. Evaluator truth and scenario geometry remain outside runtime."
+  result: "Nine bounded headless trials emitted only zero velocity. FREE evidence is disconnected from the robot footprint and too short relative to the reaction-distance lower bound; braking distance is unmeasured."
+  cases:
+    - scenario_id: S00
+      run_ids: [s00-camera-absent-stop, s00-fresh-rgb-stop, s00-localization-dropout-stop, s00-command-watchdog-stop]
+    - scenario_id: S01
+      run_ids: [s01-box-stop]
+    - scenario_id: S02
+      seeds: [101, 202]
+      run_ids: [s02-random-objects-stop, s02-seed202-random-objects-stop]
+    - scenario_id: S03
+      run_ids: [s03-constriction-stop]
+    - scenario_id: S09
+      run_ids: [s09-no-route-stop]
+  evidence: docs/evidence/phase8/phase8-summary.json

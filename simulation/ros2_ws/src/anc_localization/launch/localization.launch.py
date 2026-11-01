@@ -1,5 +1,6 @@
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument
+from launch.conditions import IfCondition
 from launch.substitutions import LaunchConfiguration, PathJoinSubstitution
 from launch_ros.actions import Node
 from launch_ros.parameter_descriptions import ParameterValue
@@ -11,6 +12,7 @@ def generate_launch_description():
     start_x = LaunchConfiguration("known_start_x")
     start_y = LaunchConfiguration("known_start_y")
     start_yaw = LaunchConfiguration("known_start_yaw")
+    publish_known_start = LaunchConfiguration("publish_known_start_tf")
     share = FindPackageShare("anc_localization")
     ekf_config = PathJoinSubstitution([share, "config", "ekf.yaml"])
     wheel_config = PathJoinSubstitution([share, "config", "wheel_odometry.yaml"])
@@ -41,12 +43,14 @@ def generate_launch_description():
             "--frame-id", "map", "--child-frame-id", "odom",
         ],
         parameters=[{"use_sim_time": use_sim_time}],
+        condition=IfCondition(publish_known_start),
     )
     return LaunchDescription([
         DeclareLaunchArgument("use_sim_time", default_value="true"),
         DeclareLaunchArgument("known_start_x", default_value="0.0"),
         DeclareLaunchArgument("known_start_y", default_value="0.0"),
         DeclareLaunchArgument("known_start_yaw", default_value="0.0"),
+        DeclareLaunchArgument("publish_known_start_tf", default_value="true"),
         known_start,
         wheel_covariance,
         ekf,

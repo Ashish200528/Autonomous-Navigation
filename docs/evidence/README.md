@@ -113,3 +113,14 @@ The ORACLE_REFERENCE map is generated from the exact scenario geometry and the k
 - phase7-perception-architecture.md, scripts/phase7_ground_truth.py, scripts/phase7_rgb_dataset.py, tests/phase7_perception_validation.py, and tests/phase7_sensor_fault_test.py: architecture, evaluator, dataset runner, and reproducible validations.
 
 The aggregate result has zero false-FREE pixels among 465,242 evaluator-known occupied pixels, 88.01% useful floor coverage, 26.67% occupied recall, and 80.98% UNKNOWN coverage. P7C1 returned all UNKNOWN because calibrated floor support was not observable. This is a limited conservative perception result, not a navigation or collision-avoidance result. See docs/PHASE_REPORT.md for the full metric table and scope limits.
+
+
+## Phase 8 RGB-only local traversability and stop-only baseline
+
+- phase8/phase8-summary.json and phase8/README.md: nine accepted stop-only runs, safety and resource aggregates, separate Phase 6 comparison, and evidence index. Autonomous motion is explicitly blocked.
+- phase8/phase8-feasibility.json: camera projection, connected-free-space, reaction-distance, and unmeasured braking-distance gate.
+- phase8/phase8-static-validation.json and phase8-static-validation.log: 7/7 FREE projection, UNKNOWN preservation, confidence, and calibration checks.
+- phase8/phase8-build.log: final seven-package ROS workspace build.
+- phase8/runs/: bounded S00/S01/S02/S03/S09 live stop runs, including missing camera/localization, command timeout, and S02 seeds 101/202. All 1,052 observed output commands were zero.
+- phase8/phase7-fault-injection.json and phase7-fault-console.log: missing/stale RGB fail-closed behavior and stale-to-fresh recovery.
+- phase6/runs/phase8-final-reference-s00-20261102/: isolated ORACLE_REFERENCE regression recorded during Phase 8; it is not RGB-only navigation evidence.

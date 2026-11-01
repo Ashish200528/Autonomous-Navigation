@@ -3,7 +3,7 @@
 Date: 2026-11-02 (Asia/Calcutta)
 Project: /home/ashish/AutonomousNavigationCar on Ubuntu-24.04 at E:/WSL/Ubuntu-24.04
 Branch: main
-Scope: Phase 0 baseline through Phase 6 reference-only Nav2 navigation.
+Scope: Phase 0 baseline through Phase 8 REALISTIC_RGB_ONLY stop-only baseline.
 
 ## Outcome
 
@@ -404,6 +404,35 @@ The accepted run recorded about 2.8 GiB available memory under the WSL 3.5 GiB m
 
 ### Limits and next boundary
 
-The classifier is color- and lighting-specific, uses only a narrow ground band, and misses many low-contrast occupied pixels by marking them UNKNOWN. Its output is not a 2D costmap, depth map, obstacle-distance estimate, or robot command. Online mapping, planning, autonomous obstacle avoidance, unknown-start localization, sensor-loss driving policy, parking, and hardware safety are not implemented. Phase 8 was not started. Recalibrate the actual camera/floor, improve occupied recall while retaining the zero false-FREE result, and broaden validation before any later navigation claim.
+The classifier is color- and lighting-specific, uses only a narrow ground band, and misses many low-contrast occupied pixels by marking them UNKNOWN. Its output is not a 2D costmap, depth map, obstacle-distance estimate, or robot command. Online mapping, planning, autonomous obstacle avoidance, unknown-start localization, sensor-loss driving policy, parking, and hardware safety are not implemented. Phase 8 subsequently added a stop-only baseline. Its motion gate remains BLOCKED because FREE evidence is disconnected from the footprint and hard-stop distance is unmeasured. Recalibrate the actual camera/floor, improve occupied recall while retaining the zero false-FREE result, and broaden validation before any later navigation claim.
 
 Evidence and reproducible commands are indexed in docs/evidence/README.md and scripts/README.md; dataflow and projection assumptions are in docs/phase7-perception-architecture.md.
+
+## Phase 8: REALISTIC_RGB_ONLY local traversability and safe stopping
+
+### Result
+
+**Classification: PASS WITH LIMITS for the stop-only baseline. Autonomous motion is BLOCKED by the feasibility gate.** The system reports STOP when a continuous footprint-clear corridor and stopping distance cannot be justified. No Phase 8 goal or robot motion was attempted.
+
+The projected S00 FREE patch spans about 0.090 m longitudinally at base_link x=0.604-0.694 m. The robot front envelope is x=0.215 m, leaving about 0.389 m of UNKNOWN. Phase 7's accepted challenge aggregate has 80.98% UNKNOWN and 26.67% occupied recall. Camera/processing/supervisor p95 reaction distance at 0.18 m/s is about 0.024 m; adding a 0.20 m margin gives about 0.224 m before braking, whose distance remains unmeasured. The FREE patch is shorter than this lower bound and disconnected from the footprint.
+
+### Implementation and safeguards
+
+The new anc_realistic_navigation package publishes a fresh, robot-relative OccupancyGrid in base_link. The 75 x 75 map uses 0.02 m cells with FREE=0, OCCUPIED=100, UNKNOWN=-1. Only high-confidence FREE pixels are projected with live CameraInfo and a TF-verified camera transform. Invalid/stale image, confidence, health, CameraInfo, simulation clock, filtered odometry, covariance, frame, or TF invalidates the snapshot to UNKNOWN. No UNKNOWN is promoted to FREE; obstacle-like RGB pixels without metric range remain UNKNOWN and block.
+
+The separate phase8_realistic.launch.py starts no Nav2 or reference map and passes publish_known_start_tf:=false. It keeps wheel/IMU EKF odometry local, without the Phase 6 known-start map-to-odom transform. The existing launch default remains true for the separate Phase 6 ORACLE_REFERENCE profile. The safe-stop supervisor is the only /cmd_vel publisher and emits zero Twist at 20 Hz unconditionally. Requested commands are isolated on /cmd_vel/requested. Gazebo truth and scenario geometry are accessed only by the live test evaluator.
+
+### Validation
+
+- Full ROS workspace build: seven packages finished.
+- Projection/fail-closed static suite: 7/7 passed.
+- Nine final live Phase 8 stop runs passed across S00, S01, S02, S03, and S09; S02 was repeated with seeds 101 and 202. Checks covered missing camera, missing localization, fresh but insufficient RGB, unlocalized obstacle evidence, command timeout, sole command authority, no Nav2, no known-start map-to-odom TF, zero command output, and evaluator-only pose.
+- All 1,052 actual /cmd_vel samples were zero; maximum evaluator displacement was 0.00001055 m; all runs recorded zero non-ground contact events. Repeated caster-to-ground surface messages are not counted as obstacle collisions.
+- The Phase 7 fault harness passed missing-RGB, stale timestamp, fresh-input, and stale-to-fresh recovery checks.
+- A separate Phase 6 S00 ORACLE_REFERENCE rerun returned NavigateToPose SUCCEEDED: path 1.8546 m, final goal error 0.1454 m, conservative clearance 1.7314 m, localization drift 0.0019 m. It is a reference comparison only and does not demonstrate RGB-only navigation.
+
+Per-run JSON/CSV/log evidence is under docs/evidence/phase8/runs/; aggregate values are in docs/evidence/phase8/phase8-summary.json. Full feasibility and topic/TF details are in docs/phase8-feasibility.md.
+
+### Limits and remaining work
+
+No movement, local route traversal, goal-reaching, or moving sensor-loss stop was demonstrated. Emergency braking distance is not measured. Camera geometry, chassis footprint, visual floor model, and estimator uncertainty remain provisional simulation assumptions. Dynamic camera loss during motion, local map recovery under a live stream interruption, and an end-to-end controller/planner are deferred until a continuous safe corridor and full stopping-distance bound can be demonstrated. Phase 8 did not touch the Arduino UNO Q application or start parking or hardware phases.
