@@ -1,28 +1,33 @@
 # ROS 2 simulation workspace
 
-## Implemented Phase 2 packages
+## Implemented packages
 
-- anc_description: Xacro differential-drive robot. It loads the single parameter inventory from the project root and defines chassis, wheels, caster, and placeholder camera frames.
-- anc_gazebo: headless Phase 2 world with a ground plane and static wall.
-- anc_bringup: Gazebo server launch, robot spawn, robot_state_publisher, and ros_gz topic bridges.
+- anc_description: Xacro robot model using the root parameter inventory. Defines chassis, wheels, caster, camera, camera optical frame, and IMU frame.
+- anc_gazebo: headless test world with ground, a static wall, and Gazebo Harmonic physics/sensor systems.
+- anc_bringup: headless Gazebo launch, robot spawn, robot_state_publisher, ros_gz bridges, and an IMU adapter that removes Gazebo's ideal orientation from the public ROS interface.
 
-Future packages for perception, localization, navigation, and evaluation remain planned and are not yet implemented as ROS packages.
+No Phase 4 perception or navigation package is implemented here.
 
 ## Model and topic contract
 
-Values under robot.simulation_model in config/robot_parameters.yaml are design placeholders, not measured hardware. The footprint rectangle conservatively includes the current wheel and caster envelope. Replace the values only after measuring the physical robot, then rerun the checks.
+Values under robot.simulation_model and sensors in config/robot_parameters.yaml are provisional placeholders, not measured hardware. Camera calibration, distortion/noise, IMU noise/bias, odometry, and contact behavior must not be presented as hardware-faithful.
 
-Gazebo truth stays inside the simulator. The Phase 2 evaluator reads GetEntityState for test measurements; the robot controller and navigation nodes do not subscribe to that service.
+Gazebo entity state is test-evaluator data only. The smoke-test script queries /gzserver/get_entity_state to check the wall stop; no navigation/perception node receives that data. The bridge exposes only the sanitized IMU on /imu/data. The raw Gazebo IMU bridge is /anc_internal/imu_raw; it contains a pose-derived orientation and is not a navigation input or rosbag topic.
 
-- ROS /cmd_vel to Gazebo /model/anc_robot/cmd_vel
-- Gazebo /model/anc_robot/odom to ROS /odom
-- Gazebo /model/anc_robot/tf to ROS /tf
-- ROS /clock from Gazebo /clock
-- Gazebo /model/anc_robot/contacts to ROS /contacts
+| ROS interface | Source / purpose |
+|---|---|
+| /clock | Gazebo simulation clock |
+| /cmd_vel | ROS command to Gazebo DiffDrive |
+| /camera/image_raw | Gazebo RGB image; camera_optical_frame |
+| /camera/camera_info | Simulated pinhole calibration; camera_optical_frame |
+| /imu/data | Sanitized gyro and acceleration; orientation explicitly unavailable; imu_link |
+| /odom | Gazebo DiffDrive wheel odometry; odom to base_footprint |
+| /joint_states | Gazebo model joint state for left/right wheel transforms |
+| /tf | Dynamic odom to base_footprint from DiffDrive plus robot_state_publisher transforms |
+| /tf_static | Fixed base, camera, optical, IMU, and other link transforms |
+| /contacts | Gazebo contact sensor bridged from /world/anc_phase2_test/model/anc_robot/link/base_footprint/sensor/chassis_contact/contact |
 
-The dynamic odom-to-base_footprint transform comes from Gazebo DiffDrive. robot_state_publisher owns the static base and fixed-link transforms. tf2_echo odom base_link resolved in the check. /tf had publishers from the bridge and robot_state_publisher; /tf_static had one robot_state_publisher publisher.
-
-The contact publisher and bridge were present, but the test received zero contact messages; do not use /contacts as a verified collision counter yet. The camera_link exists as a frame only. RGB/CameraInfo, IMU, wheel joint-state visualization, and realistic perception are later work.
+UserCommands is loaded before Gazebo's Contact system so the contact sensor registers on the runtime-spawned robot. The test reports repeated contact points/messages while contact persists; interpret them as telemetry, not unique collision episodes.
 
 ## Build
 
@@ -51,7 +56,7 @@ In terminal 2:
 cd /home/ashish/AutonomousNavigationCar
 source scripts/source_ros_jazzy.sh
 source simulation/ros2_ws/install/setup.bash
-python3 scripts/phase2_motion_test.py
+python3 scripts/phase3_sensor_smoke_test.py
 ~~~
 
-Gazebo entity state is used only by that test script as evaluator data. The script records JSON results and CSV telemetry in docs/evidence/.
+The test saves timestamped JSON, CSV, and a rendered PNG under docs/evidence/. config/phase3_sensor_view.rviz displays the robot model, TF, and RGB camera with RViz2 while Gazebo runs headlessly.

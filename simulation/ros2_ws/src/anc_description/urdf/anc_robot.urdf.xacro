@@ -17,8 +17,28 @@
   <xacro:property name="CX" value="${sim['caster_x_m']}"/>
   <xacro:property name="CR" value="${sim['caster_radius_m']}"/>
   <xacro:property name="CM" value="${sim['caster_mass_kg']}"/>
-  <xacro:property name="CXYZ" value="${sim['camera_xyz_m']}"/>
-  <xacro:property name="CRPY" value="${sim['camera_rpy_rad']}"/>
+  <xacro:property name="CAM_CFG" value="${cfg['sensors']['camera']}"/>
+  <xacro:property name="IMU_CFG" value="${cfg['sensors']['imu']}"/>
+  <xacro:property name="CXYZ" value="${CAM_CFG['mount_xyz_m']}"/>
+  <xacro:property name="CRPY" value="${CAM_CFG['mount_rpy_rad']}"/>
+  <xacro:property name="CAM_FRAME" value="${CAM_CFG['optical_frame_id']}"/>
+  <xacro:property name="CAM_WIDTH" value="${CAM_CFG['resolution_px'][0]}"/>
+  <xacro:property name="CAM_HEIGHT" value="${CAM_CFG['resolution_px'][1]}"/>
+  <xacro:property name="CAM_FOV" value="${CAM_CFG['horizontal_fov_rad']}"/>
+  <xacro:property name="CAM_RATE" value="${CAM_CFG['update_rate_hz']}"/>
+  <xacro:property name="CAM_NEAR" value="${CAM_CFG['near_clip_m']}"/>
+  <xacro:property name="CAM_FAR" value="${CAM_CFG['far_clip_m']}"/>
+  <xacro:property name="CAM_FORMAT" value="${CAM_CFG['pixel_format']}"/>
+  <xacro:property name="IMU_XYZ" value="${IMU_CFG['mount_xyz_m']}"/>
+  <xacro:property name="IMU_RPY" value="${IMU_CFG['mount_rpy_rad']}"/>
+  <xacro:property name="IMU_FRAME" value="${IMU_CFG['frame_id']}"/>
+  <xacro:property name="IMU_RATE" value="${IMU_CFG['update_rate_hz']}"/>
+  <xacro:property name="IMU_GYRO_NOISE" value="${IMU_CFG['angular_velocity_noise_stddev_radps']}"/>
+  <xacro:property name="IMU_GYRO_BIAS" value="${IMU_CFG['angular_velocity_bias_mean_radps']}"/>
+  <xacro:property name="IMU_GYRO_BIAS_STD" value="${IMU_CFG['angular_velocity_bias_stddev_radps']}"/>
+  <xacro:property name="IMU_ACCEL_NOISE" value="${IMU_CFG['linear_acceleration_noise_stddev_mps2']}"/>
+  <xacro:property name="IMU_ACCEL_BIAS" value="${IMU_CFG['linear_acceleration_bias_mean_mps2']}"/>
+  <xacro:property name="IMU_ACCEL_BIAS_STD" value="${IMU_CFG['linear_acceleration_bias_stddev_mps2']}"/>
   <xacro:property name="IXX" value="${M * (W**2 + H**2) / 12.0}"/>
   <xacro:property name="IYY" value="${M * (L**2 + H**2) / 12.0}"/>
   <xacro:property name="IZZ" value="${M * (L**2 + W**2) / 12.0}"/>
@@ -87,6 +107,68 @@
     <origin xyz="${CXYZ[0]} ${CXYZ[1]} ${CXYZ[2]}" rpy="${CRPY[0]} ${CRPY[1]} ${CRPY[2]}"/>
   </joint>
 
+  <link name="camera_optical_frame"/>
+  <joint name="camera_link_to_camera_optical_frame" type="fixed">
+    <parent link="camera_link"/><child link="camera_optical_frame"/>
+    <origin xyz="0 0 0" rpy="-1.57079632679 0 -1.57079632679"/>
+  </joint>
+
+  <link name="imu_link">
+    <inertial>
+      <mass value="0.01"/>
+      <inertia ixx="0.000001" ixy="0" ixz="0" iyy="0.000001" iyz="0" izz="0.000001"/>
+    </inertial>
+  </link>
+  <joint name="imu_fixed_joint" type="fixed">
+    <parent link="base_link"/><child link="imu_link"/>
+    <origin xyz="${IMU_XYZ[0]} ${IMU_XYZ[1]} ${IMU_XYZ[2]}" rpy="${IMU_RPY[0]} ${IMU_RPY[1]} ${IMU_RPY[2]}"/>
+  </joint>
+
+  <gazebo reference="camera_link">
+    <sensor name="anc_rgb_camera" type="camera">
+      <always_on>true</always_on>
+      <visualize>false</visualize>
+      <update_rate>${CAM_RATE}</update_rate>
+      <topic>/camera/image_raw</topic>
+      <gz_frame_id>${CAM_FRAME}</gz_frame_id>
+      <camera name="anc_rgb_camera">
+        <horizontal_fov>${CAM_FOV}</horizontal_fov>
+        <image>
+          <width>${CAM_WIDTH}</width>
+          <height>${CAM_HEIGHT}</height>
+          <format>${CAM_FORMAT}</format>
+        </image>
+        <clip><near>${CAM_NEAR}</near><far>${CAM_FAR}</far></clip>
+        <camera_info_topic>/camera/camera_info</camera_info_topic>
+        <distortion>
+          <k1>0.0</k1><k2>0.0</k2><k3>0.0</k3><p1>0.0</p1><p2>0.0</p2>
+        </distortion>
+      </camera>
+    </sensor>
+  </gazebo>
+
+  <gazebo reference="imu_link">
+    <sensor name="anc_imu" type="imu">
+      <always_on>true</always_on>
+      <visualize>false</visualize>
+      <update_rate>${IMU_RATE}</update_rate>
+      <topic>/imu/data</topic>
+      <gz_frame_id>${IMU_FRAME}</gz_frame_id>
+      <imu>
+        <angular_velocity>
+          <x><noise type="gaussian"><mean>0.0</mean><stddev>${IMU_GYRO_NOISE}</stddev><bias_mean>${IMU_GYRO_BIAS}</bias_mean><bias_stddev>${IMU_GYRO_BIAS_STD}</bias_stddev></noise></x>
+          <y><noise type="gaussian"><mean>0.0</mean><stddev>${IMU_GYRO_NOISE}</stddev><bias_mean>${IMU_GYRO_BIAS}</bias_mean><bias_stddev>${IMU_GYRO_BIAS_STD}</bias_stddev></noise></y>
+          <z><noise type="gaussian"><mean>0.0</mean><stddev>${IMU_GYRO_NOISE}</stddev><bias_mean>${IMU_GYRO_BIAS}</bias_mean><bias_stddev>${IMU_GYRO_BIAS_STD}</bias_stddev></noise></z>
+        </angular_velocity>
+        <linear_acceleration>
+          <x><noise type="gaussian"><mean>0.0</mean><stddev>${IMU_ACCEL_NOISE}</stddev><bias_mean>${IMU_ACCEL_BIAS}</bias_mean><bias_stddev>${IMU_ACCEL_BIAS_STD}</bias_stddev></noise></x>
+          <y><noise type="gaussian"><mean>0.0</mean><stddev>${IMU_ACCEL_NOISE}</stddev><bias_mean>${IMU_ACCEL_BIAS}</bias_mean><bias_stddev>${IMU_ACCEL_BIAS_STD}</bias_stddev></noise></y>
+          <z><noise type="gaussian"><mean>0.0</mean><stddev>${IMU_ACCEL_NOISE}</stddev><bias_mean>${IMU_ACCEL_BIAS}</bias_mean><bias_stddev>${IMU_ACCEL_BIAS_STD}</bias_stddev></noise></z>
+        </linear_acceleration>
+      </imu>
+    </sensor>
+  </gazebo>
+
   <gazebo reference="base_link">
     <mu1>0.8</mu1><mu2>0.8</mu2>
     <sensor name="chassis_contact" type="contact">
@@ -96,7 +178,6 @@
         <collision>base_footprint_fixed_joint_lump__chassis_collision_collision</collision>
         <collision>base_footprint_fixed_joint_lump__caster_collision_collision_1</collision>
       </contact>
-      <topic>/model/anc_robot/contacts</topic>
     </sensor>
   </gazebo>
   <gazebo reference="left_wheel_link"><mu1>1.2</mu1><mu2>1.2</mu2></gazebo>
@@ -104,6 +185,9 @@
   <gazebo reference="caster_link"><mu1>0.2</mu1><mu2>0.2</mu2></gazebo>
 
   <gazebo>
+    <plugin filename="gz-sim-joint-state-publisher-system" name="gz::sim::systems::JointStatePublisher">
+      <topic>/world/anc_phase2_test/model/anc_robot/joint_state</topic>
+    </plugin>
     <plugin filename="gz-sim-diff-drive-system" name="gz::sim::systems::DiffDrive">
       <left_joint>left_wheel_joint</left_joint><right_joint>right_wheel_joint</right_joint>
       <wheel_separation>${T}</wheel_separation><wheel_radius>${R}</wheel_radius>

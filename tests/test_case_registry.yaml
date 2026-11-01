@@ -1,5 +1,5 @@
 version: 1
-status: "Phase 1 REFERENCE Nav2 goal PASS; Phase 2 custom differential-drive motion and wall-stop PASS WITH LIMITS."
+status: "Phase 1 REFERENCE Nav2 goal PASS; Phase 2 differential-drive PASS WITH LIMITS; Phase 3 sensor interfaces PASS WITH LIMITS."
 registry:
   - id: T00
     phase: 1
@@ -58,3 +58,20 @@ registry:
       - docs/evidence/phase2-motion-second-attempt.json
       - docs/evidence/phase2-motion-third-attempt.json
       - docs/evidence/phase2-motion-fourth-attempt.json
+  - id: T05
+    phase: 3
+    name: realistic_sensor_interfaces_and_wall_contact
+    scenario_id: S00
+    status: PASS_WITH_LIMITS
+    result: "All final smoke checks passed: rendered RGB/CameraInfo at 15.15 Hz; sanitized IMU at 100 Hz; odometry at 29.41 Hz against 30 Hz target; clock, TF, wheel joint states, and wall-specific contact telemetry verified. Wheel odometry exceeded evaluator pose by 0.46115 m at the wall; all sensor assumptions remain provisional."
+    evidence:
+      - docs/evidence/phase3-sensor-smoke-final.json
+      - docs/evidence/phase3-sensor-smoke-final.log
+      - docs/evidence/phase3-sensor-telemetry-final.csv
+      - docs/evidence/phase3-camera-frame-final.png
+      - docs/evidence/phase3-sensors-bag-final
+      - docs/evidence/phase3-rviz-view.jpg
+      - docs/evidence/phase3-simulation-launch-final.log
+      - docs/evidence/phase3-sensor-build-final-verified.log
+      - docs/evidence/phase3-validation-final.log
+      - docs/evidence/phase3-rviz.log

@@ -1,5 +1,5 @@
 # Measured hardware values remain unresolved. The simulation_model block contains
-# explicitly provisional design values used only to build the Phase 2 test robot.
+# explicitly provisional design values used by the Phase 2/3 simulation model.
 robot:
   measurement_status: unresolved_not_measured
   mass_kg: null
@@ -29,9 +29,7 @@ robot:
     caster_x_m: 0.19
     caster_radius_m: 0.025
     caster_mass_kg: 0.05
-    camera_xyz_m: [0.10, 0.0, 0.10]
-    camera_rpy_rad: [0.0, 0.0, 0.0]
-    camera_status: placeholder_frame_only_no_sensor
+    camera_status: provisional_sensor_configured_not_hardware_measured
     footprint_xy_m:
       - [0.215, 0.1525]
       - [0.215, -0.1525]
@@ -39,14 +37,37 @@ robot:
       - [-0.16, 0.1525]
 sensors:
   camera:
-    position_xyz_m: null
-    orientation_rpy_rad: null
-    resolution_px: null
-    horizontal_fov_deg: null
+    status: provisional_simulation_parameters_not_hardware_measured
+    mount_xyz_m: [0.10, 0.0, 0.10]
+    mount_rpy_rad: [0.0, 0.0, 0.0]
+    link_frame_id: camera_link
+    optical_frame_id: camera_optical_frame
+    resolution_px: [320, 240]
+    horizontal_fov_rad: 1.0471975512
+    update_rate_hz: 15.0
+    near_clip_m: 0.05
+    far_clip_m: 10.0
+    pixel_format: R8G8B8
+    noise_model: none
+    distortion_model: zero_distortion_provisional
     calibration_file: null
+    calibration_note: CameraInfo is generated from the simulated pinhole FOV and image dimensions; this is not physical calibration.
   imu:
-    noise_model: null
-    covariance_source: null
+    status: provisional_simulation_parameters_not_hardware_measured
+    mount_xyz_m: [0.0, 0.0, 0.0]
+    mount_rpy_rad: [0.0, 0.0, 0.0]
+    frame_id: imu_link
+    update_rate_hz: 100.0
+    gazebo_orientation_output: true
+    ros_orientation_available: false
+    orientation_policy: Gazebo raw IMU includes pose-derived orientation; the ROS adapter drops it and marks orientation unavailable.
+    angular_velocity_noise_stddev_radps: 0.002
+    angular_velocity_bias_mean_radps: 0.0
+    angular_velocity_bias_stddev_radps: 0.0
+    linear_acceleration_noise_stddev_mps2: 0.02
+    linear_acceleration_bias_mean_mps2: 0.0
+    linear_acceleration_bias_stddev_mps2: 0.0
+    covariance_policy: ROS covariance diagonals reflect provisional SDF noise variances; they are not physically calibrated.
 mission:
   map_frame: map
   nominal_start_pose_xyyaw: [0.0, 0.0, 0.0]

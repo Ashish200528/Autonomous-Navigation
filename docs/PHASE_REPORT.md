@@ -1,9 +1,9 @@
-# Phase 0, Phase 1, and Phase 2 report
+# Phase 0 through Phase 3 report
 
 Date: 2026-11-01 (Asia/Calcutta)
 Project: /home/ashish/AutonomousNavigationCar on Ubuntu-24.04 at E:/WSL/Ubuntu-24.04
 Branch: main
-Scope: Phase 0 baseline, complete Phase 1 reference navigation validation, and first Phase 2 differential-drive robot test.
+Scope: Phase 0 planning baseline, Phase 1 reference navigation validation, Phase 2 custom differential-drive robot, and Phase 3 sensor simulation/ROS interfaces.
 
 ## Outcome
 
@@ -11,11 +11,11 @@ Scope: Phase 0 baseline, complete Phase 1 reference navigation validation, and f
 - Phase 1 environment gate: PASS. WSL2 Ubuntu 24.04.5, ROS 2 Jazzy, Gazebo Harmonic, ros_gz, RViz2, Nav2, the packaged TurtleBot3 simulator, and available resources were checked.
 - Phase 1 Task A reference navigation: PASS. Nav2 accepted a map-frame goal and returned SUCCEEDED with error code 0. Localization, known-free corridor, nonzero controller output, odometry motion, and final AMCL pose were checked.
 - Phase 2 Task B custom robot: PASS WITH LIMITS. The custom differential-drive robot built and spawned headlessly. Forward, reverse, rotation, odometry, base TF, and a physical wall stop passed. The configured contact sensor and ROS bridge produced zero contact messages; odometry also diverged under the wall stall. These limits are recorded below.
-- Phase 3 has not started. The camera link is only a placeholder frame; no camera or IMU sensor is simulated.
+- Phase 3 sensor simulation and ROS interfaces: PASS WITH LIMITS. RGB/CameraInfo, sanitized IMU, clock, odometry, joint states, TF, wall contact, RViz, and a bounded bag were verified. Sensor parameters remain provisional and wall-stall odometry still diverges.
 
 ## Scope and integrity
 
-The supplied roadmap and task text governed the phase gates. Gazebo entity state was used only by the Phase 2 test evaluator. Neither Nav2 nor a perception/controller node received Gazebo ground-truth pose or obstacle geometry. The Nav2 run is labeled REFERENCE because it used the packaged map and simulated laser scan; it is not evidence of RGB-only navigation. All custom vehicle dimensions are design placeholders, not measured hardware values.
+The supplied roadmap and task text governed the phase gates. Gazebo entity state was used only by the Phase 2/3 test evaluators. Neither Nav2 nor a perception/controller node received Gazebo ground-truth pose or obstacle geometry. The Nav2 run is labeled REFERENCE because it used the packaged map and simulated laser scan; it is not evidence of RGB-only navigation. All custom vehicle dimensions are design placeholders, not measured hardware values.
 
 No package installation, system-wide upgrade, Windows/WSL restart, or Arduino UNO Q application change was made during these validation tasks. Gazebo was stopped cleanly after tests. No Phase 2 screenshot was saved; tests were headless.
 
@@ -69,7 +69,7 @@ Three ROS 2 packages were added under simulation/ros2_ws/src:
 - anc_gazebo: a small headless world with ground and a static wall.
 - anc_bringup: server launch, robot spawn, robot_state_publisher, and ros_gz topic bridges.
 
-The robot has a box chassis, two driven wheels, a passive spherical caster, a camera frame placeholder, Gazebo DiffDrive, wheel odometry, and a single base TF chain. The test world loads Gazebo Harmonic's Contact system. The contact endpoint is advertised, but no contact messages were observed in the trial.
+At Phase 2 acceptance the robot had a box chassis, two driven wheels, a passive spherical caster, a camera frame placeholder, Gazebo DiffDrive, wheel odometry, and a base TF chain. The Phase 2 test recorded no contact messages. Phase 3 later diagnosed and corrected the sensor registration and topic bridge; the historical Phase 2 results remain unchanged.
 
 Simulation-only values in config/robot_parameters.yaml remain explicitly labeled placeholders: chassis 0.32 x 0.24 x 0.08 m and 2.0 kg; wheel radius 0.04 m, width 0.025 m, mass 0.15 kg, separation 0.28 m, and axle x -0.04 m; caster x 0.19 m, radius 0.025 m, mass 0.05 kg; speed limits 0.25 m/s and 1.0 rad/s. The conservative footprint rectangle includes the simulated wheel and caster envelope. These are not measurements or sim-to-real specifications.
 
@@ -101,6 +101,44 @@ The chassis stayed upright and the physics constraint held the robot at the calc
 
 During the wall stall, wheel odometry advanced to x=1.40039 m while evaluator pose remained at x=0.735 m. The wheels continued rotating against the wall and odometry followed that motion. Odometry matches forward and reverse travel away from the obstacle, but stall/slip accuracy is not validated. Rotation odometry also differs from evaluator yaw by about 0.10 rad. These results are a basic motion check, not a calibrated dynamics result.
 
+## Phase 3 Task C: sensor simulation and ROS interfaces
+
+**Outcome: PASS WITH LIMITS.** No Phase 4 or later work was started.
+
+### RGB camera
+
+The provisional forward-facing camera publishes /camera/image_raw and /camera/camera_info. The accepted smoke run received 320x240 rgb8 frames at 15.15 Hz with frame_id=camera_optical_frame. CameraInfo used plumb_bob, zero distortion, and focal lengths fx=fy=277.128 px, matching the provisional 60 deg horizontal FOV. The saved PNG is a rendered Gazebo image showing the red wall and gray ground; it is not fabricated or a depth channel. The configuration uses no camera noise and no physical calibration.
+
+### IMU
+
+The simulated IMU publishes at 100 Hz in imu_link. During the stationary sample window the mean acceleration was x/y/z = 0.000/0.003/9.803 m/s^2. Provisional SDF noise standard deviations are 0.002 rad/s for angular velocity and 0.02 m/s^2 for linear acceleration; the bridge covariance diagonals were 4e-6 and 4e-4 respectively. These parameters are not hardware measurements.
+
+Gazebo Harmonic's raw IMU also contains a pose-derived orientation. The earlier orientation_enabled tag was ignored by Gazebo and did not suppress that value. The final launch routes raw data to /anc_internal/imu_raw, then the anc_bringup adapter drops the quaternion and publishes /imu/data with a zero quaternion and orientation_covariance[0] = -1, the ROS convention for unavailable orientation. The raw topic is excluded from the accepted rosbag and must not feed navigation/perception.
+
+### Odometry, clock, joints, and TF
+
+/odom used frame odom and child base_footprint, publishing at 29.41 Hz against the configured 30 Hz. /clock advanced monotonically. /joint_states published the left/right wheel joint names at 499.45 Hz. The smoke test verified the edges odom -> base_footprint -> base_link -> camera_link -> camera_optical_frame, base_link -> imu_link, and both wheel links. It found no conflicting child frames; the latest dynamic TF was within 0.002 s of /clock.
+
+### Contact diagnosis and wall test
+
+The Phase 2 contact gap had two causes. First, Gazebo Harmonic's Contact system was loaded after UserCommands, while the robot was created after world startup; loading UserCommands before Contact lets the contact system see the new model. Second, Gazebo published the sensor on its actual scoped topic /world/anc_phase2_test/model/anc_robot/link/base_footprint/sensor/chassis_contact/contact, while the old ROS bridge subscribed to /model/anc_robot/contacts. The world system order and bridge mapping were corrected. This ordering matches the documented Gazebo Sim runtime-spawn behavior described in [Gazebo Sim issue #2223](https://github.com/gazebosim/gz-sim/issues/2223).
+
+The final reproducible forward wall approach passed at the expected robot center x=0.735 m. It recorded 6,374 contact messages and 8,703 contact records during the test window; 2,330 messages/records included phase2_wall. Maximum observed wall-contact depth was approximately 0.000232 m. Counts include repeated contacts while touching; they are not unique collision episodes.
+
+Wheel odometry reached x=1.19615 m while evaluator-only pose remained x=0.735 m, a +0.46115 m divergence during wall stall. The evaluator value was used only by the smoke-test script. The Phase 2 rotation result remains a separate observation: odometry yaw +1.20120 rad versus evaluator yaw +1.10063 rad, about 0.10057 rad difference. These limits are not hidden by substituting simulator pose into /odom.
+
+### Visualization, bag, and evidence
+
+RViz2 displayed the RGB camera and robot/TF frames while headless Gazebo ran. Screenshot: docs/evidence/phase3-rviz-view.jpg. The accepted MCAP bag is 4.15 s and 14.1 MiB with 2,911 messages across camera/CameraInfo, sanitized IMU, odometry, clock, and TF. High-rate contact and joint-state telemetry remains in the CSV/JSON rather than the bag.
+
+The final automated test passed every check in docs/evidence/phase3-sensor-smoke-final.json. The CSV, actual rendered PNG, final build and launch logs, RViz screenshot/log, and bag are listed in docs/evidence/README.md and tests/test_case_registry.yaml. During the headless run, about 2.5 GiB WSL memory remained available; the 1 GiB swap was unused. RViz opened under WSLg. No apt install, system-wide upgrade, WSL restart, or Arduino UNO Q change was made.
+
+### Phase 3 acceptance and limits
+
+- RGB image/CameraInfo, IMU, odometry, clock, TF, wheel joint states, contact telemetry, reproducible smoke test, RViz view, and bounded bag: **PASS**.
+- Overall Phase 3: **PASS WITH LIMITS** because camera calibration/noise and IMU assumptions are provisional, raw Gazebo orientation is excluded rather than sensor-disabled, odometry diverges under stall, and repeated contact records are not unique collision episodes.
+- The project retains separate REFERENCE and REALISTIC profile labels; Phase 3 does not add perception or navigation behavior.
+
 ## Reproduction commands
 
 In the WSL project directory:
@@ -130,8 +168,11 @@ The Phase 1 sample launch used headless mode. The map-corridor check and bag sum
 - ROS 2 Jazzy installation: https://docs.ros.org/en/jazzy/Installation/Ubuntu-Install-Debs.html
 - ROS 2 Jazzy and Gazebo Harmonic pairing: https://gazebosim.org/docs/harmonic/ros_installation/
 - Nav2 Jazzy quickstart: https://docs.nav2.org/jazzy/getting_started/quickstart/quickstart/
-- Gazebo Harmonic contact sensor and system plugin: https://gazebosim.org/docs/harmonic/sensors/
+- Gazebo Harmonic sensor and contact systems: https://gazebosim.org/docs/harmonic/sensors/
+- Gazebo Sim contact system runtime-spawn ordering diagnosis: https://github.com/gazebosim/gz-sim/issues/2223
+- ros_gz supported bridge types: https://github.com/gazebosim/ros_gz/blob/ros2/ros_gz_bridge/README.md
+- Gazebo Harmonic camera frame and CameraInfo migration notes: https://gazebosim.org/docs/harmonic/migrating_gazebo_classic_ros2_packages/
 
 ## Next recommended task
 
-Proceed to Phase 3 sensor simulation: add RGB image and CameraInfo, IMU, bridge configuration, and timestamp/TF frequency checks. Keep the profiles named REFERENCE and REALISTIC, keep Gazebo truth evaluator-only, and retain FREE/OCCUPIED/UNKNOWN semantics. Before using contact events as a collision metric, diagnose why the configured contact sensor emitted no messages. Before claiming odometry accuracy under contact or slip, define and test a wheel-slip model.
+Review the Phase 3 implementation and evidence before starting Phase 4. Preserve REFERENCE/REALISTIC separation and Gazebo truth isolation. Before hardware-faithful or sim-to-real claims, measure the physical chassis, camera calibration, and IMU noise; improve wheel odometry under slip/stall; and define contact-event semantics. Phase 4 remains unstarted.

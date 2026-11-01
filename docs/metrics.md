@@ -26,8 +26,32 @@ One headless TurtleBot3/Nav2 trial used a known map-frame initial pose and goal.
 
 One headless motion test passed all 10 required checks. Truth displacement was +0.30035 m forward, -0.29951 m reverse, and +1.10063 rad rotation. Corresponding odometry deltas were +0.30030 m, -0.30030 m, and +1.20120 rad. Maximum absolute roll/pitch was 0.00401 rad.
 
-The robot stopped at the geometry-derived wall contact plane: expected center x=0.735 m, measured x=0.735 m, maximum sampled x=0.735025 m, and final evaluator forward velocity about -0.00000056 m/s. This demonstrates that the physics constraint stopped the robot without tunneling in this test. The ROS contact topic emitted zero messages, so contact-event count is unobserved rather than a verified zero-collision count.
+The robot stopped at the geometry-derived wall contact plane: expected center x=0.735 m, measured x=0.735 m, maximum sampled x=0.735025 m, and final evaluator forward velocity about -0.00000056 m/s. This demonstrates that the physics constraint stopped the robot without tunneling in this test. The Phase 2 ROS contact topic emitted zero messages, so contact-event count was unobserved in that historical run. Phase 3 diagnosed and corrected the sensor registration and bridge topic; see the Phase 3 measurements below.
 
 Under the wall stall, odometry advanced to x=1.40039 m while evaluator pose remained at x=0.735 m. Wheel motion and world pose therefore diverged under contact/slip. Odometry accuracy under stall is not validated.
 
 Experiment record schema: run_id, seed, scenario_id, software_commit, sensor_profile, map_mode, start_x, start_y, start_yaw, goal_x, goal_y, goal_yaw, success, collision_count, elapsed_s, path_length_m, min_clearance_m, replans, final_position_error_m, final_yaw_error_deg, perception_fps, false_clear_count, false_blocked_count, outcome_reason, rosbag_path, video_path.
+
+
+## Phase 3 sensor and interface measurements
+
+One fresh headless Gazebo Harmonic run passed all checks in docs/evidence/phase3-sensor-smoke-final.json.
+
+| Interface | Measured result |
+|---|---|
+| /camera/image_raw | 320x240 rgb8, camera_optical_frame, 15.15 Hz; saved rendered wall-and-ground frame has 92 distinct sampled RGB colors |
+| /camera/camera_info | 320x240, camera_optical_frame, 15.15 Hz; fx=fy=277.128 px, consistent with the provisional 60 deg horizontal FOV; zero distortion |
+| /imu/data | 100.00 Hz, imu_link; stationary mean acceleration x/y/z = 0.000/0.003/9.803 m/s^2 |
+| IMU covariance | Angular velocity diagonal 4e-6 (sigma 0.002 rad/s); acceleration diagonal 4e-4 (sigma 0.02 m/s^2); provisional assumptions |
+| IMU orientation | Gazebo raw pose-derived quaternion is dropped by the adapter. Public /imu/data has a zero quaternion and orientation_covariance[0] = -1, meaning orientation is unavailable |
+| /odom | 29.41 Hz against configured 30 Hz; frame odom, child base_footprint |
+| /joint_states | 499.45 Hz; includes left_wheel_joint and right_wheel_joint |
+| /clock and TF | 6,373 increasing clock samples; required base, camera, optical, IMU, and wheel-link edges present; no child-frame conflicts; latest dynamic TF was within 0.002 s of /clock |
+| /contacts | 6,374 topic messages and 8,703 contact records in the test window; 2,330 messages/records include phase2_wall; maximum observed wall contact depth was about 0.000232 m |
+| Wall-stall odometry | Evaluator pose stopped at x=0.735 m while wheel odometry reached x=1.19615 m, a +0.46115 m divergence |
+
+The wall test uses evaluator-only Gazebo entity state solely inside the smoke-test script; no truth pose or wall geometry is published to navigation/perception inputs. Contact counts include repeated points while contact persists; they are not unique collision episodes.
+
+The accepted MCAP bag is 4.15 s, 14.1 MiB, and contains camera, sanitized IMU, odometry, clock, and TF. High-rate contacts and joint states are retained in the test CSV/JSON rather than the bag. RViz2 displayed the RGB image and robot/TF frames while headless Gazebo ran; see docs/evidence/phase3-rviz-view.jpg.
+
+The camera has no physical calibration, distortion, or noise model, and the IMU noise/bias values are not measured. The Phase 2 rotation trial showed about 0.10057 rad yaw difference between wheel odometry and evaluator truth. These results are interface checks, not a calibrated sim-to-real model.

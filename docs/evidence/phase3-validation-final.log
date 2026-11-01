@@ -1,0 +1,49 @@
+== Xacro/URDF ==
+robot name is: anc_robot
+---------- Successfully Parsed XML ---------------
+root Link: base_footprint has 1 child(ren)
+    child(1):  base_link
+        child(1):  camera_link
+            child(1):  camera_optical_frame
+        child(2):  caster_link
+        child(3):  imu_link
+        child(4):  left_wheel_link
+        child(5):  right_wheel_link
+== SDF ==
+Valid.
+== Python ==
+== YAML/JSON ==
+YAML OK: config/robot_parameters.yaml
+YAML OK: simulation/ros2_ws/src/anc_bringup/config/bridge.yaml
+YAML OK: tests/test_case_registry.yaml
+YAML OK: config/phase3_sensor_view.rviz
+Smoke JSON PASS: 20 checks
+== installed executables ==
+anc_bringup imu_sanitizer
+== accepted bag ==
+
+Files:             phase3-sensors-bag-final_0.mcap
+Bag size:          14.1 MiB
+Storage id:        mcap
+ROS Distro:        jazzy
+Duration:          4.145191613s
+Start:             Nov  1 2026 11:00:40.592777069 (1793530840.592777069)
+End:               Nov  1 2026 11:00:44.737968682 (1793530844.737968682)
+Messages:          2911
+Topic information: Topic: /camera/camera_info | Type: sensor_msgs/msg/CameraInfo | Count: 62 | Serialization Format: cdr
+                   Topic: /camera/image_raw | Type: sensor_msgs/msg/Image | Count: 62 | Serialization Format: cdr
+                   Topic: /clock | Type: rosgraph_msgs/msg/Clock | Count: 2051 | Serialization Format: cdr
+                   Topic: /imu/data | Type: sensor_msgs/msg/Imu | Count: 412 | Serialization Format: cdr
+                   Topic: /odom | Type: nav_msgs/msg/Odometry | Count: 121 | Serialization Format: cdr
+                   Topic: /tf | Type: tf2_msgs/msg/TFMessage | Count: 202 | Serialization Format: cdr
+                   Topic: /tf_static | Type: tf2_msgs/msg/TFMessage | Count: 1 | Serialization Format: cdr
+Service:           0
+Service information: 
+== diff check ==
+== resources ==
+               total        used        free      shared  buff/cache   available
+Mem:           3.5Gi       542Mi       1.9Gi       7.3Mi       1.2Gi       3.0Gi
+Swap:          1.0Gi          0B       1.0Gi
+Filesystem      Size  Used Avail Use% Mounted on
+/dev/sdd       1007G  6.8G  949G   1% /
+== leftover simulation/gui processes ==

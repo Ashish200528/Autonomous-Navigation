@@ -5,7 +5,7 @@ package_name = "anc_bringup"
 setup(
     name=package_name,
     version="0.1.0",
-    packages=[],
+    packages=["anc_bringup"],
     data_files=[
         ("share/ament_index/resource_index/packages", ["resource/anc_bringup"]),
         ("share/" + package_name, ["package.xml"]),
@@ -16,6 +16,11 @@ setup(
     zip_safe=True,
     maintainer="Autonomous Navigation Car project",
     maintainer_email="maintainer@example.com",
-    description="Headless Phase 2 simulation launch.",
+    description="Headless simulation launch and safe sensor interfaces.",
     license="Apache-2.0",
+    entry_points={
+        "console_scripts": [
+            "imu_sanitizer=anc_bringup.imu_sanitizer:main",
+        ],
+    },
 )

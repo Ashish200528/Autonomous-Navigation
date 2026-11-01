@@ -1,6 +1,6 @@
 # Configuration inventory
 
-Measured hardware values remain null in config/robot_parameters.yaml until they are measured. The simulation_model block is a separate, explicitly provisional design used only by the Phase 2 simulator. Do not use its values for sim-to-real claims.
+Measured hardware values remain null in config/robot_parameters.yaml until they are measured. The simulation_model block is a separate, explicitly provisional design used by the Phase 2/3 simulator. The Phase 3 camera and IMU parameters are also provisional. Do not use these values for sim-to-real claims.
 
 ## Hardware values still unresolved
 
@@ -34,7 +34,17 @@ Measured hardware values remain null in config/robot_parameters.yaml until they 
 | Wheel axle x | -0.04 m | Placeholder |
 | Caster x / radius / mass | +0.19 m / 0.025 m / 0.05 kg | Placeholder |
 | Maximum linear / angular command | 0.25 m/s / 1.0 rad/s | Placeholder |
-| Camera transform | (0.10, 0, 0.10) m; zero RPY | Frame only; no sensor |
+| Camera transform | (0.10, 0, 0.10) m; zero RPY | Provisional simulated RGB camera; not measured |
 | Footprint envelope | x from -0.16 to +0.215 m; y +/-0.1525 m | Conservative placeholder including wheels/caster |
+
+## Phase 3 simulated sensor assumptions
+
+| Sensor | Configuration | Status and limitations |
+|---|---|---|
+| RGB camera | Mount (0.10, 0, 0.10) m; 320x240; 60 deg horizontal FOV; 15 Hz; 0.05-10 m clipping | Provisional; simulated pinhole CameraInfo; zero distortion and no camera noise |
+| IMU | Mount at base center; 100 Hz; gyro sigma 0.002 rad/s; acceleration sigma 0.02 m/s^2; zero bias | Provisional, not hardware-calibrated; Gazebo raw orientation is hidden from the public ROS IMU interface |
+| ROS IMU orientation | /imu/data carries a zero quaternion with orientation_covariance[0] = -1 | Consumers must treat orientation as unavailable; do not use /anc_internal/imu_raw for navigation |
+
+The published covariance diagonals are generated from the configured provisional noise variances. Re-measure and recalibrate before using them in a state estimator.
 
 Update the YAML and this table together when hardware is measured or a simulation assumption changes.

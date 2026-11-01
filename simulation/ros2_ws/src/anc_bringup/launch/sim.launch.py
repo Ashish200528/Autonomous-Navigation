@@ -45,6 +45,13 @@ def generate_launch_description():
         output="screen",
         parameters=[{"config_file": bridge_config}],
     )
+    imu_sanitizer = Node(
+        package="anc_bringup",
+        executable="imu_sanitizer",
+        name="anc_imu_sanitizer",
+        output="screen",
+        parameters=[{"use_sim_time": True}],
+    )
     spawn = Node(
         package="ros_gz_sim",
         executable="create",
@@ -61,5 +68,6 @@ def generate_launch_description():
         gazebo,
         state_publisher,
         bridge,
+        imu_sanitizer,
         TimerAction(period=4.0, actions=[spawn]),
     ])

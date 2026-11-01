@@ -1,0 +1,251 @@
+{
+  "run_id": "attempt1",
+  "profile": "REALISTIC",
+  "mode": "headless Gazebo Harmonic",
+  "camera": {
+    "image_count": 196,
+    "image_rate_hz": 15.151515151515163,
+    "camera_info_count": 195,
+    "camera_info_rate_hz": 15.151515151515166,
+    "frame": "camera_optical_frame",
+    "provisional_horizontal_fov_rad": 1.0471975512,
+    "resolution": [
+      320,
+      240
+    ],
+    "image_evidence": {
+      "path": "docs/evidence/phase3-camera-frame-attempt1.png",
+      "frame_id": "camera_optical_frame",
+      "stamp_s": 117.35,
+      "width": 320,
+      "height": 240,
+      "encoding": "rgb8",
+      "unique_rgb_pixels": 1,
+      "channel_extrema": [
+        [
+          93,
+          93
+        ],
+        [
+          44,
+          44
+        ],
+        [
+          30,
+          30
+        ]
+      ]
+    }
+  },
+  "imu": {
+    "count": 1276,
+    "rate_hz": 100.0,
+    "frame": "imu_link",
+    "orientation": "unavailable; Gazebo truth-derived quaternion suppressed",
+    "stationary_sample_count": 200
+  },
+  "odometry": {
+    "count": 378,
+    "rate_hz": 29.41176470588236,
+    "frame": "odom",
+    "child_frame": "base_footprint",
+    "stall_comparison": {
+      "odom_x_m": 1.1911094504824131,
+      "evaluator_x_m": 0.735,
+      "x_divergence_m": 0.45610945048241314,
+      "odom_yaw_rad": 1.815070601294432e-20,
+      "evaluator_yaw_rad": -6.275720000000001e-15,
+      "yaw_divergence_rad": 6.275738150706014e-15
+    }
+  },
+  "joint_states": {
+    "count": 6349,
+    "rate_hz": 499.3706733794844,
+    "names": [
+      "left_wheel_joint",
+      "right_wheel_joint"
+    ]
+  },
+  "clock": {
+    "count": 0,
+    "latest_s": 0.0
+  },
+  "tf": {
+    "edges": [
+      [
+        "base_footprint",
+        "base_link"
+      ],
+      [
+        "base_link",
+        "camera_link"
+      ],
+      [
+        "base_link",
+        "caster_link"
+      ],
+      [
+        "base_link",
+        "imu_link"
+      ],
+      [
+        "base_link",
+        "left_wheel_link"
+      ],
+      [
+        "base_link",
+        "right_wheel_link"
+      ],
+      [
+        "camera_link",
+        "camera_optical_frame"
+      ],
+      [
+        "odom",
+        "base_footprint"
+      ]
+    ],
+    "conflicts": [],
+    "missing": []
+  },
+  "contact": {
+    "event_count": 0,
+    "events": [],
+    "robot_collision_test": "forward command toward fixed phase2_wall"
+  },
+  "evaluator_only_truth": {
+    "sim_time_s": 117.37,
+    "frame_id": "world",
+    "x": 0.735,
+    "y": -2.48161e-14,
+    "z": -4.24557e-08,
+    "yaw_rad": -6.275720000000001e-15,
+    "linear_x_mps": -5.43759e-07,
+    "angular_z_radps": 8.4835e-15
+  },
+  "checks": [
+    {
+      "name": "camera image exists",
+      "status": "PASS",
+      "detail": {
+        "path": "docs/evidence/phase3-camera-frame-attempt1.png",
+        "frame_id": "camera_optical_frame",
+        "stamp_s": 117.35,
+        "width": 320,
+        "height": 240,
+        "encoding": "rgb8",
+        "unique_rgb_pixels": 1,
+        "channel_extrema": [
+          [
+            93,
+            93
+          ],
+          [
+            44,
+            44
+          ],
+          [
+            30,
+            30
+          ]
+        ]
+      }
+    },
+    {
+      "name": "rendered RGB scene",
+      "status": "FAIL",
+      "detail": "1 distinct pixel colors"
+    },
+    {
+      "name": "camera dimensions and frame",
+      "status": "PASS",
+      "detail": "320x240, frame=camera_optical_frame"
+    },
+    {
+      "name": "camera and CameraInfo frequency",
+      "status": "PASS",
+      "detail": "image=15.15 Hz, info=15.15 Hz; expected about 15 Hz"
+    },
+    {
+      "name": "sensor timestamps monotonic",
+      "status": "PASS",
+      "detail": "strictly increasing camera, CameraInfo and IMU simulation stamps"
+    },
+    {
+      "name": "camera frame and calibration",
+      "status": "PASS",
+      "detail": "CameraInfo frame, K/P/D lengths and plumb_bob model"
+    },
+    {
+      "name": "camera calibration values",
+      "status": "PASS",
+      "detail": "fx=277.128, fy=277.128, expected 277.128 px for provisional 60 deg HFOV"
+    },
+    {
+      "name": "IMU frequency",
+      "status": "PASS",
+      "detail": "100.00 Hz; expected about 100 Hz"
+    },
+    {
+      "name": "IMU orientation truth suppressed",
+      "status": "FAIL",
+      "detail": "orientation quaternion is empty and covariance[0] = -1 on /imu/data"
+    },
+    {
+      "name": "IMU configured covariance",
+      "status": "PASS",
+      "detail": "gyro variance 4e-6 (0.002 rad/s sigma), acceleration variance 4e-4 (0.02 m/s^2 sigma)"
+    },
+    {
+      "name": "IMU stationary gravity convention",
+      "status": "PASS",
+      "detail": "stationary mean acceleration x/y/z = -0.000/-0.002/9.802 m/s^2"
+    },
+    {
+      "name": "odometry interface and frequency",
+      "status": "FAIL",
+      "detail": "378 messages at 29.41 Hz with odom/base_footprint frames"
+    },
+    {
+      "name": "wheel joint states",
+      "status": "PASS",
+      "detail": "last names=['left_wheel_joint', 'right_wheel_joint'], rate=499.37 Hz"
+    },
+    {
+      "name": "simulation clock",
+      "status": "FAIL",
+      "detail": "0 increasing /clock messages"
+    },
+    {
+      "name": "TF chain and wheel frames",
+      "status": "PASS",
+      "detail": "missing=[], conflicting_children=[]"
+    },
+    {
+      "name": "dynamic TF timestamp freshness",
+      "status": "FAIL",
+      "detail": "latest clock=0.000s, newest dynamic TF=117.342s"
+    },
+    {
+      "name": "reproducible wall stall",
+      "status": "PASS",
+      "detail": "evaluator pose={'sim_time_s': 117.37, 'frame_id': 'world', 'x': 0.735, 'y': -2.48161e-14, 'z': -4.24557e-08, 'yaw_rad': -6.275720000000001e-15, 'linear_x_mps': -5.43759e-07, 'angular_z_radps': 8.4835e-15}; expected x about 0.735 m; error=None"
+    },
+    {
+      "name": "wall contact telemetry",
+      "status": "FAIL",
+      "detail": "0 contact records; first=None"
+    },
+    {
+      "name": "wheel odometry stall characterization",
+      "status": "PASS",
+      "detail": "wheel odometry/evaluator comparison={'odom_x_m': 1.1911094504824131, 'evaluator_x_m': 0.735, 'x_divergence_m': 0.45610945048241314, 'odom_yaw_rad': 1.815070601294432e-20, 'evaluator_yaw_rad': -6.275720000000001e-15, 'yaw_divergence_rad': 6.275738150706014e-15}; evaluator data used only by this test"
+    },
+    {
+      "name": "sensor timestamps not stale",
+      "status": "FAIL",
+      "detail": "age behind /clock [image, CameraInfo, IMU, odom] = [-117.35, -117.35, -117.36, -117.342] s"
+    }
+  ],
+  "status": "FAIL"
+}
