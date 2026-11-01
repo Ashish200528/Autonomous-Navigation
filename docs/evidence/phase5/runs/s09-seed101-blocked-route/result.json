@@ -1,0 +1,171 @@
+{
+  "duration_s": 4.0,
+  "evaluator_only": {
+    "entity_list_source": "/gzserver/get_entities",
+    "entity_names": [
+      "anc_robot",
+      "arena_wall_bottom",
+      "arena_wall_left",
+      "arena_wall_right",
+      "arena_wall_top",
+      "ground_plane",
+      "obstacle_01"
+    ],
+    "entity_state_source": "/gzserver/get_entity_state",
+    "spawn_pose_error_xy_m": 1.0000000000065512e-05,
+    "spawn_pose_error_yaw_rad": 9.542340000000001e-20,
+    "truth": {
+      "angular_z_radps": 1.18309e-17,
+      "frame_id": "world",
+      "linear_x_mps": 4.18155e-09,
+      "sim_time_s": 2.558,
+      "x": -3.00001,
+      "y": -6.17455e-20,
+      "yaw_rad": -9.542340000000001e-20,
+      "z": -5.18642e-06
+    }
+  },
+  "goal_xyyaw": [
+    3.0,
+    0.0,
+    0.0
+  ],
+  "launch_command": [
+    "ros2",
+    "launch",
+    "anc_bringup",
+    "sim.launch.py",
+    "world_file:=/home/ashish/AutonomousNavigationCar/docs/evidence/phase5/runs/s09-seed101-blocked-route/world.sdf",
+    "start_x:=-3.000000",
+    "start_y:=0.000000",
+    "start_yaw:=0.000000"
+  ],
+  "layout_sha256": "2a3147ff0063458347fd2c31b78f4d07bc90ce1081605c28637bc842eeec021f",
+  "navigation_attempted": false,
+  "obstacle_count": 1,
+  "route_expected": false,
+  "route_found_by_geometry_validator": false,
+  "run_id": "s09-seed101-blocked-route",
+  "scenario_id": "S09",
+  "schema_version": 1,
+  "seed": 101,
+  "sensor_counts": {
+    "camera_image_raw": 60,
+    "clock": 3221,
+    "imu_data": 390,
+    "last_clock_s": 6.442,
+    "odom": 115
+  },
+  "sensor_profile": "REALISTIC",
+  "shutdown": {
+    "forced": false,
+    "group_gone": true,
+    "returncode": 0,
+    "signal": "SIGINT"
+  },
+  "source_commit": "3efb8c32eaed27190a0c3ea967987ea7c8305b65",
+  "start_xyyaw": [
+    -3.0,
+    0.0,
+    0.0
+  ],
+  "status": "PASS",
+  "tests": [
+    {
+      "detail": "image=1, imu=1, odom=1",
+      "name": "camera_imu_odom_started",
+      "status": "PASS"
+    },
+    {
+      "detail": "anc_robot listed=True; entity_count=7",
+      "name": "spawned_robot_listed_by_evaluator",
+      "status": "PASS"
+    },
+    {
+      "detail": "expected=['obstacle_01']; observed_match=True",
+      "name": "all_scenario_obstacles_listed_by_evaluator",
+      "status": "PASS"
+    },
+    {
+      "detail": "xy error=0.0000 m, yaw error=0.0000 rad",
+      "name": "gazebo_truth_matches_requested_start",
+      "status": "PASS"
+    },
+    {
+      "detail": "map->odom matches start pose=True; start=[-3.0, 0.0, 0.0]",
+      "name": "nonzero_known_start_map_to_odom",
+      "status": "PASS"
+    },
+    {
+      "detail": "composed truth error=0.00015972681071793564 m / 0.0006288747574489941 rad",
+      "name": "map_base_tf_consistent_with_evaluator",
+      "status": "PASS"
+    },
+    {
+      "detail": "60 image messages during startup and capture",
+      "name": "camera_stream_seen",
+      "status": "PASS"
+    },
+    {
+      "detail": "390 IMU messages during startup and capture",
+      "name": "imu_stream_seen",
+      "status": "PASS"
+    },
+    {
+      "detail": "115 odometry messages during startup and capture",
+      "name": "odometry_stream_seen",
+      "status": "PASS"
+    },
+    {
+      "detail": "3221 clock messages during startup and capture",
+      "name": "clock_stream_seen",
+      "status": "PASS"
+    },
+    {
+      "detail": "grid route=False; expected=False",
+      "name": "geometry_route_matches_expected",
+      "status": "PASS"
+    },
+    {
+      "detail": "5/5 geometry checks passed",
+      "name": "layout_validation_passed",
+      "status": "PASS"
+    },
+    {
+      "detail": "{\"forced\": false, \"group_gone\": true, \"returncode\": 0, \"signal\": \"SIGINT\"}",
+      "name": "clean_simulation_shutdown",
+      "status": "PASS"
+    }
+  ],
+  "tf_validation": {
+    "composed_pose_matches_evaluator_truth": true,
+    "known_start_matches_launch": true,
+    "map_to_base_composed": {
+      "x": -3.000169726810374,
+      "y": 1.0480011740124456e-08,
+      "yaw_rad": -0.0006288747574489941
+    },
+    "map_to_odom": {
+      "topic": "tf_static",
+      "x": -3.0,
+      "y": 0.0,
+      "yaw": 0.0,
+      "z": 0.0
+    },
+    "map_to_odom_present": true,
+    "map_to_odom_start_error_xy_m": 0.0,
+    "map_to_odom_start_error_yaw_rad": 0.0,
+    "odom_to_base_footprint": {
+      "topic": "tf",
+      "x": -0.0001697268103743399,
+      "y": 1.0480011740124456e-08,
+      "yaw": -0.000628874757448994,
+      "z": 0.0
+    },
+    "odom_to_base_footprint_present": true,
+    "truth_error_xy_m": 0.00015972681071793564,
+    "truth_error_yaw_rad": 0.0006288747574489941
+  },
+  "truth_published_to_ros": false,
+  "world_sha256": "98a0f75bafdfee7bef77267528b1127f26b99cbd1c6954129dfca81b78f3eb5f"
+}

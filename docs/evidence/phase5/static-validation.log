@@ -1,0 +1,48 @@
+PASS phase5_scenario_ids: active IDs=['S00', 'S01', 'S02', 'S03', 'S04', 'S09']
+PASS S00_geometry: 5 checks; failed=[]
+PASS S00_route_expectation: found=True, expected=True
+PASS S00_generic_entity_names: entity names=[]
+PASS S00_static_flags: flags=[]
+PASS S01_geometry: 6 checks; failed=[]
+PASS S01_route_expectation: found=True, expected=True
+PASS S01_direct_path_blocked: straight centerline clear=False
+PASS S01_generic_entity_names: entity names=['obstacle_01']
+PASS S01_static_flags: flags=[True]
+PASS S02_geometry: 26 checks; failed=[]
+PASS S02_route_expectation: found=True, expected=True
+PASS S02_generic_entity_names: entity names=['obstacle_01', 'obstacle_02', 'obstacle_03', 'obstacle_04', 'obstacle_05', 'obstacle_06']
+PASS S02_static_flags: flags=[True, True, True, True, True, True]
+PASS S03_geometry: 8 checks; failed=[]
+PASS S03_route_expectation: found=True, expected=True
+PASS S03_generic_entity_names: entity names=['obstacle_01', 'obstacle_02']
+PASS S03_static_flags: flags=[True, True]
+PASS S04_geometry: 15 checks; failed=[]
+PASS S04_route_expectation: found=True, expected=True
+PASS S04_generic_entity_names: entity names=['obstacle_01', 'obstacle_02', 'obstacle_03', 'obstacle_04']
+PASS S04_static_flags: flags=[True, True, True, True]
+PASS S09_geometry: 5 checks; failed=[]
+PASS S09_route_expectation: found=False, expected=False
+PASS S09_is_no_route: grid route=False
+PASS S09_generic_entity_names: entity names=['obstacle_01']
+PASS S09_static_flags: flags=[True]
+PASS S02_same_seed_exact_replay: layout hash=bf4f06eaf451774aa9155aa163f805b43e993d69f770bab94c3aeefa8b8504b5; world hash=94e028f3cec36ea7c18ea798fe05d1e345ee0a930ab0e2d73c7804c5ed4a0c99
+PASS S02_different_seed_changes_layout: seed101=bf4f06eaf451774aa9155aa163f805b43e993d69f770bab94c3aeefa8b8504b5; seed202=6ec2ec7135ec52dbfdbc8bbbf004af9d3c7c8e8ec0360455fb69332fa5547add
+PASS S02_different_seed_remains_valid: seed202 route=True; failed=[]
+PASS S04_same_seed_exact_replay: layout hash=af90d29b8a178a0acf91e34140de0402d13eba7666a90ce3ee0f38d0a2ca0432; world hash=528451a92a6dbdc428182d6fd292be88243ec510aec22da58485a48397acea81
+PASS S04_different_seed_changes_layout: seed101=af90d29b8a178a0acf91e34140de0402d13eba7666a90ce3ee0f38d0a2ca0432; seed202=500e3f25aaccea6690a758810b4e28080f0b3f3bd73adcfb6039076c94a320c8
+PASS S04_different_seed_remains_valid: seed202 route=True; failed=[]
+PASS profiles_remain_separate: profile labels=['REALISTIC', 'REFERENCE']
+PASS truth_not_a_robot_input: Scenario generator marks navigation_attempted=false; it has no ROS truth publisher.
+PASS S00_canonical_world_matches_generator: path=simulation/scenarios/worlds/s00_empty_open_arena.sdf exists=True
+PASS S00_gz_sdf_validate: Valid.
+PASS S01_canonical_world_matches_generator: path=simulation/scenarios/worlds/s01_single_box_detour.sdf exists=True
+PASS S01_gz_sdf_validate: Valid.
+PASS S02_canonical_world_matches_generator: path=simulation/scenarios/worlds/s02_random_simple_objects.sdf exists=True
+PASS S02_gz_sdf_validate: Valid.
+PASS S03_canonical_world_matches_generator: path=simulation/scenarios/worlds/s03_constricted_occlusion.sdf exists=True
+PASS S03_gz_sdf_validate: Valid.
+PASS S04_canonical_world_matches_generator: path=simulation/scenarios/worlds/s04_seeded_known_start.sdf exists=True
+PASS S04_gz_sdf_validate: Valid.
+PASS S09_canonical_world_matches_generator: path=simulation/scenarios/worlds/s09_no_route.sdf exists=True
+PASS S09_gz_sdf_validate: Valid.
+OVERALL PASS

@@ -7,9 +7,13 @@ from launch_ros.substitutions import FindPackageShare
 
 
 def generate_launch_description():
-    world = PathJoinSubstitution([
+    default_world = PathJoinSubstitution([
         FindPackageShare("anc_gazebo"), "worlds", "phase2_test_world.sdf"
     ])
+    world = LaunchConfiguration("world_file")
+    start_x = LaunchConfiguration("start_x")
+    start_y = LaunchConfiguration("start_y")
+    start_yaw = LaunchConfiguration("start_yaw")
     robot_xacro = PathJoinSubstitution([
         FindPackageShare("anc_description"), "urdf", "anc_robot.urdf.xacro"
     ])
@@ -62,9 +66,9 @@ def generate_launch_description():
         PythonLaunchDescriptionSource(localization_launch),
         launch_arguments={
             "use_sim_time": "true",
-            "known_start_x": "0.0",
-            "known_start_y": "0.0",
-            "known_start_yaw": "0.0",
+            "known_start_x": start_x,
+            "known_start_y": start_y,
+            "known_start_yaw": start_yaw,
         }.items(),
     )
     spawn = Node(
@@ -76,7 +80,7 @@ def generate_launch_description():
             "-world", "anc_phase2_test",
             "-topic", "robot_description",
             "-name", "anc_robot",
-            "-x", "0.0", "-y", "0.0", "-z", "0.0",
+            "-x", start_x, "-y", start_y, "-z", "0.0", "-Y", start_yaw,
         ],
     )
     return LaunchDescription([
@@ -84,6 +88,16 @@ def generate_launch_description():
             "wheel_surface_mu", default_value="1.2",
             description="Test-only Gazebo wheel surface friction coefficient.",
         ),
+        DeclareLaunchArgument(
+            "world_file", default_value=default_world,
+            description="Absolute SDF world file; defaults to the Phase 2 baseline world.",
+        ),
+        DeclareLaunchArgument("start_x", default_value="0.0",
+                              description="Known-start robot world X in meters."),
+        DeclareLaunchArgument("start_y", default_value="0.0",
+                              description="Known-start robot world Y in meters."),
+        DeclareLaunchArgument("start_yaw", default_value="0.0",
+                              description="Known-start robot world yaw in radians."),
         gazebo,
         state_publisher,
         bridge,

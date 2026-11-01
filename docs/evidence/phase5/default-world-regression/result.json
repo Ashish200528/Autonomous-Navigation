@@ -1,0 +1,87 @@
+{
+  "checks": [
+    {
+      "detail": "camera=1, imu=1, odom=1",
+      "name": "default_world_sensor_start",
+      "status": "PASS"
+    },
+    {
+      "detail": "phase2_wall listed=True; entity_count=3",
+      "name": "phase2_default_world_loaded",
+      "status": "PASS"
+    },
+    {
+      "detail": "truth xy error=0.00001 m; yaw error=0.00000 rad",
+      "name": "zero_start_default_preserved",
+      "status": "PASS"
+    },
+    {
+      "detail": "{\"composed_pose_matches_evaluator_truth\": true, \"known_start_matches_launch\": true, \"map_to_base_composed\": {\"x\": -0.00016972105638417043, \"y\": -2.9989501406022236e-10, \"yaw_rad\": -0.00040589366578425157}, \"map_to_odom\": {\"topic\": \"tf_static\", \"x\": 0.0, \"y\": 0.0, \"yaw\": 0.0, \"z\": 0.0}, \"map_to_odom_present\": true, \"map_to_odom_start_error_xy_m\": 0.0, \"map_to_odom_start_error_yaw_rad\": 0.0, \"odom_to_base_footprint\": {\"topic\": \"tf\", \"x\": -0.00016972105638417043, \"y\": -2.9989501406022236e-10, \"yaw\": -0.00040589366578425157, \"z\": 0.0}, \"odom_to_base_footprint_present\": true, \"truth_error_xy_m\": 0.00015917325638445295, \"truth_error_yaw_rad\": 0.0004058936657842514}",
+      "name": "zero_known_start_tf_preserved",
+      "status": "PASS"
+    },
+    {
+      "detail": "{\"forced\": false, \"group_gone\": true, \"returncode\": 0, \"signal\": \"SIGINT\"}",
+      "name": "default_launch_clean_shutdown",
+      "status": "PASS"
+    }
+  ],
+  "entities_evaluator_only": [
+    "anc_robot",
+    "ground_plane",
+    "phase2_wall"
+  ],
+  "scope": "default launch regression; no robot command or navigation",
+  "sensor_counts": {
+    "camera": 30,
+    "clock": 2272,
+    "imu": 194,
+    "odom": 57
+  },
+  "shutdown": {
+    "forced": false,
+    "group_gone": true,
+    "returncode": 0,
+    "signal": "SIGINT"
+  },
+  "status": "PASS",
+  "tf_validation": {
+    "composed_pose_matches_evaluator_truth": true,
+    "known_start_matches_launch": true,
+    "map_to_base_composed": {
+      "x": -0.00016972105638417043,
+      "y": -2.9989501406022236e-10,
+      "yaw_rad": -0.00040589366578425157
+    },
+    "map_to_odom": {
+      "topic": "tf_static",
+      "x": 0.0,
+      "y": 0.0,
+      "yaw": 0.0,
+      "z": 0.0
+    },
+    "map_to_odom_present": true,
+    "map_to_odom_start_error_xy_m": 0.0,
+    "map_to_odom_start_error_yaw_rad": 0.0,
+    "odom_to_base_footprint": {
+      "topic": "tf",
+      "x": -0.00016972105638417043,
+      "y": -2.9989501406022236e-10,
+      "yaw": -0.00040589366578425157,
+      "z": 0.0
+    },
+    "odom_to_base_footprint_present": true,
+    "truth_error_xy_m": 0.00015917325638445295,
+    "truth_error_yaw_rad": 0.0004058936657842514
+  },
+  "truth_evaluator_only": {
+    "angular_z_radps": 5.1906e-18,
+    "frame_id": "world",
+    "linear_x_mps": 4.18155e-09,
+    "sim_time_s": 2.62,
+    "x": -1.05478e-05,
+    "y": -4.91054e-20,
+    "yaw_rad": -1.71404e-19,
+    "z": -5.18642e-06
+  }
+}

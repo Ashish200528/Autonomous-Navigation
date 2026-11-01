@@ -11,10 +11,10 @@ All hardware measurements remain unresolved. The Phase 2 robot geometry and Phas
 ## Repository layout
 
 - simulation/ros2_ws/src/ contains the custom robot description, Gazebo world, ROS bringup packages, and the Phase 4 anc_localization package.
-- simulation/scenarios/ contains the scenario registry and future seeded worlds.
+- simulation/scenarios/ contains the scenario registry and six generated Phase 5 SDF worlds.
 - simulation/data/ is for future logs and calibration artifacts; review large raw files before committing.
 - hardware/uno_q/ is reserved for future adapters; keep the existing UNO Q application intact.
-- scripts/ contains project-scoped ROS setup and repeatable evaluation scripts.
+- scripts/ contains project-scoped ROS setup, Phase 2-4 checks, and the seeded Phase 5 generator, validator, and headless runner.
 - config/robot_parameters.yaml is the source of truth for measured and provisional model parameters.
 
 ## Start a project shell
@@ -110,6 +110,31 @@ python3 scripts/phase4_localization_test.py --mode slip --run-id phase4-localiza
 
 The accepted headless run reduced motion XY RMSE from 0.1501 m raw to 0.0481 m filtered and yaw RMSE from 0.2845 rad to 0.0153 rad. At the wall stall, filtered longitudinal error was 0.020 m versus 0.390 m raw. Fusion did not improve the rectangle return endpoint and did not correct wheel slip: at mu=0.001, evaluator chassis displacement was 0 m while wheel and filtered odometry each advanced about 0.47 m. Covariances and model parameters remain provisional. See docs/PHASE_REPORT.md and docs/evidence/README.md.
 
+## Phase 5 reproducible worlds and scenario harness
+
+Phase 5 adds six light, bounded indoor SDF worlds for roadmap IDs S00, S01, S02, S03, S04, and S09. The generator reads simulation/scenarios/scenario_registry.yaml, accepts an integer seed, validates the known start and goal against the robot footprint and arena, checks geometry and a 10 cm footprint-inflated grid route, then writes a fresh world, manifest, and layout plot.
+
+Build the project packages and run static geometry/SDF checks:
+
+~~~bash
+cd /home/ashish/AutonomousNavigationCar
+source scripts/source_ros_jazzy.sh
+cd simulation/ros2_ws
+colcon build --symlink-install --packages-up-to anc_bringup
+cd ../..
+python3 scripts/phase5_scenario_test.py
+~~~
+
+Run a headless scenario trial; the runner launches Gazebo, spawns the robot at the seeded known start, checks camera/IMU/odometry/clock and TF, records evaluator-only Gazebo truth and entity names locally, then sends SIGINT and waits for its process group to exit:
+
+~~~bash
+source scripts/source_ros_jazzy.sh
+source simulation/ros2_ws/install/setup.bash
+python3 scripts/scenario_runner.py --scenario S02 --seed 101 --run-id s02-seed101-repeat1
+~~~
+
+Each run writes world.sdf, manifest.json, layout.png, launch.log, and result.json under docs/evidence/phase5/runs/<run-id>/. The runner performs no navigation and publishes no truth or obstacle layout to ROS. The two S02 seed-101 trials, a nonzero-start S04 trial, and S09 blocked-route trial are indexed in docs/evidence/README.md. This validates scenario construction and sensor/TF startup; it does not validate path planning, perception, obstacle avoidance, or safe stopping.
+
 ## Current status
 
 - Phase 0 baseline: complete and tagged v0.1-phase0.
@@ -117,4 +142,5 @@ The accepted headless run reduced motion XY RMSE from 0.1501 m raw to 0.0481 m f
 - Phase 2 custom differential-drive motion and wall stop: PASS WITH LIMITS.
 - Phase 3 sensor simulation and ROS interfaces: PASS WITH LIMITS; see the phase report for provisional sensor assumptions and odometry/contact constraints.
 - Phase 4 known-start wheel/IMU localization: PASS WITH LIMITS.
-- Phase 5 perception/navigation, unknown-pose acquisition, and parking state machine have not been started.
+- Phase 5 reproducible worlds and scenario harness: PASS WITH LIMITS; see docs/PHASE_REPORT.md and docs/evidence/README.md.
+- Phase 6 perception/navigation, unknown-pose acquisition, safe-stop behavior, and parking have not been started.

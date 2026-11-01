@@ -12,6 +12,10 @@
 - Phase 4 added known-start EKF localization using wheel vx/vy and sanitized gyro z, with truth isolated to the evaluator. Aggregate motion RMSE and wall-stall x error improved in the accepted single run.
 - The corrected model passed the Phase 3 regression: 20/20 sensor smoke checks.
 
+## Resolved through Phase 5
+
+- Phase 5 added six bounded worlds, deterministic layout generation, geometry/no-route validation, evaluator-only truth capture, known-start spawn/TF, and cleanly terminated headless trials. It did not test navigation or safe stopping.
+
 ## P0 before hardware-faithful claims or transfer
 
 - Measure chassis footprint, height, mass, wheel radius, wheel separation, and center of mass. Current simulation values are placeholders.
@@ -22,7 +26,7 @@
 ## P1 before navigation/perception experiments
 
 - Reduce wheel-odometry divergence under slip. Phase 4 low-friction trial measured +0.4705 m wheel error with zero chassis displacement; EKF output followed the wheel estimate. Do not replace odometry with simulator pose.
-- Improve rectangle closure and raw rotation calibration. Phase 4 truth ended 0.127 m / 0.882 rad from start; filtered endpoint error exceeded raw odometry in that run.
+- Improve rectangle closure and raw rotation calibration. The accepted Phase 4 final7 truth ended 0.134 m / 0.980 rad from start; filtered endpoint error exceeded raw odometry in that run. This supersedes the earlier 0.127 m / 0.882 rad summary.
 - Validate sensor behavior over multiple seeds, longer runs, and camera viewpoints.
 - Measure or tune contact report semantics before treating repeated contact points as collision episodes.
 - Test Gazebo's GUI and RViz2 running together; Phase 3 used headless Gazebo with RViz2.
@@ -31,10 +35,10 @@
 ## P2 for later navigation experiments
 
 - Add unknown-pose acquisition separately from the known-initial-pose baseline.
-- Create seeded open-field, obstacle, constriction, occlusion, dynamic-obstacle, safe-stop, and parking scenarios.
+- Phase 5 completed seeded geometry worlds for S00-S04 and S09 plus a headless scenario harness. Dynamic obstacles, safe-stop behavior, perception, and parking remain later-phase work.
 - Implement class-agnostic RGB FREE/OCCUPIED/UNKNOWN perception; never treat UNKNOWN as CLEAR.
 - Implement a realistic sensor-constrained local costmap and replanning path.
 - Define parking tolerance and dwell using measured footprint, then test stationary pose error.
 - Plan UNO Q adapters only after simulation interfaces and regression checks are stable.
 
-Phase 4 is complete with limits; Phase 5 perception/navigation, unknown-pose acquisition, and parking remain unstarted.
+Phase 4 is complete with limits. Phase 5 world generation and scenario validation are complete with limits; Phase 6 perception/navigation, unknown-pose acquisition, safe-stop behavior, and parking remain unstarted.

@@ -3,7 +3,7 @@
 Date: 2026-11-01 (Asia/Calcutta)
 Project: /home/ashish/AutonomousNavigationCar on Ubuntu-24.04 at E:/WSL/Ubuntu-24.04
 Branch: main
-Scope: Phase 0 baseline, Phase 1 reference navigation, Phase 2 custom robot, Phase 3 sensor interfaces, and Phase 4 known-start localization.
+Scope: Phase 0 baseline through Phase 5 reproducible simulation worlds and scenario harness.
 
 ## Outcome
 
@@ -13,10 +13,11 @@ Scope: Phase 0 baseline, Phase 1 reference navigation, Phase 2 custom robot, Pha
 - Phase 2 Task B custom robot: PASS WITH LIMITS. The custom differential-drive robot built and spawned headlessly. Forward, reverse, rotation, odometry, base TF, and a physical wall stop passed. The configured contact sensor and ROS bridge produced zero contact messages; odometry also diverged under the wall stall. These limits are recorded below.
 - Phase 3 sensor simulation and ROS interfaces: PASS WITH LIMITS. RGB/CameraInfo, sanitized IMU, clock, odometry, joint states, TF, wall contact, RViz, and a bounded bag were verified. Sensor parameters remain provisional.
 - Phase 4 odometry, state estimation, and known-start localization: PASS WITH LIMITS. The wheel/gyro EKF reduced motion RMSE and wall-stall x error in the accepted run, but did not correct wheel slip and was worse than raw odometry at the non-closing rectangle endpoint.
+- Phase 5 reproducible simulation worlds and scenario harness: PASS WITH LIMITS. Six bounded worlds, deterministic seeded layouts, geometry route/no-route checks, four headless runs, known-start TF, sensor streams, evaluator-only truth, and clean shutdown were verified. No navigation or perception was attempted.
 
 ## Scope and integrity
 
-The supplied roadmap and task text governed the phase gates. Gazebo entity state was used only by the Phase 2/3/4 test evaluators. Neither Nav2, localization nodes, nor a perception/controller node received Gazebo ground-truth pose or obstacle geometry. The Nav2 run is labeled REFERENCE because it used the packaged map and simulated laser scan; it is not evidence of RGB-only navigation. All custom vehicle dimensions are design placeholders, not measured hardware values.
+The supplied roadmap and task text governed the phase gates. Gazebo entity state was used only by the Phase 2/3/4/5 test evaluators. Neither Nav2, localization nodes, nor a perception/controller node received Gazebo ground-truth pose or obstacle geometry. The Nav2 run is labeled REFERENCE because it used the packaged map and simulated laser scan; it is not evidence of RGB-only navigation. All custom vehicle dimensions are design placeholders, not measured hardware values.
 
 No package installation, system-wide upgrade, Windows/WSL restart, or Arduino UNO Q application change was made during these validation tasks. Gazebo was stopped cleanly after tests. No Phase 2 screenshot was saved; tests were headless.
 
@@ -183,6 +184,51 @@ The test verified monotonic clock/sensor stamps, approximately shared /odom and 
 
 The Phase 4 test JSON records source HEAD 0e019ac38e0747b3856d474c93ad00c124631cb3, the accepted Phase 3 base commit. Phase 4 files were working-tree changes during measurements and are committed separately after validation.
 
+## Phase 5: reproducible simulation worlds and scenario harness
+
+**Outcome: PASS WITH LIMITS.** This phase implements reproducible, bounded test scenes and verifies the simulation harness. It does not implement or claim autonomous navigation.
+
+### Scope and scenario registry
+
+The registry retains roadmap IDs S00-S09. Phase 5 activates S00-S04 and S09; S05-S08 remain planned for later work. The six canonical worlds are stored under simulation/scenarios/worlds/:
+
+- S00: empty open arena.
+- S01: one box blocks the direct segment; a footprint-clear detour remains.
+- S02: six seeded box, cylinder, sphere, and chair-proxy geometries with generic obstacle_NN names. No semantic class is assigned.
+- S03: two offset barriers create alternating lower and upper constrictions.
+- S04: seeded nonzero known-start pose and four seeded simple geometries.
+- S09: a static divider and room boundary leave no footprint-clear route.
+
+The arena outer bounds are x=[-4, 4] m and y=[-3, 3] m. The inside faces of the perimeter walls are x=[-3.85, 3.85] m and y=[-2.85, 2.85] m. Clearance validation uses the configured 0.264 m robot circumscribed radius plus 0.05 m margin. The generator checks physical obstacle footprints, start/goal clearance, configured corridor centerlines, and start-to-goal connectivity on a 0.10 m grid. Room geometry is composed from simple SDF models; the Phase 2 source world remains unchanged.
+
+### Generator, runner, and truth boundary
+
+scripts/scenario_generator.py reads the YAML registry, samples placements from the requested seed with deterministic Python PRNG state, rejects invalid placements, and builds SDF from the existing Phase 2 world skeleton. A manifest records scenario ID, seed, REFERENCE/REALISTIC profile label, start, goal, shape/pose/static fields, corridors, validation checks, and layout/world hashes. A Matplotlib plot records the generated layout and geometry route.
+
+scripts/scenario_runner.py writes a run-specific world, manifest, and plot; launches anc_bringup sim.launch.py with that world and the same start_x/start_y/start_yaw values for Gazebo spawn and known-start map-to-odom; subscribes to camera, IMU, odometry, clock, and TF; and records run metadata and evaluator evidence. Only this evaluator calls /gzserver/get_entity_state and /gzserver/get_entities. It does not publish truth or obstacle layouts, send velocity commands, request a navigation goal, or report a goal as reached. Shutdown sends SIGINT to the runner's process group and records the exit code and whether that group is gone.
+
+The REFERENCE and REALISTIC labels remain separate in the registry and evidence. Phase 5 does not introduce a sensor-profile switch or hardware-calibrated sensor/noise values; both labels currently use the existing common simulated robot sensor configuration.
+
+### Validation and run results
+
+Before changing Phase 5 code, the four-package workspace rebuilt successfully; the Phase 3 sensor regression passed 20/20 checks, and a fresh Phase 4 normal run passed its 13 checks with the recorded PASS WITH LIMITS decision. Baseline artifacts are phase5-baseline-build.log, phase5-baseline-phase3-test.log with its JSON/CSV/camera frame, and phase5-baseline-phase4-test.log with its JSON/CSV/plot and launch log.
+
+- colcon build --symlink-install --packages-up-to anc_bringup: 4/4 packages built.
+- python3 scripts/phase5_scenario_test.py: 47/47 checks passed. It checked all active scenario geometries, deterministic same-seed layout and SDF bytes, different valid S02/S04 layouts for seeds 101 and 202, the blocked S01 direct line, S09 no-route status, all six canonical worlds, and gz sdf -k for each world.
+- S02 seed 101 repeat 1 and repeat 2: both passed all 13 runner checks. They produced identical layout SHA-256 bf4f06eaf451774aa9155aa163f805b43e993d69f770bab94c3aeefa8b8504b5 and SDF SHA-256 94e028f3cec36ea7c18ea798fe05d1e345ee0a930ab0e2d73c7804c5ed4a0c99. Each observed 59 camera frames, 385/387 IMU messages, 113/114 odometry messages, the requested entity names, and map-base TF within 0.00016 m of evaluator pose.
+- S04 seed 202: all 13 checks passed. The requested known start was (-2.570240, -0.399685, -2.390039) and Gazebo truth was (-2.570230, -0.399678, -2.390040). The static map-to-odom matched the requested pose; composed map-to-base TF was within 0.00016 m and 0.00008 rad of evaluator truth. Camera/IMU/odometry counts were 61/396/117.
+- S09 seed 101: all 13 checks passed with geometry route false, expected route false, sensor streams present, and TF consistent at the start. Camera/IMU/odometry counts were 60/390/115.
+- All four scenario runs shut down with SIGINT, exit code 0, no forced escalation, and no remaining process group. A separate default-world regression also loaded the Phase 2 wall, spawned at the origin, checked zero map-to-odom, and shut down cleanly. The independent run directories preserve each SDF, manifest, plot, launch log, and result JSON.
+- A preliminary standalone check using coreutils timeout did spawn the default robot, but the timeout wrapper sent a second interrupt and escalated Gazebo shutdown. That diagnostic is retained as phase5/default-world-timeout-diagnostic.log; the controlled process-group regression above is the accepted shutdown result.
+
+The comparison summary is docs/evidence/phase5/phase5-summary.json. The default-world regression is docs/evidence/phase5/default-world-regression/result.json. Every live scenario run includes a generated layout.png visualization; the runner remained headless and did not capture a Gazebo GUI screenshot. Static checks are in docs/evidence/phase5/static-validation.json and .log; each live trial is under docs/evidence/phase5/runs/. docs/evidence/README.md indexes the build, checks, summaries, and run artifacts.
+
+### Limits and Phase 6 readiness
+
+The 10 cm grid uses a conservative circumscribed-circle footprint and a fixed safety margin; it is a scene-feasibility check, not a Nav2 planner, costmap, or calibrated collision model. Randomly generated obstacles are static in this phase. The static field is recorded and SDF honors it, but no dynamic-obstacle behavior was tested. Sensor-profile names are registry metadata only; this phase does not switch profiles or calibrate sensors.
+
+No path-following command, Nav2 goal, RGB perception, class-agnostic occupancy layer, safe-stop behavior, unknown-pose acquisition, or parking test was run. S09 proves only that the geometry validator recognizes a blocked route; it does not prove that a robot detects the condition or stops safely. The infrastructure is ready for a separately scoped next phase to implement and test one of those behaviors. Hardware geometry, camera calibration, IMU bias/noise, wheel slip, and watchdog/e-stop requirements remain open.
+
 ## Reproduction commands
 
 In the WSL project directory:
@@ -234,6 +280,32 @@ At evidence capture, git rev-parse HEAD returned 0e019ac38e0747b3856d474c93ad00c
 
 The Phase 1 sample launch used headless mode. The map-corridor check and bag summarizer are scripts/check_reference_map_corridor.py and scripts/summarize_nav2_reference_bag.py. Full output and telemetry are indexed in docs/evidence/README.md.
 
+### Phase 5 static validation and scenario replay
+
+~~~bash
+cd /home/ashish/AutonomousNavigationCar
+source scripts/source_ros_jazzy.sh
+cd simulation/ros2_ws
+colcon build --symlink-install --packages-up-to anc_bringup
+cd ../..
+python3 scripts/phase5_scenario_test.py
+~~~
+
+For a fresh headless run:
+
+~~~bash
+cd /home/ashish/AutonomousNavigationCar
+source scripts/source_ros_jazzy.sh
+source simulation/ros2_ws/install/setup.bash
+python3 scripts/scenario_runner.py --scenario S02 --seed 101 --run-id s02-seed101-replay
+~~~
+
+The run ID must be new because the runner preserves each evidence directory. Change the scenario and seed to replay another layout. The default-world regression is:
+
+~~~bash
+python3 scripts/phase5_default_world_smoke.py
+~~~
+
 ## Official references
 
 - ROS 2 Jazzy installation: https://docs.ros.org/en/jazzy/Installation/Ubuntu-Install-Debs.html
@@ -243,10 +315,13 @@ The Phase 1 sample launch used headless mode. The map-corridor check and bag sum
 - Gazebo Sim contact system runtime-spawn ordering diagnosis: https://github.com/gazebosim/gz-sim/issues/2223
 - ros_gz supported bridge types: https://github.com/gazebosim/ros_gz/blob/ros2/ros_gz_bridge/README.md
 - robot_localization sensor configuration: https://github.com/cra-ros-pkg/robot_localization/blob/rolling-devel/doc/configuring_robot_localization.rst
+- SDFormat shape geometry and collision/visual elements: https://github.com/gazebosim/sdf_tutorials/blob/master/docs/spec_shapes/tutorial.md
+- SDFormat world and model structure: https://github.com/gazebosim/sdf_tutorials/blob/master/docs/spec_world/tutorial1.md
+- ros_gz_sim world and entity creation: https://github.com/gazebosim/ros_gz/blob/ros2/ros_gz_sim/README.md
 - robot_localization state-estimation nodes: https://github.com/cra-ros-pkg/robot_localization/blob/rolling-devel/doc/state_estimation_nodes.rst
 - SDFormat URDF extensions and wheel friction conversion: https://sdformat.org/tutorials/specification/sdformat_urdf_extensions/1.6/
 - Gazebo Harmonic camera frame and CameraInfo migration notes: https://gazebosim.org/docs/harmonic/migrating_gazebo_classic_ros2_packages/
 
 ## Next recommended task
 
-Phase 5 is not ready for a hardware-faithful navigation claim. First measure the chassis, wheel geometry, encoder behavior, camera calibration, and IMU noise/bias; use those measurements to retune covariances and friction; and add tests for missing/stale wheel input and multiple trajectory seeds. Keep the known-start baseline and evaluator-only truth boundary. Phase 5 perception/navigation, unknown-pose acquisition, and parking remain unstarted.
+Phase 5 scenario generation and harness checks are complete with limits; they do not support a navigation claim. Before hardware-faithful work, measure the chassis, wheel geometry, encoder behavior, camera calibration, and IMU noise/bias; use measurements to retune covariances and friction; and add tests for missing/stale wheel input. Keep the known-start baseline and evaluator-only truth boundary. Phase 6 perception/navigation, unknown-pose acquisition, safe-stop behavior, and parking remain unstarted.

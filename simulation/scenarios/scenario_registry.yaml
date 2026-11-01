@@ -1,78 +1,175 @@
-version: 1
+version: 2
 units: {distance: m, angle: rad}
+arena:
+  outer_bounds_xy: [-4.0, 4.0, -3.0, 3.0]
+  inner_bounds_xy: [-3.85, 3.85, -2.85, 2.85]
+  wall_height_m: 1.2
+  robot_circumscribed_radius_m: 0.264
+  clearance_margin_m: 0.05
+  grid_resolution_m: 0.10
 seed_sets:
   smoke: [101]
   repeatability: [101, 202, 303]
 scenarios:
   - id: S00
     name: empty_open_arena_known_pose
-    status: planned
+    phase: 5
+    status: active_phase5
+    world_type: empty_arena
     sensor_profile: REFERENCE
     map_mode: static_known
     seed_set: smoke
+    validity: traversable
     start_xyyaw: [0.0, 0.0, 0.0]
     goal_xyyaw: [2.0, 0.0, 0.0]
-    pass_evidence: goal reached, no collisions, pose and drive checks
+    obstacles: []
+    expected_free_corridors:
+      - name: direct_open_lane
+        points: [[0.0, 0.0], [2.0, 0.0]]
+    route_expected: true
+    pass_evidence: "World bounds, known-start TF, sensors, and reproducible launch are verified; navigation is not attempted."
   - id: S01
     name: box_blocks_direct_path
-    status: planned
+    phase: 5
+    status: active_phase5
+    world_type: single_box_detour
     sensor_profile: REFERENCE
     map_mode: static_known
     seed_set: smoke
-    pass_evidence: replan around box or explicit safe stop; no collision
+    validity: traversable
+    start_xyyaw: [-3.0, 0.0, 0.0]
+    goal_xyyaw: [3.0, 0.0, 0.0]
+    obstacles:
+      - name: obstacle_01
+        shape: box
+        pose_xyyaw: [0.0, 0.0, 0.0]
+        size_xyz: [0.90, 0.75, 0.80]
+        static: true
+    expected_free_corridors:
+      - name: lower_detour
+        points: [[-3.0, 0.0], [-1.0, -1.25], [1.0, -1.25], [3.0, 0.0]]
+    route_expected: true
+    pass_evidence: "A single unclassified box blocks the straight segment while a footprint-clear route remains."
   - id: S02
     name: unrecognized_random_objects
-    status: planned
+    phase: 5
+    status: active_phase5
+    world_type: random_simple_objects
     sensor_profile: REALISTIC
     map_mode: online_or_local
     seed_set: repeatability
-    pass_evidence: class-agnostic occupancy; no semantic dependency
+    validity: traversable
+    start_xyyaw: [-3.0, 0.0, 0.0]
+    goal_xyyaw: [3.0, 0.0, 0.0]
+    random_obstacles:
+      count: 6
+      x_range: [-1.5, 1.5]
+      y_range: [-0.9, 0.9]
+      shapes: [box, cylinder, sphere, chair]
+    expected_free_corridors:
+      - name: upper_open_lane
+        points: [[-3.0, 0.0], [-2.0, 2.0], [2.0, 2.0], [3.0, 0.0]]
+    route_expected: true
+    route_classification: geometry_only
+    pass_evidence: "Seed changes shape/pose layout; no semantic class or object detector is used."
   - id: S03
     name: left_center_right_constriction
-    status: planned
+    phase: 5
+    status: active_phase5
+    world_type: constricted_occlusion
     sensor_profile: REALISTIC
     map_mode: online_or_local
     seed_set: smoke
-    pass_evidence: choose a footprint-safe corridor or stop
+    validity: traversable
+    start_xyyaw: [-3.0, 0.0, 0.0]
+    goal_xyyaw: [3.0, 0.0, 0.0]
+    obstacles:
+      - name: obstacle_01
+        shape: box
+        pose_xyyaw: [-1.2, 0.5, 0.0]
+        size_xyz: [0.35, 3.40, 1.10]
+        static: true
+      - name: obstacle_02
+        shape: box
+        pose_xyyaw: [1.2, -0.5, 0.0]
+        size_xyz: [0.35, 3.40, 1.10]
+        static: true
+    expected_free_corridors:
+      - name: alternating_constriction
+        points: [[-3.0, 0.0], [-1.6, -1.65], [-0.6, -1.65], [0.0, 0.0], [0.6, 1.65], [1.6, 1.65], [3.0, 0.0]]
+        minimum_width_m: 0.95
+    route_expected: true
+    pass_evidence: "Offset barriers leave narrow lower and upper passages; route check accounts for the robot footprint."
   - id: S04
     name: randomized_known_start
-    status: planned
+    phase: 5
+    status: active_phase5
+    world_type: seeded_known_start
     sensor_profile: REFERENCE
     map_mode: static_known
     seed_set: repeatability
-    pass_evidence: pose initialized per seed; goal reached or safe failure
+    validity: traversable
+    start_region_xyyaw: [-2.6, -1.3, -1.1, 1.1, -3.141592653589793, 3.141592653589793]
+    goal_xyyaw: [2.8, 0.0, 0.0]
+    random_obstacles:
+      count: 4
+      x_range: [-0.1, 1.8]
+      y_range: [-1.1, 1.1]
+      shapes: [box, cylinder, sphere, chair]
+    expected_free_corridors:
+      - name: upper_open_lane
+        points: [[-2.0, 0.0], [-1.8, 2.0], [2.0, 2.0], [2.8, 0.0]]
+    route_expected: true
+    pass_evidence: "Start pose and obstacle layout are sampled deterministically from the seed; map-to-odom is initialized to the same pose."
   - id: S05
     name: dynamic_obstacle
+    phase: 6
     status: planned
     sensor_profile: REALISTIC
     map_mode: online_or_local
     seed_set: repeatability
-    pass_evidence: react/replan without scripted controller truth
+    pass_evidence: "Phase 6 candidate: dynamic obstacle behavior is not implemented in Phase 5."
   - id: S06
     name: poor_texture_shadow_occlusion
+    phase: 6
     status: planned
     sensor_profile: REALISTIC
     map_mode: online_or_local
     seed_set: repeatability
-    pass_evidence: unknown behavior and false-clear count reported
+    pass_evidence: "Phase 6 candidate: optical texture and shadow variants are not implemented in Phase 5."
   - id: S07
     name: temporary_sensor_loss
+    phase: 6
     status: planned
     sensor_profile: REALISTIC
     map_mode: online_or_local
     seed_set: repeatability
-    pass_evidence: stop safely when RGB, IMU or odometry is lost
+    pass_evidence: "Phase 6 candidate: safe-stop behavior is not implemented in Phase 5."
   - id: S08
     name: final_parking_bay_fiducial_optional
+    phase: 6
     status: planned
     sensor_profile: REALISTIC
     map_mode: static_known
     seed_set: repeatability
-    pass_evidence: final pose error and stationary dwell reported
+    pass_evidence: "Phase 6 candidate: parking is not implemented in Phase 5."
   - id: S09
     name: no_traversable_route
-    status: planned
+    phase: 5
+    status: active_phase5
+    world_type: blocked_divider
     sensor_profile: REALISTIC
     map_mode: online_or_local
     seed_set: repeatability
-    pass_evidence: safe failure, no collision, no infinite spinning
+    validity: no_route
+    start_xyyaw: [-3.0, 0.0, 0.0]
+    goal_xyyaw: [3.0, 0.0, 0.0]
+    obstacles:
+      - name: obstacle_01
+        shape: box
+        pose_xyyaw: [0.0, 0.0, 0.0]
+        size_xyz: [0.25, 5.60, 1.10]
+        static: true
+    expected_free_corridors: []
+    route_expected: false
+    pass_evidence: "A static divider leaves a body-width-infeasible wall gap; this is geometry validation only, not a safe-stop test."

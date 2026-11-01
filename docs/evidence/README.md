@@ -68,3 +68,17 @@ The Gazebo contact test counts repeated contact records while the robot remains 
 - phase4-normal-launch-attempt*.log, phase4-localization-normal-attempt*.json/.csv/.png, phase4-slip-launch-attempt*.log, phase4-localization-slip-attempt*.json/.csv/.png, and earlier final*.log/JSON files: preserved iterations, including an EKF YAML numeric-type startup failure, initial wall assertion mismatch, subscriber-count/GID instrumentation corrections, and friction conversion diagnostics. The final7 normal and final4 slip artifacts above are authoritative. phase4-normal-test-final6.log preserves a failed summary-formatting attempt; no result JSON was written by that attempt.
 
 Only the Phase 4 evaluator calls /gzserver/get_entity_state. The EKF and wheel adapter consume only /odometry/wheel and /imu/data. Ground truth is retained as evaluator evidence, not published to ROS. Test JSON source_commit records baseline Git HEAD at measurement time; Phase 4 changes were uncommitted working-tree content then.
+
+## Phase 5 reproducible worlds and scenario harness
+
+- phase5-baseline-build.log, phase5-baseline-launch.log, phase5-baseline-phase3-test.log, phase5-baseline-phase4-launch.log, and phase5-baseline-phase4-test.log: pre-change rebuild and fresh Phase 3/Phase 4 baseline checks. The Phase 3 JSON/CSV/camera frame and Phase 4 JSON/CSV/plot are also retained at the evidence root.
+- phase5-build.log: four-package workspace build after launch parameterization.
+- phase5/static-validation.json and .log: 47 checks for registry IDs, geometry, start/goal clearance, corridors, routes/no-route, same-seed exact layout/SDF replay, different valid seeded layouts, and all six gz sdf -k checks.
+- phase5/phase5-summary.json: phase decision and cross-trial seed/hash/shutdown comparison, including the default-world regression.
+- phase5/runs/s02-seed101-repeat1/ and phase5/runs/s02-seed101-repeat2/: independent complete S02 trials with identical layout/world hashes; each contains world.sdf, manifest.json, layout.png, launch.log, and result.json.
+- phase5/runs/s04-seed202-known-start/: nonzero position/yaw known-start, spawn truth, map-to-odom, composed map-to-base TF, sensors, and shutdown.
+- phase5/runs/s09-seed101-blocked-route/: blocked geometry and expected no-route validation with live sensor/TF checks.
+- phase5-run-s02-seed101-repeat1-summary.log, phase5-run-s02-seed101-repeat2-summary.log, phase5-run-s04-seed202-summary.log, and phase5-run-s09-seed101-summary.log: concise command output for each runner.
+- Canonical worlds: simulation/scenarios/worlds/s00_empty_open_arena.sdf, s01_single_box_detour.sdf, s02_random_simple_objects.sdf, s03_constricted_occlusion.sdf, s04_seeded_known_start.sdf, and s09_no_route.sdf.
+- phase5/default-world-regression/: controlled launch without overrides; phase2_wall, zero spawn/map-to-odom, sensor startup, evaluator truth agreement, and clean shutdown passed. The earlier coreutils-timeout diagnostic is preserved as phase5/default-world-timeout-diagnostic.log because its second interrupt caused forced escalation; it is not counted as an accepted run.
+- Every accepted live run captured evaluator truth in its local result.json; the runner did not publish truth or entity layouts to ROS, command the robot, or attempt navigation. Each accepted process group exited cleanly after SIGINT.

@@ -1,5 +1,5 @@
 version: 1
-status: "Phase 1 REFERENCE Nav2 goal PASS; Phase 2 differential-drive PASS WITH LIMITS; Phase 3 sensor interfaces PASS WITH LIMITS; Phase 4 known-start localization PASS WITH LIMITS."
+status: "Phase 1 REFERENCE Nav2 goal PASS; Phase 2 differential-drive PASS WITH LIMITS; Phase 3 sensor interfaces PASS WITH LIMITS; Phase 4 known-start localization PASS WITH LIMITS; Phase 5 scenario harness PASS WITH LIMITS."
 registry:
   - id: T00
     phase: 1
@@ -98,3 +98,40 @@ registry:
       - docs/evidence/phase3-sensor-smoke-phase4-final-model.json
       - docs/evidence/phase4-tf-publisher-info-final4.log
       - docs/evidence/phase4-ekf-node-info-final4.log
+  - id: T07
+    phase: 5
+    name: deterministic_scenario_geometry_and_sdf_validation
+    scenario_id: null
+    status: PASS
+    result: "47/47 checks passed: all Phase 5 route/no-route layouts, start/goal and obstacle geometry, same-seed exact layout/SDF replay, distinct valid S02/S04 layouts across seeds 101/202, blocked S01 direct line, and six gz sdf validations."
+    evidence:
+      - docs/evidence/phase5/static-validation.json
+      - docs/evidence/phase5/static-validation.log
+      - scripts/phase5_scenario_test.py
+  - id: T08
+    phase: 5
+    name: headless_scenario_spawn_sensors_tf_truth_boundary_and_shutdown
+    scenario_id: S02
+    status: PASS_WITH_LIMITS
+    result: "Four headless runs passed all 52 runner checks: two identical S02 seed-101 replays, S04 seed-202 nonzero known start, and S09 no-route. Camera, IMU, odometry, clock, model listing, spawn pose, known-start map-to-odom, composed map-to-base TF, geometry expectation, evaluator-only truth, and non-forced SIGINT shutdown passed. Navigation was not attempted."
+    evidence:
+      - docs/evidence/phase5/phase5-summary.json
+      - docs/evidence/phase5/runs/s02-seed101-repeat1/result.json
+      - docs/evidence/phase5/runs/s02-seed101-repeat2/result.json
+      - docs/evidence/phase5/runs/s04-seed202-known-start/result.json
+      - docs/evidence/phase5/runs/s09-seed101-blocked-route/result.json
+      - docs/evidence/phase5/runs/s02-seed101-repeat1/launch.log
+      - docs/evidence/phase5/runs/s02-seed101-repeat2/launch.log
+      - docs/evidence/phase5/runs/s04-seed202-known-start/launch.log
+      - docs/evidence/phase5/runs/s09-seed101-blocked-route/launch.log
+  - id: T09
+    phase: 5
+    name: phase2_default_world_launch_regression
+    scenario_id: S00
+    status: PASS
+    result: "Controlled launch without overrides loaded phase2_wall, spawned at the origin, published zero known-start map-to-odom, produced camera/IMU/odometry, agreed with evaluator pose, and shut down with SIGINT and no forced escalation. An earlier timeout-wrapper diagnostic needed SIGTERM escalation and is retained separately."
+    evidence:
+      - docs/evidence/phase5/default-world-regression/result.json
+      - docs/evidence/phase5/default-world-regression/launch.log
+      - docs/evidence/phase5-default-world-smoke-summary.log
+      - docs/evidence/phase5/default-world-timeout-diagnostic.log
