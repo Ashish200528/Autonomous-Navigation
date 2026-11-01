@@ -99,3 +99,17 @@ Only the Phase 4 evaluator calls /gzserver/get_entity_state. The EKF and wheel a
 - Each accepted run contains result.json, world/map files, truth trajectory, logs, costmaps/trace images where available, and an MCAP rosbag. Earlier failed diagnostic attempts are retained under the same runs/ directory and are not counted as accepted results.
 
 The ORACLE_REFERENCE map is generated from the exact scenario geometry and the known spawn pose is supplied to the localization baseline. This verifies custom-car Nav2 planning against a privileged reference map; it does not validate RGB perception, unknown-map navigation, unknown-start localization, parking, or sim-to-real behavior. S03's minimum conservative clearance was about 0.0155 m. S09's Gazebo truth twist disagreed with stable pose and near-zero odometry while command topics were zero; see its result.json. No GUI screenshot was captured because these trials were headless; the run-specific map/layout and navigation trace PNGs are saved.
+
+## Phase 7 RGB-only perception
+
+- phase7/build-full.log: final six-package ROS workspace build.
+- phase7/static-validation.log: 13/13 classifier, mask, ambiguity, calibration, and fail-closed checks.
+- phase7/fault-injection.log and phase7/fault-injection.json: live missing-RGB, fresh-RGB, and stale-sim-timestamp behavior; invalid cases publish all UNKNOWN with zero unknown confidence, and the stale case retains the source image timestamp.
+- phase7/floor-reference-calibration.json: fixed Lab floor reference, ROI, calibration scope, support requirements, and valid 0.50-0.60 m band.
+- phase7/accepted-phase7-final-verified-console.log and phase7/dataset/accepted-phase7-final-verified/dataset-results.json: authoritative six-case, 12-view dataset run, quantitative metrics, topic contracts, frame timing, memory samples, and process outcomes.
+- phase7/dataset/accepted-phase7-final-verified/{s00-seed101-rgb-only,s01-seed101-rgb-only,s02-seed101-rgb-only,s03-seed101-rgb-only,s04-seed202-rgb-only,p7c1-seed101-rgb-only}/: generated world/manifest, actual RGB, predicted mask, confidence/overlay, offline evaluator truth, and per-view metrics.
+- phase7/baseline/: accepted Phase 3 camera/sensor and Phase 6 reference-navigation baseline logs; associated Phase 3 frame/telemetry and the isolated Phase 6 S00 result are linked in the Phase 7 report.
+- phase7/diagnostic-findings.md: concise record of issues found and corrected during calibration and runner iteration. Other exploratory console logs remain local and are not presented as accepted evidence.
+- phase7-perception-architecture.md, scripts/phase7_ground_truth.py, scripts/phase7_rgb_dataset.py, tests/phase7_perception_validation.py, and tests/phase7_sensor_fault_test.py: architecture, evaluator, dataset runner, and reproducible validations.
+
+The aggregate result has zero false-FREE pixels among 465,242 evaluator-known occupied pixels, 88.01% useful floor coverage, 26.67% occupied recall, and 80.98% UNKNOWN coverage. P7C1 returned all UNKNOWN because calibrated floor support was not observable. This is a limited conservative perception result, not a navigation or collision-avoidance result. See docs/PHASE_REPORT.md for the full metric table and scope limits.

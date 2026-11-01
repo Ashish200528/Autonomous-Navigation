@@ -455,7 +455,7 @@ def build_world_sdf(layout):
         x, y, yaw = obstacle["pose_xyyaw"]
         static = bool(obstacle.get("static", True))
         model, link = add_model(world, obstacle["name"], x, y, 0, yaw, static)
-        ambient, diffuse = COLORS[shape]
+        ambient, diffuse = obstacle.get("visual_material", COLORS[shape])
         if shape in ("box",):
             sx, sy, sz = obstacle["size_xyz"]
             model.find("pose").text = f"{x:.6f} {y:.6f} {sz/2:.6f} 0 0 {yaw:.6f}"

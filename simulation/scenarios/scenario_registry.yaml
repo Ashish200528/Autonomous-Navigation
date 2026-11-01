@@ -204,3 +204,38 @@ phase6_navigation:
       status: PASS_EXPECTED_NO_ROUTE
       seed: 101
       run_id: s09-reference-seed101-pose-odom-stop
+
+phase7_rgb_perception:
+  profile: REALISTIC_RGB_ONLY
+  status: PASS_WITH_LIMITS
+  runtime_inputs: [/camera/image_raw, /camera/camera_info, /clock]
+  evaluator_truth: "Offline only; generated from test world geometry and never exposed to anc_perception."
+  output_contract: "mono8 FREE=0, OCCUPIED=100, UNKNOWN=255; confidence, overlay, health"
+  cases:
+    - case_id: s00-seed101-rgb-only
+      base_scenario: S00
+      seed: 101
+      viewpoints: [view_start, view_turned]
+    - case_id: s01-seed101-rgb-only
+      base_scenario: S01
+      seed: 101
+      viewpoints: [view_start, view_turned]
+    - case_id: s02-seed101-rgb-only
+      base_scenario: S02
+      seed: 101
+      viewpoints: [view_start, view_turned]
+    - case_id: s03-seed101-rgb-only
+      base_scenario: S03
+      seed: 101
+      viewpoints: [view_start, view_turned]
+    - case_id: s04-seed202-rgb-only
+      base_scenario: S04
+      seed: 202
+      viewpoints: [view_start, view_turned]
+    - case_id: p7c1-seed101-rgb-only
+      base_scenario: S01
+      seed: 101
+      challenge: "Floor-like gray unnamed box and occlusion/shadow visual ambiguity."
+      viewpoints: [view_start, view_turned]
+  accepted_run_id: accepted-phase7-final-verified
+  result: "12 views; PASS WITH LIMITS. P7C1 was invalid/UNKNOWN because calibrated floor support was not observable."

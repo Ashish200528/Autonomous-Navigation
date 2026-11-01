@@ -1,6 +1,6 @@
 # Decisions and assumptions
 
-Status: Phase 0 baseline and verified Phase 1 through Phase 4 results. Changes to the implementation track should be evidence-backed and recorded here.
+Status: Phase 0 baseline and verified Phase 1 through Phase 7 results with stated limits. Changes to the implementation track should be evidence-backed and recorded here.
 
 | ID | Decision | Rationale / status |
 |---|---|---|
@@ -20,6 +20,9 @@ Status: Phase 0 baseline and verified Phase 1 through Phase 4 results. Changes t
 | D-14 | Fuse wheel vx/vy from /odometry/wheel and sanitized gyro z from /imu/data only. | IMU orientation is unavailable; wheel pose, raw Gazebo pose, and evaluator truth are excluded from the EKF. |
 | D-15 | Assign odom -> base_footprint to the EKF. | Gazebo DiffDrive TF bridge is removed; launch config assigns the EKF the dynamic edge. Per-edge publisher GID cannot be correlated from current RMW MessageInfo. |
 | D-16 | Keep ground truth inside test evaluators. | Phase 4 evaluator calls GetEntityState and writes local comparison evidence; estimator nodes do not receive that data. |
+| D-17 | Make Phase 7 RGB perception class-agnostic and fail closed to UNKNOWN. | Runtime uses camera RGB/CameraInfo plus clock age only; simulator truth stays in a separate offline evaluator. |
+| D-18 | Limit FREE ground projection to the calibrated 0.50-0.60 m forward band. | Camera height/pitch, pinhole, and planar-floor assumptions are provisional; ambiguous or unsupported pixels remain UNKNOWN. This is not metric depth. |
+| D-19 | Keep REALISTIC_RGB_ONLY perception separate from ORACLE_REFERENCE navigation. | Phase 6 reference maps/costmaps remain intact; Phase 7 does not start navigation. |
 
 ## Unresolved decisions
 
@@ -29,5 +32,5 @@ Status: Phase 0 baseline and verified Phase 1 through Phase 4 results. Changes t
 - Gazebo contact-event semantics; repeated contact records are telemetry, not unique episodes.
 - Wheel slip remains uncorrected by the available sensors; Phase 4 measured about 0.468 m false displacement with the chassis stationary.
 - Covariance calibration across hardware measurements, multiple seeds, and missing/stale wheel input.
-- Scenario arena set, unknown-pose acquisition, realistic perception, safe-stop policy, and parking validation.
+- Scenario arena set, unknown-pose acquisition, improved RGB perception recall/calibration, realistic costmap and navigation, safe-stop policy, and parking validation.
 - Whether WSLg performance is sufficient for Gazebo GUI and RViz concurrently.

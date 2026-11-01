@@ -13,3 +13,10 @@
 - Added per-run geometry-derived ORACLE_REFERENCE maps, a navigation mode in the scenario runner, metrics, MCAP evidence, TF authority checks, and static acceptance checks.
 - Validated S00-S04 navigation and S09 bounded no-route abort with recorded limits; see docs/evidence/phase6/.
 - Kept the Phase 6 navigation status separate from historical Phase 5 sensor-profile metadata.
+
+## Phase 7 RGB-only perception - 2026-11-02
+
+- Added the separate anc_perception REALISTIC_RGB_ONLY profile with conservative FREE/OCCUPIED/UNKNOWN masks, confidence, overlay, and health.
+- Added offline-only geometry evaluation, fixed-seed RGB dataset capture, and live missing/stale RGB fault checks.
+- Validated six packages, 13 static checks, and 12 captured views; documented measured limits in docs/PHASE_REPORT.md and docs/evidence/README.md.
+- Kept ORACLE_REFERENCE navigation separate; Phase 8 was not started.

@@ -67,3 +67,19 @@ All values below are simulation assumptions. EKF tuning was checked against Gaze
 Process-noise and initial-estimate covariance arrays are provisional in anc_localization/config/ekf.yaml. Measure wheel/IMU performance before hardware use. At mu=0.001 the chassis stayed stationary while wheel odometry advanced 0.4705 m and filtered odometry advanced 0.4681 m.
 
 Update the YAML and this table together when hardware is measured or a simulation assumption changes.
+
+## Phase 7 RGB perception assumptions
+
+The profile is calibrated to the simulated 320x240 pinhole camera and Phase 3 floor image. The classifier uses CameraInfo intrinsics (fx/fy approximately 277.13 px, principal point 160/120), zero distortion, a zero-pitch camera, and assumed camera height 0.18 m above ground. The simulated camera has nominal 60 degree horizontal FOV. FREE is projected only to a camera-centered 0.50-0.60 m forward band on a planar floor. A fixed Lab floor reference [171,128,128] was measured from ROI [96,216,224,235] of docs/evidence/phase3-camera-frame-phase7-baseline-camera.png; it does not adapt online. At least 24 calibrated-looking low-gradient seed pixels and a connected floor component of at least 4,000 pixels are required. Nonzero distortion is rejected rather than silently ignored.
+
+These values are assumptions for the current Gazebo material and rendering. Camera mounting, floor appearance, lens distortion, FOV, and image timing have not been measured on the real robot. The narrow projection band does not estimate obstacle depth. Unobservable appearance, shadows, weak contrast, stale/missing RGB, or insufficient calibrated support remain UNKNOWN or invalidate the frame.
+
+| Output/assumption | Phase 7 setting | Interpretation |
+|---|---|---|
+| Mask | mono8 FREE=0, OCCUPIED=100, UNKNOWN=255 | UNKNOWN is never traversable |
+| Runtime node inputs | /camera/image_raw, /camera/camera_info, /clock | Clock checks age only; no odom/IMU/map/depth/truth |
+| Confidence | mono8; unknown confidence 0 | Not a hardware-calibrated probability |
+| Ground band | 0.50-0.60 m forward | Limited planar-floor region; no general depth estimate |
+| Invalid-data threshold | 0.35 s simulated image age | Missing/stale frames fail closed to UNKNOWN |
+
+Update the Phase 7 configuration and this table together after a measured camera calibration or lighting/material change.

@@ -135,6 +135,27 @@ python3 scripts/scenario_runner.py --scenario S02 --seed 101 --run-id s02-seed10
 
 Each run writes world.sdf, manifest.json, layout.png, launch.log, and result.json under docs/evidence/phase5/runs/<run-id>/. The runner performs no navigation and publishes no truth or obstacle layout to ROS. The two S02 seed-101 trials, a nonzero-start S04 trial, and S09 blocked-route trial are indexed in docs/evidence/README.md. This validates scenario construction and sensor/TF startup; it does not validate path planning, perception, obstacle avoidance, or safe stopping.
 
+## Phase 7 RGB-only perception
+
+Phase 7 adds a separate REALISTIC_RGB_ONLY profile and anc_perception package. The runtime node reads only /camera/image_raw, /camera/camera_info, and /clock (timestamp age only), and publishes a mono8 mask (FREE=0, OCCUPIED=100, UNKNOWN=255), confidence image, overlay, and health JSON. It does not read odometry, IMU, maps, depth, Gazebo entity state, or scenario manifests. The Phase 6 ORACLE_REFERENCE launch remains separate.
+
+Build and run the bounded checks from Ubuntu 24.04 WSL:
+
+~~~bash
+cd /home/ashish/AutonomousNavigationCar
+source scripts/source_ros_jazzy.sh
+cd simulation/ros2_ws
+colcon build --symlink-install
+cd ../..
+python3 tests/phase7_perception_validation.py
+python3 tests/phase7_sensor_fault_test.py
+python3 scripts/phase7_rgb_dataset.py --run-id phase7-replay-unique --scenarios S00,S01,S02,S03,S04,P7C1
+~~~
+
+Use a new run ID for each dataset replay. Evidence is indexed in docs/evidence/README.md; projection assumptions and the runtime/evaluator boundary are in docs/phase7-perception-architecture.md.
+
+The accepted 12-view run recorded zero false-FREE pixels in evaluator-known occupied regions and 88.0% useful free coverage on known floor, with 100% occupied precision but 26.7% occupied recall. UNKNOWN covered 81.0% of all pixels. P7C1 failed closed to all UNKNOWN when calibrated floor support was not observable. Assessment: PASS WITH LIMITS. The method is tied to simulated floor appearance and a 0.50-0.60 m ground band; it provides no arbitrary obstacle depth, navigation, or obstacle avoidance.
+
 ## Current status
 
 - Phase 0 baseline: complete and tagged v0.1-phase0.
@@ -143,4 +164,5 @@ Each run writes world.sdf, manifest.json, layout.png, launch.log, and result.jso
 - Phase 3 sensor simulation and ROS interfaces: PASS WITH LIMITS; see the phase report for provisional sensor assumptions and odometry/contact constraints.
 - Phase 4 known-start wheel/IMU localization: PASS WITH LIMITS.
 - Phase 5 reproducible worlds and scenario harness: PASS WITH LIMITS; see docs/PHASE_REPORT.md and docs/evidence/README.md.
-- Phase 6 selected ORACLE_REFERENCE Nav2 scenarios S00-S04 and S09: PASS WITH LIMITS; see docs/PHASE_REPORT.md and docs/evidence/phase6/README.md. RGB perception, unknown-pose acquisition, general safe-stop behavior, and parking remain unimplemented.
+- Phase 6 selected ORACLE_REFERENCE Nav2 scenarios S00-S04 and S09: PASS WITH LIMITS; see docs/PHASE_REPORT.md and docs/evidence/phase6/README.md.
+- Phase 7 RGB-only FREE/OCCUPIED/UNKNOWN perception: PASS WITH LIMITS; see docs/PHASE_REPORT.md and docs/phase7-perception-architecture.md. Phase 8 navigation using perception has not started.

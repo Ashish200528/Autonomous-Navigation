@@ -1,5 +1,5 @@
-version: 1
-status: "Phase 1 REFERENCE Nav2 goal PASS; Phase 2 differential-drive PASS WITH LIMITS; Phase 3 sensor interfaces PASS WITH LIMITS; Phase 4 known-start localization PASS WITH LIMITS; Phase 5 scenario harness PASS WITH LIMITS."
+version: 2
+status: "Phase 1 REFERENCE Nav2 goal PASS; Phase 2 differential-drive PASS WITH LIMITS; Phase 3 sensor interfaces PASS WITH LIMITS; Phase 4 known-start localization PASS WITH LIMITS; Phase 5 scenario harness PASS WITH LIMITS; Phase 6 ORACLE_REFERENCE navigation PASS WITH LIMITS; Phase 7 RGB-only perception PASS WITH LIMITS."
 registry:
   - id: T00
     phase: 1
@@ -135,3 +135,37 @@ registry:
       - docs/evidence/phase5/default-world-regression/launch.log
       - docs/evidence/phase5-default-world-smoke-summary.log
       - docs/evidence/phase5/default-world-timeout-diagnostic.log
+  - id: T10
+    phase: 7
+    name: class_agnostic_rgb_mask_static_validation
+    scenario_id: null
+    status: PASS
+    result: "13/13 checks passed for mask semantics, useful free coverage, generic occupied cues, ambiguous/low-contrast unknown handling, calibrated floor support, and distortion rejection."
+    evidence:
+      - docs/evidence/phase7/static-validation.log
+      - tests/phase7_perception_validation.py
+  - id: T11
+    phase: 7
+    name: headless_rgb_dataset_fixed_scenarios_and_topic_contract
+    scenario_id: "S00,S01,S02,S03,S04,P7C1"
+    status: PASS_WITH_LIMITS
+    result: "12 captured views across six cases; all launches shut down cleanly and each node subscribed only to /camera/image_raw, /camera/camera_info, /clock. Aggregate false-FREE rate 0.0%, useful known-floor coverage 88.01%, occupied precision 100%, recall 26.67%, UNKNOWN 80.98%; P7C1 returned all UNKNOWN when floor support was unobservable."
+    evidence:
+      - docs/evidence/phase7/dataset/accepted-phase7-final-verified/dataset-results.json
+      - docs/evidence/phase7/accepted-phase7-final-verified-console.log
+      - docs/evidence/phase7/dataset/accepted-phase7-final-verified/s00-seed101-rgb-only
+      - docs/evidence/phase7/dataset/accepted-phase7-final-verified/s01-seed101-rgb-only
+      - docs/evidence/phase7/dataset/accepted-phase7-final-verified/s02-seed101-rgb-only
+      - docs/evidence/phase7/dataset/accepted-phase7-final-verified/s03-seed101-rgb-only
+      - docs/evidence/phase7/dataset/accepted-phase7-final-verified/s04-seed202-rgb-only
+      - docs/evidence/phase7/dataset/accepted-phase7-final-verified/p7c1-seed101-rgb-only
+  - id: T12
+    phase: 7
+    name: missing_and_stale_rgb_fail_closed
+    scenario_id: null
+    status: PASS
+    result: "Live test passed: missing RGB and a 0.5 s stale simulated timestamp each published INVALID_UNKNOWN, mask value 255, and confidence 0; fresh RGB produced a valid free band."
+    evidence:
+      - docs/evidence/phase7/fault-injection.json
+      - docs/evidence/phase7/fault-injection.log
+      - tests/phase7_sensor_fault_test.py

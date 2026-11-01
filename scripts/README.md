@@ -29,3 +29,25 @@ python3 scripts/scenario_runner.py --scenario S01 --seed 101 --run-id s01-refere
 ~~~
 
 Accepted Phase 6 run IDs and limitations are indexed in docs/evidence/phase6/README.md and docs/evidence/phase6/phase6-summary.json. This profile is not RGB perception or hardware validation.
+
+## Phase 7 REALISTIC_RGB_ONLY perception
+
+Build and run the checks from the repository root:
+
+~~~bash
+source scripts/source_ros_jazzy.sh
+cd simulation/ros2_ws
+colcon build --symlink-install
+cd ../..
+python3 tests/phase7_perception_validation.py
+python3 tests/phase7_sensor_fault_test.py
+~~~
+
+For a fixed-suite replay, use a new run ID to preserve previous evidence:
+
+~~~bash
+source simulation/ros2_ws/install/setup.bash
+python3 scripts/phase7_rgb_dataset.py --run-id phase7-replay-unique --scenarios S00,S01,S02,S03,S04,P7C1
+~~~
+
+The runner starts bounded headless Gazebo cases, captures RGB and classifier outputs, queries simulator geometry only in the offline evaluator, records per-view metrics and the live ROS graph contract, then shuts down each process group. anc_perception/realistic_perception.launch.py is separate from Phase 6 ORACLE_REFERENCE; do not interpret its output as a costmap or autonomous navigation input. Accepted run and topic contract are indexed in docs/evidence/README.md.
