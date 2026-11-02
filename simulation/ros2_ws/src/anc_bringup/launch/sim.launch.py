@@ -1,6 +1,6 @@
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription, TimerAction
-from launch.conditions import IfCondition, UnlessCondition
+from launch.conditions import IfCondition
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import Command, FindExecutable, LaunchConfiguration, PathJoinSubstitution
 from launch_ros.actions import Node
@@ -26,6 +26,8 @@ def generate_launch_description():
         FindPackageShare("anc_localization"), "launch", "localization.launch.py"
     ])
 
+    # Use ros_gz_sim's server component in both modes. It exposes the
+    # evaluator-only simulation_interfaces services used by the Phase 6 runner.
     gazebo = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
             PathJoinSubstitution([
@@ -36,8 +38,9 @@ def generate_launch_description():
             "world_sdf_file": world,
             "verbosity_level": "3",
         }.items(),
-        condition=UnlessCondition(gui),
     )
+    # Gazebo Harmonic supports a GUI-only client which attaches to the running
+    # server. Keeping these processes separate preserves the ROS service layer.
     gazebo_gui = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
             PathJoinSubstitution([
@@ -45,7 +48,7 @@ def generate_launch_description():
             ])
         ),
         launch_arguments={
-            "gz_args": [world, " -r -v 3"],
+            "gz_args": "-g -v 3",
             "on_exit_shutdown": "true",
         }.items(),
         condition=IfCondition(gui),

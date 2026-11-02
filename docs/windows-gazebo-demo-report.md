@@ -8,7 +8,7 @@ Branch: `feature/phase8c-lidar`
 
 The three Windows launchers and their README were copied to the actual Windows Desktop and Downloads Known Folders. A CMD-specific quoting problem was then reproduced and fixed in all six launcher copies. The Desktop and Downloads copies now match by SHA-256. The real Desktop menu opened, displayed its choices, and exited on option 7 without starting a simulation. Launcher code and ROS launch descriptions passed static/help checks; the Phase 6 and LiDAR RViz profiles are installed in the ROS workspace.
 
-No Gazebo, RViz, navigation, sensor, or motion demonstration was started. Current Windows free memory is far below the launcher's minimum, so simulation behavior remains unverified.
+During the initial delivery verification, no Gazebo, RViz, navigation, sensor, or motion demonstration was started. A later user-triggered Phase 6 GUI attempt is documented below; it opened the world but failed before goal dispatch.
 
 ## Environment observed
 
@@ -64,10 +64,21 @@ The source staging folder had exactly four files. Existing destination files wer
 
 ## Not run / remaining
 
-The launcher requires at least `2560 MiB` free Windows RAM for Gazebo and `3328 MiB` to add RViz (also at least `1536 MiB` free in WSL). Latest Windows free memory was `709 MiB`. The helper will block the launch at this level. No app was closed, no process was force-killed, and no restart was triggered.
+The launcher requires at least `2560 MiB` free Windows RAM for Gazebo and `3328 MiB` to add RViz (also at least `1536 MiB` free in WSL). At initial delivery Windows free memory was `709 MiB`; a later diagnostic during this diagnosis read `982 MiB` and WSL available memory `3118 MiB`. The helper will block the launch at either Windows reading. No app was closed, no process was force-killed, and no restart was triggered.
 
 After Windows memory is freed, the remaining work is to run and visually verify each requested demonstration, observe the safety/sensor displays and shutdown behavior, and capture the requested video or screenshots if the project task still calls for them. Live Phase 6 GUI navigation, RGB/LiDAR GUI behavior, movement, LiDAR Nav2 goal navigation, repeated-launch cleanup, and parking remain unverified. Historical headless Phase 6 evidence is not evidence of these GUI runs.
 
 ## CMD launcher correction
 
 The first user launch showed `WSL_E_DISTRO_NOT_FOUND` after the distribution list, even though `Ubuntu-24.04` was registered. Reproducing the BAT argument form in CMD isolated the issue to quoting `%DISTRO%` in `--distribution "%DISTRO%"`. WSL accepted the literal/unquoted selector, while the quoted variable form failed. Updated all three launchers in both Known Folders to use `--distribution %DISTRO%`. Re-ran the actual Desktop menu interactively: the menu appeared, option 7 exited cleanly, and no demo or Gazebo process was started. The WSL1 unsupported message remains a status warning; WSL2 is active and the launcher works.
+
+
+## Follow-up: stationary Phase 6 GUI run (2026-11-02)
+
+The user's S03 screenshot corresponds to `phase6-S03-seed101-20261102T151437Z-496.log`. The run report says `Goal status: unavailable`, `action: null`, and `runner_error: RuntimeError: Evaluator-only Gazebo truth service returned no robot pose`. The same failure appears in the immediately preceding GUI S00 and S01 run logs. In `scripts/phase6_navigation_runner.py`, the evaluator waits for `/gzserver/get_entity_state` and raises before it sends `/navigate_to_pose`; therefore Nav2 received no goal and published no motion command. This is why the robot stayed at its spawn location. The scenario was not the cause.
+
+The GUI branch in `anc_bringup/launch/sim.launch.py` had started standalone `gz sim` with both server and GUI. That path did not provide the ROS `GzServer` simulation-interface service used by the evaluator. The launch now uses `ros_gz_sim`'s `gz_server.launch.py` in both headless and GUI modes, and starts Gazebo with `gz sim -g -v 3` as a separate GUI-only client when requested. This restores the service layer while keeping the visible scene.
+
+Rebuilt only `anc_bringup`: `Finished <<< anc_bringup [3.18s]`, `Summary: 1 package finished [3.33s]`. The launch file passed Python AST parsing, `ros2 launch anc_bringup sim.launch.py --show-args`, `ros2 launch anc_navigation reference_navigation.launch.py --show-args`, source/install comparison, and `git diff --check`. No post-fix Gazebo run was started: the latest Windows free-memory reading was `982 MiB`, below the launcher's `2560 MiB` minimum. There was no active project simulation process at the time of diagnosis. A live movement check remains pending until Windows memory is freed.
+
+The split server/GUI arrangement follows the Gazebo Harmonic `-s` server / `-g` GUI-only model and `ros_gz_sim`'s `GzServer` simulation-interface API: [Gazebo Harmonic getting started](https://gazebosim.org/docs/harmonic/getstarted/), [ros_gz_sim user API](https://github.com/gazebosim/ros_gz/blob/ros2/ros_gz_sim/doc/user_api.rst).
