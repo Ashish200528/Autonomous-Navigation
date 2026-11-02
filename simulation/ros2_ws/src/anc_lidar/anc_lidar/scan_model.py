@@ -238,6 +238,99 @@ def forward_corridor_m(data, grid: Grid, *, robot_front_m=0.215,
     return length*grid.resolution_m
 
 
+
+def swept_rotation_clearance(data, grid: Grid, footprint_vertices_xy_m, *,
+                             center_drift_allowance_m,
+                             sensor_mount_uncertainty_m,
+                             safety_margin_m,
+                             center_x_m=0.0, center_y_m=0.0):
+    """Require measured FREE cells throughout a conservative in-place turn disk.
+
+    The disk encloses every orientation of the configured polygon. It is
+    expanded for possible wheel-pivot drift, sensor mounting uncertainty and
+    an explicit clearance margin. UNKNOWN and OCCUPIED cells both deny yaw.
+    A cell is checked if any part of its square intersects the required disk.
+    """
+    grid.validate()
+    if len(data) != grid.width*grid.height:
+        raise ValueError("rotation_grid_length_mismatch")
+    scalars = (center_drift_allowance_m, sensor_mount_uncertainty_m,
+               safety_margin_m, center_x_m, center_y_m)
+    if not all(math.isfinite(float(value)) for value in scalars):
+        raise ValueError("rotation_clearance_input_nonfinite")
+    if any(float(value) < 0 for value in scalars[:3]):
+        raise ValueError("rotation_clearance_margin_negative")
+    vertices = []
+    try:
+        for x, y in footprint_vertices_xy_m:
+            x, y = float(x), float(y)
+            if not math.isfinite(x) or not math.isfinite(y):
+                raise ValueError
+            vertices.append((x, y))
+    except (TypeError, ValueError, OverflowError):
+        raise ValueError("rotation_footprint_invalid")
+    if len(vertices) < 3:
+        raise ValueError("rotation_footprint_invalid")
+
+    footprint_radius = max(math.hypot(x, y) for x, y in vertices)
+    required_radius = (footprint_radius + float(center_drift_allowance_m)
+                       + float(sensor_mount_uncertainty_m)
+                       + float(safety_margin_m))
+    grid_min_x, grid_min_y = grid.origin_x_m, grid.origin_y_m
+    grid_max_x = grid_min_x + grid.width*grid.resolution_m
+    grid_max_y = grid_min_y + grid.height*grid.resolution_m
+    inside_grid = (
+        center_x_m-required_radius >= grid_min_x
+        and center_x_m+required_radius <= grid_max_x
+        and center_y_m-required_radius >= grid_min_y
+        and center_y_m+required_radius <= grid_max_y
+    )
+    checked = occupied = unknown = 0
+    resolution = grid.resolution_m
+    ix0 = max(0, math.floor((center_x_m-required_radius-grid_min_x)/resolution)-1)
+    ix1 = min(grid.width-1,
+              math.ceil((center_x_m+required_radius-grid_min_x)/resolution)+1)
+    iy0 = max(0, math.floor((center_y_m-required_radius-grid_min_y)/resolution)-1)
+    iy1 = min(grid.height-1,
+              math.ceil((center_y_m+required_radius-grid_min_y)/resolution)+1)
+    radius_sq = required_radius*required_radius
+    for iy in range(iy0, iy1+1):
+        cell_y = grid_min_y+(iy+0.5)*resolution
+        dy = max(abs(cell_y-center_y_m)-resolution/2.0, 0.0)
+        for ix in range(ix0, ix1+1):
+            cell_x = grid_min_x+(ix+0.5)*resolution
+            dx = max(abs(cell_x-center_x_m)-resolution/2.0, 0.0)
+            if dx*dx+dy*dy > radius_sq:
+                continue
+            checked += 1
+            value = data[iy*grid.width+ix]
+            if value == OCCUPIED:
+                occupied += 1
+            elif value != FREE:
+                unknown += 1
+    authorized = inside_grid and checked > 0 and occupied == 0 and unknown == 0
+    if not inside_grid:
+        reason = "swept_disk_outside_grid"
+    elif occupied:
+        reason = "swept_disk_occupied"
+    elif unknown or checked == 0:
+        reason = "swept_disk_unknown"
+    else:
+        reason = "swept_disk_clear"
+    return {
+        "authorized": authorized,
+        "reason": reason,
+        "footprint_circumradius_m": footprint_radius,
+        "required_radius_m": required_radius,
+        "center_drift_allowance_m": float(center_drift_allowance_m),
+        "sensor_mount_uncertainty_m": float(sensor_mount_uncertainty_m),
+        "safety_margin_m": float(safety_margin_m),
+        "checked_cells": checked,
+        "occupied_cells": occupied,
+        "unknown_cells": unknown,
+        "inside_grid": inside_grid,
+    }
+
 def fuse_lidar_with_rgb_free(lidar_data, lidar_grid: Grid, rgb_data, rgb_geometry):
     """Only project metric RGB FREE cells into LiDAR UNKNOWN; never use RGB OCCUPIED."""
     lidar_grid.validate()

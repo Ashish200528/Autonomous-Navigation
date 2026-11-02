@@ -14,7 +14,8 @@ from std_msgs.msg import String
 
 from anc_navigation_common.contracts import GridGeometry, validate_grid
 from anc_navigation_common.safety import speed_gate
-from anc_lidar.scan_model import latest_matching_map_health_pair
+from anc_lidar.scan_model import (Grid, latest_matching_map_health_pair,
+                                  swept_rotation_clearance)
 
 
 def stamp_seconds(stamp):
@@ -53,6 +54,12 @@ class LidarSafetyGate(Node):
             "perception_latency_bound_s": 0.2368,
             "supervisor_period_s": 0.05,
             "publish_rate_hz": 20.0,
+            "rotation_calibration_max_radps": 0.0,
+            "turn_footprint_vertices_xy_m": [0.215, 0.1525, 0.215, -0.1525,
+                                               -0.16, -0.1525, -0.16, 0.1525],
+            "turn_center_drift_allowance_m": 0.14,
+            "turn_sensor_mount_uncertainty_m": 0.02,
+            "turn_safety_margin_m": 0.10,
         }
         for name, value in defaults.items():
             self.declare_parameter(name, value)
@@ -81,8 +88,8 @@ class LidarSafetyGate(Node):
                                  self.on_clock, qos_profile_sensor_data)
         self.create_timer(1.0/float(self.p["publish_rate_hz"]), self.tick, clock=RclClock(clock_type=ClockType.STEADY_TIME))
         self.get_logger().warning(
-            "Safety gate permits only forward linear velocity; angular authority stays zero "
-            "until yaw stopping and turning clearance are measured."
+            "Forward motion uses the measured linear gate. Rotation stays disabled by default; "
+            "an explicit calibration cap allows rotation only inside a fully known-free swept disk."
         )
 
     def on_scan_health(self, msg):
@@ -168,6 +175,17 @@ class LidarSafetyGate(Node):
         now = time.monotonic()
         p = self.p
         failures = []
+        try:
+            rotation_calibration_cap = float(p["rotation_calibration_max_radps"])
+        except (TypeError, ValueError):
+            rotation_calibration_cap = 0.0
+            failures.append("rotation_calibration_limit_invalid")
+        if not math.isfinite(rotation_calibration_cap) or rotation_calibration_cap < 0:
+            rotation_calibration_cap = 0.0
+            failures.append("rotation_calibration_limit_invalid")
+        elif rotation_calibration_cap > 0.10:
+            rotation_calibration_cap = 0.0
+            failures.append("rotation_calibration_limit_exceeds_0.10_radps")
         scalar_inputs = {}
         if self.scan_health is None:
             failures.append("scan_health_missing")
@@ -281,6 +299,36 @@ class LidarSafetyGate(Node):
                     or math.sqrt(yaw_var) > float(p["maximum_odom_yaw_sigma_rad"])):
                 failures.append("filtered_localization_uncertainty")
 
+        turn_clearance = {
+            "authorized": False,
+            "reason": "required_inputs_invalid",
+            "checked_cells": 0,
+            "occupied_cells": 0,
+            "unknown_cells": 0,
+        }
+        if grid is not None:
+            try:
+                flat_vertices = list(p["turn_footprint_vertices_xy_m"])
+                if len(flat_vertices) < 6 or len(flat_vertices) % 2:
+                    raise ValueError("rotation_footprint_invalid")
+                vertices = list(zip(flat_vertices[::2], flat_vertices[1::2]))
+                turn_grid = Grid(
+                    geometry.width, geometry.height, geometry.resolution_m,
+                    geometry.origin_x_m, geometry.origin_y_m, geometry.frame_id)
+                turn_clearance = swept_rotation_clearance(
+                    data, turn_grid, vertices,
+                    center_drift_allowance_m=float(p["turn_center_drift_allowance_m"]),
+                    sensor_mount_uncertainty_m=float(p["turn_sensor_mount_uncertainty_m"]),
+                    safety_margin_m=float(p["turn_safety_margin_m"]))
+            except (KeyError, TypeError, ValueError, OverflowError) as exc:
+                turn_clearance = {
+                    "authorized": False,
+                    "reason": str(exc) or "rotation_clearance_config_invalid",
+                    "checked_cells": 0,
+                    "occupied_cells": 0,
+                    "unknown_cells": 0,
+                }
+
         corridor = 0.0
         if not failures and grid is not None:
             width = grid.width
@@ -328,20 +376,50 @@ class LidarSafetyGate(Node):
             )
             if not speed_result.get("valid"):
                 failures.append(str(speed_result.get("reason", "speed_gate_invalid")))
-            elif float(speed_result.get("max_linear_speed_mps", 0.0)) <= 0:
+            elif (float(speed_result.get("max_linear_speed_mps", 0.0)) <= 0
+                  and rotation_calibration_cap <= 0):
                 failures.append(str(speed_result.get("reason", "no_safe_speed")))
-        selected_speed = 0.0 if failures or speed_result is None else float(
-            speed_result["max_linear_speed_mps"])
+        selected_speed = (
+            0.0 if failures or speed_result is None or rotation_calibration_cap > 0
+            else float(speed_result["max_linear_speed_mps"])
+        )
+        selected_angular = (
+            rotation_calibration_cap
+            if (not failures and rotation_calibration_cap > 0
+                and turn_clearance.get("authorized") is True)
+            else 0.0
+        )
+        gate_authorized = not failures and (selected_speed > 0 or selected_angular > 0)
+        if failures:
+            gate_reason = failures[0]
+        elif rotation_calibration_cap > 0 and selected_angular <= 0:
+            gate_reason = str(turn_clearance.get("reason", "rotation_clearance_denied"))
+        else:
+            gate_reason = "pass"
         result = {
             "node": "anc_lidar_safety_gate",
             "profile": "REALISTIC_RGB_LIDAR",
             "valid": not failures,
-            "authorized": not failures and selected_speed > 0,
-            "reason": "pass" if not failures else failures[0],
+            "authorized": gate_authorized,
+            "reason": gate_reason,
             "failures": failures,
+            "motion_mode": ("rotation_calibration_only" if rotation_calibration_cap > 0
+                            else "forward_only"),
+            "combined_motion_authorized": False,
             "max_linear_speed_mps": selected_speed,
-            "max_angular_speed_radps": 0.0,
-            "angular_motion_status": "blocked_unmeasured_yaw_stopping_and_turn_clearance",
+            "max_angular_speed_radps": selected_angular,
+            "angular_motion_status": (
+                "calibration_only_swept_disk_clear" if selected_angular > 0 else
+                (str(turn_clearance.get("reason", "rotation_clearance_denied"))
+                 if rotation_calibration_cap > 0 else
+                 "disabled_unmeasured_yaw_stopping")),
+            "rotation_calibration_speed_cap_radps": rotation_calibration_cap,
+            "rotation_clearance": turn_clearance,
+            "angular_stopping_model": {
+                "measured": False,
+                "production_authorized": False,
+                "note": "Calibration-only capped pulses; production yaw remains disabled pending measured stopping bound and review.",
+            },
             "corridor_m": corridor,
             "speed_gate": speed_result,
             "speed_gate_inputs": scalar_inputs,

@@ -4,6 +4,7 @@ from launch.conditions import IfCondition
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import LaunchConfiguration, PathJoinSubstitution
 from launch_ros.actions import Node
+from launch_ros.parameter_descriptions import ParameterValue
 from launch_ros.substitutions import FindPackageShare
 
 
@@ -21,6 +22,8 @@ def generate_launch_description():
     lidar_config = PathJoinSubstitution([lidar_share, "config", "realistic_lidar.yaml"])
     slam_config = PathJoinSubstitution([lidar_share, "config", "slam_toolbox.yaml"])
     nav2_config = PathJoinSubstitution([lidar_share, "config", "nav2_lidar.yaml"])
+    rotation_calibration_cap = ParameterValue(
+        LaunchConfiguration("rotation_calibration_max_radps"), value_type=float)
     slam_launch = PathJoinSubstitution([
         FindPackageShare("slam_toolbox"), "launch", "online_async_launch.py"
     ])
@@ -89,7 +92,9 @@ def generate_launch_description():
     safety_gate = Node(
         package="anc_lidar", executable="lidar_safety_gate",
         name="anc_lidar_safety_gate", output="screen",
-        parameters=lidar_params,
+        parameters=[lidar_config, {
+            "rotation_calibration_max_radps": rotation_calibration_cap,
+        }],
     )
     command_guard = Node(
         package="anc_navigation_common", executable="safety_command_guard",
@@ -103,7 +108,7 @@ def generate_launch_description():
             "command_timeout_s": 0.30,
             "safety_timeout_s": 0.25,
             "hard_max_linear_speed_mps": 0.18,
-            "hard_max_angular_speed_radps": 0.0,
+            "hard_max_angular_speed_radps": rotation_calibration_cap,
         }],
     )
     slam = IncludeLaunchDescription(
@@ -136,6 +141,9 @@ def generate_launch_description():
         DeclareLaunchArgument("start_x", default_value="0.0"),
         DeclareLaunchArgument("start_y", default_value="0.0"),
         DeclareLaunchArgument("start_yaw", default_value="0.0"),
+        DeclareLaunchArgument(
+            "rotation_calibration_max_radps", default_value="0.0",
+            description="Test-only pure rotation cap (0.02..0.10 rad/s). Translation remains locked; 0 disables rotation."),
         DeclareLaunchArgument("enable_slam", default_value="false",
                               description="Opt in to scan-matching after resource checks; no Gazebo truth is used."),
         DeclareLaunchArgument("enable_nav2", default_value="false",

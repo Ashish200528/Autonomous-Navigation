@@ -60,6 +60,44 @@ class CommonContractTests(unittest.TestCase):
                          stop_distance_by_speed=[(0.1, 0.01)], **args)
                          ["max_linear_speed_mps"], 0.0)
 
+
+    def test_rotation_calibration_guard_allows_yaw_only_and_blocks_translation(self):
+        state = {
+            "valid": True, "authorized": True,
+            "motion_mode": "rotation_calibration_only",
+            "max_linear_speed_mps": 0.0,
+            "max_angular_speed_radps": 0.05,
+        }
+        common = dict(request_age_s=0.01, safety_age_s=0.01,
+                      safety_state=state, command_timeout_s=0.3,
+                      safety_timeout_s=0.2,
+                      hard_max_linear_speed_mps=0.18,
+                      hard_max_angular_speed_radps=0.05)
+        yaw_only = guarded_command(
+            request={"linear_x_mps": 0.0, "angular_z_radps": 0.02}, **common)
+        self.assertTrue(yaw_only["authorized"])
+        self.assertEqual((yaw_only["linear_x_mps"], yaw_only["angular_z_radps"]),
+                         (0.0, 0.02))
+
+        combined = guarded_command(
+            request={"linear_x_mps": 0.05, "angular_z_radps": 0.02}, **common)
+        self.assertFalse(combined["authorized"])
+        self.assertEqual(combined["reason"], "combined_motion_not_validated")
+        self.assertEqual((combined["linear_x_mps"], combined["angular_z_radps"]),
+                         (0.0, 0.0))
+
+        translation = guarded_command(
+            request={"linear_x_mps": 0.05, "angular_z_radps": 0.0}, **common)
+        self.assertFalse(translation["authorized"])
+        self.assertEqual(translation["reason"],
+                         "rotation_calibration_translation_blocked")
+
+        denied = guarded_command(
+            request={"linear_x_mps": 0.0, "angular_z_radps": 0.02},
+            **(common | {"safety_state": state | {"authorized": False}}))
+        self.assertFalse(denied["authorized"])
+        self.assertEqual(denied["reason"], "safety_authority_false")
+
     def test_guard_blocks_missing_stale_invalid_and_clamps(self):
         common = dict(request={"linear_x_mps": 0.18, "angular_z_radps": 0.5},
                       request_age_s=0.01, safety_age_s=0.01,

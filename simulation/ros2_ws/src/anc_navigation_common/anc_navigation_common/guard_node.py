@@ -96,7 +96,14 @@ class SafetyCommandGuard(Node):
         self.state.publish(out)
 
     def stop(self):
-        self.output.publish(Twist())
+        # rclpy's SIGINT handler may already have invalidated the context before
+        # the finally block runs. Avoid a teardown traceback in that case.
+        if not rclpy.ok():
+            return
+        try:
+            self.output.publish(Twist())
+        except Exception as exc:
+            self.get_logger().debug(f"Final zero skipped after ROS context shutdown: {exc}")
 
 
 def main(args=None):

@@ -76,6 +76,8 @@ def guarded_command(*, request, request_age_s, safety_state, safety_age_s,
     if safety_state.get("valid") is not True:
         return zero | {"reason": str(safety_state.get("reason", "safety_state_invalid")),
                        "authorized": False}
+    if safety_state.get("authorized") is False:
+        return zero | {"reason": "safety_authority_false", "authorized": False}
     try:
         vx, wz = float(request["linear_x_mps"]), float(request["angular_z_radps"])
         max_v = min(float(safety_state["max_linear_speed_mps"]),
@@ -86,6 +88,12 @@ def guarded_command(*, request, request_age_s, safety_state, safety_age_s,
         return zero | {"reason": "command_or_gate_malformed", "authorized": False}
     if not all(math.isfinite(v) for v in (vx, wz, max_v, max_w)):
         return zero | {"reason": "command_or_gate_nonfinite", "authorized": False}
+    if safety_state.get("motion_mode") == "rotation_calibration_only":
+        if abs(vx) > 1e-9 and abs(wz) > 1e-9:
+            return zero | {"reason": "combined_motion_not_validated", "authorized": False}
+        if abs(vx) > 1e-9 and abs(wz) <= 1e-9:
+            return zero | {"reason": "rotation_calibration_translation_blocked",
+                           "authorized": False}
     if max_v < 0 or max_w < 0:
         return zero | {"reason": "gate_speed_limit_negative", "authorized": False}
     v = max(-max_v, min(max_v, vx))

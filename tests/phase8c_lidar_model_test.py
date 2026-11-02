@@ -12,7 +12,8 @@ sys.path.insert(0, str(ROOT/"simulation/ros2_ws/src/anc_navigation_common"))
 sys.path.insert(0, str(ROOT/"simulation/ros2_ws/src/anc_lidar"))
 from anc_lidar.scan_model import (Grid, condition_ranges, forward_corridor_m,
                                   fuse_lidar_with_rgb_free, inflate_obstacles,
-                                  raytrace_scan, validate_scan, latest_matching_map_health_pair)
+                                  raytrace_scan, validate_scan, latest_matching_map_health_pair,
+                                  swept_rotation_clearance)
 from anc_navigation_common.contracts import FREE, OCCUPIED, UNKNOWN
 
 
@@ -137,6 +138,46 @@ class LidarModelTests(unittest.TestCase):
         self.assertEqual(inflated[50*grid.width+68], OCCUPIED)
         self.assertEqual(inflated[unknown_near], UNKNOWN)
         self.assertGreaterEqual(forward_corridor_m(data, grid), 0.0)
+
+
+    def test_rotation_clearance_requires_known_free_full_swept_disk(self):
+        grid = Grid(width=100, height=100, resolution_m=0.05,
+                    origin_x_m=-2.5, origin_y_m=-2.5)
+        footprint = [(-0.2, -0.1), (-0.2, 0.1), (0.2, 0.1), (0.2, -0.1)]
+        margins = dict(center_drift_allowance_m=0.10,
+                       sensor_mount_uncertainty_m=0.02,
+                       safety_margin_m=0.05)
+        result = swept_rotation_clearance([FREE]*10000, grid, footprint, **margins)
+        self.assertTrue(result["authorized"])
+        self.assertEqual(result["reason"], "swept_disk_clear")
+        self.assertGreater(result["required_radius_m"], result["footprint_circumradius_m"])
+
+        unknown = [FREE]*10000
+        unknown[50*grid.width+54] = UNKNOWN
+        denied_unknown = swept_rotation_clearance(unknown, grid, footprint, **margins)
+        self.assertFalse(denied_unknown["authorized"])
+        self.assertEqual(denied_unknown["reason"], "swept_disk_unknown")
+
+        occupied = [FREE]*10000
+        occupied[50*grid.width+57] = OCCUPIED
+        denied_occupied = swept_rotation_clearance(occupied, grid, footprint, **margins)
+        self.assertFalse(denied_occupied["authorized"])
+        self.assertEqual(denied_occupied["reason"], "swept_disk_occupied")
+
+    def test_rotation_clearance_fails_closed_at_grid_edge_and_bad_geometry(self):
+        small = Grid(width=10, height=10, resolution_m=0.05,
+                     origin_x_m=-0.25, origin_y_m=-0.25)
+        footprint = [(-0.2, -0.1), (-0.2, 0.1), (0.2, 0.1), (0.2, -0.1)]
+        margins = dict(center_drift_allowance_m=0.10,
+                       sensor_mount_uncertainty_m=0.02,
+                       safety_margin_m=0.05)
+        edge = swept_rotation_clearance([FREE]*100, small, footprint, **margins)
+        self.assertFalse(edge["authorized"])
+        self.assertEqual(edge["reason"], "swept_disk_outside_grid")
+        with self.assertRaisesRegex(ValueError, "rotation_grid_length_mismatch"):
+            swept_rotation_clearance([FREE], small, footprint, **margins)
+        with self.assertRaisesRegex(ValueError, "rotation_footprint_invalid"):
+            swept_rotation_clearance([FREE]*100, small, [(0, 0)]*2, **margins)
 
     def test_rgb_only_fills_unknown_and_cannot_erase_lidar_occupied(self):
         lidar_grid = Grid(width=2, height=1, resolution_m=1.0,
