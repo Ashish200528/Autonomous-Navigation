@@ -87,59 +87,14 @@ PS
   ps_eval "$script" | tail -1
 }
 
-host_app_candidates() {
+protected_codex_inventory() {
   local script
   script=$(cat <<'PS'
 $items=Get-Process -Name 'ChatGPT','Codex' -ErrorAction SilentlyContinue | Where-Object { $_.MainWindowHandle -ne 0 }
-if (-not $items) { 'NO_APPROVED_APP_MAIN_WINDOW_FOUND'; exit }
+if (-not $items) { 'NO_PROTECTED_CODEX_WINDOW_FOUND'; exit }
 $items | ForEach-Object {
  $packagePath=($_.Path -match '(?i)\\WindowsApps\\OpenAI\.Codex_[^\\]+\\app\\ChatGPT\.exe$')
  "{0}|{1}|{2}|main-window={3}|OpenAI-package-path={4}" -f $_.ProcessName,$_.Id,$_.Path,$_.MainWindowHandle,$packagePath
-}
-PS
-)
-  ps_eval "$script"
-}
-
-close_approved_apps() {
-  local script
-  script=$(cat <<'PS'
-$names=@('ChatGPT','Codex')
-$items=Get-Process -ErrorAction SilentlyContinue | Where-Object { ($names -contains $_.ProcessName) -and $_.MainWindowHandle -ne 0 }
-if (-not $items) { 'No ChatGPT/Codex GUI process found.'; exit }
-foreach ($p in $items) {
- $path=$p.Path
- $verified=$false
- $officialPackage=($path -match '(?i)\\WindowsApps\\OpenAI\.Codex_[^\\]+\\app\\ChatGPT\.exe$')
- $openAiSigner=$false
- if ($path -and (Test-Path -LiteralPath $path)) {
-  try {
-   $signature=Get-AuthenticodeSignature -LiteralPath $path
-   $openAiSigner=($signature.Status -eq 'Valid' -and $signature.SignerCertificate.Subject -match '(?i)OpenAI')
-  } catch { $openAiSigner=$false }
- }
- $verified=($officialPackage -or $openAiSigner)
- if (-not $verified) {
-  "PROTECTED: $($p.ProcessName) pid=$($p.Id) executable identity/signature was not verified."
-  continue
- }
- if ($p.MainWindowHandle -eq 0) {
-  "PROTECTED: $($p.ProcessName) pid=$($p.Id) has no verified user-facing window."
-  continue
- }
- $requested=$false
- try { $requested=$p.CloseMainWindow() } catch { $requested=$false }
- if (-not $requested) {
-  "LEFT OPEN: $($p.ProcessName) pid=$($p.Id) did not accept a graceful close request."
-  continue
- }
- [void]$p.WaitForExit(8000)
- $p.Refresh()
- if ($p.HasExited) {
-  "CLOSED GRACEFULLY: $($p.ProcessName) pid=$($p.Id)."
- } else {
-  "LEFT OPEN: $($p.ProcessName) pid=$($p.Id) did not exit; no force-kill was attempted (it may have unsaved work)."
- }
 }
 PS
 )
@@ -191,24 +146,15 @@ print_preflight_state() {
 }
 
 offer_close_apps() {
-  local candidates reply
-  candidates=$(host_app_candidates)
-  if [[ "$candidates" == *"NO_APPROVED_APP_MAIN_WINDOW_FOUND"* || -z "$candidates" ]]; then
-    echo "No ChatGPT/Codex user-facing process was visible to the Windows process query."
-    return 0
+  local protected
+  protected=$(protected_codex_inventory || true)
+  echo "Preserving the active ChatGPT/Codex execution and all user applications."
+  if [[ -n "$protected" && "$protected" != *"NO_PROTECTED_CODEX_WINDOW_FOUND"* ]]; then
+    echo "Protected ChatGPT/Codex process identity:"
+    echo "$protected"
   fi
-  echo "Potential approved desktop applications found:"
-  echo "$candidates"
-  echo "ChatGPT/Codex may contain unsaved work. Press C within 10 seconds to cancel; any other key or timeout proceeds with signature-verified graceful close requests."
-  reply=""
-  read -r -s -t 10 -n 1 reply || true
-  printf '\n'
-  reply=$(printf '%s' "$reply" | tr '[:upper:]' '[:lower:]')
-  if [[ "$reply" == c ]]; then
-    echo "Launcher cancelled before any application or project process was closed."
-    return 130
-  fi
-  close_approved_apps
+  echo "No desktop app is closed automatically because this launcher cannot prove that an app has no unsaved work."
+  return 0
 }
 
 check_project_environment() {
@@ -265,7 +211,7 @@ prepare_launch() {
     echo "BLOCKED: untracked project simulation session left running; no new launch started."
     return 1
   fi
-  echo "Resource snapshot after graceful close attempts and tracked-session cleanup:"
+  echo "Resource snapshot after preserving desktop apps and tracked-session cleanup:"
   show_resource_snapshot || { echo "BLOCKED: could not re-read host memory."; return 1; }
   if [[ "$WINDOWS_AVAILABLE_MIB" -lt 2560 || "$WSL_AVAILABLE_MIB" -lt 1536 ]]; then
     echo "BLOCKED: Gazebo GUI requires at least 2560 MiB available on Windows and 1536 MiB in WSL."
@@ -434,8 +380,8 @@ diagnostics() {
   echo "Read-only environment diagnostics; no processes will be closed or launched."
   show_resource_snapshot || return 1
   echo "Ubuntu-24.04 registered WSL base path: $(registered_distro_path)"
-  echo "Approved app process identities (inspection only):"
-  host_app_candidates
+  echo "Protected ChatGPT/Codex process identities (inspection only):"
+  protected_codex_inventory
   check_project_environment || return 1
   bash "$SESSION_SCRIPT" status
 }
