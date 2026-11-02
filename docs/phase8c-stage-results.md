@@ -77,3 +77,8 @@ Headless video is 640 x 360 at 5 fps for 4:21.8 and composites RGB, LiDAR, gate 
 | Physical hardware validation | PENDING HARDWARE |
 
 An initial build wrapper failure was due to set -u before colcon; the bounded retry completed all 8 packages in 38 seconds. The first partial log and wrapper error remain preserved. Run aggregate reporting with python3 scripts/phase8c_stage6_report.py from repository root. It does not start a simulator or publish commands. GitHub issue listing returned no existing issues; none was created.
+
+
+## Stage 9: Nav2 integration and safe demo launcher (2026-11-02)
+
+The custom Nav2 launch routes motion through velocity smoothing, collision monitoring and the existing safety guard; the live SLAM map is the global costmap source and unknown cells remain blocked. Gazebo GUI/RViz, the evaluator and scenario launcher build and pass offline checks. This did not unlock navigation: the readiness gate remains false because production turning and moving localization are unvalidated. The launcher measured 619 MiB of available Windows RAM and stopped before simulation. See docs/phase8c-stage9-report.md and docs/evidence/phase8c/lidar/stage9-launch-preflight-verified-2026-11-02.log.

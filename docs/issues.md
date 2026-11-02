@@ -76,3 +76,8 @@
 - Plan UNO Q adapters only after simulation interfaces and regression checks are stable.
 
 Earlier phases remain complete only within their stated limits. Phase 8 remains an independent RGB-only stop-only baseline. Phase 8C Branch 1 permits bounded forward motion in clear S00, but angular motion, obstacle avoidance and goal navigation remain blocked or unrun. Drift correction, low-obstacle coverage, broader scenarios, unknown-pose acquisition, parking and hardware transfer remain unresolved.
+
+
+## Phase 8C Stage 9 status (2026-11-02)
+
+- Nav2/GUI/evaluator integration and a memory/readiness-gated launcher are implemented and pass offline checks. Live navigation remains blocked: Windows RAM was 619 MiB available at preflight; production turning and moving SLAM are not validated. The launcher correctly stopped before Gazebo. Do not enable its Nav2 gate until all three prerequisite evidence files exist and the turning/localization checks pass.

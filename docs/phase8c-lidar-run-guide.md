@@ -48,3 +48,20 @@ This config shows /map, /realistic/scan, TF and robot model. It requires WSLg/de
 The headless sensor composite is at docs/evidence/live-demo-2026-11-02/phase8c-live-demo.mp4; its report is beside it. The video shows RGB, LiDAR, gate state and /cmd_vel. It is not a desktop capture or Nav2 demonstration. The MP4 remains local because the existing *.mp4 ignore rule excludes video.
 
 Do not submit Nav2 goals, attempt obstacle traversal or start live parking. Production yaw and moving localization are not validated. The launch default remains zero.
+## Repeatable scenario launcher
+
+The launcher checks both Windows host RAM and WSL RAM before generating a scenario or starting ROS/Gazebo. Minimum available memory is 2 GiB on Windows for headless runs, 2.5 GiB for GUI runs, and 1.5 GiB within WSL. Headless is the default.
+
+~~~bash
+cd /home/ashish/AutonomousNavigationCar
+./scripts/run_lidar_demo.sh --scenario S00 --seed 101 --duration 90
+~~~
+
+To request the intended Gazebo + RViz goal demonstration:
+
+~~~bash
+cd /home/ashish/AutonomousNavigationCar
+./scripts/run_lidar_demo.sh --scenario S01 --seed 101 --gui --goal
+~~~
+
+The second command only enables Nav2 after the checked-in readiness gate confirms production turning, moving SLAM and the live single-guard command chain with existing evidence files. Those prerequisites are currently false. After the RAM preflight passes, the command therefore runs RGB + LiDAR + online SLAM only and clearly records that the goal is blocked; it does not count as navigation. The GUI path has not yet been opened or recorded. See docs/phase8c-stage9-report.md.

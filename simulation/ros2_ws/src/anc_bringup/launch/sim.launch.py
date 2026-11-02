@@ -1,6 +1,6 @@
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription, TimerAction
-from launch.conditions import IfCondition
+from launch.conditions import IfCondition, UnlessCondition
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import Command, FindExecutable, LaunchConfiguration, PathJoinSubstitution
 from launch_ros.actions import Node
@@ -12,6 +12,7 @@ def generate_launch_description():
         FindPackageShare("anc_gazebo"), "worlds", "phase2_test_world.sdf"
     ])
     world = LaunchConfiguration("world_file")
+    gui = LaunchConfiguration("gui")
     start_x = LaunchConfiguration("start_x")
     start_y = LaunchConfiguration("start_y")
     start_yaw = LaunchConfiguration("start_yaw")
@@ -35,6 +36,19 @@ def generate_launch_description():
             "world_sdf_file": world,
             "verbosity_level": "3",
         }.items(),
+        condition=UnlessCondition(gui),
+    )
+    gazebo_gui = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(
+            PathJoinSubstitution([
+                FindPackageShare("ros_gz_sim"), "launch", "gz_sim.launch.py"
+            ])
+        ),
+        launch_arguments={
+            "gz_args": [world, " -r -v 3"],
+            "on_exit_shutdown": "true",
+        }.items(),
+        condition=IfCondition(gui),
     )
     state_publisher = Node(
         package="robot_state_publisher",
@@ -124,6 +138,8 @@ def generate_launch_description():
             "camera_update_rate_hz", default_value="15.0",
             description="Camera update rate in Hz; default preserves existing profiles.",
         ),
+        DeclareLaunchArgument("gui", default_value="false",
+                              description="Use the Gazebo GUI; headless remains the default."),
         DeclareLaunchArgument(
             "world_file", default_value=default_world,
             description="Absolute SDF world file; defaults to the Phase 2 baseline world.",
@@ -137,6 +153,7 @@ def generate_launch_description():
         DeclareLaunchArgument("publish_known_start_tf", default_value="true",
                               description="Publish the test-only known-start map-to-odom transform."),
         gazebo,
+        gazebo_gui,
         state_publisher,
         bridge,
         lidar_bridge,

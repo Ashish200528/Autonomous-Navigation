@@ -16,7 +16,7 @@ Visualization Manager:
     - Class: rviz_default_plugins/Map
       Alpha: 0.75
       Enabled: true
-      Name: SLAM Map
+      Name: Sensor-built SLAM Map
       Topic:
         Depth: 5
         Durability Policy: Transient Local
@@ -26,7 +26,7 @@ Visualization Manager:
       Value: true
     - Class: rviz_default_plugins/LaserScan
       Enabled: true
-      Name: LiDAR Scan
+      Name: 2D LiDAR
       Color Transformer: FlatColor
       Color: 255; 200; 0
       Position Transformer: XYZ
@@ -40,6 +40,50 @@ Visualization Manager:
         History Policy: Keep Last
         Reliability Policy: Best Effort
         Value: /realistic/scan
+      Value: true
+    - Class: rviz_default_plugins/Path
+      Alpha: 1
+      Buffer Length: 1
+      Color: 20; 255; 60
+      Enabled: true
+      Name: Nav2 Global Plan
+      Line Style: Lines
+      Line Width: 0.04
+      Pose Style: None
+      Topic:
+        Depth: 5
+        Durability Policy: Volatile
+        History Policy: Keep Last
+        Reliability Policy: Reliable
+        Value: /plan
+      Value: true
+    - Class: rviz_default_plugins/Path
+      Alpha: 1
+      Buffer Length: 1
+      Color: 40; 100; 255
+      Enabled: true
+      Name: Nav2 Local Plan
+      Line Style: Lines
+      Line Width: 0.03
+      Pose Style: None
+      Topic:
+        Depth: 5
+        Durability Policy: Volatile
+        History Policy: Keep Last
+        Reliability Policy: Reliable
+        Value: /local_plan
+      Value: true
+    - Class: rviz_default_plugins/Polygon
+      Alpha: 1
+      Color: 25; 255; 0
+      Enabled: true
+      Name: Robot Footprint
+      Topic:
+        Depth: 5
+        Durability Policy: Volatile
+        History Policy: Keep Last
+        Reliability Policy: Reliable
+        Value: /local_costmap/published_footprint
       Value: true
     - Class: rviz_default_plugins/TF
       Enabled: true

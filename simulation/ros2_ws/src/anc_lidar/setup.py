@@ -7,7 +7,7 @@ setup(
         ("share/ament_index/resource_index/packages", ["resource/" + name]),
         ("share/" + name, ["package.xml"]),
         ("share/" + name + "/launch", glob("launch/*.launch.py")),
-        ("share/" + name + "/config", glob("config/*.yaml")),
+        ("share/" + name + "/config", glob("config/*.yaml") + glob("config/*.rviz")),
     ],
     install_requires=["setuptools"], zip_safe=True,
     maintainer="Ashish", maintainer_email="maintainer@example.invalid",

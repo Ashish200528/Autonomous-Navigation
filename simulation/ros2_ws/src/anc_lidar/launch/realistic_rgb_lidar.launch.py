@@ -22,19 +22,21 @@ def generate_launch_description():
     lidar_config = PathJoinSubstitution([lidar_share, "config", "realistic_lidar.yaml"])
     slam_config = PathJoinSubstitution([lidar_share, "config", "slam_toolbox.yaml"])
     nav2_config = PathJoinSubstitution([lidar_share, "config", "nav2_lidar.yaml"])
+    rviz_config = PathJoinSubstitution([lidar_share, "config", "phase8c_lidar.rviz"])
     rotation_calibration_cap = ParameterValue(
         LaunchConfiguration("rotation_calibration_max_radps"), value_type=float)
     slam_launch = PathJoinSubstitution([
         FindPackageShare("slam_toolbox"), "launch", "online_async_launch.py"
     ])
     nav2_launch = PathJoinSubstitution([
-        FindPackageShare("nav2_bringup"), "launch", "navigation_launch.py"
+        lidar_share, "launch", "nav2_lidar.launch.py"
     ])
 
     simulation = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(sim_launch),
         launch_arguments={
             "world_file": LaunchConfiguration("world_file"),
+            "gui": LaunchConfiguration("gui"),
             "start_x": LaunchConfiguration("start_x"),
             "start_y": LaunchConfiguration("start_y"),
             "start_yaw": LaunchConfiguration("start_yaw"),
@@ -126,9 +128,17 @@ def generate_launch_description():
             "params_file": nav2_config,
             "use_sim_time": "true",
             "autostart": "true",
-            "use_composition": "False",
         }.items(),
         condition=IfCondition(LaunchConfiguration("enable_nav2")),
+    )
+    rviz = Node(
+        package="rviz2",
+        executable="rviz2",
+        name="phase8c_rviz",
+        output="screen",
+        arguments=["-d", rviz_config],
+        parameters=[{"use_sim_time": True}],
+        condition=IfCondition(LaunchConfiguration("gui")),
     )
     return LaunchDescription([
         DeclareLaunchArgument(
@@ -158,4 +168,5 @@ def generate_launch_description():
         command_guard,
         slam,
         nav2,
+        rviz,
     ])

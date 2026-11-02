@@ -565,3 +565,8 @@ A headless sensor composite is saved at docs/evidence/live-demo-2026-11-02/phase
 | Physical hardware validation | PENDING HARDWARE |
 
 GitHub issue listing returned no existing issues; none was created. Branch remains feature/phase8c-lidar; no merge to main was made.
+
+
+## Phase 8C Stage 9 update (2026-11-02)
+
+Nav2 launch/configuration, a guarded command chain, an evaluator, a GUI/RViz path and a memory/readiness-gated demo launcher were added. Offline build and test checks pass; no live Nav2, Gazebo GUI, motion or parking trial was started because Windows had 619 MiB available and the GUI preflight requires 2.5 GiB. Production yaw remains zero and the Nav2 readiness gate is false. Full evidence and the current capability matrix are in docs/phase8c-stage9-report.md.
