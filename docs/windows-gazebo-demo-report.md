@@ -6,9 +6,9 @@ Branch: `feature/phase8c-lidar`
 
 ## Outcome
 
-The three Windows launchers and their README were copied to the actual Windows Desktop and Downloads Known Folders. All eight copied files passed SHA-256 comparison against the staged source files. Launcher code and ROS launch descriptions passed static/help checks; the Phase 6 and LiDAR RViz profiles are installed in the ROS workspace.
+The three Windows launchers and their README were copied to the actual Windows Desktop and Downloads Known Folders. A CMD-specific quoting problem was then reproduced and fixed in all six launcher copies. The Desktop and Downloads copies now match by SHA-256. The real Desktop menu opened, displayed its choices, and exited on option 7 without starting a simulation. Launcher code and ROS launch descriptions passed static/help checks; the Phase 6 and LiDAR RViz profiles are installed in the ROS workspace.
 
-No Gazebo, RViz, navigation, sensor, or motion demonstration was started. Current Windows free memory is far below the launcher's minimum, so GUI behavior remains unverified.
+No Gazebo, RViz, navigation, sensor, or motion demonstration was started. Current Windows free memory is far below the launcher's minimum, so simulation behavior remains unverified.
 
 ## Environment observed
 
@@ -53,13 +53,13 @@ Each folder contains these exact four files:
 - `C:\Users\ajayk\Desktop\README_GAZEBO_DEMOS.txt`
 - The same four filenames under `C:\Users\ajayk\Downloads\`.
 
-The source staging folder had exactly four files. Existing destination files were checked first; no conflicting names existed. Each destination file was re-hashed after copying and matched its source:
+The source staging folder had exactly four files. Existing destination files were checked first; no conflicting names existed. After the quoting correction, SHA-256 hashes for each Desktop launcher match the corresponding Downloads launcher. The table lists the current launcher hashes; the README hash remains unchanged:
 
 | File | SHA-256 |
 |---|---|
-| `01_WATCH_ROBOT_NAVIGATE.bat` | `A68A55B46A86B4381137340289EA2BC3EAE3FF57DF9A2E4CD71D2B4A3B3EBA95` |
-| `02_WATCH_RGB_LIDAR.bat` | `90053BFE0C90A9CEBFAC7B6E1580DC5DC48D0BDA932CB1BFC41D91C563AA85B2` |
-| `03_GAZEBO_DEMO_MENU.bat` | `0C9C3F2D6B3F5CCD2CCF6FFC8FF2119616AF5659CC9B97C1E1697E0E90E943BF` |
+| `01_WATCH_ROBOT_NAVIGATE.bat` | `7036A99C7C7FBEE4990D781ADC045C5B742EA3D55427FB5B7F31425CF0D14258` |
+| `02_WATCH_RGB_LIDAR.bat` | `A538A9D8888E787B2DA34A4574A5CC59D5D90D9B21922C146B0D2281948EF7A0` |
+| `03_GAZEBO_DEMO_MENU.bat` | `DD5B6789B54E7C013DD715BF2A4A1FE039C2CC1C9112A239D49528AEDFAC8A39` |
 | `README_GAZEBO_DEMOS.txt` | `2E44CEAE4A1035CBBB243D3C1FC053E96B2AAF19C161EDF05AD4758FD6489479` |
 
 ## Not run / remaining
@@ -67,3 +67,7 @@ The source staging folder had exactly four files. Existing destination files wer
 The launcher requires at least `2560 MiB` free Windows RAM for Gazebo and `3328 MiB` to add RViz (also at least `1536 MiB` free in WSL). Latest Windows free memory was `709 MiB`. The helper will block the launch at this level. No app was closed, no process was force-killed, and no restart was triggered.
 
 After Windows memory is freed, the remaining work is to run and visually verify each requested demonstration, observe the safety/sensor displays and shutdown behavior, and capture the requested video or screenshots if the project task still calls for them. Live Phase 6 GUI navigation, RGB/LiDAR GUI behavior, movement, LiDAR Nav2 goal navigation, repeated-launch cleanup, and parking remain unverified. Historical headless Phase 6 evidence is not evidence of these GUI runs.
+
+## CMD launcher correction
+
+The first user launch showed `WSL_E_DISTRO_NOT_FOUND` after the distribution list, even though `Ubuntu-24.04` was registered. Reproducing the BAT argument form in CMD isolated the issue to quoting `%DISTRO%` in `--distribution "%DISTRO%"`. WSL accepted the literal/unquoted selector, while the quoted variable form failed. Updated all three launchers in both Known Folders to use `--distribution %DISTRO%`. Re-ran the actual Desktop menu interactively: the menu appeared, option 7 exited cleanly, and no demo or Gazebo process was started. The WSL1 unsupported message remains a status warning; WSL2 is active and the launcher works.
