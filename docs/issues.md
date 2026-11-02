@@ -86,4 +86,4 @@ Earlier phases remain complete only within their stated limits. Phase 8 remains 
 
 ## Phase 8C Stage 9 evidence-gate follow-up (2026-11-02)
 
-The moving-SLAM and readiness checks were strengthened and their offline tests passed. Current Windows memory use was 87%; the headless resource threshold was not met, so no live simulation was run. Production turning, moving SLAM, Nav2 S00, and S01 avoidance remain open blockers. See docs/phase8c-stage9-report.md and the final offline evidence log.
+The moving-SLAM and readiness checks were strengthened and their offline tests passed. The post-build host-memory probe measured 926 MiB available on Windows and 3134 MiB in WSL; Windows remains below the headless resource threshold, so no live simulation was run. Production turning, moving SLAM, Nav2 S00, and S01 avoidance remain open blockers. See docs/phase8c-stage9-report.md and the final offline evidence log.

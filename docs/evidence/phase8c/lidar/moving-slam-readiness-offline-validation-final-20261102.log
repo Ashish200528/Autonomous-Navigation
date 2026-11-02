@@ -244,3 +244,10 @@ test_case_registry.yaml parse passed
 launcher parsed readiness state=<BLOCKED>
 launcher parsed reason=<production_turning_verified:evidence_reference_missing; moving_slam_verified:evidence_reference_missing; moving_slam_verified:three_distinct_moving_trials_required; guarded_command_chain_verified:evidence_reference_missing; guarded_command_chain_verified:at_least_one_S00_navigation_trial_required>
 git diff --check passed; no Gazebo/SLAM/Nav2 process was started by this validation.
+
+=== non-launching resource preflight UTC 2026-11-02T16:42:59Z ===
+windows_available_mib=926
+wsl_available_mib=3134
+headless_required_windows_mib=2048
+headless_required_wsl_mib=1536
+result=BLOCKED; no simulation launched because Windows free RAM was below threshold
