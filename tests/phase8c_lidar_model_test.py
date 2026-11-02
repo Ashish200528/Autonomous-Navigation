@@ -13,7 +13,7 @@ sys.path.insert(0, str(ROOT/"simulation/ros2_ws/src/anc_lidar"))
 from anc_lidar.scan_model import (Grid, condition_ranges, forward_corridor_m,
                                   fuse_lidar_with_rgb_free, inflate_obstacles,
                                   raytrace_scan, validate_scan, latest_matching_map_health_pair,
-                                  swept_rotation_clearance)
+                                  swept_rotation_clearance, evaluate_moving_slam_metrics)
 from anc_navigation_common.contracts import FREE, OCCUPIED, UNKNOWN
 
 
@@ -199,6 +199,43 @@ class LidarModelTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "fusion_frame_mismatch"):
             fuse_lidar_with_rgb_free([UNKNOWN], lidar_grid, [FREE],
                                      (1, 1, 1.0, 0.0, 0.0, "map"))
+
+
+    def test_moving_slam_requires_live_maps_and_localization(self):
+        result = evaluate_moving_slam_metrics(
+            scan_messages=12, map_updates=4, truth_pose_samples=8, slam_pose_updates=3,
+            map_to_odom_updates=16, map_free_cells=80, map_occupied_cells=12,
+            truth_forward_displacement_m=0.22,
+            slam_relative_displacement_error_m=0.04,
+            slam_relative_yaw_error_rad=0.02,
+            non_ground_contact_events=0)
+        self.assertEqual(result["status"], "PASS")
+        self.assertEqual(result["failures"], [])
+
+    def test_moving_slam_rejects_missing_maps_or_pose_updates(self):
+        result = evaluate_moving_slam_metrics(
+            scan_messages=12, map_updates=0, truth_pose_samples=8, slam_pose_updates=0,
+            map_to_odom_updates=0, map_free_cells=0, map_occupied_cells=0,
+            truth_forward_displacement_m=0.22,
+            slam_relative_displacement_error_m=0.04,
+            slam_relative_yaw_error_rad=0.02,
+            non_ground_contact_events=0)
+        self.assertEqual(result["status"], "FAIL")
+        self.assertIn("map_updates_below_minimum", result["failures"])
+        self.assertIn("slam_pose_updates_below_minimum", result["failures"])
+
+    def test_moving_slam_rejects_excessive_error_and_contact(self):
+        result = evaluate_moving_slam_metrics(
+            scan_messages=12, map_updates=4, truth_pose_samples=8, slam_pose_updates=3,
+            map_to_odom_updates=16, map_free_cells=80, map_occupied_cells=12,
+            truth_forward_displacement_m=0.22,
+            slam_relative_displacement_error_m=0.15,
+            slam_relative_yaw_error_rad=0.12,
+            non_ground_contact_events=1)
+        self.assertEqual(result["status"], "FAIL")
+        self.assertIn("slam_position_error_exceeds_limit", result["failures"])
+        self.assertIn("slam_yaw_error_exceeds_limit", result["failures"])
+        self.assertIn("non_ground_contact_observed", result["failures"])
 
 
 if __name__ == "__main__":

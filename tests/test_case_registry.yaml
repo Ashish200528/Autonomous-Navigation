@@ -321,3 +321,17 @@ registry:
       - docs/evidence/phase8c/lidar/stage6-comparison.png
       - docs/evidence/phase8c/lidar/stage6-resource-observations.png
       - scripts/phase8c_stage6_report.py
+
+  - id: T26
+    phase: "8C"
+    name: moving_slam_trial_contract_and_content_validated_readiness_gate
+    scenario_id: S00
+    status: PASS_WITH_LIMITS
+    result: "Offline measurement-contract and evidence-validator regressions passed. The bounded moving-SLAM probe now requires live scan/map/pose/TF updates, truth-relative position/yaw error and no contacts. Nav2 readiness validates actual evidence contents and requires a 13-case turning matrix, 3 distinct moving-SLAM trials, and a successful guarded S00 Nav2 goal. No live simulation was run; readiness remains BLOCKED."
+    evidence:
+      - docs/evidence/phase8c/lidar/moving-slam-readiness-offline-validation-retry2-20261102.log
+      - docs/evidence/phase8c/lidar/moving-slam-readiness-offline-validation-final-20261102.log
+      - scripts/phase8c_readiness.py
+      - tests/phase8c_readiness_test.py
+      - tests/phase8c_slam_timeout_probe.py
+      - simulation/ros2_ws/src/anc_lidar/anc_lidar/scan_model.py

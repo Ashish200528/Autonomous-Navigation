@@ -59,3 +59,11 @@ No queue-full or EKF missed-rate warning appeared in the 25-second tuned log, bu
 - stage2-s00-stationary-slam-map.png is a small visual preview of the PGM map.
 
 The first final-build wrapper stopped before colcon because the sourced ROS setup referenced an unset shell variable under set -u; that output is in final-colcon-build-shell-error.log. A separate first colcon log ended while anc_lidar was starting; the complete bounded retry in final-colcon-build-retry-2026-11-02.log passed all 8 packages in 38 seconds.
+
+
+## 2026-11-02 evidence-gate follow-up
+
+- moving-slam-readiness-offline-validation-final-20261102.log: final offline tests after strict lifecycle/costmap evidence checks; 18 LiDAR model, 7 readiness, 9 common safety, 6 Nav2 config, and 2 publisher-audit tests pass. Launcher and Python checks pass; the current evidence-backed readiness result remains BLOCKED.
+- moving-slam-readiness-offline-validation-retry2-20261102.log: one-package anc_lidar build passed and the preceding offline suite/import checks passed.
+- moving-slam-readiness-offline-validation-20261102.log and moving-slam-readiness-offline-validation-retry1-20261102.log: preserved incomplete setup attempts; ROS setup was initially run with nounset enabled. No simulator was launched in either attempt.
+- New checks are offline evidence validation only. They do not prove moving SLAM, production turning or autonomous navigation.

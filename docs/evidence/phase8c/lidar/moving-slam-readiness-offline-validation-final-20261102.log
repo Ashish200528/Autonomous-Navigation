@@ -1,0 +1,246 @@
+Timestamp UTC: 2026-11-02 16:28:57
+Branch and starting HEAD:
+feature/phase8c-lidar
+5161a89ad7f5b21a7c8e30b903d34eefec705f2b
+test_fault_model_records_drop_invalid_and_no_return (__main__.LidarModelTests.test_fault_model_records_drop_invalid_and_no_return) ... ok
+test_gazebo_positive_infinity_is_a_max_range_no_return (__main__.LidarModelTests.test_gazebo_positive_infinity_is_a_max_range_no_return) ... ok
+test_inflation_preserves_unknown_cells (__main__.LidarModelTests.test_inflation_preserves_unknown_cells) ... ok
+test_invalid_beam_remains_unknown_and_not_free (__main__.LidarModelTests.test_invalid_beam_remains_unknown_and_not_free) ... ok
+test_map_health_pairing_does_not_mix_interleaved_scans (__main__.LidarModelTests.test_map_health_pairing_does_not_mix_interleaved_scans) ... ok
+test_map_health_pairing_selects_latest_matching_scan (__main__.LidarModelTests.test_map_health_pairing_selects_latest_matching_scan) ... ok
+test_max_range_is_clear_without_inventing_obstacle_endpoint (__main__.LidarModelTests.test_max_range_is_clear_without_inventing_obstacle_endpoint) ... ok
+test_moving_slam_rejects_excessive_error_and_contact (__main__.LidarModelTests.test_moving_slam_rejects_excessive_error_and_contact) ... ok
+test_moving_slam_rejects_missing_maps_or_pose_updates (__main__.LidarModelTests.test_moving_slam_rejects_missing_maps_or_pose_updates) ... ok
+test_moving_slam_requires_live_maps_and_localization (__main__.LidarModelTests.test_moving_slam_requires_live_maps_and_localization) ... ok
+test_nan_and_negative_infinity_remain_unknown (__main__.LidarModelTests.test_nan_and_negative_infinity_remain_unknown) ... ok
+test_rgb_frame_mismatch_fails_closed (__main__.LidarModelTests.test_rgb_frame_mismatch_fails_closed) ... ok
+test_rgb_only_fills_unknown_and_cannot_erase_lidar_occupied (__main__.LidarModelTests.test_rgb_only_fills_unknown_and_cannot_erase_lidar_occupied) ... ok
+test_rotation_clearance_fails_closed_at_grid_edge_and_bad_geometry (__main__.LidarModelTests.test_rotation_clearance_fails_closed_at_grid_edge_and_bad_geometry) ... ok
+test_rotation_clearance_requires_known_free_full_swept_disk (__main__.LidarModelTests.test_rotation_clearance_requires_known_free_full_swept_disk) ... ok
+test_scan_contract_checks_frame_count_fov_and_limits (__main__.LidarModelTests.test_scan_contract_checks_frame_count_fov_and_limits) ... ok
+test_space_behind_first_return_stays_unknown (__main__.LidarModelTests.test_space_behind_first_return_stays_unknown) ... ok
+test_valid_return_marks_ray_free_and_endpoint_occupied (__main__.LidarModelTests.test_valid_return_marks_ray_free_and_endpoint_occupied) ... ok
+
+----------------------------------------------------------------------
+Ran 18 tests in 0.004s
+
+OK
+test_calibration_only_rotation_is_not_production_turning (__main__.Phase8CReadinessTests.test_calibration_only_rotation_is_not_production_turning) ... ok
+test_evidence_path_cannot_escape_project_root (__main__.Phase8CReadinessTests.test_evidence_path_cannot_escape_project_root) ... ok
+test_flags_and_file_presence_alone_never_open_gate (__main__.Phase8CReadinessTests.test_flags_and_file_presence_alone_never_open_gate) ... ok
+test_moving_slam_needs_three_distinct_measured_runs (__main__.Phase8CReadinessTests.test_moving_slam_needs_three_distinct_measured_runs) ... ok
+test_navigation_needs_success_and_guard_graph_audit (__main__.Phase8CReadinessTests.test_navigation_needs_success_and_guard_graph_audit) ... ok
+test_valid_contents_can_open_gate_without_editing_cached_flags (__main__.Phase8CReadinessTests.test_valid_contents_can_open_gate_without_editing_cached_flags) ... ok
+
+----------------------------------------------------------------------
+Ran 6 tests in 0.007s
+
+OK
+test_gate_blocks_unmeasured_or_short_clearance (__main__.CommonContractTests.test_gate_blocks_unmeasured_or_short_clearance) ... ok
+test_guard_blocks_missing_stale_invalid_and_clamps (__main__.CommonContractTests.test_guard_blocks_missing_stale_invalid_and_clamps) ... ok
+test_lidar_obstacles_cannot_be_overwritten_by_rgb (__main__.CommonContractTests.test_lidar_obstacles_cannot_be_overwritten_by_rgb) ... ok
+test_nonfinite_and_out_of_range_scan_values_are_unknown (__main__.CommonContractTests.test_nonfinite_and_out_of_range_scan_values_are_unknown) ... ok
+test_optional_metric_rgb_free_only_fills_lidar_unknown (__main__.CommonContractTests.test_optional_metric_rgb_free_only_fills_lidar_unknown) ... ok
+test_ros_occupancy_values_and_dimensions (__main__.CommonContractTests.test_ros_occupancy_values_and_dimensions) ... ok
+test_rotation_calibration_guard_allows_yaw_only_and_blocks_translation (__main__.CommonContractTests.test_rotation_calibration_guard_allows_yaw_only_and_blocks_translation) ... ok
+test_sensor_age_rejects_future_and_stale (__main__.CommonContractTests.test_sensor_age_rejects_future_and_stale) ... ok
+test_speed_gate_uses_all_distance_terms (__main__.CommonContractTests.test_speed_gate_uses_all_distance_terms) ... ok
+
+----------------------------------------------------------------------
+Ran 9 tests in 0.001s
+
+OK
+test_global_costmap_uses_live_sensor_map_and_unknown_is_blocked (__main__.Nav2LidarConfigTests.test_global_costmap_uses_live_sensor_map_and_unknown_is_blocked) ... ok
+test_low_speed_and_turn_outputs_remain_bounded (__main__.Nav2LidarConfigTests.test_low_speed_and_turn_outputs_remain_bounded) ... ok
+test_motion_topics_form_one_guarded_chain (__main__.Nav2LidarConfigTests.test_motion_topics_form_one_guarded_chain) ... ok
+test_nav2_footprint_matches_robot_geometry (__main__.Nav2LidarConfigTests.test_nav2_footprint_matches_robot_geometry) ... ok
+test_nav2_yaml_has_no_duplicate_mapping_keys (__main__.Nav2LidarConfigTests.test_nav2_yaml_has_no_duplicate_mapping_keys) ... ok
+test_profile_keeps_simulation_headless_and_navigation_opt_in (__main__.Nav2LidarConfigTests.test_profile_keeps_simulation_headless_and_navigation_opt_in) ... ok
+
+----------------------------------------------------------------------
+Ran 6 tests in 0.010s
+
+OK
+test_accepts_only_guard_as_single_cmd_vel_publisher (__main__.PublisherAuditTests.test_accepts_only_guard_as_single_cmd_vel_publisher) ... ok
+test_rejects_competing_or_unrecognized_publishers (__main__.PublisherAuditTests.test_rejects_competing_or_unrecognized_publishers) ... ok
+
+----------------------------------------------------------------------
+Ran 2 tests in 0.000s
+
+OK
+phase8c_slam_timeout_probe import passed
+BLOCKED\tproduction_turning_verified:evidence_reference_missing; moving_slam_verified:evidence_reference_missing; moving_slam_verified:three_distinct_moving_trials_required; guarded_command_chain_verified:evidence_reference_missing; guarded_command_chain_verified:at_least_one_S00_navigation_trial_required
+
+Post-review final verification UTC: 2026-11-02 16:31:09
+test_fault_model_records_drop_invalid_and_no_return (__main__.LidarModelTests.test_fault_model_records_drop_invalid_and_no_return) ... ok
+test_gazebo_positive_infinity_is_a_max_range_no_return (__main__.LidarModelTests.test_gazebo_positive_infinity_is_a_max_range_no_return) ... ok
+test_inflation_preserves_unknown_cells (__main__.LidarModelTests.test_inflation_preserves_unknown_cells) ... ok
+test_invalid_beam_remains_unknown_and_not_free (__main__.LidarModelTests.test_invalid_beam_remains_unknown_and_not_free) ... ok
+test_map_health_pairing_does_not_mix_interleaved_scans (__main__.LidarModelTests.test_map_health_pairing_does_not_mix_interleaved_scans) ... ok
+test_map_health_pairing_selects_latest_matching_scan (__main__.LidarModelTests.test_map_health_pairing_selects_latest_matching_scan) ... ok
+test_max_range_is_clear_without_inventing_obstacle_endpoint (__main__.LidarModelTests.test_max_range_is_clear_without_inventing_obstacle_endpoint) ... ok
+test_moving_slam_rejects_excessive_error_and_contact (__main__.LidarModelTests.test_moving_slam_rejects_excessive_error_and_contact) ... ok
+test_moving_slam_rejects_missing_maps_or_pose_updates (__main__.LidarModelTests.test_moving_slam_rejects_missing_maps_or_pose_updates) ... ok
+test_moving_slam_requires_live_maps_and_localization (__main__.LidarModelTests.test_moving_slam_requires_live_maps_and_localization) ... ok
+test_nan_and_negative_infinity_remain_unknown (__main__.LidarModelTests.test_nan_and_negative_infinity_remain_unknown) ... ok
+test_rgb_frame_mismatch_fails_closed (__main__.LidarModelTests.test_rgb_frame_mismatch_fails_closed) ... ok
+test_rgb_only_fills_unknown_and_cannot_erase_lidar_occupied (__main__.LidarModelTests.test_rgb_only_fills_unknown_and_cannot_erase_lidar_occupied) ... ok
+test_rotation_clearance_fails_closed_at_grid_edge_and_bad_geometry (__main__.LidarModelTests.test_rotation_clearance_fails_closed_at_grid_edge_and_bad_geometry) ... ok
+test_rotation_clearance_requires_known_free_full_swept_disk (__main__.LidarModelTests.test_rotation_clearance_requires_known_free_full_swept_disk) ... ok
+test_scan_contract_checks_frame_count_fov_and_limits (__main__.LidarModelTests.test_scan_contract_checks_frame_count_fov_and_limits) ... ok
+test_space_behind_first_return_stays_unknown (__main__.LidarModelTests.test_space_behind_first_return_stays_unknown) ... ok
+test_valid_return_marks_ray_free_and_endpoint_occupied (__main__.LidarModelTests.test_valid_return_marks_ray_free_and_endpoint_occupied) ... ok
+
+----------------------------------------------------------------------
+Ran 18 tests in 0.004s
+
+OK
+test_calibration_only_rotation_is_not_production_turning (__main__.Phase8CReadinessTests.test_calibration_only_rotation_is_not_production_turning) ... ok
+test_evidence_path_cannot_escape_project_root (__main__.Phase8CReadinessTests.test_evidence_path_cannot_escape_project_root) ... ok
+test_flags_and_file_presence_alone_never_open_gate (__main__.Phase8CReadinessTests.test_flags_and_file_presence_alone_never_open_gate) ... ok
+test_moving_slam_needs_three_distinct_measured_runs (__main__.Phase8CReadinessTests.test_moving_slam_needs_three_distinct_measured_runs) ... ok
+test_navigation_needs_success_and_guard_graph_audit (__main__.Phase8CReadinessTests.test_navigation_needs_success_and_guard_graph_audit) ... ok
+test_valid_contents_can_open_gate_without_editing_cached_flags (__main__.Phase8CReadinessTests.test_valid_contents_can_open_gate_without_editing_cached_flags) ... ok
+
+----------------------------------------------------------------------
+Ran 6 tests in 0.007s
+
+OK
+test_gate_blocks_unmeasured_or_short_clearance (__main__.CommonContractTests.test_gate_blocks_unmeasured_or_short_clearance) ... ok
+test_guard_blocks_missing_stale_invalid_and_clamps (__main__.CommonContractTests.test_guard_blocks_missing_stale_invalid_and_clamps) ... ok
+test_lidar_obstacles_cannot_be_overwritten_by_rgb (__main__.CommonContractTests.test_lidar_obstacles_cannot_be_overwritten_by_rgb) ... ok
+test_nonfinite_and_out_of_range_scan_values_are_unknown (__main__.CommonContractTests.test_nonfinite_and_out_of_range_scan_values_are_unknown) ... ok
+test_optional_metric_rgb_free_only_fills_lidar_unknown (__main__.CommonContractTests.test_optional_metric_rgb_free_only_fills_lidar_unknown) ... ok
+test_ros_occupancy_values_and_dimensions (__main__.CommonContractTests.test_ros_occupancy_values_and_dimensions) ... ok
+test_rotation_calibration_guard_allows_yaw_only_and_blocks_translation (__main__.CommonContractTests.test_rotation_calibration_guard_allows_yaw_only_and_blocks_translation) ... ok
+test_sensor_age_rejects_future_and_stale (__main__.CommonContractTests.test_sensor_age_rejects_future_and_stale) ... ok
+test_speed_gate_uses_all_distance_terms (__main__.CommonContractTests.test_speed_gate_uses_all_distance_terms) ... ok
+
+----------------------------------------------------------------------
+Ran 9 tests in 0.001s
+
+OK
+test_global_costmap_uses_live_sensor_map_and_unknown_is_blocked (__main__.Nav2LidarConfigTests.test_global_costmap_uses_live_sensor_map_and_unknown_is_blocked) ... ok
+test_low_speed_and_turn_outputs_remain_bounded (__main__.Nav2LidarConfigTests.test_low_speed_and_turn_outputs_remain_bounded) ... ok
+test_motion_topics_form_one_guarded_chain (__main__.Nav2LidarConfigTests.test_motion_topics_form_one_guarded_chain) ... ok
+test_nav2_footprint_matches_robot_geometry (__main__.Nav2LidarConfigTests.test_nav2_footprint_matches_robot_geometry) ... ok
+test_nav2_yaml_has_no_duplicate_mapping_keys (__main__.Nav2LidarConfigTests.test_nav2_yaml_has_no_duplicate_mapping_keys) ... ok
+test_profile_keeps_simulation_headless_and_navigation_opt_in (__main__.Nav2LidarConfigTests.test_profile_keeps_simulation_headless_and_navigation_opt_in) ... ok
+
+----------------------------------------------------------------------
+Ran 6 tests in 0.011s
+
+OK
+test_accepts_only_guard_as_single_cmd_vel_publisher (__main__.PublisherAuditTests.test_accepts_only_guard_as_single_cmd_vel_publisher) ... ok
+test_rejects_competing_or_unrecognized_publishers (__main__.PublisherAuditTests.test_rejects_competing_or_unrecognized_publishers) ... ok
+
+----------------------------------------------------------------------
+Ran 2 tests in 0.000s
+
+OK
+phase8c_slam_timeout_probe import passed
+test_case_registry.yaml parse passed
+BLOCKED\tproduction_turning_verified:evidence_reference_missing; moving_slam_verified:evidence_reference_missing; moving_slam_verified:three_distinct_moving_trials_required; guarded_command_chain_verified:evidence_reference_missing; guarded_command_chain_verified:at_least_one_S00_navigation_trial_required
+
+=== post-delimiter final verification UTC 2026-11-02T16:39:05Z ===
+Starting >>> anc_lidar
+running egg_info
+writing ../../../../build/anc_lidar/anc_lidar.egg-info/PKG-INFO
+writing dependency_links to ../../../../build/anc_lidar/anc_lidar.egg-info/dependency_links.txt
+writing entry points to ../../../../build/anc_lidar/anc_lidar.egg-info/entry_points.txt
+writing requirements to ../../../../build/anc_lidar/anc_lidar.egg-info/requires.txt
+writing top-level names to ../../../../build/anc_lidar/anc_lidar.egg-info/top_level.txt
+reading manifest file '../../../../build/anc_lidar/anc_lidar.egg-info/SOURCES.txt'
+writing manifest file '../../../../build/anc_lidar/anc_lidar.egg-info/SOURCES.txt'
+running build
+running build_py
+copying anc_lidar/scan_model.py -> /home/ashish/AutonomousNavigationCar/build/anc_lidar/build/lib/anc_lidar
+running install
+running install_lib
+copying /home/ashish/AutonomousNavigationCar/build/anc_lidar/build/lib/anc_lidar/scan_model.py -> /home/ashish/AutonomousNavigationCar/install/anc_lidar/lib/python3.12/site-packages/anc_lidar
+byte-compiling /home/ashish/AutonomousNavigationCar/install/anc_lidar/lib/python3.12/site-packages/anc_lidar/scan_model.py to scan_model.cpython-312.pyc
+running install_data
+running install_egg_info
+removing '/home/ashish/AutonomousNavigationCar/install/anc_lidar/lib/python3.12/site-packages/anc_lidar-0.1.0-py3.12.egg-info' (and everything under it)
+Copying ../../../../build/anc_lidar/anc_lidar.egg-info to /home/ashish/AutonomousNavigationCar/install/anc_lidar/lib/python3.12/site-packages/anc_lidar-0.1.0-py3.12.egg-info
+running install_scripts
+Installing lidar_safety_gate script to /home/ashish/AutonomousNavigationCar/install/anc_lidar/lib/anc_lidar
+Installing local_grid_fuser script to /home/ashish/AutonomousNavigationCar/install/anc_lidar/lib/anc_lidar
+Installing local_scan_mapper script to /home/ashish/AutonomousNavigationCar/install/anc_lidar/lib/anc_lidar
+Installing scan_conditioner script to /home/ashish/AutonomousNavigationCar/install/anc_lidar/lib/anc_lidar
+writing list of installed files to '/home/ashish/AutonomousNavigationCar/build/anc_lidar/install.log'
+Finished <<< anc_lidar [6.37s]
+
+Summary: 1 package finished [7.36s]
+test_fault_model_records_drop_invalid_and_no_return (__main__.LidarModelTests.test_fault_model_records_drop_invalid_and_no_return) ... ok
+test_gazebo_positive_infinity_is_a_max_range_no_return (__main__.LidarModelTests.test_gazebo_positive_infinity_is_a_max_range_no_return) ... ok
+test_inflation_preserves_unknown_cells (__main__.LidarModelTests.test_inflation_preserves_unknown_cells) ... ok
+test_invalid_beam_remains_unknown_and_not_free (__main__.LidarModelTests.test_invalid_beam_remains_unknown_and_not_free) ... ok
+test_map_health_pairing_does_not_mix_interleaved_scans (__main__.LidarModelTests.test_map_health_pairing_does_not_mix_interleaved_scans) ... ok
+test_map_health_pairing_selects_latest_matching_scan (__main__.LidarModelTests.test_map_health_pairing_selects_latest_matching_scan) ... ok
+test_max_range_is_clear_without_inventing_obstacle_endpoint (__main__.LidarModelTests.test_max_range_is_clear_without_inventing_obstacle_endpoint) ... ok
+test_moving_slam_rejects_excessive_error_and_contact (__main__.LidarModelTests.test_moving_slam_rejects_excessive_error_and_contact) ... ok
+test_moving_slam_rejects_missing_maps_or_pose_updates (__main__.LidarModelTests.test_moving_slam_rejects_missing_maps_or_pose_updates) ... ok
+test_moving_slam_requires_live_maps_and_localization (__main__.LidarModelTests.test_moving_slam_requires_live_maps_and_localization) ... ok
+test_nan_and_negative_infinity_remain_unknown (__main__.LidarModelTests.test_nan_and_negative_infinity_remain_unknown) ... ok
+test_rgb_frame_mismatch_fails_closed (__main__.LidarModelTests.test_rgb_frame_mismatch_fails_closed) ... ok
+test_rgb_only_fills_unknown_and_cannot_erase_lidar_occupied (__main__.LidarModelTests.test_rgb_only_fills_unknown_and_cannot_erase_lidar_occupied) ... ok
+test_rotation_clearance_fails_closed_at_grid_edge_and_bad_geometry (__main__.LidarModelTests.test_rotation_clearance_fails_closed_at_grid_edge_and_bad_geometry) ... ok
+test_rotation_clearance_requires_known_free_full_swept_disk (__main__.LidarModelTests.test_rotation_clearance_requires_known_free_full_swept_disk) ... ok
+test_scan_contract_checks_frame_count_fov_and_limits (__main__.LidarModelTests.test_scan_contract_checks_frame_count_fov_and_limits) ... ok
+test_space_behind_first_return_stays_unknown (__main__.LidarModelTests.test_space_behind_first_return_stays_unknown) ... ok
+test_valid_return_marks_ray_free_and_endpoint_occupied (__main__.LidarModelTests.test_valid_return_marks_ray_free_and_endpoint_occupied) ... ok
+
+----------------------------------------------------------------------
+Ran 18 tests in 0.005s
+
+OK
+test_brief_output_uses_real_tab_for_shell_launcher (__main__.Phase8CReadinessTests.test_brief_output_uses_real_tab_for_shell_launcher) ... ok
+test_calibration_only_rotation_is_not_production_turning (__main__.Phase8CReadinessTests.test_calibration_only_rotation_is_not_production_turning) ... ok
+test_evidence_path_cannot_escape_project_root (__main__.Phase8CReadinessTests.test_evidence_path_cannot_escape_project_root) ... ok
+test_flags_and_file_presence_alone_never_open_gate (__main__.Phase8CReadinessTests.test_flags_and_file_presence_alone_never_open_gate) ... ok
+test_moving_slam_needs_three_distinct_measured_runs (__main__.Phase8CReadinessTests.test_moving_slam_needs_three_distinct_measured_runs) ... ok
+test_navigation_needs_success_and_guard_graph_audit (__main__.Phase8CReadinessTests.test_navigation_needs_success_and_guard_graph_audit) ... ok
+test_valid_contents_can_open_gate_without_editing_cached_flags (__main__.Phase8CReadinessTests.test_valid_contents_can_open_gate_without_editing_cached_flags) ... ok
+
+----------------------------------------------------------------------
+Ran 7 tests in 0.059s
+
+OK
+test_gate_blocks_unmeasured_or_short_clearance (__main__.CommonContractTests.test_gate_blocks_unmeasured_or_short_clearance) ... ok
+test_guard_blocks_missing_stale_invalid_and_clamps (__main__.CommonContractTests.test_guard_blocks_missing_stale_invalid_and_clamps) ... ok
+test_lidar_obstacles_cannot_be_overwritten_by_rgb (__main__.CommonContractTests.test_lidar_obstacles_cannot_be_overwritten_by_rgb) ... ok
+test_nonfinite_and_out_of_range_scan_values_are_unknown (__main__.CommonContractTests.test_nonfinite_and_out_of_range_scan_values_are_unknown) ... ok
+test_optional_metric_rgb_free_only_fills_lidar_unknown (__main__.CommonContractTests.test_optional_metric_rgb_free_only_fills_lidar_unknown) ... ok
+test_ros_occupancy_values_and_dimensions (__main__.CommonContractTests.test_ros_occupancy_values_and_dimensions) ... ok
+test_rotation_calibration_guard_allows_yaw_only_and_blocks_translation (__main__.CommonContractTests.test_rotation_calibration_guard_allows_yaw_only_and_blocks_translation) ... ok
+test_sensor_age_rejects_future_and_stale (__main__.CommonContractTests.test_sensor_age_rejects_future_and_stale) ... ok
+test_speed_gate_uses_all_distance_terms (__main__.CommonContractTests.test_speed_gate_uses_all_distance_terms) ... ok
+
+----------------------------------------------------------------------
+Ran 9 tests in 0.001s
+
+OK
+test_global_costmap_uses_live_sensor_map_and_unknown_is_blocked (__main__.Nav2LidarConfigTests.test_global_costmap_uses_live_sensor_map_and_unknown_is_blocked) ... ok
+test_low_speed_and_turn_outputs_remain_bounded (__main__.Nav2LidarConfigTests.test_low_speed_and_turn_outputs_remain_bounded) ... ok
+test_motion_topics_form_one_guarded_chain (__main__.Nav2LidarConfigTests.test_motion_topics_form_one_guarded_chain) ... ok
+test_nav2_footprint_matches_robot_geometry (__main__.Nav2LidarConfigTests.test_nav2_footprint_matches_robot_geometry) ... ok
+test_nav2_yaml_has_no_duplicate_mapping_keys (__main__.Nav2LidarConfigTests.test_nav2_yaml_has_no_duplicate_mapping_keys) ... ok
+test_profile_keeps_simulation_headless_and_navigation_opt_in (__main__.Nav2LidarConfigTests.test_profile_keeps_simulation_headless_and_navigation_opt_in) ... ok
+
+----------------------------------------------------------------------
+Ran 6 tests in 0.011s
+
+OK
+test_accepts_only_guard_as_single_cmd_vel_publisher (__main__.PublisherAuditTests.test_accepts_only_guard_as_single_cmd_vel_publisher) ... ok
+test_rejects_competing_or_unrecognized_publishers (__main__.PublisherAuditTests.test_rejects_competing_or_unrecognized_publishers) ... ok
+
+----------------------------------------------------------------------
+Ran 2 tests in 0.000s
+
+OK
+phase8c_slam_timeout_probe import passed
+test_case_registry.yaml parse passed
+launcher parsed readiness state=<BLOCKED>
+launcher parsed reason=<production_turning_verified:evidence_reference_missing; moving_slam_verified:evidence_reference_missing; moving_slam_verified:three_distinct_moving_trials_required; guarded_command_chain_verified:evidence_reference_missing; guarded_command_chain_verified:at_least_one_S00_navigation_trial_required>
+git diff --check passed; no Gazebo/SLAM/Nav2 process was started by this validation.

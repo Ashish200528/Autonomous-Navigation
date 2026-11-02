@@ -71,17 +71,7 @@ nav2=false; block_reason="goal not requested"
 if [[ "$want_goal" == true ]]; then
  readiness="$ROOT/config/phase8c_demo_readiness.json"
  if [[ -f "$readiness" ]]; then
-  gate=$(python3 - "$readiness" "$ROOT" <<'PY'
-import json, pathlib, sys
-data=json.loads(pathlib.Path(sys.argv[1]).read_text()); root=pathlib.Path(sys.argv[2])
-required=("production_turning_verified","moving_slam_verified","guarded_command_chain_verified")
-checks=data.get("prerequisites",{}); evidence=data.get("evidence",{})
-missing=[k for k in required if checks.get(k) is not True]
-missing_files=[k for k in required if not evidence.get(k) or not (root/evidence[k]).is_file()]
-why=[f"{k}=false" for k in missing]+[f"{k} evidence missing" for k in missing_files]
-print(("BLOCKED\t"+"; ".join(why)) if why else "READY\tprerequisite evidence present")
-PY
-)
+  gate=$(python3 "$ROOT/scripts/phase8c_readiness.py" "$readiness" "$ROOT" --brief)
   gate_state="${gate%%$'\t'*}"; block_reason="${gate#*$'\t'}"
   [[ "$gate_state" == READY ]] && nav2=true
  else block_reason="readiness file missing"

@@ -8,12 +8,15 @@ from pathlib import Path
 
 import rclpy
 from geometry_msgs.msg import Twist, PoseWithCovarianceStamped
-from nav_msgs.msg import Odometry
+from nav_msgs.msg import OccupancyGrid, Odometry
 from rclpy.node import Node
 from rclpy.qos import qos_profile_sensor_data
+from ros_gz_interfaces.msg import Contacts
+from sensor_msgs.msg import LaserScan
 from simulation_interfaces.srv import GetEntityState
 from std_msgs.msg import String
 from tf2_msgs.msg import TFMessage
+from anc_lidar.scan_model import evaluate_moving_slam_metrics
 
 
 def yaw(q):
@@ -39,6 +42,12 @@ class SlamTimeoutProbe(Node):
         self.odom = None
         self.slam_pose = None
         self.map_odom = None
+        self.scan_count = 0
+        self.map_update_count = 0
+        self.slam_pose_update_count = 0
+        self.map_to_odom_update_count = 0
+        self.latest_map_counts = None
+        self.non_ground_contact_pairs = set()
         self.output_samples = []
         self.guard_samples = []
         self.create_subscription(String, "/realistic/safety_state",
@@ -48,6 +57,12 @@ class SlamTimeoutProbe(Node):
         self.create_subscription(Twist, "/cmd_vel", self.on_output, 10)
         self.create_subscription(Odometry, "/odometry/filtered",
                                  self.on_odom, qos_profile_sensor_data)
+        self.create_subscription(LaserScan, "/realistic/scan",
+                                 self.on_scan, qos_profile_sensor_data)
+        self.create_subscription(OccupancyGrid, "/map",
+                                 self.on_slam_map, 10)
+        self.create_subscription(Contacts, "/contacts",
+                                 self.on_contacts, 20)
         self.create_subscription(PoseWithCovarianceStamped, "/pose",
                                  self.on_slam_pose, 10)
         self.create_subscription(TFMessage, "/tf", self.on_tf, 10)
@@ -81,7 +96,35 @@ class SlamTimeoutProbe(Node):
                                 yaw(msg.pose.pose.orientation), stamp_s,
                                 time.monotonic())
 
+    def on_scan(self, _msg):
+        self.scan_count += 1
+
+    def on_slam_map(self, msg):
+        self.map_update_count += 1
+        values = list(msg.data)
+        self.latest_map_counts = {
+            "stamp_s": msg.header.stamp.sec+msg.header.stamp.nanosec*1e-9,
+            "frame_id": msg.header.frame_id,
+            "width": int(msg.info.width),
+            "height": int(msg.info.height),
+            "resolution_m": float(msg.info.resolution),
+            "free_cells": sum(value == 0 for value in values),
+            "occupied_cells": sum(value == 100 for value in values),
+            "unknown_cells": sum(value < 0 for value in values),
+        }
+
+    def on_contacts(self, msg):
+        for contact in msg.contacts:
+            first = str(contact.collision1.name)
+            second = str(contact.collision2.name)
+            if not first or not second:
+                continue
+            if "ground_plane" in (first+" "+second).lower():
+                continue
+            self.non_ground_contact_pairs.add(tuple(sorted((first, second))))
+
     def on_slam_pose(self, msg):
+        self.slam_pose_update_count += 1
         stamp_s = msg.header.stamp.sec+msg.header.stamp.nanosec*1e-9
         self.slam_pose = pose_record(msg.pose.pose.position.x,
                                      msg.pose.pose.position.y,
@@ -93,6 +136,7 @@ class SlamTimeoutProbe(Node):
             if (transform.header.frame_id.lstrip("/") == "map"
                     and transform.child_frame_id.lstrip("/") == "odom"):
                 t = transform.transform.translation
+                self.map_to_odom_update_count += 1
                 self.map_odom = pose_record(
                     t.x, t.y, yaw(transform.transform.rotation),
                     transform.header.stamp.sec+transform.header.stamp.nanosec*1e-9,
@@ -186,6 +230,13 @@ class SlamTimeoutProbe(Node):
         start_odom = dict(self.odom) if self.odom else None
         start_slam = dict(self.slam_pose) if self.slam_pose else None
         start_map_odom = dict(self.map_odom) if self.map_odom else None
+        start_metrics = {
+            "scans": self.scan_count,
+            "maps": self.map_update_count,
+            "slam_poses": self.slam_pose_update_count,
+            "map_to_odom": self.map_to_odom_update_count,
+        }
+        start_contact_pairs = set(self.non_ground_contact_pairs)
         drive_start_wall = time.monotonic()
         drive_duration_s = 4.0
         max_displacement_m = 0.50
@@ -263,7 +314,36 @@ class SlamTimeoutProbe(Node):
                            "yaw_rad": math.atan2(
                                math.sin(final_map_odom["yaw_rad"]-start_map_odom["yaw_rad"]),
                                math.cos(final_map_odom["yaw_rad"]-start_map_odom["yaw_rad"]))})
+        truth_yaw_delta = math.atan2(
+            math.sin(final_truth["yaw_rad"]-start_truth["yaw_rad"]),
+            math.cos(final_truth["yaw_rad"]-start_truth["yaw_rad"]))
+        slam_yaw_error = None
+        if start_slam is not None and final_slam is not None:
+            slam_yaw_delta = math.atan2(
+                math.sin(final_slam["yaw_rad"]-start_slam["yaw_rad"]),
+                math.cos(final_slam["yaw_rad"]-start_slam["yaw_rad"]))
+            slam_yaw_error = abs(math.atan2(
+                math.sin(slam_yaw_delta-truth_yaw_delta),
+                math.cos(slam_yaw_delta-truth_yaw_delta)))
+        contact_pairs_during_trial = sorted(
+            self.non_ground_contact_pairs-start_contact_pairs)
+        final_map_counts = self.latest_map_counts or {}
+        moving_slam_evaluation = evaluate_moving_slam_metrics(
+            scan_messages=self.scan_count-start_metrics["scans"],
+            map_updates=self.map_update_count-start_metrics["maps"],
+            truth_pose_samples=len(truth_samples),
+            slam_pose_updates=self.slam_pose_update_count-start_metrics["slam_poses"],
+            map_to_odom_updates=self.map_to_odom_update_count-start_metrics["map_to_odom"],
+            map_free_cells=final_map_counts.get("free_cells", 0),
+            map_occupied_cells=final_map_counts.get("occupied_cells", 0),
+            truth_forward_displacement_m=truth_delta,
+            slam_relative_displacement_error_m=(
+                None if slam_delta is None else abs(slam_delta-truth_delta)),
+            slam_relative_yaw_error_rad=slam_yaw_error,
+            non_ground_contact_events=len(contact_pairs_during_trial),
+        )
         report = {
+            "trial_id": trial_id,
             "classification": "S00_BOUNDED_FORWARD_SLAM_AND_COMMAND_TIMEOUT_PROBE",
             "status": "FAIL",
             "runtime_received_no_simulator_truth": True,
@@ -299,6 +379,16 @@ class SlamTimeoutProbe(Node):
                 None if odom_delta is None else abs(odom_delta-truth_delta)),
             "slam_relative_displacement_error_m": (
                 None if slam_delta is None else abs(slam_delta-truth_delta)),
+            "slam_relative_yaw_error_rad": slam_yaw_error,
+            "moving_sensor_counts": {
+                "scan_messages": self.scan_count-start_metrics["scans"],
+                "slam_map_updates": self.map_update_count-start_metrics["maps"],
+                "slam_pose_updates": self.slam_pose_update_count-start_metrics["slam_poses"],
+                "map_to_odom_updates": self.map_to_odom_update_count-start_metrics["map_to_odom"],
+            },
+            "final_slam_map": final_map_counts,
+            "non_ground_contact_pairs": contact_pairs_during_trial,
+            "moving_slam_evaluation": moving_slam_evaluation,
             "truth_samples": truth_samples,
             "output_samples": self.output_samples,
             "guard_samples": self.guard_samples,
@@ -312,6 +402,7 @@ class SlamTimeoutProbe(Node):
             and timeout_delay <= 0.40 and pretimeout_gate_invalid is None
             and len(nonzero_samples) > 0 and 0.01 < total_forward <= max_displacement_m
             and stop_distance <= report["post_zero_stopping_limit_m"] and settled
+            and moving_slam_evaluation["status"] == "PASS"
         ) else "FAIL"
         return report
 

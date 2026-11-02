@@ -59,3 +59,19 @@ cd /home/ashish/AutonomousNavigationCar
 ~~~
 
 At the recorded memory level it exits before starting the simulator. After sufficient RAM is available, the still-false readiness gate prevents this command from claiming or attempting autonomous navigation; it runs the sensor/online-SLAM profile and records that the goal is blocked. Production turning and moving-SLAM evidence are prerequisites before a Nav2 trial can be enabled.
+
+
+## Follow-up: moving-SLAM and readiness evidence hardening (2026-11-02)
+
+This follow-up improves the quality of the next live trials. It does not record a new Gazebo result.
+
+- The bounded S00 forward probe now records scans, online /map updates, /pose updates, map-to-odom updates, evaluator truth samples, map occupancy, and non-ground contacts during the movement interval. It can report PASS only with bounded forward travel, at least 8 scans, 2 SLAM map updates, 3 truth samples, 2 SLAM pose updates, 2 map-to-odom updates, known FREE and OCCUPIED map cells, position and yaw displacement errors each at most 0.10, no non-ground contacts, and the existing command-timeout stop checks. These are trial acceptance limits; passing one probe alone does not establish repeatability or unlock Nav2.
+- Added scripts/phase8c_readiness.py. It validates the actual JSON contents, exact result classifications, measurable outcomes, and project-contained evidence paths. Production turning requires its full 13-case measured safety matrix; moving SLAM requires three distinct passing probe results; the guarded Nav2 prerequisite requires a successful S00 goal, all six lifecycle nodes active, fresh RGB/scan/map/odometry, costmap and plan updates, positive measured clearance, no contacts, and a live /cmd_vel audit naming only anc_safety_command_guard.
+- scripts/run_lidar_demo.sh now uses that validator. Cached boolean flags and file presence alone cannot open the gate. The configuration still has all three prerequisite flags false and evidence references null; no flags were edited.
+- The latest user's S02 GUI/RViz evidence is sensing-only with no requested goal or command; its final local LiDAR map had 2,433 free and 189 occupied cells and the safety gate was authorized. The S01 evidence is also sensing-only, with no goal or command. Its final saved snapshot had an all-UNKNOWN local LiDAR map and safety-state age 35.315 s after the run; it does not prove whether the map was valid during the live session. Both sessions report Nav2 enabled: false. Neither is a navigation run.
+- The S01 launch log includes an incompatible RELIABILITY QoS warning on /realistic/scan; the saved log does not identify the requesting endpoint. No QoS or safety condition was weakened based on this unisolated warning.
+- Windows Task Manager showed 87% memory use during this continuation; WSL showed about 3.1 GiB available and no Gazebo/ROS simulation processes. The headless launcher requires 2 GiB available on Windows, so no Gazebo, SLAM, turning, or Nav2 trial was started.
+
+Verification: the single-package anc_lidar colcon build passed. The offline suite passed 18 LiDAR model tests, 7 readiness tests, 9 shared safety tests, 6 Nav2 config tests, and 2 publisher-audit tests. Python import/compile checks, launcher bash -n, and git diff --check passed. The final test output is saved in docs/evidence/phase8c/lidar/moving-slam-readiness-offline-validation-final-20261102.log; the build plus an earlier successful full suite is in docs/evidence/phase8c/lidar/moving-slam-readiness-offline-validation-retry2-20261102.log.
+
+The capability matrix is unchanged: production turning, moving SLAM, LiDAR Nav2 goal navigation, S01 avoidance/replanning, exploration, and live parking remain BLOCKED or NOT TESTED. No screenshot or video of autonomous LiDAR navigation was produced.

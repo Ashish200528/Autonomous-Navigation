@@ -49,6 +49,7 @@
 - Phase 8 remains stop-only and shared launch keeps LiDAR disabled by default in older profiles.
 - Fresh Phase 3/4 regressions and Phase 5/6/7/8 static tests, Phase 8 live stop-only check, and one Phase 8B brake repeat are indexed in docs/evidence/phase8c/lidar/README.md.
 - SLAM did not demonstrate drift reduction; Nav2 was not enabled. Stage D remains untested.
+- Follow-up hardening: the bounded forward SLAM probe now requires live map/pose/TF updates and truth-relative error measurements before PASS. The Nav2 gate parses and validates evidence contents, including lifecycle, costmap, plan, goal, and publisher audit results. No live run has yet met these prerequisites.
 
 ## P0 before hardware-faithful claims or transfer
 
@@ -81,3 +82,8 @@ Earlier phases remain complete only within their stated limits. Phase 8 remains 
 ## Phase 8C Stage 9 status (2026-11-02)
 
 - Nav2/GUI/evaluator integration and a memory/readiness-gated launcher are implemented and pass offline checks. Live navigation remains blocked: Windows RAM was 619 MiB available at preflight; production turning and moving SLAM are not validated. The launcher correctly stopped before Gazebo. Do not enable its Nav2 gate until all three prerequisite evidence files exist and the turning/localization checks pass.
+
+
+## Phase 8C Stage 9 evidence-gate follow-up (2026-11-02)
+
+The moving-SLAM and readiness checks were strengthened and their offline tests passed. Current Windows memory use was 87%; the headless resource threshold was not met, so no live simulation was run. Production turning, moving SLAM, Nav2 S00, and S01 avoidance remain open blockers. See docs/phase8c-stage9-report.md and the final offline evidence log.

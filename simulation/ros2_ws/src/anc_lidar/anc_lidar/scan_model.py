@@ -331,6 +331,114 @@ def swept_rotation_clearance(data, grid: Grid, footprint_vertices_xy_m, *,
         "inside_grid": inside_grid,
     }
 
+
+def evaluate_moving_slam_metrics(*, scan_messages, map_updates, truth_pose_samples,
+                                 slam_pose_updates, map_to_odom_updates,
+                                 map_free_cells, map_occupied_cells,
+                                 truth_forward_displacement_m,
+                                 slam_relative_displacement_error_m,
+                                 slam_relative_yaw_error_rad,
+                                 non_ground_contact_events,
+                                 min_scan_messages=8, min_map_updates=2,
+                                 min_pose_updates=2, min_tf_updates=2,
+                                 min_motion_m=0.10, max_motion_m=0.50,
+                                 max_position_error_m=0.10,
+                                 max_yaw_error_rad=0.10):
+    # Require fresh sensor/map/pose activity and finite estimator-to-truth errors.
+    # This measurement contract does not grant motion authority.
+    integer_measurements = {
+        "scan_messages": scan_messages,
+        "map_updates": map_updates,
+        "truth_pose_samples": truth_pose_samples,
+        "slam_pose_updates": slam_pose_updates,
+        "map_to_odom_updates": map_to_odom_updates,
+        "map_free_cells": map_free_cells,
+        "map_occupied_cells": map_occupied_cells,
+        "non_ground_contact_events": non_ground_contact_events,
+    }
+    failures = []
+    normalized = {}
+    for name, value in integer_measurements.items():
+        try:
+            converted = int(value)
+            if isinstance(value, bool) or converted != value or converted < 0:
+                raise ValueError
+        except (TypeError, ValueError, OverflowError):
+            failures.append(name + "_invalid")
+            continue
+        normalized[name] = converted
+
+    numeric_measurements = {
+        "truth_forward_displacement_m": truth_forward_displacement_m,
+        "slam_relative_displacement_error_m": slam_relative_displacement_error_m,
+        "slam_relative_yaw_error_rad": slam_relative_yaw_error_rad,
+    }
+    numeric = {}
+    for name, value in numeric_measurements.items():
+        try:
+            converted = float(value)
+            if not math.isfinite(converted):
+                raise ValueError
+        except (TypeError, ValueError, OverflowError):
+            failures.append(name + "_missing_or_nonfinite")
+            continue
+        numeric[name] = converted
+
+    checks = {}
+    count_requirements = (
+        ("scan_messages", min_scan_messages),
+        ("map_updates", min_map_updates),
+        ("truth_pose_samples", 3),
+        ("slam_pose_updates", min_pose_updates),
+        ("map_to_odom_updates", min_tf_updates),
+        ("map_free_cells", 1),
+        ("map_occupied_cells", 1),
+    )
+    for name, minimum in count_requirements:
+        checks[name] = normalized.get(name, -1) >= minimum
+        if name in normalized and not checks[name]:
+            failures.append(name + "_below_minimum")
+
+    displacement = numeric.get("truth_forward_displacement_m")
+    checks["bounded_forward_motion"] = (
+        displacement is not None and min_motion_m <= displacement <= max_motion_m)
+    if displacement is not None and not checks["bounded_forward_motion"]:
+        failures.append("truth_forward_displacement_out_of_bounds")
+
+    position_error = numeric.get("slam_relative_displacement_error_m")
+    checks["slam_position_error"] = (
+        position_error is not None and 0.0 <= position_error <= max_position_error_m)
+    if position_error is not None and not checks["slam_position_error"]:
+        failures.append("slam_position_error_exceeds_limit")
+
+    yaw_error = numeric.get("slam_relative_yaw_error_rad")
+    checks["slam_yaw_error"] = (
+        yaw_error is not None and 0.0 <= yaw_error <= max_yaw_error_rad)
+    if yaw_error is not None and not checks["slam_yaw_error"]:
+        failures.append("slam_yaw_error_exceeds_limit")
+
+    checks["no_non_ground_contacts"] = normalized.get(
+        "non_ground_contact_events", -1) == 0
+    if "non_ground_contact_events" in normalized and not checks["no_non_ground_contacts"]:
+        failures.append("non_ground_contact_observed")
+
+    return {
+        "status": "PASS" if not failures else "FAIL",
+        "checks": checks,
+        "failures": failures,
+        "measurements": {**normalized, **numeric},
+        "limits": {
+            "minimum_scan_messages": int(min_scan_messages),
+            "minimum_map_updates": int(min_map_updates),
+            "minimum_truth_pose_samples": 3,
+            "minimum_slam_pose_updates": int(min_pose_updates),
+            "minimum_map_to_odom_updates": int(min_tf_updates),
+            "truth_forward_displacement_m": [float(min_motion_m), float(max_motion_m)],
+            "maximum_slam_position_error_m": float(max_position_error_m),
+            "maximum_slam_yaw_error_rad": float(max_yaw_error_rad),
+        },
+    }
+
 def fuse_lidar_with_rgb_free(lidar_data, lidar_grid: Grid, rgb_data, rgb_geometry):
     """Only project metric RGB FREE cells into LiDAR UNKNOWN; never use RGB OCCUPIED."""
     lidar_grid.validate()
