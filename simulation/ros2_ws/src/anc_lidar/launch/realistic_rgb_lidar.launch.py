@@ -138,7 +138,7 @@ def generate_launch_description():
         output="screen",
         arguments=["-d", rviz_config],
         parameters=[{"use_sim_time": True}],
-        condition=IfCondition(LaunchConfiguration("gui")),
+        condition=IfCondition(LaunchConfiguration("rviz")),
     )
     return LaunchDescription([
         DeclareLaunchArgument(
@@ -151,6 +151,7 @@ def generate_launch_description():
         DeclareLaunchArgument("start_x", default_value="0.0"),
         DeclareLaunchArgument("start_y", default_value="0.0"),
         DeclareLaunchArgument("start_yaw", default_value="0.0"),
+        DeclareLaunchArgument("rviz", default_value="false", description="Open RViz sensor and map displays; independent of Gazebo GUI."),
         DeclareLaunchArgument(
             "rotation_calibration_max_radps", default_value="0.0",
             description="Test-only pure rotation cap (0.02..0.10 rad/s). Translation remains locked; 0 disables rotation."),

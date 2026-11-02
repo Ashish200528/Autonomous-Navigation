@@ -1,0 +1,69 @@
+# Windows Gazebo Demonstration Delivery and Verification
+
+Date: 2026-11-02
+Project: `/home/ashish/AutonomousNavigationCar`
+Branch: `feature/phase8c-lidar`
+
+## Outcome
+
+The three Windows launchers and their README were copied to the actual Windows Desktop and Downloads Known Folders. All eight copied files passed SHA-256 comparison against the staged source files. Launcher code and ROS launch descriptions passed static/help checks; the Phase 6 and LiDAR RViz profiles are installed in the ROS workspace.
+
+No Gazebo, RViz, navigation, sensor, or motion demonstration was started. Current Windows free memory is far below the launcher's minimum, so GUI behavior remains unverified.
+
+## Environment observed
+
+- WSL distro: `Ubuntu-24.04`; registered base path: `E:\WSL\Ubuntu-24.04`.
+- WSL kernel: `6.6.87.2-microsoft-standard-WSL2`; WSLg variables: `WAYLAND_DISPLAY=wayland-0`, `DISPLAY=:0`.
+- Windows physical memory reported by the diagnostic: `7.34 GiB`; latest available reading: `709 MiB` (recent readings ranged from `628 MiB` to `856 MiB`), load `90%`, 12 logical CPUs.
+- WSL available memory: `3134 MiB`; swap: `1024 MiB`; project filesystem available: `970562 MiB`.
+- GPU query: `NVIDIA GeForce GTX 1650`, `4096 MiB`, driver `592.82`.
+- ROS 2 Jazzy imports successfully (`rclpy` from `/opt/ros/jazzy/lib/python3.12/site-packages/rclpy`). `ros_gz_sim` resolves under `/opt/ros/jazzy`; `gz` resolves to `/opt/ros/jazzy/opt/gz_tools_vendor/bin/gz`.
+- Project packages resolve from the local workspace install: `anc_gazebo`, `anc_navigation`, and `anc_lidar`.
+
+## Project changes
+
+- Phase 6 runner supports opt-in Gazebo GUI, RViz, and holding the paused result window; existing headless defaults remain.
+- Reference navigation launch forwards its GUI option and can start the configured Phase 6 RViz view.
+- LiDAR launch separates Gazebo GUI from optional RViz; its RViz profile includes the RGB image panel.
+- LiDAR demo wrapper and GUI monitor add status presentation and a bounded S00-only straight request through the existing guarded navigation topic. The command guard remains the `/cmd_vel` owner. Other scenarios are sensing-only; LiDAR Nav2 remains readiness-gated.
+- Windows WSL launcher helpers provide diagnostics, menu/session tracking, and bounded cleanup without force-killing a process. They do not install packages or change Windows/WSL settings.
+
+## Verification performed
+
+- Initial ROS Python `--help` invocation before sourcing the ROS environment returned `ModuleNotFoundError: No module named 'rclpy'`. Repeating after sourcing `/opt/ros/jazzy/setup.bash` and the workspace succeeded; `rclpy` import succeeded.
+- `python3 scripts/phase6_navigation_runner.py --help`: passed; includes `--gui`, `--rviz`, `--hold-window`.
+- `python3 scripts/phase8c_gui_demo.py --help`: passed.
+- `bash scripts/run_lidar_demo.sh --help`: passed; documents GUI, RViz, demo status/forward, and hold options.
+- `ros2 launch anc_navigation reference_navigation.launch.py --show-args`: passed; showed `gui` and `rviz` defaults as false.
+- `ros2 launch anc_lidar realistic_rgb_lidar.launch.py --show-args`: passed; showed separate `gui` and `rviz` defaults as false; Nav2 and SLAM remain opt-in.
+- First installed-file check found the Phase 6 RViz profile missing from the stale install tree. Ran `colcon build --executor sequential --packages-select anc_navigation --event-handlers console_direct+`; result: `Finished <<< anc_navigation [9.91s]`, `Summary: 1 package finished [10.2s]`. The Phase 6 RViz profile then appeared in the install tree. Both installed RViz profiles were subsequently confirmed.
+- The earlier workspace build completed three packages (`anc_bringup`, `anc_navigation`, `anc_lidar`); the focused navigation package rebuild above was done after discovering the stale installed config.
+- `bash -n` on all three helper scripts, Python AST parsing of both changed Python scripts, and `git diff --check`: passed.
+- Launcher read-only diagnostics: passed; reported the correct distro base path, ROS/Gazebo availability, current branch and `NO_ACTIVE_PROJECT_SESSION`. A separate scan reported `NO_PROJECT_SIM_PROCESS`.
+- Parking status command explicitly reported: `AUTONOMOUS PARKING — NOT YET LIVE-VALIDATED`.
+- No screenshots or recording were produced because no graphical simulation was started.
+
+## Windows files delivered
+
+Each folder contains these exact four files:
+
+- `C:\Users\ajayk\Desktop\01_WATCH_ROBOT_NAVIGATE.bat`
+- `C:\Users\ajayk\Desktop\02_WATCH_RGB_LIDAR.bat`
+- `C:\Users\ajayk\Desktop\03_GAZEBO_DEMO_MENU.bat`
+- `C:\Users\ajayk\Desktop\README_GAZEBO_DEMOS.txt`
+- The same four filenames under `C:\Users\ajayk\Downloads\`.
+
+The source staging folder had exactly four files. Existing destination files were checked first; no conflicting names existed. Each destination file was re-hashed after copying and matched its source:
+
+| File | SHA-256 |
+|---|---|
+| `01_WATCH_ROBOT_NAVIGATE.bat` | `A68A55B46A86B4381137340289EA2BC3EAE3FF57DF9A2E4CD71D2B4A3B3EBA95` |
+| `02_WATCH_RGB_LIDAR.bat` | `90053BFE0C90A9CEBFAC7B6E1580DC5DC48D0BDA932CB1BFC41D91C563AA85B2` |
+| `03_GAZEBO_DEMO_MENU.bat` | `0C9C3F2D6B3F5CCD2CCF6FFC8FF2119616AF5659CC9B97C1E1697E0E90E943BF` |
+| `README_GAZEBO_DEMOS.txt` | `2E44CEAE4A1035CBBB243D3C1FC053E96B2AAF19C161EDF05AD4758FD6489479` |
+
+## Not run / remaining
+
+The launcher requires at least `2560 MiB` free Windows RAM for Gazebo and `3328 MiB` to add RViz (also at least `1536 MiB` free in WSL). Latest Windows free memory was `709 MiB`. The helper will block the launch at this level. No app was closed, no process was force-killed, and no restart was triggered.
+
+After Windows memory is freed, the remaining work is to run and visually verify each requested demonstration, observe the safety/sensor displays and shutdown behavior, and capture the requested video or screenshots if the project task still calls for them. Live Phase 6 GUI navigation, RGB/LiDAR GUI behavior, movement, LiDAR Nav2 goal navigation, repeated-launch cleanup, and parking remain unverified. Historical headless Phase 6 evidence is not evidence of these GUI runs.
