@@ -1,5 +1,5 @@
 version: 2
-status: "Phase 1 REFERENCE Nav2 goal PASS; Phase 2 differential-drive PASS WITH LIMITS; Phase 3 sensor interfaces PASS WITH LIMITS; Phase 4 known-start localization PASS WITH LIMITS; Phase 5 scenario harness PASS WITH LIMITS; Phase 6 ORACLE_REFERENCE navigation PASS WITH LIMITS; Phase 7 RGB-only perception PASS WITH LIMITS; Phase 8 REALISTIC_RGB_ONLY stop-only baseline PASS WITH LIMITS; Phase 8 motion gate BLOCKED."
+status: "Phase 1 REFERENCE Nav2 goal PASS; Phase 2 differential-drive PASS WITH LIMITS; Phase 3 sensor interfaces PASS WITH LIMITS; Phase 4 known-start localization PASS WITH LIMITS; Phase 5 scenario harness PASS WITH LIMITS; Phase 6 ORACLE_REFERENCE navigation PASS WITH LIMITS; Phase 7 RGB-only perception PASS WITH LIMITS; Phase 8 REALISTIC_RGB_ONLY stop-only baseline PASS WITH LIMITS; Phase 8 RGB-only motion gate BLOCKED; Phase 8C Branch 1 RGB + 2D LiDAR PASS WITH LIMITS; Phase 8C Stage D BLOCKED / NOT RUN."
 registry:
   - id: T00
     phase: 1
@@ -209,3 +209,59 @@ registry:
     evidence:
       - docs/evidence/phase6/runs/phase8-final-reference-s00-20261102/result.json
       - docs/evidence/phase6/runs/phase8-final-reference-s00-20261102/launch.log
+
+  - id: T17
+    phase: "8C"
+    name: realistic_rgb_lidar_sensor_scan_map_and_fusion
+    scenario_id: S00
+    status: PASS_WITH_LIMITS
+    result: "360-beam scan measured 4.94 Hz with 358/360 usable beams; single-scan map preserved FREE/OCCUPIED/UNKNOWN. RGB added no fused cells in clear S00 and fabricated no metric occupied cells."
+    evidence:
+      - docs/evidence/phase8c/lidar/final-post-motion-live.json
+      - docs/evidence/phase8c/lidar/final-lidar-mapper-graph-audit.log
+      - docs/evidence/phase8c/lidar/final-fuser-graph-audit.log
+      - docs/evidence/phase8c/lidar/final-rgb-perception-graph-audit.log
+      - docs/evidence/phase8c/lidar/final-cmd-vel-publisher-audit.log
+      - tests/phase8c_live_probe.py
+  - id: T18
+    phase: "8C"
+    name: realistic_rgb_lidar_stationary_faults_and_clearance_gate
+    scenario_id: S00
+    status: PASS
+    result: "Invalid scan, scan/RGB/localization process loss, and 0.50 m clearance each failed closed with zero authoritative output; inputs recovered."
+    evidence:
+      - docs/evidence/phase8c/lidar/final-stage-b-invalid-scan-retry.json
+      - docs/evidence/phase8c/lidar/final-stage-b-scan-process-loss.json
+      - docs/evidence/phase8c/lidar/final-stage-b-rgb-process-loss.json
+      - docs/evidence/phase8c/lidar/final-stage-b-localization-loss.json
+      - docs/evidence/phase8c/lidar/final-stage-b-clearance-probe.json
+      - tests/phase8c_invalid_scan_test.py
+      - tests/phase8c_stationary_loss_test.py
+  - id: T19
+    phase: "8C"
+    name: realistic_rgb_lidar_bounded_motion_and_fault_stops
+    scenario_id: S00
+    status: PASS_WITH_LIMITS
+    result: "The 0.05 m/s watchdog trial moved 0.212 m and settled; LiDAR, RGB-perception and localization loss trials stopped within limits. Angular authority remained zero; no avoidance or goal navigation ran."
+    evidence:
+      - docs/evidence/phase8c/lidar/final-stage-c-command-timeout.json
+      - docs/evidence/phase8c/lidar/final-stage-c-lidar-loss-motion.json
+      - docs/evidence/phase8c/lidar/final-stage-c-rgb-loss-motion.json
+      - docs/evidence/phase8c/lidar/final-stage-c-localization-loss-motion.json
+      - tests/phase8c_motion_trial.py
+  - id: T20
+    phase: "8C"
+    name: earlier_phase_regressions_and_profile_isolation
+    scenario_id: S00
+    status: PASS_WITH_LIMITS
+    result: "Phase 3 sensor smoke 20/20; Phase 4 normal localization retry passed with stated return-error limits after one initial threshold failure; Phase 5/6/7/8 static checks 47/47, 19/19, 13/13, 7/7; fresh Phase 8 live check 125/125 zero commands; one Phase 8B low-friction stop was 0.002976 m. Full Nav2 and 24-trial sweep not repeated."
+    evidence:
+      - docs/evidence/phase8c/lidar/final-phase3-regression-console.log
+      - docs/evidence/phase8c/lidar/final-phase4-regression-retry-console.log
+      - docs/evidence/phase8c/lidar/final-regression-phase5-static.log
+      - docs/evidence/phase8c/lidar/final-regression-phase6-static.log
+      - docs/evidence/phase8c/lidar/final-regression-phase7-static.log
+      - docs/evidence/phase8c/lidar/final-regression-phase8-static.log
+      - docs/evidence/phase8c/lidar/final-phase8-live-regression-console.log
+      - docs/evidence/phase8c/lidar/final-phase8b-stop-regression-console.log
+      - docs/evidence/phase8b/stopping-distance/phase8c-lidar-regression-one-stop/stopping-distance-results.json

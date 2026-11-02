@@ -1,4 +1,4 @@
-# Open issues after Phase 8B feasibility assessment
+# Open issues after Phase 8C Branch 1 assessment
 
 ## Resolved through Phase 3
 
@@ -42,6 +42,14 @@
 - Calculated a 0.656429 m forward-corridor requirement including measured camera age/latency, stop distance, Phase 4 slip-derived localization allowance, and explicit safety margin. The 0.48 m best corridor fails the gate; Phase 8 remains locked to zero velocity.
 - Final seven-package build and Phase 6/7/8 regression evidence passed. No autonomous movement or Phase 9 work was performed.
 
+## Resolved through Phase 8C Branch 1
+
+- Added an opt-in planar LiDAR/ROS bridge, scan validation/fault handling, one-scan FREE/OCCUPIED/UNKNOWN map, conservative optional RGB fusion, and separate REALISTIC_RGB_LIDAR profile.
+- Added a measured forward-only gate and sole authoritative command guard. Invalid/stale scan, map, localization, RGB perception and command inputs fail closed; bounded S00 motion and fault stops passed.
+- Phase 8 remains stop-only and shared launch keeps LiDAR disabled by default in older profiles.
+- Fresh Phase 3/4 regressions and Phase 5/6/7/8 static tests, Phase 8 live stop-only check, and one Phase 8B brake repeat are indexed in docs/evidence/phase8c/lidar/README.md.
+- SLAM did not demonstrate drift reduction; Nav2 was not enabled. Stage D remains untested.
+
 ## P0 before hardware-faithful claims or transfer
 
 - Measure chassis footprint, height, mass, wheel radius, wheel separation, and center of mass. Current simulation values are placeholders.
@@ -67,4 +75,4 @@
 - Define parking tolerance and dwell using measured footprint, then test stationary pose error.
 - Plan UNO Q adapters only after simulation interfaces and regression checks are stable.
 
-Phase 4 localization, Phase 5 scenario validation, Phase 6 selected reference navigation, Phase 7 RGB-only perception, and the Phase 8B feasibility assessment are complete with stated limits. Phase 8 remains a stop-only baseline. RGB-only movement, unknown-pose acquisition, parking, and hardware transfer remain unimplemented; the gate is blocked by insufficient connected corridor, poor occupied recall, and slip-derived localization uncertainty.
+Earlier phases remain complete only within their stated limits. Phase 8 remains an independent RGB-only stop-only baseline. Phase 8C Branch 1 permits bounded forward motion in clear S00, but angular motion, obstacle avoidance and goal navigation remain blocked or unrun. Drift correction, low-obstacle coverage, broader scenarios, unknown-pose acquisition, parking and hardware transfer remain unresolved.

@@ -2,8 +2,8 @@
 
 Date: 2026-11-02 (Asia/Calcutta)
 Project: /home/ashish/AutonomousNavigationCar on Ubuntu-24.04 at E:/WSL/Ubuntu-24.04
-Branch: main
-Scope: Phase 0 baseline through Phase 8 REALISTIC_RGB_ONLY stop-only baseline.
+Branch: feature/phase8c-lidar (based on main commit 61c59790ad36194c86e5db86f5a56be170dd6e42)
+Scope: Phase 0 through Phase 8C Branch 1 (RGB + 2D LiDAR), with earlier phase limits preserved.
 
 ## Outcome
 
@@ -15,6 +15,8 @@ Scope: Phase 0 baseline through Phase 8 REALISTIC_RGB_ONLY stop-only baseline.
 - Phase 4 odometry, state estimation, and known-start localization: PASS WITH LIMITS. The wheel/gyro EKF reduced motion RMSE and wall-stall x error in the accepted run, but did not correct wheel slip and was worse than raw odometry at the non-closing rectangle endpoint.
 - Phase 5 reproducible simulation worlds and scenario harness: PASS WITH LIMITS. Six bounded worlds, deterministic seeded layouts, geometry route/no-route checks, four headless runs, known-start TF, sensor streams, evaluator-only truth, and clean shutdown were verified. No navigation or perception was attempted.
 - Phase 6 REFERENCE Nav2 navigation: PASS WITH LIMITS. The selected S00/S01/S02/S03/S04/S09 trials passed using a per-run geometry-derived oracle map, known-start EKF TF, headless Gazebo, collision/clearance/truth evaluation, rosbag evidence, and bounded teardown. This is not RGB or unknown-map navigation.
+
+- Phase 8C Branch 1 RGB + 2D LiDAR: PASS WITH LIMITS for sensors, local mapping, the forward gate and bounded straight/fault-stop tests. Angular motion remains disabled. Stage D avoidance/goal navigation are BLOCKED / NOT RUN. SLAM/Nav2 default off; drift improvement was not demonstrated.
 
 ## Scope and integrity
 
@@ -460,3 +462,50 @@ The conservative gate calculation is:
 The full-footprint width requirement is 0.345 m, including 0.02 m lateral clearance on either side. The 0.470505 m allowance comes from the Phase 4 low-friction endpoint error with no evaluator chassis displacement; it replaces the Phase 8 EKF's zero covariance as the conservative allowance. Since the best corridor is only 0.48 m and C2 missed every known occupied pixel, the motion gate stays BLOCKED. No motion controller, autonomous driving scenario, or RGB Nav2 run was enabled. The existing stop-only lock remains intact.
 
 The seven-package ROS build and Phase 6/7/8 regression checks passed. Candidate, per-view, stopping-distance, and resource evidence is indexed in [docs/evidence/phase8b/README.md](evidence/phase8b/README.md). Full details: [docs/evidence/phase8b/phase8b-report.md](evidence/phase8b/phase8b-report.md).
+
+
+## Phase 8C Branch 1: RGB + 2D LiDAR
+
+### Assessment
+
+| Milestone | Assessment | Evidence |
+|---|---|---|
+| Sensor integration | PASS WITH LIMITS | 360-beam lidar_link scan at 4.94 Hz; 358/360 beams usable (99.44%). RGB/CameraInfo, IMU, filtered odometry and TF were present. |
+| Local map and fusion | PASS WITH LIMITS | Single-scan 180×180, 0.10 m map: 4,206 FREE, 267 OCCUPIED, 27,927 UNKNOWN. RGB yielded 617 FREE, 5,008 UNKNOWN, no metric OCCUPIED; fused S00 grid equaled LiDAR-only. |
+| Safety gate | PASS WITH LIMITS | S00 corridor 3.20 m; 0.656429 m required at 0.18 m/s. A 0.50 m obstacle clearance stayed stopped; 0.582701 m is required at 0.02 m/s. |
+| Actual movement | PASS WITH LIMITS | Bounded straight requests at 0.05 m/s; watchdog trial moved 0.212 m, then settled. Fault trials settled after 0.047–0.057 m total travel with post-zero movement 0–0.000082 m. |
+| Avoidance / goal navigation | BLOCKED / NOT RUN | Angular limit is 0 rad/s. No obstacle-course avoidance or Nav2 goal success is claimed. |
+
+### Implementation and runtime boundary
+
+anc_lidar adds REALISTIC_RGB_LIDAR: parameterized Gazebo planar scanner and bridge, scan conditioner, single-scan ray-traced map, footprint inflation, optional conservative RGB fusion, measured speed gate, and command guard. Provisional config uses 360 samples over ±π, 0.12–6.0 m, 5 Hz, 0.01 m distance-noise sigma, and configurable missed/invalid readings. This generic sensor is not a hardware specification. Its scan plane is 0.16 m above ground and cannot guarantee detection below it or overhead.
+
+Observed Gazebo unobstructed rays arrived as +Inf; the conditioner maps that observed representation to a finite max-range no-return. NaN, negative infinity and invalid/out-of-range samples remain UNKNOWN. Valid return endpoints are OCCUPIED; only measured space before them is FREE; behind hits and unobserved space remains UNKNOWN. The map is a fresh single-scan snapshot. RGB cannot erase LiDAR OCCUPIED cells or fabricate metric obstacle locations.
+
+Graph audits confirmed runtime nodes did not consume the Phase 6 reference map or Gazebo truth. Truth was queried only by evaluators, never published to runtime. anc_safety_command_guard was the sole /cmd_vel publisher; requests were isolated on /cmd_vel_nav. Shared launch keeps LiDAR disabled by default. Phase 8 remains a separate unconditional-zero profile.
+
+### Safety and controlled trials
+
+The gate uses scan validity, age/rate, paired map health, filtered-localization freshness/covariance, processing/supervisor delay, Phase 8B stopping data, Phase 4 slip allowance, full-footprint clearance and margin. The clearance probe yielded 0.50 m and was denied motion (0.582701 m required at 0.02 m/s). Invalid scan, paused scan conditioner, stale localization, paused RGB perception and stale command tests produced zero authoritative output; recovery followed restored inputs.
+
+Moving fault trials at 0.05 m/s request speed:
+- LiDAR loss: 0.046981 m total displacement, 0.000082 m after zero.
+- RGB-perception loss: 0.056990 m total, 0 m after zero.
+- Localization loss: 0.049390 m total, 0 m after zero.
+- Command timeout: 0.212 m total forward displacement, 0 m after zero.
+
+Each trial settled within the 0.50 m displacement and 0.10298 m stopping limits. The gate’s clear-corridor cap was 0.18 m/s; no yaw command was permitted. One Phase 8B low-friction sample measured 0.002976 m at 0.1588 m/s observed speed (target 0.18, μ=0.5). This is a simulator sample, not a hardware stopping bound.
+
+### Resource and localization limits
+
+WSL has about 3.5 GiB RAM. The LiDAR profile reduces camera rate to 5 Hz. Under the combined profile Gazebo used about 106% CPU and an EKF update-rate warning occurred; other ROS processes also used substantial CPU. Optional SLAM generated /map and stationary map→odom but had a full scan queue and EKF timing warnings. No drift improvement was established, so SLAM/Nav2 remain off.
+
+A fresh Phase 4 normal replay had one initial wall-stationarity assertion failure at 0.01255 m/s; a retry passed. Retry filtered motion RMSE was 0.0568 m vs 0.1731 m raw, but filtered return-to-start error (0.1014 m, 0.533 rad) was worse than raw (0.0145 m, 0.014 rad). This wheel/gyro regression does not show LiDAR scan-matching drift correction.
+
+### Regression record
+
+The final build completed eight ROS packages. Phase 8C tests passed common 8/8, scan/map 13/13, CameraInfo pairing 3/3. Fresh Phase 3 sensor smoke passed 20/20 (RGB/CameraInfo 15.07 Hz, IMU 99.69 Hz, odometry 29.41 Hz, TF/contact passed). Phase 4 normal retry passed with the stated return-error limits. Static regressions passed Phase 5 47/47, Phase 6 profile 19/19, Phase 7 13/13, Phase 8 projection 7/7. Fresh Phase 8 S00 stop-only regression had 125/125 zero /cmd_vel samples, sole Phase 8 publisher, no Nav2 and no displacement. Phase 8B one-sample repeat passed at 0.002976 m. Existing full Phase 6 Nav2 trials and Phase 8B 24-run sweep were retained but not repeated on this low-memory branch. See docs/evidence/phase8c/lidar/README.md.
+
+### Remaining work
+
+The 2D plane misses low obstacles and overhead structure; reflectivity, dynamic obstacles and varied surfaces were not evaluated. RGB added no cells on the tested corridor and supplies no metric obstacle range. Wheel/gyro return error remains significant, and scan matching has not been shown to improve it. No obstacle course, goal reaching, parking, hardware integration or UNO Q change is included. Stage D remains blocked pending yaw stopping, turning clearance, localization/map quality and resource validation.

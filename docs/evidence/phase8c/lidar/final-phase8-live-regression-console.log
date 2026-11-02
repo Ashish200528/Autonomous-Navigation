@@ -1,0 +1,54 @@
+{
+  "actual_cmd_vel": {
+    "nonzero_samples": 0,
+    "publisher_nodes": [
+      "/anc_realistic_safe_stop_supervisor"
+    ],
+    "samples": 125,
+    "zero_samples": 125
+  },
+  "checks": {
+    "camera_health_valid": true,
+    "controller_timeout_keeps_output_zero": true,
+    "evaluator_truth_displacement_le_0_02m": true,
+    "every_actual_cmd_vel_sample_zero": true,
+    "no_known_start_map_to_odom_transform": true,
+    "occupancy_grid_never_marks_obstacles": true,
+    "perception_state_reports_forward_unknown_block": true,
+    "perception_subscribes_only_camera_and_clock": true,
+    "requested_nonzero_command_seen": true,
+    "runtime_graph_has_no_nav2_nodes": true,
+    "single_cmd_vel_publisher_is_phase8_supervisor": true,
+    "some_geometrically_projected_free_cells": true,
+    "supervisor_reports_motion_lock": true,
+    "supervisor_subscriptions_are_isolated": true
+  },
+  "contact_telemetry": {
+    "collision_pair_examples": [
+      {
+        "collision1": "anc_robot::base_footprint::base_footprint_fixed_joint_lump__caster_collision_collision_1",
+        "collision2": "ground_plane::ground::ground_collision",
+        "max_depth_m": 3.3398792902518404e-05
+      }
+    ],
+    "ground_or_surface_events": 2364,
+    "messages": 2364,
+    "non_ground_contact_events": 0
+  },
+  "error": null,
+  "evaluator_displacement_m": 7.15874e-20,
+  "grid_counts": {
+    "free": 617,
+    "occupied": 0,
+    "unknown": 5008
+  },
+  "input_failures": [],
+  "launch_shutdown": {
+    "return_code": 0,
+    "signal": "SIGINT"
+  },
+  "run_id": "phase8c-branch1-stop-only-regression",
+  "scenario": "S00",
+  "seed": 101,
+  "status": "PASS"
+}

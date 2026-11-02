@@ -181,6 +181,29 @@ Phase 8B compared five provisional camera geometries and projection bands while 
 
 An isolated empty-world test measured 24 moving stops at four speeds and two simulated friction settings. At 0.18 m/s and mu=0.5 the maximum recorded stop distance was 0.00298 m. This simulation result does not bound hardware stopping distance. The gate remains BLOCKED; the Phase 8 supervisor still publishes zero commands, and no RGB navigation or Phase 9 work was started.
 
+## Phase 8C Branch 1: RGB + 2D LiDAR
+
+The feature/phase8c-lidar branch adds a parameterized planar Gazebo LiDAR, ROS 2 scan conditioner, single-scan robot-relative occupancy map, optional conservative RGB FREE-only fusion, measured forward-speed gate, and one /cmd_vel guard. LiDAR is opt-in in the shared simulator launch (lidar_enabled:=false by default); REALISTIC_RGB_LIDAR is separate. Phase 8's RGB-only supervisor remains stop-only.
+
+Provisional scanner settings are 360 samples over 360 degrees, 0.12–6.0 m, 5 Hz, 0.01 m Gaussian distance noise, and bounded missed/invalid readings; these are simulation assumptions. In live S00, scan rate was 4.94 Hz and 358/360 beams were usable (99.44%). The 180×180 LiDAR map at 0.10 m had 4,206 FREE, 267 OCCUPIED, and 27,927 UNKNOWN cells. The RGB snapshot had 617 FREE, 5,008 UNKNOWN, and no metric OCCUPIED cells; fused counts matched LiDAR-only, so RGB added no cells in this clear corridor.
+
+The gate observed 3.20 m of forward full-footprint corridor against 0.656429 m required at 0.18 m/s. Bounded forward trials were allowed; angular authority remains 0 rad/s because yaw stopping and turning clearance are unmeasured. The watchdog trial moved 0.212 m; sensor/localization loss trials stopped within saved limits. A 0.50 m clearance probe correctly remained stopped below the 0.583 m requirement at 0.02 m/s.
+
+Stage D obstacle avoidance and goal navigation were not run. SLAM and Nav2 default off: the SLAM experiment generated a map and stationary map→odom but showed scan-queue and EKF update-rate warnings, without a measured drift improvement. The scan plane is about 0.16 m above ground and is not 3D sensing; low obstacles and overhangs remain blind spots. See [Phase 8C report](docs/PHASE_REPORT.md), [architecture](docs/phase8c-architecture.md), and [evidence](docs/evidence/phase8c/lidar/README.md).
+
+Build and launch:
+
+~~~bash
+cd /home/ashish/AutonomousNavigationCar
+source scripts/source_ros_jazzy.sh
+cd simulation/ros2_ws
+colcon build --symlink-install --packages-up-to anc_lidar --parallel-workers 2
+source install/setup.bash
+ros2 launch anc_lidar realistic_rgb_lidar.launch.py world_file:=/home/ashish/AutonomousNavigationCar/simulation/scenarios/worlds/s00_empty_open_arena.sdf enable_slam:=false enable_nav2:=false
+~~~
+
+The eight-package build and 24 Phase 8C unit checks passed. Full evidence and limits are indexed in docs/evidence/phase8c/lidar/README.md.
+
 ## Current status
 
 - Phase 0 baseline: complete and tagged v0.1-phase0.
@@ -192,4 +215,5 @@ An isolated empty-world test measured 24 moving stops at four speeds and two sim
 - Phase 6 selected ORACLE_REFERENCE Nav2 scenarios S00-S04 and S09: PASS WITH LIMITS; see docs/PHASE_REPORT.md and docs/evidence/phase6/README.md.
 - Phase 7 RGB-only FREE/OCCUPIED/UNKNOWN perception: PASS WITH LIMITS; see docs/PHASE_REPORT.md and docs/phase7-perception-architecture.md.
 - Phase 8 local RGB map and zero-command safe-stop baseline: PASS WITH LIMITS. Autonomous motion and goal-reaching are BLOCKED by the feasibility gate; see docs/phase8-feasibility.md.
-- Phase 8B camera sweep and simulated stopping-distance assessment: COMPLETE WITH LIMITS; motion gate remains BLOCKED. See docs/evidence/phase8b/phase8b-report.md.
+- Phase 8B camera sweep and simulated stopping-distance assessment: COMPLETE WITH LIMITS; the RGB-only motion gate remains BLOCKED. See docs/evidence/phase8b/phase8b-report.md.
+- Phase 8C Branch 1 RGB + 2D LiDAR sensing, local mapping, safety gate and bounded forward tests: PASS WITH LIMITS. Angular motion remains locked; obstacle avoidance and goal navigation were not demonstrated. See docs/evidence/phase8c/lidar/README.md.

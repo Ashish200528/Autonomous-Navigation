@@ -1,5 +1,6 @@
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription, TimerAction
+from launch.conditions import IfCondition
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import Command, FindExecutable, LaunchConfiguration, PathJoinSubstitution
 from launch_ros.actions import Node
@@ -45,8 +46,10 @@ def generate_launch_description():
                 FindExecutable(name="xacro"), " ", robot_xacro,
                 " wheel_surface_mu:=", LaunchConfiguration("wheel_surface_mu"),
                 " camera_enabled:=", LaunchConfiguration("camera_enabled"),
+                " lidar_enabled:=", LaunchConfiguration("lidar_enabled"),
                 " camera_mount_z_m:=", LaunchConfiguration("camera_mount_z_m"),
                 " camera_pitch_down_rad:=", LaunchConfiguration("camera_pitch_down_rad"),
+                " camera_update_rate_hz:=", LaunchConfiguration("camera_update_rate_hz"),
             ]),
             "use_sim_time": True,
         }],
@@ -57,6 +60,15 @@ def generate_launch_description():
         name="anc_parameter_bridge",
         output="screen",
         parameters=[{"config_file": bridge_config}],
+    )
+    lidar_bridge = Node(
+        package="ros_gz_bridge",
+        executable="parameter_bridge",
+        name="anc_lidar_parameter_bridge",
+        output="screen",
+        arguments=["/realistic/scan/raw@sensor_msgs/msg/LaserScan[gz.msgs.LaserScan"],
+        parameters=[{"override_frame_id": "lidar_link"}],
+        condition=IfCondition(LaunchConfiguration("lidar_enabled")),
     )
     imu_sanitizer = Node(
         package="anc_bringup",
@@ -97,12 +109,20 @@ def generate_launch_description():
             description="Enable RGB camera sensor; Phase 6 reference navigation disables it to reduce headless rendering load.",
         ),
         DeclareLaunchArgument(
+            "lidar_enabled", default_value="false",
+            description="Enable the parameterized planar LiDAR and its ROS bridge only in the LiDAR profile.",
+        ),
+        DeclareLaunchArgument(
             "camera_mount_z_m", default_value="0.10",
             description="Provisional camera mount Z relative to base_link, meters.",
         ),
         DeclareLaunchArgument(
             "camera_pitch_down_rad", default_value="0.0",
             description="Positive provisional downward camera pitch in radians.",
+        ),
+        DeclareLaunchArgument(
+            "camera_update_rate_hz", default_value="15.0",
+            description="Camera update rate in Hz; default preserves existing profiles.",
         ),
         DeclareLaunchArgument(
             "world_file", default_value=default_world,
@@ -119,6 +139,7 @@ def generate_launch_description():
         gazebo,
         state_publisher,
         bridge,
+        lidar_bridge,
         imu_sanitizer,
         localization,
         TimerAction(period=4.0, actions=[spawn]),

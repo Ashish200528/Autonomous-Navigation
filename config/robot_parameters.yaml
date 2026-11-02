@@ -69,6 +69,23 @@ sensors:
     linear_acceleration_bias_mean_mps2: 0.0
     linear_acceleration_bias_stddev_mps2: 0.0
     covariance_policy: ROS covariance diagonals reflect provisional SDF noise variances; they are not physically calibrated.
+  lidar:
+    status: provisional_simulation_parameters_not_hardware_measured
+    model_assumption: generic low-cost 360-degree planar scanner; not a purchased or selected hardware model
+    mount_xyz_m: [0.0, 0.0, 0.08]
+    mount_rpy_rad: [0.0, 0.0, 0.0]
+    frame_id: lidar_link
+    horizontal_samples: 360
+    scan_angle_min_rad: -3.141592653589793
+    scan_angle_max_rad: 3.141592653589793
+    update_rate_hz: 5.0
+    range_min_m: 0.12
+    range_max_m: 6.0
+    distance_noise_stddev_m: 0.01
+    missed_reading_probability: 0.005
+    invalid_reading_probability: 0.002
+    plane_height_above_ground_m: 0.16
+    scan_plane_limit: A single horizontal plane; low objects below the plane and overhead geometry are not guaranteed to be detected
 localization:
   status: provisional_known_start_not_hardware_measured
   known_start_map_pose_xyyaw: [0.0, 0.0, 0.0]

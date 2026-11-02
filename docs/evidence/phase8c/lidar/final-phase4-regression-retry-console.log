@@ -1,0 +1,203 @@
+{
+  "status": "PASS_WITH_LIMITS",
+  "mode": "normal",
+  "summary": "/home/ashish/AutonomousNavigationCar/docs/evidence/phase8c-branch1-regression-normal-retry.json",
+  "telemetry": "/home/ashish/AutonomousNavigationCar/docs/evidence/phase8c-branch1-regression-normal-retry.csv",
+  "plot": "/home/ashish/AutonomousNavigationCar/docs/evidence/phase8c-branch1-regression-normal-retry.png",
+  "rates_hz": {
+    "raw_odom": 29.411764705882355,
+    "wheel_odometry": 29.411764705882355,
+    "filtered": 29.981839770901725,
+    "imu": 97.27209944751381
+  },
+  "checks": [
+    {
+      "name": "raw, covariance-qualified wheel, filtered odometry and IMU received",
+      "status": "PASS",
+      "detail": {
+        "raw": 1705,
+        "wheel": 1705,
+        "filtered": 1718,
+        "imu": 5635
+      }
+    },
+    {
+      "name": "raw and wheel streams share exact stamps for >=98% of the smaller stream",
+      "status": "PASS",
+      "detail": {
+        "matched": 1705,
+        "raw_samples": 1705,
+        "wheel_samples": 1705,
+        "raw_unmatched_samples": 0,
+        "wheel_unmatched_samples": 0,
+        "shared_coverage_of_smaller_stream": 1.0
+      }
+    },
+    {
+      "name": "wheel velocity covariance is nonzero and pose is excluded",
+      "status": "PASS",
+      "detail": {
+        "vx_variance": 0.0004,
+        "vy_variance": 0.01,
+        "pose_x_variance": 1000000.0
+      }
+    },
+    {
+      "name": "sanitized IMU orientation stays unavailable",
+      "status": "PASS",
+      "detail": {
+        "orientation_covariance_0": -1.0
+      }
+    },
+    {
+      "name": "IMU dropout stops data, EKF continues, and input recovers",
+      "status": "PASS",
+      "detail": {
+        "imu_during_dropout": 0,
+        "filtered_during_dropout": 46,
+        "imu_recovered": true
+      }
+    },
+    {
+      "name": "simulation clock and sensor stamps are monotonic",
+      "status": "PASS",
+      "detail": {
+        "clock": true,
+        "topics": {
+          "raw": true,
+          "wheel": true,
+          "filtered": true,
+          "imu": true
+        }
+      }
+    },
+    {
+      "name": "EKF output rate is stable",
+      "status": "PASS",
+      "detail": {
+        "filtered_rate_hz": 29.981839770901725,
+        "target_hz": 30.0
+      }
+    },
+    {
+      "name": "filtered odometry is fresh against /clock",
+      "status": "PASS",
+      "detail": {
+        "latest_clock_s": 76.756,
+        "latest_filtered_s": 76.73,
+        "age_s": 0.02599999999999625
+      }
+    },
+    {
+      "name": "filtered covariance remains finite and nonnegative",
+      "status": "PASS",
+      "detail": {
+        "samples_checked": 1718
+      }
+    },
+    {
+      "name": "known-start TF chain has required edges and no parent conflicts",
+      "status": "PASS",
+      "detail": {
+        "map_to_odom_identity": true,
+        "odom_to_base_footprint_edge_present": true,
+        "tf_topic_publisher_nodes": [
+          "anc_ekf_filter",
+          "robot_state_publisher"
+        ],
+        "per_edge_publisher_gid_available": false,
+        "static_edges_missing": [],
+        "frame_parent_conflicts": {}
+      }
+    },
+    {
+      "name": "filtered pose has no one-sample jumps",
+      "status": "PASS",
+      "detail": {
+        "jump_count": 0,
+        "examples": [],
+        "limits": {
+          "position_m": 0.1,
+          "yaw_rad": 0.3
+        }
+      }
+    },
+    {
+      "name": "straight, in-place rotation, rectangle, and return are recorded",
+      "status": "PASS",
+      "detail": {
+        "straight_end_truth": {
+          "topic": "truth",
+          "scenario": "normal",
+          "phase": "straight_out",
+          "sim_time_s": 29.154,
+          "x": 0.298394,
+          "y": -7.28726e-17,
+          "z": -3.15628e-08,
+          "yaw": -1.8688099999999997e-15,
+          "vx": 0.00199958,
+          "vy": -9.95844e-19,
+          "wz": 2.12402e-17,
+          "frame_id": "world"
+        },
+        "rotation_end_truth": {
+          "topic": "truth",
+          "scenario": "normal",
+          "phase": "rotation_ccw",
+          "sim_time_s": 36.006,
+          "x": -0.035421,
+          "y": 0.0396108,
+          "z": -3.15007e-08,
+          "yaw": 1.4299300000000001,
+          "vx": -0.00309184,
+          "vy": -0.00143499,
+          "wz": 0.0537535,
+          "frame_id": "world"
+        },
+        "return_to_start": {
+          "truth_xy_error_m": 0.0879188336905936,
+          "truth_yaw_error_rad": 0.5325990000000002,
+          "raw_xy_error_m": 0.014547484236887781,
+          "raw_yaw_error_rad": 0.014185319315020343,
+          "filtered_xy_error_m": 0.10141685129063023,
+          "filtered_yaw_error_rad": 0.5326370994303158
+        }
+      }
+    },
+    {
+      "name": "wall stall is stationary and the EKF reduces raw wheel drift",
+      "status": "PASS",
+      "detail": {
+        "evaluator_x_m": 0.751278,
+        "evaluator_y_m": -0.539763,
+        "evaluator_yaw_rad": -0.5304070000000002,
+        "raw_odom_x_m": 1.1809337024438618,
+        "filtered_x_m": 0.972949958504267,
+        "raw_minus_truth_m": 0.42965570244386175,
+        "filtered_minus_truth_m": 0.22167195850426702,
+        "evaluator_linear_speed_mps": -5.49278e-07
+      }
+    }
+  ],
+  "motion_raw_xy_rmse_m": 0.17308242315949557,
+  "motion_filtered_xy_rmse_m": 0.05679749991668059,
+  "return_to_start": {
+    "truth_xy_error_m": 0.0879188336905936,
+    "truth_yaw_error_rad": 0.5325990000000002,
+    "raw_xy_error_m": 0.014547484236887781,
+    "raw_yaw_error_rad": 0.014185319315020343,
+    "filtered_xy_error_m": 0.10141685129063023,
+    "filtered_yaw_error_rad": 0.5326370994303158
+  },
+  "wall_stall": {
+    "evaluator_x_m": 0.751278,
+    "evaluator_y_m": -0.539763,
+    "evaluator_yaw_rad": -0.5304070000000002,
+    "raw_odom_x_m": 1.1809337024438618,
+    "filtered_x_m": 0.972949958504267,
+    "raw_minus_truth_m": 0.42965570244386175,
+    "filtered_minus_truth_m": 0.22167195850426702,
+    "evaluator_linear_speed_mps": -5.49278e-07
+  },
+  "wheel_slip": null
+}
