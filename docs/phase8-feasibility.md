@@ -78,10 +78,23 @@ Per-run JSON, CSV, and launch logs are under `docs/evidence/phase8/runs/`. Aggre
 
 ## Limits and remaining work
 
-- No locally validated movement or goal-reaching was demonstrated; these remain blocked by the disconnected FREE patch and unmeasured stopping distance.
+- No locally validated movement or goal-reaching was demonstrated. The original Phase 8 baseline had a disconnected FREE patch and no measured stopping distance; Phase 8B later measured simulated stops, but the updated gate still fails.
 - No sudden camera dropout while the robot was moving was tested, because the controller never enabled motion. Camera-absent startup and perception stale-to-fresh recovery were tested.
-- No emergency-braking distance is claimed. Ground-contact reports are not interpreted as obstacle collisions.
+- The Phase 8 baseline had no emergency-braking measurement. Phase 8B measured simulator stopping distance under tested conditions only; it is not a hardware or all-surface bound. Ground-contact reports are not interpreted as obstacle collisions.
 - The grid's camera pose, robot footprint, floor plane, lighting, and pinhole calibration remain simulated assumptions, not measured hardware values.
 - Phase 8 does not modify the Arduino UNO Q application, transfer commands to hardware, implement parking, or start a later phase.
 
 The correct current behavior is STOP/BLOCKED when evidence does not establish a continuous safe corridor.
+
+
+## Phase 8B update — measured simulation stops and camera candidate sweep
+
+The opening table records the Phase 8 baseline before stopping distance had been measured. Phase 8B measured simulated stopping distance in an isolated empty-world test; it does not promote that result to a hardware or all-surface bound.
+
+The best candidate (C2: camera height 0.24 m, 0.80 rad down pitch, 0.10-0.90 m projection band) had 0.48 m maximum connected full-footprint corridor across 12 projected views; 10/12 views connected and both wheel tracks were connected in those same 10 views. The two remaining views had no corridor. Candidate C2 recorded 0% OCCUPIED recall over 3,390 evaluator-known occupied pixels. C0 and C1 produced no connected corridor. C3/C4 were single S00 live checks and also produced no connected corridor.
+
+The isolated stop test used three repeats at 0.02/0.05/0.10/0.18 m/s under simulated mu=1.2 and mu=0.5. All 24 moving trials settled. The maximum measured stop distance was 0.00298 m at 0.18 m/s, mu=0.5. Pose-derived rates were used because entity-state twist remained stale at low speed. The test does not establish a hardware stopping bound.
+
+The updated gate uses the C2 maximum camera age (0.174 s), maximum perception latency (0.2368 s), 0.050 s supervisor period, 0.00298 m measured stop, 0.470505 m Phase 4 slip-derived localization allowance, a 0.10 m explicit safety margin, and full-footprint width of 0.345 m. Forward distance is measured from the robot's front footprint boundary, so no second longitudinal footprint addition is needed. Required connected forward corridor is **0.656429 m**; best observed is **0.480 m**, a **0.176429 m shortfall**. The C2 image result also had zero occupied recall, so the gate remains BLOCKED.
+
+The Phase 8 safe-stop lock is unchanged. No navigation controller or autonomous motion test was added. See [Phase 8B report](evidence/phase8b/phase8b-report.md) and [machine-readable gate](evidence/phase8b/motion-gate.json).

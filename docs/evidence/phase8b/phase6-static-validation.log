@@ -1,0 +1,20 @@
+PASS phase6_scenario_registry: registered=['S00', 'S01', 'S02', 'S03', 'S04', 'S09']
+PASS reference_profile_registry: profile=ORACLE_REFERENCE
+PASS phase5_metadata_preserved: active_phase5 status and original sensor_profile values remain intact
+PASS scenario_generator_route_expectations: S01 traversable; S09 no-route
+PASS map_contains_obstacle_geometry: box center occupancy=0
+PASS map_start_goal_are_free: start=254, goal=254
+PASS map_size_and_profile: {'width': 160, 'height': 120, 'resolution_m': 0.05, 'origin_xy_m': [-4.0, -3.0], 'occupied_cells': 1932, 'free_cells': 17268, 'profile': 'ORACLE_REFERENCE'}
+PASS no_route_divider_in_reference_map: divider center occupancy=0
+PASS custom_kinematics_limits_and_frames: controller=nav2_regulated_pure_pursuit_controller::RegulatedPurePursuitController, desired_linear_vel=0.18, base_frame=base_footprint
+PASS dedicated_reference_launch_only: launch uses the custom simulation and explicit map_yaml, with no AMCL
+PASS headless_camera_toggle: Phase 6 disables RGB while the existing simulator default remains enabled
+PASS closed_bag_tf_validation: MCAP edges and live /tf endpoints verify the sole EKF dynamic broadcaster
+PASS bounded_gazebo_pause_on_shutdown: the runner asks Gazebo to pause and bounds the graceful shutdown request
+PASS bounded_post_action_settle: a bounded settle window uses truth pose stability, odometry, and zero command
+PASS idempotent_ros_shutdown_imu_sanitizer: ROS shutdown is guarded after SIGINT
+PASS idempotent_ros_shutdown_wheel_odometry_covariance: ROS shutdown is guarded after SIGINT
+PASS idempotent_ros_shutdown_cmd_vel_guard: ROS shutdown is guarded after SIGINT
+PASS lifecycle_and_domain_gate: evaluator and launch share the private domain; actions wait for active lifecycle nodes
+PASS phase5_stationary_mode_preserved: stationary remains default and navigation delegates to Phase 6 runner
+OVERALL PASS

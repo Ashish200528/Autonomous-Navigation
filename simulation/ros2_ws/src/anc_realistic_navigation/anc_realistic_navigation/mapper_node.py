@@ -63,6 +63,7 @@ class LocalTraversabilityNode(Node):
             "expected_camera_y_in_base_m": 0.0,
             "expected_camera_z_in_base_m": 0.10,
             "expected_camera_height_above_floor_m": 0.18,
+            "expected_camera_pitch_down_rad": 0.0,
             "camera_transform_tolerance_m": 0.02,
             "publish_rate_hz": 10.0,
         }
@@ -250,8 +251,10 @@ class LocalTraversabilityNode(Node):
             raise ValueError("camera_height_disagrees_with_documented_mount")
         quaternion = (q.x, q.y, q.z, q.w)
         optical_forward = quaternion_matrix(quaternion)[:, 2]
-        if not np.allclose(optical_forward, [1.0, 0.0, 0.0], atol=0.02):
-            raise ValueError("camera_orientation_disagrees_with_level_forward_classifier")
+        expected_pitch = float(self.p["expected_camera_pitch_down_rad"])
+        expected_forward = [math.cos(expected_pitch), 0.0, -math.sin(expected_pitch)]
+        if not np.allclose(optical_forward, expected_forward, atol=0.02):
+            raise ValueError("camera_orientation_disagrees_with_classifier_pitch")
         return xyz, quaternion
 
     def publish_snapshot(self):

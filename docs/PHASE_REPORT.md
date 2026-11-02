@@ -436,3 +436,27 @@ Per-run JSON/CSV/log evidence is under docs/evidence/phase8/runs/; aggregate val
 ### Limits and remaining work
 
 No movement, local route traversal, goal-reaching, or moving sensor-loss stop was demonstrated. Emergency braking distance is not measured. Camera geometry, chassis footprint, visual floor model, and estimator uncertainty remain provisional simulation assumptions. Dynamic camera loss during motion, local map recovery under a live stream interruption, and an end-to-end controller/planner are deferred until a continuous safe corridor and full stopping-distance bound can be demonstrated. Phase 8 did not touch the Arduino UNO Q application or start parking or hardware phases.
+
+
+## Phase 8B: RGB camera geometry and stopping-feasibility assessment
+
+**Assessment complete with limits; autonomous motion remains BLOCKED.** Camera z/pitch, ground-projection interval, and floor-seed candidates were evaluated on fixed scenarios. The runner recorded actual camera TF for projection evaluation. C0-C2 completed multi-view sweeps (C1 was repeated to cover both fixed S02 seeds); C3/C4 were exploratory S00 live checks.
+
+C2 (camera height 0.24 m, downward pitch 0.80 rad, 0.10-0.90 m ground interval) produced the longest connected full-footprint corridor: 0.48 m in 10/12 evaluated views; two views had zero corridor. It recorded zero false-FREE pixels, but also 0% occupied recall across 3,390 evaluator-known occupied pixels. The corridor remains short of the 0.656429 m gate requirement. The baseline and moderate-pitch candidates had no connected corridor.
+
+A separate empty-world test completed 24/24 moving trials at 0.02, 0.05, 0.10, and 0.18 m/s, under simulated friction mu=1.2 and 0.5, with three repeats per condition. The largest settled stop distance was 0.00298 m at 0.18 m/s, mu=0.5. It was measured by evaluator-pose finite differences, because the Gazebo entity-state twist was stale at low speed. This measurement is limited to the simulator and tested friction.
+
+The conservative gate calculation is:
+
+```text
+0.18 * (0.174 s camera age + 0.2368 s perception latency + 0.050 s supervisor period)
++ 0.00298 m stop distance
++ 0.470505 m Phase 4 slip-derived localization allowance
++ 0.000 m forward footprint addition (measurement starts at the front footprint boundary)
++ 0.100 m explicit safety margin
+= 0.656429 m required connected corridor
+```
+
+The full-footprint width requirement is 0.345 m, including 0.02 m lateral clearance on either side. The 0.470505 m allowance comes from the Phase 4 low-friction endpoint error with no evaluator chassis displacement; it replaces the Phase 8 EKF's zero covariance as the conservative allowance. Since the best corridor is only 0.48 m and C2 missed every known occupied pixel, the motion gate stays BLOCKED. No motion controller, autonomous driving scenario, or RGB Nav2 run was enabled. The existing stop-only lock remains intact.
+
+The seven-package ROS build and Phase 6/7/8 regression checks passed. Candidate, per-view, stopping-distance, and resource evidence is indexed in [docs/evidence/phase8b/README.md](evidence/phase8b/README.md). Full details: [docs/evidence/phase8b/phase8b-report.md](evidence/phase8b/phase8b-report.md).

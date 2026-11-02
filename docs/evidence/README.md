@@ -1,4 +1,4 @@
-# Phase 1 through Phase 6 evidence index
+# Phase 1 through Phase 8B evidence index
 
 Evidence below was captured from the E:-hosted Ubuntu-24.04 WSL distro. Phase 1 navigation used the packaged REFERENCE sensor profile. Phase 2/3/4 entity-state data appears only in test evaluators and is not an input to localization, navigation, or perception.
 
@@ -124,3 +124,8 @@ The aggregate result has zero false-FREE pixels among 465,242 evaluator-known oc
 - phase8/runs/: bounded S00/S01/S02/S03/S09 live stop runs, including missing camera/localization, command timeout, and S02 seeds 101/202. All 1,052 observed output commands were zero.
 - phase8/phase7-fault-injection.json and phase7-fault-console.log: missing/stale RGB fail-closed behavior and stale-to-fresh recovery.
 - phase6/runs/phase8-final-reference-s00-20261102/: isolated ORACLE_REFERENCE regression recorded during Phase 8; it is not RGB-only navigation evidence.
+
+
+## Phase 8B camera geometry and stopping feasibility
+
+See [phase8b/README.md](phase8b/README.md) for the evidence index and [phase8b/phase8b-report.md](phase8b/phase8b-report.md) for candidate metrics and the BLOCKED motion-gate decision. The isolated stop-test details and calculation are recorded in [phase8b/motion-gate.json](phase8b/motion-gate.json). The Phase 8 safe-stop supervisor stayed active; no autonomous RGB navigation was run.

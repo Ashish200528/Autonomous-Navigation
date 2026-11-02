@@ -1,0 +1,196 @@
+{
+  "base_phase5_scenario": "S01",
+  "camera_geometry_candidate": {
+    "camera_height_m": 0.24,
+    "camera_mount_x_m": 0.1,
+    "camera_mount_y_m": 0.0,
+    "camera_mount_z_m": 0.16,
+    "camera_pitch_down_rad": 0.8,
+    "distortion_model": "zero_distortion_provisional",
+    "floor_seed_row_fraction": 0.75,
+    "horizontal_fov_rad": 1.0471975512,
+    "max_ground_forward_m": 0.9,
+    "min_ground_forward_m": 0.1,
+    "resolution_px": [
+      320,
+      240
+    ]
+  },
+  "camera_info": {
+    "d": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "distortion_model": "plumb_bob",
+    "frame_id": "camera_optical_frame",
+    "height": 240,
+    "k": [
+      277.1281433105469,
+      0.0,
+      160.0,
+      0.0,
+      277.12815284729004,
+      120.0,
+      0.0,
+      0.0,
+      1.0
+    ],
+    "width": 320
+  },
+  "camera_transform_base_link": {
+    "quaternion_xyzw": [
+      0.6552396681557677,
+      -0.6552396681544662,
+      0.2658213258471174,
+      -0.26582132585032564
+    ],
+    "translation_m": [
+      0.1,
+      0.0,
+      0.16
+    ]
+  },
+  "evaluator_truth_pose": {
+    "angular_z_radps": 0.0308447,
+    "frame_id": "world",
+    "linear_x_mps": 0.00018768,
+    "sim_time_s": 6.308,
+    "x": -3.00201,
+    "y": 0.0125217,
+    "yaw_rad": 0.31832,
+    "z": -3.12909e-08
+  },
+  "files": {
+    "confidence": "prediction_confidence.png",
+    "evaluator_truth": "evaluator_truth_mask.png",
+    "overlay": "prediction_overlay.png",
+    "prediction_mask": "prediction_mask.png",
+    "rgb": "rgb_input.png"
+  },
+  "ground_truth_source": "Offline ray intersections against deterministic scenario geometry and Gazebo truth pose; withheld from the runtime ROS perception node.",
+  "image_frame_id": "camera_optical_frame",
+  "image_stamp_ns": 6206000000,
+  "image_stamp_s": 6.206,
+  "metrics": {
+    "evaluator_truth_counts_px": {
+      "free": 73600,
+      "occupied": 0,
+      "unknown": 3200
+    },
+    "false_free_px_on_known_occupied": 0,
+    "false_free_rate_on_known_occupied": null,
+    "known_truth_classification_coverage": 0.893804347826087,
+    "known_truth_px": 73600,
+    "occupied_precision": null,
+    "occupied_recall": null,
+    "prediction_counts_px": {
+      "free": 65784,
+      "occupied": 0,
+      "total": 76800,
+      "unknown": 11016
+    },
+    "true_free_px": 65784,
+    "true_occupied_px": 0,
+    "unknown_coverage_total": 0.1434375,
+    "useful_free_coverage_on_known_floor": 0.893804347826087
+  },
+  "perception_forbidden_inputs": [
+    "/odom",
+    "/imu/data",
+    "/map",
+    "/depth",
+    "/scan",
+    "/gzserver/get_entity_state",
+    "scenario geometry"
+  ],
+  "perception_health": {
+    "camera_height_assumption_m": 0.24,
+    "camera_info_stamp_s": 6.206,
+    "camera_pitch_down_assumption_rad": 0.8,
+    "camera_sim_age_s": 0.02,
+    "camera_wall_age_s": 0.0,
+    "clock_use": "timestamp-age only; not a geometric sensor",
+    "counts": {
+      "floor_seed_px": 7833,
+      "free_px": 65784,
+      "ground_band_px": 73600,
+      "occupied_px": 0,
+      "total_px": 76800,
+      "unknown_px": 11016
+    },
+    "floor_color_threshold_lab_weighted": 16.0,
+    "floor_component_largest_px": 65784,
+    "floor_component_min_area_px": 4000,
+    "floor_reference_lab": [
+      171.0,
+      128.0,
+      128.0
+    ],
+    "floor_seed_gradient_threshold": 22.0,
+    "floor_seed_support_tolerance_lab_weighted": 30.0,
+    "forbidden_inputs": [
+      "odometry",
+      "IMU",
+      "Gazebo entity state",
+      "depth",
+      "oracle map",
+      "scenario geometry"
+    ],
+    "ground_projection_valid_forward_band_m": [
+      0.1,
+      0.9
+    ],
+    "image_stamp_s": 6.206,
+    "input_topics": [
+      "/camera/image_raw",
+      "/camera/camera_info",
+      "/clock"
+    ],
+    "intrinsics": {
+      "cx_px": 160.0,
+      "cy_px": 120.0,
+      "fx_px": 277.1281433105469,
+      "fy_px": 277.12815284729004
+    },
+    "mask_encoding": "mono8: FREE=0, OCCUPIED=100, UNKNOWN=255",
+    "measured_wall_fps": 14.91,
+    "node": "anc_rgb_perception",
+    "processed_frames": 57,
+    "processing_latency_ms": 9.347,
+    "profile": "REALISTIC_RGB_ONLY",
+    "reason": "ok",
+    "status": "VALID",
+    "unknown_confidence_value": 0,
+    "valid": true
+  },
+  "perception_input_topics": [
+    "/camera/image_raw",
+    "/camera/camera_info",
+    "/clock"
+  ],
+  "process_rss_snapshot": [
+    {
+      "command": "/opt/ros/jazzy/lib/ros_gz_sim/gzserver --ros-args --params-file /tmp/launch_params_anjll0b0 ",
+      "pid": 86294,
+      "rss_kib": 504992
+    },
+    {
+      "command": "/usr/bin/python3 /home/ashish/AutonomousNavigationCar/simulation/ros2_ws/install/anc_perception/lib/anc_perception/rgb_perception_node --ros-args -r __node:=anc_rgb_perception --pa",
+      "pid": 86301,
+      "rss_kib": 181372
+    }
+  ],
+  "runtime_profile": "REALISTIC_RGB_ONLY",
+  "scenario_id": "S01",
+  "seed": 101,
+  "truth_query_time_minus_image_stamp_s": 0.10199999999999942,
+  "viewpoint_id": "view_turned",
+  "viewpoint_rotation_evaluator_only": {
+    "source": "evaluator-only Gazebo pose; not a perception input",
+    "xy_change_m": 0.012680416826350746,
+    "yaw_change_rad": 0.31832
+  }
+}

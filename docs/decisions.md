@@ -1,6 +1,6 @@
 # Decisions and assumptions
 
-Status: Phase 0 baseline and verified Phase 1 through Phase 8 stop-only results with stated limits. Phase 8 autonomous motion remains blocked by the feasibility gate. Changes to the implementation track should be evidence-backed and recorded here.
+Status: Phase 0 baseline and verified Phase 1 through Phase 8 stop-only results with stated limits. Phase 8B measured a simulated stopping distance, but autonomous motion remains blocked by the feasibility gate. Changes to the implementation track should be evidence-backed and recorded here.
 
 | ID | Decision | Rationale / status |
 |---|---|---|
@@ -24,8 +24,9 @@ Status: Phase 0 baseline and verified Phase 1 through Phase 8 stop-only results 
 | D-18 | Limit FREE ground projection to the calibrated 0.50-0.60 m forward band. | Camera height/pitch, pinhole, and planar-floor assumptions are provisional; ambiguous or unsupported pixels remain UNKNOWN. This is not metric depth. |
 | D-19 | Keep REALISTIC_RGB_ONLY perception separate from ORACLE_REFERENCE navigation. | Phase 6 reference maps/costmaps remain intact; Phase 7 does not start navigation. |
 | D-20 | Preserve unsupported local grid cells as UNKNOWN and project only high-confidence FREE pixels. | RGB obstacle appearance has no metric range; treating it as a metric occupied cell would overstate what the sensor provides. |
-| D-21 | Keep Phase 8 motion locked behind a feasibility gate and publish unconditional zero velocity in the accepted stop-only profile. | Current FREE patch is disconnected/too short and braking distance is unmeasured; no autonomous motion is justified. |
+| D-21 | Keep Phase 8 motion locked behind a feasibility gate and publish unconditional zero velocity in the accepted stop-only profile. | Phase 8B measured simulator stopping distance, but the best connected corridor is shorter than the conservative gate and the candidate missed occupied pixels. |
 | D-22 | Keep Phase 8 separate from ORACLE_REFERENCE and omit the known-start map-to-odom transform. | The realistic profile has no reference map or privileged initial localization; Phase 6 remains a separate comparison. |
+| D-23 | Recompute the motion gate with worst observed C2 timing, measured mu=0.5 simulator stopping distance, Phase 4 slip-derived localization allowance, and a 0.10 m explicit safety margin. | Required forward corridor is 0.656429 m; best candidate is 0.480 m, so the zero-velocity lock remains. |
 
 ## Unresolved decisions
 

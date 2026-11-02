@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Geometry and fail-closed invariants for the Phase 8 RGB local map."""
+import argparse
 import json
 import math
 import sys
@@ -13,6 +14,13 @@ from anc_realistic_navigation.projection import project_free_pixels
 
 
 def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "--output", type=Path,
+        default=ROOT / "docs/evidence/phase8/phase8-static-validation.json",
+        help="JSON output path; defaults to the accepted Phase 8 evidence path",
+    )
+    args = parser.parse_args()
     checks = []
     def check(name, passed, detail):
         checks.append({"name": name, "status": "PASS" if passed else "FAIL",
@@ -77,7 +85,7 @@ def main():
                                               "quaternion_base": list(q)},
               "grid_state_counts": counts,
               "interpretation": "Synthetic unit fixtures validate projection invariants only; live Gazebo evidence is reported separately."}
-    out = ROOT / "docs/evidence/phase8/phase8-static-validation.json"
+    out = args.output
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(json.dumps(result, indent=2, sort_keys=True) + "\n")
     print(json.dumps(result, indent=2, sort_keys=True))

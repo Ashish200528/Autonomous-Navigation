@@ -24,6 +24,8 @@ from rosgraph_msgs.msg import Clock
 from sensor_msgs.msg import CameraInfo, Image
 from simulation_interfaces.srv import GetEntityState
 from std_msgs.msg import String
+from rclpy.time import Time
+from tf2_ros import Buffer, TransformListener
 
 from anc_perception.perception_node import _decode_rgb
 from phase7_ground_truth import ground_truth_mask
@@ -34,6 +36,7 @@ from scenario_runner import stop_process_group, yaw_from_quaternion
 EVIDENCE = ROOT / "docs" / "evidence" / "phase7"
 RUNS = EVIDENCE / "dataset"
 CONFIG_PATH = ROOT / "simulation/ros2_ws/src/anc_perception/config/realistic.yaml"
+ROBOT_CONFIG_PATH = ROOT / "config/robot_parameters.yaml"
 INPUTS = ["/camera/image_raw", "/camera/camera_info", "/clock"]
 
 
@@ -134,6 +137,8 @@ class CaptureNode(Node):
         self.clock_seconds = None
         self.image_stamps, self.clock_stamps = [], []
         self.truth = self.create_client(GetEntityState, "/gzserver/get_entity_state")
+        self.tf_buffer = Buffer()
+        self.tf_listener = TransformListener(self.tf_buffer, self, spin_thread=False)
         self.cmd_pub = self.create_publisher(Twist, "/cmd_vel", 10)
         self.create_subscription(Image, "/camera/image_raw", self._image, qos_profile_sensor_data)
         self.create_subscription(CameraInfo, "/camera/camera_info", self._info, qos_profile_sensor_data)
@@ -249,6 +254,14 @@ class CaptureNode(Node):
                 time.sleep(0.15)
         raise RuntimeError(f"Gazebo evaluator truth query failed after retries: {last_error}")
 
+    def camera_transform(self):
+        tf = self.tf_buffer.lookup_transform(
+            "base_link", "camera_optical_frame", Time()
+        ).transform
+        t, q = tf.translation, tf.rotation
+        return ([float(t.x), float(t.y), float(t.z)],
+                [float(q.x), float(q.y), float(q.z), float(q.w)])
+
     def command(self, angular):
         msg = Twist()
         msg.angular.z = float(angular)
@@ -313,7 +326,7 @@ def _process_rss_snapshot():
     return records
 
 
-def _save_sample(node, bundle, layout, case_dir, view_id, config, motion=None):
+def _save_sample(node, bundle, layout, case_dir, view_id, config, camera_settings, motion=None):
     image_msg = bundle["image"]
     if image_msg.encoding not in ("rgb8", "bgr8", "rgba8", "bgra8"):
         raise ValueError(f"Unsupported captured image encoding {image_msg.encoding}")
@@ -339,6 +352,7 @@ def _save_sample(node, bundle, layout, case_dir, view_id, config, motion=None):
         "frame_id": info_msg.header.frame_id,
     }
     truth_pose = node.query_truth()
+    camera_translation, camera_quaternion = node.camera_transform()
     gt = ground_truth_mask(rgb.shape[:2], info, layout, truth_pose, config)
     metrics = pixel_metrics(prediction, gt)
     stamp_ns = bundle["key"]
@@ -368,6 +382,11 @@ def _save_sample(node, bundle, layout, case_dir, view_id, config, motion=None):
         "image_stamp_s": stamp_ns / 1e9,
         "image_frame_id": image_msg.header.frame_id,
         "camera_info": info,
+        "camera_geometry_candidate": camera_settings,
+        "camera_transform_base_link": {
+            "translation_m": camera_translation,
+            "quaternion_xyzw": camera_quaternion,
+        },
         "perception_health": bundle["health"],
         "evaluator_truth_pose": truth_pose,
         "truth_query_time_minus_image_stamp_s": (
@@ -398,6 +417,11 @@ def _save_sample(node, bundle, layout, case_dir, view_id, config, motion=None):
         "viewpoint_id": view_id,
         "sample_dir": str(sample_dir.relative_to(ROOT)),
         "health": bundle["health"],
+        "camera_transform_base_link": data["camera_transform_base_link"],
+        "projection_inputs": {
+            "mask_file": "prediction_mask.png",
+            "confidence_file": "prediction_confidence.png",
+        },
         "metrics": metrics,
         "truth_query_time_minus_image_stamp_s": data["truth_query_time_minus_image_stamp_s"],
         "process_rss_snapshot": data["process_rss_snapshot"],
@@ -433,7 +457,7 @@ def _perception_subscriber_info(node, timeout_sec=8.0):
     return "\n".join(rows) + "\n", names
 
 
-def _run_case(node, layout, case_id, config):
+def _run_case(node, layout, case_id, config, camera_settings):
     case_dir = RUNS / case_id
     case_dir.mkdir(parents=True, exist_ok=False)
     world_path = case_dir / "world.sdf"
@@ -456,6 +480,12 @@ def _run_case(node, layout, case_id, config):
         f"start_x:={float(x):.6f}",
         f"start_y:={float(y):.6f}",
         f"start_yaw:={float(yaw):.6f}",
+        f"camera_mount_z_m:={camera_settings['camera_mount_z_m']:.6f}",
+        f"camera_pitch_down_rad:={camera_settings['camera_pitch_down_rad']:.6f}",
+        f"camera_height_m:={camera_settings['camera_height_m']:.6f}",
+        f"min_ground_forward_m:={camera_settings['min_ground_forward_m']:.6f}",
+        f"max_ground_forward_m:={camera_settings['max_ground_forward_m']:.6f}",
+        f"floor_seed_row_fraction:={camera_settings['floor_seed_row_fraction']:.6f}",
     ]
     launch_log_path = case_dir / "launch.log"
     process, shutdown, samples = None, None, []
@@ -487,7 +517,8 @@ def _run_case(node, layout, case_id, config):
             first = node.bundle()
             if first is None:
                 raise RuntimeError("Missing synchronized start-view bundle.")
-            samples.append(_save_sample(node, first, layout, case_dir, "view_start", config))
+            samples.append(_save_sample(node, first, layout, case_dir, "view_start", config,
+                                        camera_settings))
 
             truth_before = node.query_truth()
             node.rotate_and_settle()
@@ -513,7 +544,8 @@ def _run_case(node, layout, case_id, config):
             if second is None:
                 raise RuntimeError("Missing synchronized post-turn bundle.")
             samples.append(_save_sample(
-                node, second, layout, case_dir, "view_turned", config, motion
+                node, second, layout, case_dir, "view_turned", config,
+                camera_settings, motion
             ))
         node_info, observed = _perception_subscriber_info(node)
         (case_dir / "perception-node-info.txt").write_text(node_info)
@@ -686,20 +718,73 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--run-id", default="accepted-final")
     parser.add_argument("--scenarios", default="S00,S01,S02,S03,S04,P7C1")
+    parser.add_argument("--s02-seeds", default="101")
+    parser.add_argument("--output-root", type=Path, default=RUNS)
+    parser.add_argument("--camera-mount-z-m", type=float, default=None)
+    parser.add_argument("--camera-pitch-down-rad", type=float, default=None)
+    parser.add_argument("--min-ground-forward-m", type=float, default=None)
+    parser.add_argument("--max-ground-forward-m", type=float, default=None)
+    parser.add_argument("--floor-seed-row-fraction", type=float, default=None)
     args = parser.parse_args()
     if not re.fullmatch(r"[A-Za-z0-9_.-]{1,60}", args.run_id):
         raise ValueError("run-id must contain only letters, digits, dot, underscore, or hyphen")
-    RUNS = EVIDENCE / "dataset" / args.run_id
+    RUNS = args.output_root.resolve() / args.run_id
+    if ROOT not in RUNS.parents:
+        raise ValueError("output-root must remain inside the project repository")
     RUNS.mkdir(parents=True, exist_ok=False)
     selected = {item.strip() for item in args.scenarios.split(",") if item.strip()}
     config = yaml.safe_load(CONFIG_PATH.read_text())["/**"]["ros__parameters"]
+    robot_config = yaml.safe_load(ROBOT_CONFIG_PATH.read_text())
+    model = robot_config["robot"]["simulation_model"]
+    camera_cfg = robot_config["sensors"]["camera"]
+    base_link_height = float(model["chassis_height_m"])/2.0 + float(model["wheel_radius_m"])
+    mount_z = float(camera_cfg["mount_xyz_m"][2] if args.camera_mount_z_m is None
+                    else args.camera_mount_z_m)
+    pitch = float(camera_cfg["mount_rpy_rad"][1] if args.camera_pitch_down_rad is None
+                  else args.camera_pitch_down_rad)
+    min_forward = float(config["min_ground_forward_m"] if args.min_ground_forward_m is None
+                        else args.min_ground_forward_m)
+    max_forward = float(config["max_ground_forward_m"] if args.max_ground_forward_m is None
+                        else args.max_ground_forward_m)
+    seed_row = float(config["floor_seed_row_fraction"]
+                     if args.floor_seed_row_fraction is None
+                     else args.floor_seed_row_fraction)
+    if not (0.0 < mount_z < 1.0 and 0.0 <= pitch < 1.2
+            and 0.0 < min_forward < max_forward and 0.0 < seed_row < 1.0):
+        raise ValueError("candidate camera geometry is outside supported bounds")
+    camera_settings = {
+        "camera_mount_x_m": float(camera_cfg["mount_xyz_m"][0]),
+        "camera_mount_y_m": float(camera_cfg["mount_xyz_m"][1]),
+        "camera_mount_z_m": mount_z,
+        "camera_height_m": base_link_height + mount_z,
+        "camera_pitch_down_rad": pitch,
+        "min_ground_forward_m": min_forward,
+        "max_ground_forward_m": max_forward,
+        "floor_seed_row_fraction": seed_row,
+        "resolution_px": list(camera_cfg["resolution_px"]),
+        "horizontal_fov_rad": float(camera_cfg["horizontal_fov_rad"]),
+        "distortion_model": camera_cfg["distortion_model"],
+    }
+    config["camera_height_m"] = camera_settings["camera_height_m"]
+    config["camera_pitch_down_rad"] = pitch
+    config["min_ground_forward_m"] = min_forward
+    config["max_ground_forward_m"] = max_forward
+    config["floor_seed_row_fraction"] = seed_row
+    (RUNS / "camera-configuration.json").write_text(
+        json.dumps(camera_settings, indent=2, sort_keys=True) + "\n"
+    )
     os.environ["ROS_DOMAIN_ID"] = "73"
     rclpy.init()
     node = CaptureNode()
+    s02_seeds = [int(value.strip()) for value in args.s02_seeds.split(",") if value.strip()]
+    if not s02_seeds or len(set(s02_seeds)) != len(s02_seeds) or any(
+        seed < 0 or seed > 2**31-1 for seed in s02_seeds
+    ):
+        raise ValueError("S02 seeds must be unique nonnegative 32-bit integers")
     all_cases = [
         ("S00", 101, generate_layout("S00", 101)),
         ("S01", 101, generate_layout("S01", 101)),
-        ("S02", 101, generate_layout("S02", 101)),
+        *(("S02", seed, generate_layout("S02", seed)) for seed in s02_seeds),
         ("S03", 101, generate_layout("S03", 101)),
         ("S04", 202, generate_layout("S04", 202)),
         ("P7C1", 101, _challenge_layout()),
@@ -715,7 +800,7 @@ def main():
             case_id = f"{scenario_id.lower()}-seed{seed}-rgb-only"
             print(f"START {case_id}", flush=True)
             try:
-                result = _run_case(node, layout, case_id, config)
+                result = _run_case(node, layout, case_id, config, camera_settings)
             except Exception as exc:
                 result = {
                     "case_id": case_id, "scenario_id": scenario_id,
@@ -741,6 +826,8 @@ def main():
     report = {
         "phase": 7,
         "profile": "REALISTIC_RGB_ONLY",
+        "experiment_phase": "8B",
+        "camera_geometry_candidate": camera_settings,
         "source_commit": subprocess.run(
             ["git", "rev-parse", "HEAD"], cwd=ROOT, text=True,
             stdout=subprocess.PIPE, check=False,

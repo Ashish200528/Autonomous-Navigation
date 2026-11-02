@@ -1,0 +1,62 @@
+{
+  "camera_header_timing": {
+    "count": 46,
+    "max_interval_s": 0.068,
+    "median_interval_s": 0.066,
+    "rate_hz": 15.15151515151515
+  },
+  "clock_timing": {
+    "count": 2752,
+    "max_interval_s": 0.254,
+    "median_interval_s": 0.002,
+    "rate_hz": 500.0
+  },
+  "contract_passed": true,
+  "expected_perception_subscriber_topics": [
+    "/camera/image_raw",
+    "/camera/camera_info",
+    "/clock"
+  ],
+  "free_memory_snapshot": "               total        used        free      shared  buff/cache   available\nMem:           3.5Gi       1.2Gi       1.6Gi        75Mi       869Mi       2.3Gi\nSwap:          1.0Gi          0B       1.0Gi\n",
+  "gazebo_truth_subscribed_by_perception": false,
+  "health_sample_count": 52,
+  "health_samples_file": "runtime-health.jsonl",
+  "health_timing_csv": "runtime-health.csv",
+  "launch_command": [
+    "ros2",
+    "launch",
+    "anc_perception",
+    "realistic_perception.launch.py",
+    "world_file:=/home/ashish/AutonomousNavigationCar/docs/evidence/phase8b/camera-datasets/c02-height024-pitch080-seed075/s00-seed101-rgb-only/world.sdf",
+    "start_x:=0.000000",
+    "start_y:=0.000000",
+    "start_yaw:=0.000000",
+    "camera_mount_z_m:=0.160000",
+    "camera_pitch_down_rad:=0.800000",
+    "camera_height_m:=0.240000",
+    "min_ground_forward_m:=0.100000",
+    "max_ground_forward_m:=0.900000",
+    "floor_seed_row_fraction:=0.750000"
+  ],
+  "nav2_started": false,
+  "observed_perception_subscriber_topics": [
+    "/camera/camera_info",
+    "/camera/image_raw",
+    "/clock"
+  ],
+  "perception_node_info": "Node: /anc_rgb_perception\nSubscriptions:\n  /camera/camera_info: sensor_msgs/msg/CameraInfo\n  /camera/image_raw: sensor_msgs/msg/Image\n  /clock: rosgraph_msgs/msg/Clock\n",
+  "process_rss_sampled": [
+    {
+      "command": "/opt/ros/jazzy/lib/ros_gz_sim/gzserver --ros-args --params-file /tmp/launch_params_oupxlvhm ",
+      "pid": 86032,
+      "rss_kib": 500196
+    },
+    {
+      "command": "/usr/bin/python3 /home/ashish/AutonomousNavigationCar/simulation/ros2_ws/install/anc_perception/lib/anc_perception/rgb_perception_node --ros-args -r __node:=anc_rgb_perception --pa",
+      "pid": 86039,
+      "rss_kib": 180964
+    }
+  ],
+  "profile": "REALISTIC_RGB_ONLY",
+  "reference_map_loaded": false
+}

@@ -1,4 +1,4 @@
-# Open issues after Phase 8 stop-only baseline
+# Open issues after Phase 8B feasibility assessment
 
 ## Resolved through Phase 3
 
@@ -34,6 +34,14 @@
 - Camera absence, missing filtered localization, command timeout, stale RGB, fresh-input recovery, sole command authority, no Nav2, and no known-start map-to-odom were checked.
 - Phase 8 is accepted only as PASS WITH LIMITS for stop-only. Autonomous motion remains blocked: observed FREE cells do not connect to the footprint, and emergency-braking distance is unmeasured.
 
+## Resolved through Phase 8B feasibility assessment
+
+- Added configurable camera mount height, downward pitch, projection band, and floor-seed candidates; dataset evidence records the live camera TF used for each view.
+- Compared C0-C4 candidates. C2 achieved the longest full-footprint corridor (0.48 m), but had 0% occupied recall across 3,390 evaluator-known occupied pixels.
+- Measured 24 isolated simulator stopping trials at four speeds, two friction settings, and three repeats. Maximum stop distance was 0.00298 m at 0.18 m/s and mu=0.5.
+- Calculated a 0.656429 m forward-corridor requirement including measured camera age/latency, stop distance, Phase 4 slip-derived localization allowance, and explicit safety margin. The 0.48 m best corridor fails the gate; Phase 8 remains locked to zero velocity.
+- Final seven-package build and Phase 6/7/8 regression evidence passed. No autonomous movement or Phase 9 work was performed.
+
 ## P0 before hardware-faithful claims or transfer
 
 - Measure chassis footprint, height, mass, wheel radius, wheel separation, and center of mass. Current simulation values are placeholders.
@@ -55,8 +63,8 @@
 - Add unknown-pose acquisition separately from the known-initial-pose baseline.
 - Phase 5 completed seeded geometry worlds for S00-S04 and S09 plus a headless scenario harness. Phase 6 added an ORACLE_REFERENCE Nav2 baseline and one bounded static no-route abort. Dynamic obstacles, RGB perception, unknown-pose localization, general sensor-loss safe stopping, and parking remain later-phase work.
 - Improve Phase 7 RGB perception recall and test camera/floor calibration under varied lighting and real hardware; preserve UNKNOWN as distinct from FREE.
-- Improve camera-derived free-space coverage and occupied recall; then demonstrate a continuous footprint-clear local corridor with a measured braking-distance bound before enabling any motion or replanning.
+- Improve camera-derived free-space coverage and occupied recall, and characterize localization uncertainty. Phase 8B measured simulator stopping distance, but it is not a hardware or all-surface bound; require a continuous corridor longer than the Phase 8B gate before enabling motion or replanning.
 - Define parking tolerance and dwell using measured footprint, then test stationary pose error.
 - Plan UNO Q adapters only after simulation interfaces and regression checks are stable.
 
-Phase 4 localization, Phase 5 scenario validation, Phase 6 selected reference navigation, and Phase 7 RGB-only perception are complete with stated limits. Phase 8 added and verified a stop-only baseline. RGB-only movement, unknown-pose acquisition, parking, and hardware transfer remain unimplemented; the motion gate is blocked by insufficient connected free-space evidence and unmeasured braking distance.
+Phase 4 localization, Phase 5 scenario validation, Phase 6 selected reference navigation, Phase 7 RGB-only perception, and the Phase 8B feasibility assessment are complete with stated limits. Phase 8 remains a stop-only baseline. RGB-only movement, unknown-pose acquisition, parking, and hardware transfer remain unimplemented; the gate is blocked by insufficient connected corridor, poor occupied recall, and slip-derived localization uncertainty.

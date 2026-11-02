@@ -32,6 +32,8 @@
   <xacro:property name="CAM_NEAR" value="${CAM_CFG['near_clip_m']}"/>
   <xacro:property name="CAM_FAR" value="${CAM_CFG['far_clip_m']}"/>
   <xacro:property name="CAM_FORMAT" value="${CAM_CFG['pixel_format']}"/>
+  <xacro:arg name="camera_mount_z_m" default="${CXYZ[2]}"/>
+  <xacro:arg name="camera_pitch_down_rad" default="${CRPY[1]}"/>
   <xacro:property name="IMU_XYZ" value="${IMU_CFG['mount_xyz_m']}"/>
   <xacro:property name="IMU_RPY" value="${IMU_CFG['mount_rpy_rad']}"/>
   <xacro:property name="IMU_FRAME" value="${IMU_CFG['frame_id']}"/>
@@ -108,7 +110,7 @@
   </link>
   <joint name="camera_fixed_joint" type="fixed">
     <parent link="base_link"/><child link="camera_link"/>
-    <origin xyz="${CXYZ[0]} ${CXYZ[1]} ${CXYZ[2]}" rpy="${CRPY[0]} ${CRPY[1]} ${CRPY[2]}"/>
+    <origin xyz="${CXYZ[0]} ${CXYZ[1]} $(arg camera_mount_z_m)" rpy="${CRPY[0]} $(arg camera_pitch_down_rad) ${CRPY[2]}"/>
   </joint>
 
   <link name="camera_optical_frame"/>

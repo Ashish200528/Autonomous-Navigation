@@ -45,6 +45,8 @@ def generate_launch_description():
                 FindExecutable(name="xacro"), " ", robot_xacro,
                 " wheel_surface_mu:=", LaunchConfiguration("wheel_surface_mu"),
                 " camera_enabled:=", LaunchConfiguration("camera_enabled"),
+                " camera_mount_z_m:=", LaunchConfiguration("camera_mount_z_m"),
+                " camera_pitch_down_rad:=", LaunchConfiguration("camera_pitch_down_rad"),
             ]),
             "use_sim_time": True,
         }],
@@ -93,6 +95,14 @@ def generate_launch_description():
         DeclareLaunchArgument(
             "camera_enabled", default_value="true",
             description="Enable RGB camera sensor; Phase 6 reference navigation disables it to reduce headless rendering load.",
+        ),
+        DeclareLaunchArgument(
+            "camera_mount_z_m", default_value="0.10",
+            description="Provisional camera mount Z relative to base_link, meters.",
+        ),
+        DeclareLaunchArgument(
+            "camera_pitch_down_rad", default_value="0.0",
+            description="Positive provisional downward camera pitch in radians.",
         ),
         DeclareLaunchArgument(
             "world_file", default_value=default_world,

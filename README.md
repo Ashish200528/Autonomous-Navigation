@@ -175,6 +175,12 @@ ros2 launch anc_realistic_navigation phase8_realistic.launch.py
 
 Reproduce static checks with python3 tests/phase8_safety_validation.py. The live harness is tests/phase8_live_safety_test.py; each run uses a unique --run-id and records JSON, CSV, launch logs, resource samples, and evaluator-only truth under docs/evidence/phase8/runs/.
 
+## Phase 8B RGB geometry and stopping feasibility
+
+Phase 8B compared five provisional camera geometries and projection bands while retaining the Phase 8 zero-command supervisor. The best full-footprint free corridor was 0.48 m; the conservative calculation requires 0.656429 m. The best candidate also classified 0% of evaluator-known occupied pixels as OCCUPIED. See [docs/evidence/phase8b/phase8b-report.md](docs/evidence/phase8b/phase8b-report.md) and [docs/evidence/phase8b/motion-gate.json](docs/evidence/phase8b/motion-gate.json).
+
+An isolated empty-world test measured 24 moving stops at four speeds and two simulated friction settings. At 0.18 m/s and mu=0.5 the maximum recorded stop distance was 0.00298 m. This simulation result does not bound hardware stopping distance. The gate remains BLOCKED; the Phase 8 supervisor still publishes zero commands, and no RGB navigation or Phase 9 work was started.
+
 ## Current status
 
 - Phase 0 baseline: complete and tagged v0.1-phase0.
@@ -186,3 +192,4 @@ Reproduce static checks with python3 tests/phase8_safety_validation.py. The live
 - Phase 6 selected ORACLE_REFERENCE Nav2 scenarios S00-S04 and S09: PASS WITH LIMITS; see docs/PHASE_REPORT.md and docs/evidence/phase6/README.md.
 - Phase 7 RGB-only FREE/OCCUPIED/UNKNOWN perception: PASS WITH LIMITS; see docs/PHASE_REPORT.md and docs/phase7-perception-architecture.md.
 - Phase 8 local RGB map and zero-command safe-stop baseline: PASS WITH LIMITS. Autonomous motion and goal-reaching are BLOCKED by the feasibility gate; see docs/phase8-feasibility.md.
+- Phase 8B camera sweep and simulated stopping-distance assessment: COMPLETE WITH LIMITS; motion gate remains BLOCKED. See docs/evidence/phase8b/phase8b-report.md.

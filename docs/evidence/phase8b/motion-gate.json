@@ -1,0 +1,61 @@
+{
+  "phase": "8B",
+  "status": "BLOCKED",
+  "decision": "Keep Phase 8 locked in stop-only mode; do not enable an RGB motion controller or navigation.",
+  "formula": "required_forward_length = v*(camera_age + perception_latency + supervisor_period) + measured_stop_distance + localization_uncertainty_allowance + forward_footprint_margin_from_front_reference + explicit_safety_margin",
+  "inputs": {
+    "velocity_mps": 0.18,
+    "camera_timestamp_age_max_s": 0.174,
+    "perception_latency_max_s": 0.2368,
+    "supervisor_period_s": 0.05,
+    "measured_worst_stop_distance_m": 0.00298,
+    "measured_stop_distance_condition": {
+      "wheel_surface_mu": 0.5,
+      "target_speed_mps": 0.18,
+      "repeats": 3
+    },
+    "localization_uncertainty_allowance_m": 0.4705050313257851,
+    "localization_source": "docs/evidence/phase4-localization-slip-final4.json raw_odometry_vs_evaluator.endpoint_xy_error_m",
+    "forward_footprint_margin_from_front_reference_m": 0,
+    "footprint_reference_explanation": "Corridor distance starts at the robot front footprint boundary; full footprint width is checked separately.",
+    "robot_front_extent_from_base_link_m": 0.215,
+    "footprint_width_m": 0.305,
+    "lateral_margin_each_side_m": 0.02,
+    "required_corridor_width_m": 0.345,
+    "explicit_safety_margin_m": 0.1
+  },
+  "calculation": {
+    "reaction_time_s": 0.4608,
+    "reaction_distance_m": 0.082944,
+    "required_forward_length_m": 0.6564290313257851,
+    "best_observed_connected_full_footprint_corridor_m": 0.48,
+    "shortfall_best_case_m": 0.1764290313257851,
+    "minimum_observed_connected_length_m": 0
+  },
+  "camera_candidate_evidence": {
+    "C2_dataset": "docs/evidence/phase8b/camera-datasets/c02-height024-pitch080-seed075/dataset-results.json",
+    "C2_projection": "docs/evidence/phase8b/camera-datasets/c02-height024-pitch080-seed075/camera-projection-evaluation.json",
+    "sample_count": 12,
+    "samples_with_connected_full_footprint_corridor": 10,
+    "samples_with_both_wheel_tracks_connected": 10,
+    "maximum_corridor_length_m": 0.48,
+    "minimum_corridor_length_m": 0,
+    "known_occupied_pixels": 3390,
+    "occupied_recall": 0
+  },
+  "braking_evidence": {
+    "file": "docs/evidence/phase8b/stopping-distance/run-20261102-full-mu050/stopping-distance-results.json",
+    "moving_trials_settled": 24,
+    "trial_count": 24,
+    "repeats_per_speed_and_friction": 3,
+    "maximum_stop_distance_mu_0_5_m": 0.00298,
+    "truth_odom_max_absolute_distance_error_m": 0.0035600000019213596,
+    "non_ground_contacts": 0,
+    "simulator_process_groups_cleanly_exited": true
+  },
+  "runtime_policy": {
+    "zero_velocity_safe_stop_lock_preserved": true,
+    "autonomous_motion_tests_performed": false,
+    "phase9_started": false
+  }
+}

@@ -10,18 +10,22 @@ import subprocess
 import sys
 import time
 from pathlib import Path
+import yaml
 
 import rclpy
 from geometry_msgs.msg import Twist
 from nav_msgs.msg import OccupancyGrid, Odometry
 from rclpy.node import Node
-from rclpy.qos import QoSProfile, ReliabilityPolicy, DurabilityPolicy
+from rclpy.qos import QoSProfile, ReliabilityPolicy, DurabilityPolicy, qos_profile_sensor_data
 from tf2_msgs.msg import TFMessage
 from ros_gz_interfaces.msg import Contacts
 from simulation_interfaces.srv import GetEntityState
 from std_msgs.msg import String
+from sensor_msgs.msg import Image as ROSImage
 
 ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT / "scripts"))
+from phase8b_camera_metrics import corridor_metrics, grid_image
 
 
 def stamp_seconds(stamp):
@@ -37,13 +41,18 @@ class Monitor(Node):
         self.map_state = None
         self.supervisor_state = None
         self.health = None
+        self.camera_image = None
+        self.mask_image = None
+        self.confidence_image = None
         self.odom = None
+        self.localization_covariance = None
         self.contact_messages = 0
         self.contact_events = 0
         self.non_ground_contact_events = 0
         self.contact_pair_examples = []
         self.contact_pair_seen = set()
         self.tf_edges = set()
+        self.tf_static_edges = set()
         self.rows = []
         self.t0 = time.monotonic()
         self.create_subscription(Twist, "/cmd_vel", self.on_cmd, 10)
@@ -51,12 +60,15 @@ class Monitor(Node):
         self.create_subscription(String, "/realistic/navigation_state", self.on_map, 10)
         self.create_subscription(String, "/realistic/supervisor_state", self.on_supervisor, 10)
         self.create_subscription(String, "/perception/health", self.on_health, 10)
+        self.create_subscription(ROSImage, "/camera/image_raw", self.on_camera_image, qos_profile_sensor_data)
+        self.create_subscription(ROSImage, "/perception/image_mask", self.on_mask_image, qos_profile_sensor_data)
+        self.create_subscription(ROSImage, "/perception/confidence", self.on_confidence_image, qos_profile_sensor_data)
         self.create_subscription(Odometry, "/odom", self.on_odom, 10)
         self.create_subscription(Contacts, "/contacts", self.on_contacts, 10)
         self.create_subscription(TFMessage, "/tf", self.on_tf, 100)
         static_qos = QoSProfile(depth=100, reliability=ReliabilityPolicy.RELIABLE,
                                 durability=DurabilityPolicy.TRANSIENT_LOCAL)
-        self.create_subscription(TFMessage, "/tf_static", self.on_tf, static_qos)
+        self.create_subscription(TFMessage, "/tf_static", self.on_tf_static, static_qos)
         self.truth = self.create_client(GetEntityState, "/gzserver/get_entity_state")
 
     def on_cmd(self, msg):
@@ -92,13 +104,34 @@ class Monitor(Node):
         except json.JSONDecodeError:
             self.health = {"valid": False, "status": "INVALID_UNKNOWN", "reason": "bad_json"}
 
+    def on_camera_image(self, msg):
+        self.camera_image = msg
+
+    def on_mask_image(self, msg):
+        self.mask_image = msg
+
+    def on_confidence_image(self, msg):
+        self.confidence_image = msg
+
     def on_odom(self, msg):
         self.odom = msg
+        covariance = list(msg.pose.covariance)
+        self.localization_covariance = {
+            "pose_x_variance_m2": float(covariance[0]),
+            "pose_y_variance_m2": float(covariance[7]),
+            "pose_yaw_variance_rad2": float(covariance[35]),
+            "source_topic": "/odometry/filtered",
+        }
 
     def on_tf(self, msg):
         for transform in msg.transforms:
             self.tf_edges.add((transform.header.frame_id.lstrip("/"),
                                transform.child_frame_id.lstrip("/")))
+
+    def on_tf_static(self, msg):
+        for transform in msg.transforms:
+            self.tf_static_edges.add((transform.header.frame_id.lstrip("/"),
+                                      transform.child_frame_id.lstrip("/")))
 
     def on_contacts(self, msg):
         self.contact_messages += 1
@@ -187,13 +220,29 @@ def main():
     parser.add_argument("--run-id", required=True)
     parser.add_argument("--world-file", type=Path, required=True)
     parser.add_argument("--camera-enabled", choices=("true", "false"), default="true")
+    parser.add_argument("--expect-invalid-camera", action="store_true",
+                        help="Expect the configured RGB candidate to fail closed and save raw/mask evidence")
+    parser.add_argument("--camera-candidate-mode", choices=("valid", "either"),
+                        default="valid",
+                        help="In either mode, accept valid or invalid camera health for a bounded geometry check")
     parser.add_argument("--odometry-topic", default="/odometry/filtered")
     parser.add_argument("--start-x", type=float, default=0.0)
     parser.add_argument("--start-y", type=float, default=0.0)
     parser.add_argument("--start-yaw", type=float, default=0.0)
     parser.add_argument("--duration", type=float, default=4.0)
+    parser.add_argument("--camera-mount-z-m", type=float, default=0.10)
+    parser.add_argument("--camera-pitch-down-rad", type=float, default=0.0)
+    parser.add_argument("--camera-height-m", type=float, default=0.18)
+    parser.add_argument("--min-ground-forward-m", type=float, default=0.50)
+    parser.add_argument("--max-ground-forward-m", type=float, default=0.60)
+    parser.add_argument("--floor-seed-row-fraction", type=float, default=0.90)
+    parser.add_argument(
+        "--output-root", type=Path,
+        default=ROOT / "docs/evidence/phase8/runs",
+        help="Evidence directory root; defaults to the Phase 8 accepted runs directory",
+    )
     args = parser.parse_args()
-    out_dir = ROOT / "docs/evidence/phase8/runs" / args.run_id
+    out_dir = args.output_root / args.run_id
     out_dir.mkdir(parents=True, exist_ok=True)
     launch_log_path = out_dir / "launch.log"
     launch_log = launch_log_path.open("w")
@@ -203,6 +252,12 @@ def main():
         f"start_x:={args.start_x}", f"start_y:={args.start_y}",
         f"start_yaw:={args.start_yaw}", f"camera_enabled:={args.camera_enabled}",
         f"odometry_topic:={args.odometry_topic}",
+        f"camera_mount_z_m:={args.camera_mount_z_m}",
+        f"camera_pitch_down_rad:={args.camera_pitch_down_rad}",
+        f"camera_height_m:={args.camera_height_m}",
+        f"min_ground_forward_m:={args.min_ground_forward_m}",
+        f"max_ground_forward_m:={args.max_ground_forward_m}",
+        f"floor_seed_row_fraction:={args.floor_seed_row_fraction}",
     ]
     proc = subprocess.Popen(launch, cwd=ROOT, stdout=launch_log, stderr=subprocess.STDOUT,
                             start_new_session=True, text=True)
@@ -215,7 +270,26 @@ def main():
     rclpy.init()
     try:
         monitor = Monitor()
-        if args.camera_enabled == "true" and args.odometry_topic == "/odometry/filtered":
+        if args.expect_invalid_camera:
+            monitor.spin_until(
+                lambda: monitor.health is not None and monitor.health.get("valid") is False
+                and monitor.grid is not None and all(v == -1 for v in monitor.grid.data),
+                30.0, "candidate_fail_closed_unknown_grid",
+            )
+        elif args.camera_candidate_mode == "either":
+            def candidate_state_ready():
+                if monitor.health is None or monitor.grid is None:
+                    return False
+                if monitor.health.get("valid") is False:
+                    return all(v == -1 for v in monitor.grid.data)
+                if monitor.health.get("valid") is True:
+                    return (monitor.map_state is not None
+                            and not monitor.map_state.get("input_failures", [])
+                            and monitor.map_state.get("camera_transform") is not None)
+                return False
+            monitor.spin_until(candidate_state_ready, 45.0,
+                               "candidate_camera_health_and_synchronized_projection")
+        elif args.camera_enabled == "true" and args.odometry_topic == "/odometry/filtered":
             monitor.spin_until(
                 lambda: monitor.health is not None and monitor.health.get("valid") is True
                 and monitor.map_state is not None
@@ -242,6 +316,22 @@ def main():
         publishers = monitor.get_publishers_info_by_topic("/cmd_vel")
         publisher_names = sorted({f"{p.node_namespace.rstrip('/')}/{p.node_name}"
                                   for p in publishers})
+        node_subscriptions = {}
+        for node_name in ("anc_rgb_perception", "anc_local_traversability",
+                          "anc_realistic_safe_stop_supervisor"):
+            try:
+                node_subscriptions[node_name] = sorted(
+                    name for name, _types in
+                    monitor.get_subscriber_names_and_types_by_node(node_name, "/")
+                )
+            except Exception as exc:
+                node_subscriptions[node_name] = {"error": f"{type(exc).__name__}: {exc}"}
+        topic_publishers = {}
+        for topic in ("/cmd_vel", "/tf", "/tf_static"):
+            topic_publishers[topic] = sorted({
+                f"{p.node_namespace.rstrip('/')}/{p.node_name}"
+                for p in monitor.get_publishers_info_by_topic(topic)
+            })
         truth_before = monitor.query_truth()
         mem_start = mem_available_kib()
         samples = []
@@ -275,10 +365,36 @@ def main():
         displacement = math.hypot(dx, dy)
         zero_count = sum(not sample["nonzero"] for sample in monitor.cmd_samples)
         nonzero_count = len(monitor.cmd_samples)-zero_count
-        grid_data = list(monitor.grid.data) if monitor.grid else []
+        grid_message = monitor.grid
+        grid_data = list(grid_message.data) if grid_message else []
         grid_counts = {"free": grid_data.count(0), "occupied": grid_data.count(100),
                        "unknown": grid_data.count(-1)}
+        map_params = {
+            "grid_width": int(grid_message.info.width) if grid_message else 0,
+            "grid_height": int(grid_message.info.height) if grid_message else 0,
+            "resolution_m": float(grid_message.info.resolution) if grid_message else 0.0,
+            "origin_x_m": float(grid_message.info.origin.position.x) if grid_message else 0.0,
+            "origin_y_m": float(grid_message.info.origin.position.y) if grid_message else 0.0,
+        }
+        robot_params = yaml.safe_load(
+            (ROOT / "config/robot_parameters.yaml").read_text()
+        )
+        projected_corridor = (
+            corridor_metrics(grid_data, map_params, robot_params)
+            if grid_data else None
+        )
         cmd_zero = bool(monitor.cmd_samples) and nonzero_count == 0
+        localization_uncertainty = None
+        if monitor.localization_covariance is not None:
+            cov = monitor.localization_covariance
+            sigma_xy = math.sqrt(max(cov["pose_x_variance_m2"],
+                                     cov["pose_y_variance_m2"], 0.0))
+            localization_uncertainty = {
+                **cov,
+                "sigma_xy_m": sigma_xy,
+                "three_sigma_xy_allowance_m": 3.0 * sigma_xy,
+                "interpretation": "sqrt(max EKF x/y pose variance); evaluator truth is excluded",
+            }
         publisher_audit = (len(publisher_names) == 1 and
                            publisher_names[0].endswith("/anc_realistic_safe_stop_supervisor"))
         map_failures = (monitor.map_state or {}).get("input_failures", [])
@@ -300,10 +416,25 @@ def main():
                 for name in monitor.get_node_names()),
             "no_known_start_map_to_odom_transform": (
                 "anc_known_start_map_to_odom" not in monitor.get_node_names() and
-                ("map", "odom") not in monitor.tf_edges),
+                ("map", "odom") not in monitor.tf_edges and
+                ("map", "odom") not in monitor.tf_static_edges),
+            "perception_subscribes_only_camera_and_clock": set(
+                node_subscriptions.get("anc_rgb_perception", [])
+            ) == {"/camera/image_raw", "/camera/camera_info", "/clock"},
+            "supervisor_subscriptions_are_isolated": set(
+                node_subscriptions.get("anc_realistic_safe_stop_supervisor", [])
+            ) == {"/clock", "/cmd_vel/requested", "/realistic/navigation_state"},
             "occupancy_grid_never_marks_obstacles": grid_counts["occupied"] == 0,
         }
-        if args.camera_enabled == "true":
+        if args.expect_invalid_camera or (
+            args.camera_candidate_mode == "either" and
+            monitor.health is not None and monitor.health.get("valid") is False
+        ):
+            base_checks["candidate_camera_invalid_fails_closed"] = bool(
+                monitor.health and monitor.health.get("valid") is False)
+            base_checks["invalid_candidate_grid_all_unknown"] = grid_counts == {
+                "free": 0, "occupied": 0, "unknown": len(grid_data)}
+        elif args.camera_enabled == "true":
             base_checks["camera_health_valid"] = bool(monitor.health and monitor.health.get("valid") is True)
             if args.odometry_topic == "/odometry/filtered":
                 base_checks["some_geometrically_projected_free_cells"] = grid_counts["free"] > 0
@@ -334,6 +465,21 @@ def main():
             "supervisor_state": monitor.supervisor_state,
             "perception_health": monitor.health,
             "grid_counts": grid_counts,
+            "camera_geometry_candidate": {
+                "mount_z_relative_to_base_m": args.camera_mount_z_m,
+                "camera_height_above_floor_m": args.camera_height_m,
+                "pitch_down_rad": args.camera_pitch_down_rad,
+                "min_ground_forward_m": args.min_ground_forward_m,
+                "max_ground_forward_m": args.max_ground_forward_m,
+            },
+            "projected_corridor_metrics": projected_corridor,
+            "runtime_graph": {
+                "node_subscriptions": node_subscriptions,
+                "topic_publishers": topic_publishers,
+                "dynamic_tf_edges": sorted(monitor.tf_edges),
+                "static_tf_edges": sorted(monitor.tf_static_edges),
+                "note": "Topic-level publisher ownership is observed; per-edge /tf publisher attribution is not provided by current ROS message metadata.",
+            },
             "unlocalized_occupied_image_pixels": obstacle_pixels,
             "evaluator_truth_before": truth_before,
             "evaluator_truth_after": truth_after,
@@ -351,8 +497,41 @@ def main():
             "camera_sim_age_s": (monitor.health or {}).get("camera_sim_age_s"),
             "perception_latency_ms": (monitor.health or {}).get("processing_latency_ms"),
             "localization_runtime_input": args.odometry_topic,
+            "localization_uncertainty": localization_uncertainty,
             "evaluator_truth_runtime_input": False,
         })
+        if grid_data:
+            (out_dir / "local-grid.json").write_text(json.dumps({
+                "geometry": map_params, "data": grid_data,
+                "counts": grid_counts, "connected_corridor": projected_corridor,
+            }, indent=2, sort_keys=True) + "\n")
+            cv2 = __import__("cv2")
+            cv2.imwrite(str(out_dir / "projected-local-grid.png"),
+                        grid_image(grid_data, map_params, robot_params))
+        for label, msg in (("camera-rgb.png", monitor.camera_image),
+                           ("perception-mask.png", monitor.mask_image),
+                           ("perception-confidence.png", monitor.confidence_image)):
+            if msg is None:
+                continue
+            import numpy as np
+            cv2 = __import__("cv2")
+            channels = 1 if msg.encoding == "mono8" else 3
+            raw = np.frombuffer(msg.data, dtype=np.uint8).reshape(msg.height, msg.step)
+            if channels == 1:
+                image = raw[:, :msg.width].copy()
+            else:
+                image = raw[:, :msg.width * channels].reshape(msg.height, msg.width, channels).copy()
+                if msg.encoding == "rgb8":
+                    image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
+            cv2.imwrite(str(out_dir / label), image)
+        (out_dir / "camera-image-metadata.json").write_text(json.dumps({
+            label: ({"encoding": msg.encoding, "width": msg.width, "height": msg.height,
+                     "step": msg.step, "stamp": stamp_seconds(msg.header.stamp)}
+                    if msg is not None else None)
+            for label, msg in (("camera-rgb.png", monitor.camera_image),
+                               ("perception-mask.png", monitor.mask_image),
+                               ("perception-confidence.png", monitor.confidence_image))
+        }, indent=2, sort_keys=True) + "\n")
         with (out_dir / "telemetry.csv").open("w", newline="") as f:
             writer = csv.DictWriter(f, fieldnames=[
                 "wall_elapsed_s", "event", "linear_x", "angular_z", "nonzero"])
