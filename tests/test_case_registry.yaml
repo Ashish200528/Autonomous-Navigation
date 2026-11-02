@@ -1,5 +1,5 @@
 version: 2
-status: "Phase 1 REFERENCE Nav2 goal PASS; Phase 2 differential-drive PASS WITH LIMITS; Phase 3 sensor interfaces PASS WITH LIMITS; Phase 4 known-start localization PASS WITH LIMITS; Phase 5 scenario harness PASS WITH LIMITS; Phase 6 ORACLE_REFERENCE navigation PASS WITH LIMITS; Phase 7 RGB-only perception PASS WITH LIMITS; Phase 8 REALISTIC_RGB_ONLY stop-only baseline PASS WITH LIMITS; Phase 8 RGB-only motion gate BLOCKED; Phase 8C Branch 1 RGB + 2D LiDAR PASS WITH LIMITS; Phase 8C Stage D BLOCKED / NOT RUN."
+status: "Phase 1 REFERENCE Nav2 goal PASS; Phase 2 differential-drive PASS WITH LIMITS; Phase 3 sensor interfaces PASS WITH LIMITS; Phase 4 known-start localization PASS WITH LIMITS; Phase 5 scenario harness PASS WITH LIMITS; Phase 6 ORACLE_REFERENCE navigation PASS WITH LIMITS; Phase 7 RGB-only perception PASS WITH LIMITS; Phase 8 REALISTIC_RGB_ONLY stop-only baseline PASS WITH LIMITS; Phase 8 RGB-only motion gate BLOCKED; Phase 8C Branch 1 RGB + 2D LiDAR PASS WITH LIMITS; Phase 8C Stage 1 calibration PASS WITH LIMITS; Stage 2 stationary SLAM PASS WITH LIMITS; Stages 3-5 BLOCKED; Stage 6 PARTIAL; Stage 7 PARTIAL DESIGN; Stage 8 PASS WITH LIMITS."
 registry:
   - id: T00
     phase: 1
@@ -265,3 +265,59 @@ registry:
       - docs/evidence/phase8c/lidar/final-phase8-live-regression-console.log
       - docs/evidence/phase8c/lidar/final-phase8b-stop-regression-console.log
       - docs/evidence/phase8b/stopping-distance/phase8c-lidar-regression-one-stop/stopping-distance-results.json
+
+  - id: T21
+    phase: "8C"
+    name: pure_yaw_rotation_calibration_and_stop_timing
+    scenario_id: S00
+    status: PASS_WITH_LIMITS
+    result: "Six 1.2 s calibration pulses at +/-0.02, +/-0.05 and +/-0.10 rad/s passed. Command-to-zero output 0.00386-0.04985 s; pose-rate settle 0.579-0.722 s; max center drift 0.004337 m; production yaw stayed disabled; no combined-motion test."
+    evidence:
+      - docs/evidence/phase8c/lidar/stage1-rotation-trials-retry.json
+      - docs/evidence/phase8c/lidar/stage1-rotation-trials-retry.log
+      - tests/phase8c_rotation_trial.py
+  - id: T22
+    phase: "8C"
+    name: swept_rotation_clearance_denial_probes
+    scenario_id: "S00,S01,S03"
+    status: PASS_WITH_LIMITS
+    result: "No-motion checks denied unsafe swept disks. Near-wall result isolated swept clearance with 18 occupied and 4 unknown cells; box and constriction also had invalid RGB floor-support state. No probe moved the robot."
+    evidence:
+      - docs/evidence/phase8c/lidar/stage1-s00-near-wall-gate.json
+      - docs/evidence/phase8c/lidar/stage1-s01-near-box-gate.json
+      - docs/evidence/phase8c/lidar/stage1-s03-constriction-gate.json
+      - tests/phase8c_rotation_gate_probe.py
+  - id: T23
+    phase: "8C"
+    name: stationary_s00_slam_map_capture
+    scenario_id: S00
+    status: PASS_WITH_LIMITS
+    result: "25 s wall / 24.53 s simulation, 128 scans, 8 map updates, 508 map-to-odom samples and a 155x115 0.05 m map saved. No SLAM pose messages or motion/drift validation."
+    evidence:
+      - docs/evidence/phase8c/lidar/stage2-s00-stationary-slam-tuned.json
+      - docs/evidence/phase8c/lidar/stage2-s00-stationary-slam-map.pgm
+      - docs/evidence/phase8c/lidar/stage2-s00-stationary-slam-map.yaml
+      - docs/evidence/phase8c/lidar/stage2-s00-stationary-slam-map.png
+      - docs/evidence/phase8c/lidar/stage2-s00-stationary-slam-tuned-launch.log
+      - tests/phase8c_slam_stationary_test.py
+  - id: T24
+    phase: "8C"
+    name: parking_controller_proposal_unit_checks
+    scenario_id: null
+    status: PASS_WITH_LIMITS
+    result: "7/7 tests passed for sequential rotate/approach, caps, invalid safety/localization, calibration lockout and stationary hold. Not runtime-wired; no live parking goal."
+    evidence:
+      - docs/evidence/phase8c/lidar/stage5-parking-controller-tests.log
+      - tests/parking_controller_test.py
+  - id: T25
+    phase: "8C"
+    name: stage6_profile_aggregate_and_report_generation
+    scenario_id: null
+    status: PASS_WITH_LIMITS
+    result: "Generated profile-separated JSON/CSV and comparison/resource plots from saved Phase 6-8C evidence. Sampling is heterogeneous, not a controlled head-to-head navigation benchmark."
+    evidence:
+      - docs/evidence/phase8c/lidar/stage6-comparative-summary.json
+      - docs/evidence/phase8c/lidar/stage6-comparison.csv
+      - docs/evidence/phase8c/lidar/stage6-comparison.png
+      - docs/evidence/phase8c/lidar/stage6-resource-observations.png
+      - scripts/phase8c_stage6_report.py

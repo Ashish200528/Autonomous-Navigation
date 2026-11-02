@@ -36,3 +36,12 @@ SLAM generated /map and stationary map→odom but scan-queue-full and EKF update
 2. LiDAR model, bridge, conditioner, local map, optional RGB fusion, launch and evidence.
 
 Future names remain reserved: feature/phase8c-tof and feature/phase8c-rgb-only. This branch does not create them, merge into main, start Phase 9, buy hardware or modify the Arduino UNO Q application.
+
+
+## Supplemental remaining-stage results (2026-11-02)
+
+Six short S00 pure-yaw calibration pulses at +/-0.02, +/-0.05 and +/-0.10 rad/s passed. Command-to-zero output was 0.00386-0.04985 s; pose-rate settling was 0.579-0.722 s; max center drift 0.004337 m. A conservative 0.523593 m swept disk denied the near-wall probe. Production yaw remains 0.0 rad/s because angular stop distance and mixed-motion envelope are not established. Near-box/constriction denial also coincided with invalid RGB floor support.
+
+Tuned stationary S00 SLAM generated a 155 x 115 map at 0.05 m resolution. It received 128 scans and 8 map updates in 25 seconds, but no SLAM pose messages arrived and no robot motion was evaluated. The tuned log omitted earlier queue-full/EKF missed-rate warnings but included a startup TF-cache drop and diagnostic QoS warnings. Drift reduction remains unproven.
+
+The parking controller is a sensor-neutral, non-authoritative proposal in anc_navigation_common/parking.py; 7 unit tests pass. It is not wired to runtime velocity. Goal navigation, avoidance, replanning and live parking remain blocked. See docs/phase8c-stage-results.md, docs/phase8c-lidar-run-guide.md and docs/phase8c-hardware-transfer.md.

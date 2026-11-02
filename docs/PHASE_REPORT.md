@@ -509,3 +509,59 @@ The final build completed eight ROS packages. Phase 8C tests passed common 8/8, 
 ### Remaining work
 
 The 2D plane misses low obstacles and overhead structure; reflectivity, dynamic obstacles and varied surfaces were not evaluated. RGB added no cells on the tested corridor and supplies no metric obstacle range. Wheel/gyro return error remains significant, and scan matching has not been shown to improve it. No obstacle course, goal reaching, parking, hardware integration or UNO Q change is included. Stage D remains blocked pending yaw stopping, turning clearance, localization/map quality and resource validation.
+
+
+## Phase 8C remaining LiDAR stages: supplemental report (2026-11-02)
+
+This additive continuation preserves earlier report history and failed attempts. Full matrix is in docs/phase8c-stage-results.md.
+
+### Stage 1: calibration-only rotation and swept clearance
+
+Six S00 1.2-second pure-yaw pulses at +/-0.02, +/-0.05 and +/-0.10 rad/s passed. Command-to-zero output latency was 0.00386-0.04985 s; first slow pose-derived rate followed 0.019-0.172 s after zero; settling took 0.579-0.722 s. Maximum center drift was 0.004337 m; residual yaw was zero in saved samples and there were no non-ground contacts. Swept disk radius was 0.523593 m from provisional footprint circumradius, 0.14 m drift allowance, 0.02 m sensor uncertainty and 0.10 m margin.
+
+The near-wall no-motion gate denied rotation with 18 occupied and 4 unknown cells. Near-box/constriction probes also found occupied/unknown cells, but both additionally failed RGB floor-support validation and are not isolated clearance-only tests. The sole /cmd_vel publisher remained the guard. Production angular speed stays 0.0 rad/s: short clear-arena pulses do not establish general yaw stopping distance or combined-motion safety. The initial failed evaluation remains at stage1-rotation-trials.json/.log.
+
+### Stage 2: tuned stationary SLAM map
+
+SLAM now uses a 0.25 s minimum scan interval (4 Hz processing), queue size 3, 0.05 s transform publishing and 3 s map updates. In 25.001 wall seconds / 24.53 simulation seconds, stationary S00 received 128 scans, 8 map messages and 508 map-to-odom TF messages. It saved a 155 x 115 map at 0.05 m resolution: 1,447 free, 6 occupied, 16,372 unknown. All 520 /cmd_vel samples were zero; there were no non-ground contacts.
+
+No SLAM pose messages arrived. Stationary truth drift is not localization accuracy or drift improvement. The tuned log had no queue-full or EKF missed-update-rate warning during this 25-second interval, but did include a startup TF-cache drop and diagnostic-subscriber QoS warnings. This does not prove earlier timing issues resolved. The first failed monitor QoS attempt remains preserved.
+
+### Stages 3-5: navigation and parking
+
+Nav2 goals, obstacle traversal, dynamic-obstacle response, replanning and live parking were not attempted. They require production yaw stopping and moving localization evidence not established. The non-authoritative parking proposal passed 7/7 unit tests, blocks in calibration mode, and is not wired to runtime velocity.
+
+### Stage 6: profile-separated evaluation and resources
+
+Generated JSON, CSV and plots aggregate saved evidence. Phase 6 ORACLE_REFERENCE succeeded on reachable S00-S04 (5/5), with mean final XY error 0.14382 m and zero collisions; S09 aborted for the expected no-route case. Phase 7 RGB had 12 views, 0 false-FREE rate on known occupied pixels, 88.01% useful floor FREE coverage, 100% occupied precision, 26.67% occupied recall and 80.98% UNKNOWN. Phase 8 RGB-only stop profile passed 9/9 with 1,052/1,052 zero command samples and maximum displacement 0.00001055 m. Phase 8C had 358/360 usable beams at 4.94 Hz; RGB added no cells over LiDAR in tested clear S00.
+
+These are different profiles, not a head-to-head benchmark. Phase 6 used oracle map; Phase 7 evaluated RGB labels; Phase 8 stayed stopped; Phase 8C measured LiDAR and bounded straight motion.
+
+WSL has about 3.5 GiB RAM. Phase 8 recorded max sampled process RSS 852,672 KiB and minimum available memory 1,956,248 KiB. One summarized process sample during stationary SLAM reported about 2.2 GiB available, Gazebo RSS about 508,616 KiB and instantaneous process CPU near 112%; this is not a whole-system peak or time series. After simulation shutdown idle available memory was about 3.0 GiB. These are capacity observations, not a controlled benchmark ranking.
+
+### Stage 7: UNO Q transfer preparation
+
+docs/phase8c-hardware-transfer.md documents Linux MPU / STM32 responsibilities, Bridge contract, watchdog/E-stop requirements, LiDAR comparison and checklist. UNO Q Debian Trixie compatibility with ROS Jazzy remains unverified; Jazzy Tier 1 is Ubuntu Noble arm64. No UNO Q software, Arduino app, wiring or hardware changed. Hardware readiness is PARTIAL; physical validation PENDING HARDWARE.
+
+### Stage 8: saved demo and run guide
+
+A headless sensor composite is saved at docs/evidence/live-demo-2026-11-02/phase8c-live-demo.mp4 and described by its report. It shows RGB, scan, safety state and /cmd_vel; it is not a Gazebo desktop video or Nav2 path. MP4 remains local under the existing *.mp4 ignore rule. The operation guide and config/phase8c_lidar.rviz provide sensor/stationary-map workflows. RViz was not opened in this pass.
+
+### Final capability classifications
+
+| Capability | Result |
+|---|---|
+| LiDAR sensing | PASS WITH LIMITS |
+| Local mapping | PASS WITH LIMITS |
+| Safe rotation | PASS WITH LIMITS - calibration only; production yaw disabled |
+| SLAM and moving localization | BLOCKED |
+| Autonomous goal navigation | BLOCKED |
+| Obstacle avoidance | BLOCKED |
+| Replanning | BLOCKED |
+| Autonomous parking | BLOCKED live; 7 unit tests pass |
+| Fault handling | PASS WITH LIMITS for tested forward-motion and stop-only faults |
+| Full simulation evaluation | BLOCKED / INCOMPLETE |
+| Hardware deployment readiness | PARTIAL |
+| Physical hardware validation | PENDING HARDWARE |
+
+GitHub issue listing returned no existing issues; none was created. Branch remains feature/phase8c-lidar; no merge to main was made.

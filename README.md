@@ -217,3 +217,10 @@ The eight-package build and 24 Phase 8C unit checks passed. Full evidence and li
 - Phase 8 local RGB map and zero-command safe-stop baseline: PASS WITH LIMITS. Autonomous motion and goal-reaching are BLOCKED by the feasibility gate; see docs/phase8-feasibility.md.
 - Phase 8B camera sweep and simulated stopping-distance assessment: COMPLETE WITH LIMITS; the RGB-only motion gate remains BLOCKED. See docs/evidence/phase8b/phase8b-report.md.
 - Phase 8C Branch 1 RGB + 2D LiDAR sensing, local mapping, safety gate and bounded forward tests: PASS WITH LIMITS. Angular motion remains locked; obstacle avoidance and goal navigation were not demonstrated. See docs/evidence/phase8c/lidar/README.md.
+
+
+## Phase 8C remaining LiDAR work (2026-11-02)
+
+Supplemental results and capability classifications are in docs/phase8c-stage-results.md. Six pure-yaw calibration pulses and a conservative swept-footprint denial guard were validated, but production angular authority remains 0 rad/s. A tuned stationary S00 SLAM run saved a 0.05 m map; moving localization and drift reduction were not demonstrated. Nav2 goal navigation, obstacle avoidance, replanning and live parking remain blocked. The parking proposal passed 7 unit tests but is not wired to velocity authority.
+
+A headless sensor composite and limited RViz setup are indexed in docs/phase8c-lidar-run-guide.md. This is not a global-navigation demo. UNO Q transfer is design-only; hardware validation is pending.

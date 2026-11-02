@@ -36,3 +36,26 @@ World: S00 empty arena, except where the static-clearance probe world is named.
 ## Commands and limits
 From WSL: cd /home/ashish/AutonomousNavigationCar; source scripts/source_ros_jazzy.sh; run the common, lidar-model and camera-sync Phase 8C test scripts. Live evaluators are phase8c_live_probe.py, phase8c_invalid_scan_test.py, phase8c_stationary_loss_test.py and phase8c_motion_trial.py; captured command output is in per-stage logs. Truth queries are evaluator-only.
 Evidence supports a planar sensor, one-scan map, optional RGB fusion, forward gate and guarded straight movement. It does not establish persistent mapping, reliable general obstacle recall, scan-matching drift correction, yaw safety, obstacle avoidance, Nav2 goals, 3D sensing or hardware safety. No other branch, Phase 9 or UNO Q change is included.
+
+
+## Remaining LiDAR stages (2026-11-02)
+
+- stage1-rotation-trials-retry.json/.log: six calibration pulses passed. Production yaw stays disabled.
+- stage1-rotation-trials.json/.log: original failed evaluation retained.
+- stage1-s00-near-wall-gate.json, stage1-s01-near-box-gate.json, stage1-s03-constriction-gate.json: no-motion denial probes; box/constriction also include invalid RGB floor support.
+- stage2-s00-stationary-slam-tuned.json/.log: bounded S00 result; launch log has TF-cache and diagnostic QoS warnings.
+- stage2-s00-stationary-slam-map.pgm/.yaml and .png: saved from live /map; PNG is a preview, stationary observations only.
+- stage5-parking-controller-tests.log: proposal controller, 7/7 tests; no runtime wiring or live parking.
+- stage6-comparative-summary.json, stage6-comparison.csv, stage6-comparison.png, stage6-resource-observations.png, stage6-idle-resource-observation.json: profile-separated evidence and plots. Generator is scripts/phase8c_stage6_report.py.
+- live-demo-2026-11-02/phase8c-live-demo-report.md and local MP4: headless sensor composite, not desktop capture.
+- docs/phase8c-stage-results.md: full stage report.
+- docs/phase8c-lidar-run-guide.md: safe sensor and map commands.
+- docs/phase8c-hardware-transfer.md: UNO Q architecture and checklist.
+
+No queue-full or EKF missed-rate warning appeared in the 25-second tuned log, but the short observation does not prove earlier issues solved. A TF-cache drop and diagnostic QoS warnings remain. No moving SLAM pose, drift improvement, Nav2 goal, avoidance, replanning or live parking is claimed.
+
+- Final verification logs: final-common-tests-2026-11-02.log (9/9), final-lidar-model-tests-2026-11-02.log (15/15), final-parking-tests-2026-11-02.log (7/7), final-compileall-2026-11-02.log, final-schema-parse-2026-11-02.log, final-colcon-build-retry-2026-11-02.log (8 packages) and final-stage6-report-2026-11-02.log.
+- final-colcon-build-shell-error.log preserves the first wrapper failure caused by set -u before colcon; the retry passed.
+- stage2-s00-stationary-slam-map.png is a small visual preview of the PGM map.
+
+The first final-build wrapper stopped before colcon because the sourced ROS setup referenced an unset shell variable under set -u; that output is in final-colcon-build-shell-error.log. A separate first colcon log ended while anc_lidar was starting; the complete bounded retry in final-colcon-build-retry-2026-11-02.log passed all 8 packages in 38 seconds.

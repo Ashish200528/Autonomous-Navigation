@@ -25,3 +25,19 @@ Phase 8 remains an independent RGB-only stop-only profile with its motion gate b
 The 8C speed gate used the Phase 8B simulator stop-distance table, Phase 4 slip-derived localization allowance, current scan/map health, footprint clearance and safety margin. A 0.50 m clearance probe stayed stopped below the 0.583 m minimum tested requirement. No hardware safety claim is made.
 
 The Phase 6 ORACLE_REFERENCE launch remains independent. ToF/RGB-only branches, parking, hardware integration and Phase 9 are outside this branch.
+
+
+## Remaining LiDAR assignment update (2026-11-02)
+
+| Stage | Status | Result |
+|---|---|---|
+| 8C Stage 1 turning | PASS WITH LIMITS | Six calibration pulses and swept-clearance denials; production yaw disabled. |
+| 8C Stage 2 SLAM | PASS WITH LIMITS | Stationary map/map-to-odom only; moving localization and drift reduction unproven. |
+| 8C Stage 3 realistic goals | BLOCKED / NOT RUN | Nav2 remains off pending production yaw and moving localization evidence. |
+| 8C Stage 4 avoidance/replanning | BLOCKED / NOT RUN | No obstacle traversal or replanning run. |
+| 8C Stage 5 parking | BLOCKED live | 7 unit tests pass for a non-authoritative proposal controller. |
+| 8C Stage 6 evaluation | PARTIAL WITH LIMITS | Prior profile evidence aggregated; not a controlled head-to-head benchmark. |
+| 8C Stage 7 hardware | PARTIAL DESIGN ONLY | UNO Q compatibility and physical safety require validation. |
+| 8C Stage 8 demo | PASS WITH LIMITS | Headless video and run guide; no Nav2 path or desktop capture. |
+
+Full evidence: docs/phase8c-stage-results.md. Older Stage D text predates calibration pulses; production yaw and downstream navigation remain blocked.
