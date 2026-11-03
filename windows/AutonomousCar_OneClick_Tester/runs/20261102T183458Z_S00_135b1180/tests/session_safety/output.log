@@ -1,0 +1,33 @@
+      1       1 /sbin/init
+      2       0 /init
+      8       0 plan9 --control-socket 7 --log-level 4 --server-fd 8 --pipe-fd 10 --log-truncate
+     44      44 /usr/lib/systemd/systemd-journald
+     94      94 /usr/lib/systemd/systemd-udevd
+    150     150 /usr/lib/systemd/systemd-resolved
+    151     151 /usr/lib/systemd/systemd-timesyncd
+    157     157 /usr/sbin/cron -f -P
+    158     158 @dbus-daemon --system --address=systemd: --nofork --nopidfile --systemd-activation --syslog-only
+    162     162 /usr/bin/lttng-sessiond
+    169     169 /usr/lib/systemd/systemd-logind
+    171     171 /usr/libexec/wsl-pro-service
+    178     162 /usr/bin/lttng-sessiond
+    200     200 /usr/sbin/rsyslogd -n -iNONE
+    205     205 /sbin/agetty -o -p -- \u --noclear --keep-baud - 115200,38400,9600 vt220
+    208     208 /sbin/agetty -o -p -- \u --noclear - linux
+    209     209 /usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal
+    261     261 /usr/lib/systemd/systemd-timedated
+    299     299 /bin/login -f
+    346     346 /usr/lib/systemd/systemd --user
+    347     346 (sd-pam)
+    359     359 -bash
+    404     404 /init
+    405     404 /init
+    406     406 setsid --wait bash /mnt/c/Users/ajayk/Desktop/AutonomousCar_OneClick_Tester/tools/wsl_test_runner.sh --run 20261102T183458Z_S00_135b1180 /mnt/c/Users/ajayk/Desktop/AutonomousCar_OneClick_Tester/runs/20261102T183458Z_S00_135b1180 /mnt/c/Users/ajayk/Desktop/AutonomousCar_OneClick_Tester/runs/20261102T183458Z_S00_135b1180/config/test_settings.json /home/ashish/AutonomousNavigationCar 14056 true 2026-11-02T18:34:57.5067904Z /mnt/c/Users/ajayk/Desktop/AutonomousCar_OneClick_Tester/latest
+    410     410 python3 /mnt/c/Users/ajayk/Desktop/AutonomousCar_OneClick_Tester/tools/wsl_orchestrator.py run 20261102T183458Z_S00_135b1180 /mnt/c/Users/ajayk/Desktop/AutonomousCar_OneClick_Tester/runs/20261102T183458Z_S00_135b1180 /mnt/c/Users/ajayk/Desktop/AutonomousCar_OneClick_Tester/runs/20261102T183458Z_S00_135b1180/config/test_settings.json /home/ashish/AutonomousNavigationCar 14056 true 2026-11-02T18:34:57.5067904Z /mnt/c/Users/ajayk/Desktop/AutonomousCar_OneClick_Tester/latest
+    458      94 (udev-worker)
+    459      94 (udev-worker)
+    460      94 (udev-worker)
+    462      94 (udev-worker)
+    471      94 (udev-worker)
+    480      94 (udev-worker)
+    494     494 ps -eo pid,pgid,args --no-headers

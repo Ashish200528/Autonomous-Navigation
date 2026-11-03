@@ -119,12 +119,13 @@ result=0
 if [[ "$demo_status" == true ]]; then
  echo "REALISTIC RGB + LiDAR — CURRENT VERIFIED CAPABILITIES"
  echo "Nav2 goal navigation stays disabled unless its readiness file and evidence independently pass."
- if [[ "$demo_forward" == true ]]; then
-  python3 scripts/phase8c_gui_demo.py --scenario "$scenario" --output "$run_dir/phase8c-demo-status.json" --request-forward
- else
-  python3 scripts/phase8c_gui_demo.py --scenario "$scenario" --output "$run_dir/phase8c-demo-status.json"
- fi
+ monitor_args=(--scenario "$scenario" --output "$run_dir/phase8c-demo-status.json"
+               --launch-pid "$launch_pid" --monitor-duration-s "$duration")
+ [[ "$demo_forward" != true ]] || monitor_args+=(--request-forward)
+ set +e
+ python3 scripts/phase8c_gui_demo.py "${monitor_args[@]}"
  result=$?
+ set -e
  echo "Sensor/status monitor exit code: $result"
 elif [[ "$nav2" == true ]]; then
  set +e

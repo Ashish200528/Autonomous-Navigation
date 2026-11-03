@@ -1,0 +1,59 @@
+ANALYZE THIS STANDALONE TEST RUN FIRST
+Run folder: C:\Users\ajayk\Desktop\AutonomousCar_OneClick_Tester\runs\20261102T183851Z_S00_57fd8b93
+Run ID: 20261102T183851Z_S00_57fd8b93
+Overall: BLOCKED - one or more tests were blocked by resources or readiness
+Project version: feature/phase8c-lidar @ 567ac430544fe7fb945f8fb9c7aac4f47e779804
+
+Executed:
+- additional_fault_injection: SKIPPED - additional fault injection is disabled by safe defaults
+- environment: PASS - ROS 2 Jazzy, Gazebo, project workspace and required packages verified
+- lidar_sensors: SKIPPED - DRY_RUN: live simulation deliberately not launched
+- map_save: SKIPPED - DRY_RUN: live simulation deliberately not launched
+- moving_slam_trial_1: SKIPPED - DRY_RUN: live simulation deliberately not launched
+- moving_slam_trial_2: SKIPPED - DRY_RUN: live simulation deliberately not launched
+- moving_slam_trial_3: SKIPPED - DRY_RUN: live simulation deliberately not launched
+- nav2: BLOCKED - readiness validator did not return READY
+- offline_common_infrastructure_test: PASS - existing offline pytest (no simulator/motion)
+- offline_lidar_model_test: PASS - existing offline pytest (no simulator/motion)
+- offline_nav2_config_test: PASS - existing offline pytest (no simulator/motion)
+- offline_nav2_runner_test: PASS - existing offline pytest (no simulator/motion)
+- offline_readiness_test: PASS - existing offline pytest (no simulator/motion)
+- offline_tests: PASS - all selected offline tests passed
+- production_turning: SKIPPED - production turning trials are disabled; no angular request
+- readiness: BLOCKED - readiness validator: BLOCKED	production_turning_verified:evidence_reference_missing; moving_slam_verified:evidence_reference_missing; moving_slam_verified:three_distinct_moving_trials_required; guarded_command_chain_verified:evidence_reference_missing; guarded_command_chain_verified:at_least_one_S00_navigation_trial_required
+- resource_gate: BLOCKED - DRY_RUN: Gazebo withheld; current Windows free RAM is 726 MiB (minimum 2048), WSL available RAM is 3130 MiB (minimum 1536).
+- rgb_camera_pair: SKIPPED - DRY_RUN: live simulation deliberately not launched
+- session_safety: PASS - no existing matching simulation session
+- simulation_cleanup: PASS - no simulator was started; no cleanup was required
+- stationary_slam: SKIPPED - DRY_RUN: live simulation deliberately not launched
+- turning_clearance_probe: SKIPPED - DRY_RUN: live simulation deliberately not launched
+
+Strong evidence files:
+- tests/lidar_sensors/result.json
+- tests/lidar_sensors/output.log
+- tests/stationary_slam/result.json
+- tests/stationary_slam/output.log
+- tests/moving_slam_trial_1/result.json
+- tests/moving_slam_trial_1/output.log
+- tests/moving_slam_trial_2/result.json
+- tests/moving_slam_trial_2/output.log
+- tests/moving_slam_trial_3/result.json
+- tests/moving_slam_trial_3/output.log
+- tests/turning_clearance_probe/result.json
+- tests/turning_clearance_probe/output.log
+- tests/readiness/result.json
+- tests/readiness/output.log
+- tests/nav2/result.json
+- tests/nav2/output.log
+
+Engineering blockers:
+- nav2: readiness validator did not return READY
+- readiness: readiness validator: BLOCKED	production_turning_verified:evidence_reference_missing; moving_slam_verified:evidence_reference_missing; moving_slam_verified:three_distinct_moving_trials_required; guarded_command_chain_verified:evidence_reference_missing; guarded_command_chain_verified:at_least_one_S00_navigation_trial_required
+- resource_gate: DRY_RUN: Gazebo withheld; current Windows free RAM is 726 MiB (minimum 2048), WSL available RAM is 3130 MiB (minimum 1536).
+
+Production turning passed: no (not validated or skipped)
+Moving SLAM passed: no
+Realistic Nav2 attempted: no
+
+Future Codex request:
+"I have run the standalone Autonomous Navigation Car tests while Codex was closed. Review the latest run folder, analyze the recorded Gazebo, LiDAR, SLAM, localization, turning, safety and navigation results, identify the exact blockers, and implement the next justified corrections on feature/phase8c-lidar."

@@ -1,0 +1,190 @@
+Continue the Autonomous Navigation Car project with **Phase 8B — RGB Navigation Feasibility Recovery, Stopping-Distance Validation and Conditional Low-Speed Motion**.
+
+Repository: https://github.com/Ashish200528/Autonomous-Navigation
+
+Local WSL workspace: `/home/ashish/AutonomousNavigationCar`
+
+Latest reviewed commit: `0866608c159f059e14d1f27bf4e5ab6c40732650`
+
+Phases 0–7 are implemented with documented limitations.
+
+Phase 8 achieved **PASS WITH LIMITS for a STOP-ONLY baseline**. The autonomous motion gate remains BLOCKED.
+
+Read the original master roadmap, Phase 7 report, `docs/phase8-feasibility.md`, `docs/PHASE_REPORT.md`, `docs/issues.md`, and the Phase 8 source and test evidence.
+
+Do not describe Phase 8 as successful RGB autonomous navigation.
+
+## Primary objective
+
+Investigate and, if technically justified, resolve the barriers preventing the existing RGB-only robot from safely executing short, low-speed movements.
+
+Preserve fail-closed behavior and do not authorize motion simply to achieve a visible demonstration.
+
+### Task A — Verify the existing baseline
+
+1. Check local Git status and safely synchronize with GitHub.
+2. Preserve uncommitted files and existing evidence.
+3. Rebuild all ROS 2 packages.
+4. Rerun Phase 7 perception tests, Phase 8 static validation and representative stationary safety tests.
+5. Verify the Phase 6 ORACLE_REFERENCE navigation baseline remains operational.
+6. Inspect runtime topic subscriptions and transform ownership.
+
+Do not reinstall existing working dependencies unnecessarily.
+
+### Task B — Address the camera visibility gap
+
+The current Phase 8 report records:
+
+- Robot front at approximately x = 0.215 m.
+- FREE patch at approximately x = 0.604–0.694 m.
+- UNKNOWN gap of about 0.389 m.
+- FREE patch length of about 0.090 m.
+- Phase 7 UNKNOWN coverage around 81%.
+- Phase 7 occupied recall around 26.7%.
+
+Investigate the camera mounting geometry, downward viewing angle, ground-plane visibility and existing classifier's restricted 0.50–0.60 m band.
+
+Implement controlled simulation experiments with provisional camera pitch/height settings if useful.
+
+Maintain consistent URDF/Xacro, CameraInfo, TF, projection math and evaluator configuration.
+
+Compare several mounting/projection configurations using fixed seeds.
+
+Measure:
+- Continuous confirmed FREE corridor from the robot front.
+- Coverage near the wheels and footprint.
+- False-FREE errors.
+- OCCUPIED detection and UNKNOWN coverage.
+- Geometric projection validity.
+- Sensitivity to obstacle color, shadow and occlusion.
+- CPU/RAM usage and processing latency.
+
+Do not declare unobserved ground to be FREE merely to close the gap.
+
+If the available RGB evidence remains insufficient, retain BLOCKED.
+
+### Task C — Measure simulated emergency stopping distance
+
+Create a separate bounded Gazebo dynamics experiment, isolated from the locked Phase 8 production command path.
+
+Use the existing simulated robot and low test speeds.
+
+Measure emergency-command response at several speeds, including approximately 0.05, 0.10 and 0.18 m/s if the test setup permits.
+
+Record:
+- Command-to-stop delay.
+- Actual robot displacement after the stop command.
+- Wheel/odometry versus evaluator truth.
+- Physical settling behavior.
+- Stop-distance repeatability.
+- Slip or poor-friction cases.
+- Maximum observed stopping distance with an explicit conservative allowance.
+
+This is a dynamics test, not a realistic perception navigation pass.
+
+Do not use Phase 6 goal settling as a substitute for emergency braking measurements.
+
+Do not modify the Arduino UNO Q application or issue commands to physical hardware.
+
+### Task D — Recalculate the movement gate
+
+Implement an explicit mathematical acceptance gate combining:
+
+- Reliable connected FREE corridor length.
+- Actual braking-distance measurements.
+- Camera image age.
+- Perception latency.
+- Supervisor response period.
+- Robot footprint.
+- Localization uncertainty.
+- An explicit safety margin.
+
+Document the reasoning and measured values.
+
+UNKNOWN remains non-traversable.
+
+Unlocalized OCCUPIED image evidence must not be converted into fabricated metric obstacle locations.
+
+If the gate cannot establish sufficient safe space, retain unconditional zero output.
+
+Do not change the existing motion lock solely to force a test to pass.
+
+### Task E — Conditional guarded controller
+
+Only if Tasks B–D establish a defensible motion envelope:
+
+1. Implement a separate, explicitly gated simulation-only low-speed controller.
+2. Preserve the existing stop-only launch as a regression baseline.
+3. Ensure only one node owns `/cmd_vel`.
+4. Require fresh valid perception, localization, TF and command data before motion.
+5. Bound speed and acceleration according to measured stopping capability.
+6. Stop on UNKNOWN, invalid perception, stale camera, localization dropout or command timeout.
+7. Prevent automatic resumption after a fault until the required safety conditions are re-established.
+8. Verify that the stop output produces an actual physical stop, not just a ROS status message.
+
+Do not add a launch flag that casually bypasses the feasibility gate.
+
+### Task F — Controlled simulation tests
+
+Test in this order:
+
+1. Empty S00 world with absent camera: remain stopped.
+2. Empty S00 with healthy camera and valid FREE corridor: short low-speed forward motion, only if authorized by the measured gate.
+3. Emergency stop while moving in a safe open arena.
+4. Camera dropout while moving.
+5. Stale camera frame or invalid CameraInfo while moving.
+6. Localization dropout/uncertainty while moving.
+7. S01 box approach: safe stopping before contact.
+8. S02 random obstacles with seeds 101 and 202.
+9. S03 narrow passage: refuse unsafe movement.
+10. S09 impossible route: no false success and no unsafe bypass.
+
+Only run moving scenarios if their prerequisite safety gates pass.
+
+Do not count stationary stop tests as successful autonomous navigation.
+
+### Task G — Scientific safeguards
+
+- REALISTIC runtime must never consume oracle maps, Gazebo truth, hidden object geometry, scenario manifests, synthetic depth or ideal lidar.
+- Ground truth is evaluator-only.
+- Preserve FREE=0, OCCUPIED=100, UNKNOWN=-1 for metric occupancy maps.
+- Do not assume arbitrary metric obstacle distance from monocular RGB.
+- Record the existing Phase 4 wheel-slip limitations.
+- Keep Phase 6 reference navigation separate and functional.
+- Use lightweight headless Gazebo on the 8 GB RAM laptop.
+- Do not implement parking, motor hardware interfaces or UNO Q integration in this task.
+
+### Required evidence
+
+Save:
+
+- Candidate camera geometry configurations.
+- Actual RGB frames, masks and ground projections.
+- Connected corridor lengths.
+- False-FREE, occupied-recall and UNKNOWN statistics.
+- Measured emergency braking curves and stop distances.
+- Safety-gate calculations.
+- Actual velocity command and robot-motion traces.
+- Camera/localization fault-injection results.
+- Minimum obstacle clearance and contacts.
+- CPU, memory, perception FPS and latency.
+- Separate PASS/FAIL/BLOCKED assessments for each experiment.
+
+Update README, phase reports, issues, configuration notes, test registry and evidence index.
+
+Commit and safely push validated work to the existing GitHub repository.
+
+## Final decision
+
+Provide two distinct results:
+
+1. **Phase 8B feasibility and safety improvements:** PASS / PASS WITH LIMITS / FAIL / BLOCKED.
+2. **REALISTIC_RGB_ONLY moving navigation:** PASS / PASS WITH LIMITS / FAIL / NOT ATTEMPTED / BLOCKED.
+
+If movement remains unsafe or geometrically unjustified, do not force it. Leave the stop-only implementation intact, explain the remaining engineering blocker and recommend the next specific experiment.
+
+If only short safe local motion succeeds, call it locally validated movement, not full goal navigation.
+
+**Stop after this Phase 8B work. Do not automatically begin Phase 9 parking.**
+
+Continue independently through ordinary coding, testing and documentation work, asking me only for permissions or genuine blockers.

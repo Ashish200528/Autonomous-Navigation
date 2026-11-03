@@ -1,0 +1,135 @@
+# Autonomous Navigation Car — Live Gazebo Visual Demonstration
+
+I want you to run the current **Phase 8C Branch 1 (RGB + LiDAR)** simulation on my computer so that I can watch the robot and understand its current capabilities visually.
+
+**Repository:** https://github.com/Ashish200528/Autonomous-Navigation
+
+**Local WSL project:** `/home/ashish/AutonomousNavigationCar`
+
+**Git branch:** `feature/phase8c-lidar`
+
+## Main objective
+
+This is a **live visual demonstration**, not a new development phase.
+
+Please operate the simulation on my behalf using my existing Windows 11 / WSL2 Ubuntu 24.04 environment.
+
+Open the actual Gazebo graphical interface and keep it visible so I can observe the robot, obstacles and movements.
+
+Do not simply run headless tests and provide logs. I specifically want to see the simulation visually.
+
+## 1. Prepare the environment
+
+- Check the existing Git branch, working-tree status and ROS 2 setup.
+- Safely update the LiDAR branch if required, without overwriting uncommitted changes.
+- Source ROS 2 Jazzy and the workspace.
+- Build only if necessary.
+- Verify WSLg / graphical display availability.
+- Do not reinstall ROS, Gazebo or other working dependencies unnecessarily.
+
+## 2. Start Gazebo visually
+
+Launch the existing `anc_lidar` REALISTIC_RGB_LIDAR profile using the appropriate scenario world.
+
+The existing launch starts Gazebo headlessly. Start a compatible Gazebo GUI session connected to that same simulator.
+
+Make sure the 3D window actually displays the robot and selected environment.
+
+If graphical access is unavailable from your execution environment, explain the limitation instead of falsely claiming that I can see the window. Use the supported computer-control method to open the GUI on my desktop if available.
+
+Keep `enable_slam:=false` and `enable_nav2:=false`, since full autonomous LiDAR navigation has not yet been validated.
+
+## 3. Demonstrate different environments
+
+Show these environments sequentially:
+
+**Demonstration A — S00 Empty Arena**
+- Display the custom car and its sensors.
+- Verify the LiDAR and camera topics are running.
+- Demonstrate a short forward movement using the guarded `/cmd_vel_nav` interface.
+- Stop and show that the robot actually settles.
+
+**Demonstration B — S01 Box Obstacle**
+- Display the box blocking the direct route.
+- Show how LiDAR detects the obstacle.
+- Demonstrate conservative stopping or refusal to move when clearance is insufficient.
+- Do not force the car toward the obstacle.
+
+**Demonstration C — S02 Random Obstacles**
+- Load seed 101.
+- Show the arrangement of different obstacles.
+- Then reload with seed 202.
+- Show how obstacle positions change and how the LiDAR readings reflect the environment.
+
+**Demonstration D — S03 Narrow Passage**
+- Show the constricted environment.
+- Observe how the robot's safety system evaluates clearance.
+- Do not attempt unvalidated turning or narrow-passage navigation.
+
+**Demonstration E — S09 No Route**
+- Show the blocked route.
+- Explain visually why the current system cannot safely traverse it.
+- Do not claim that the robot has performed global no-route detection with Nav2.
+
+## 4. Show sensor and safety information
+
+Where practical, use RViz2 alongside Gazebo to display:
+
+- Robot model and TF.
+- LiDAR LaserScan.
+- Local occupancy grid.
+- FREE, OCCUPIED and UNKNOWN regions.
+- RGB camera image.
+- Safety authorization and actual velocity commands.
+
+Use a sensible display arrangement so the windows remain understandable.
+
+Do not overload WSL memory. If Gazebo and RViz2 cannot run together reliably, prioritize Gazebo GUI and display important sensor/safety values in a terminal instead.
+
+## 5. Motion and safety restrictions
+
+The current Phase 8C branch has validated only short, guarded forward movement.
+
+- Send motion requests through `/cmd_vel_nav`.
+- Never bypass the authoritative `/cmd_vel` safety guard.
+- Keep angular velocity at zero.
+- Use low-speed, bounded commands only where the safety gate authorizes them.
+- Do not force motion when a sensor is invalid or clearance is inadequate.
+- Explicitly stop between demonstrations.
+- Do not enable Nav2 or claim autonomous obstacle avoidance.
+
+## 6. Make the demonstration easy for me to follow
+
+I want to watch and understand what is happening.
+
+For each environment, briefly explain:
+
+1. Which scenario is open.
+2. What the robot can currently sense.
+3. What behavior is being demonstrated.
+4. Whether the safety gate permits movement.
+5. Which functionality is still unfinished.
+
+If supported, arrange the Gazebo GUI in a useful top-down or angled view with the robot and nearby obstacles visible.
+
+Please allow me to observe each environment before switching. Use my confirmation to move to the next scenario rather than closing one environment immediately and launching another without warning.
+
+## 7. Final result
+
+After the demonstration, summarize:
+
+- Which environments successfully opened in Gazebo.
+- Whether the robot was visible.
+- Whether guarded forward motion was observed.
+- Whether LiDAR and RGB sensor outputs were available.
+- Whether the safety gate behaved as expected.
+- Any GUI or performance issues.
+- What remains before autonomous turning, obstacle avoidance and goal navigation.
+
+Do not modify the Arduino UNO Q application.
+
+Do not begin Phase 8C-D, another sensing branch, parking or hardware integration.
+
+**This task is only to let me visually inspect and understand the current simulation.**
+
+Leave the final requested environment open for inspection if possible, and ensure the robot is stopped safely before ending the demonstration.

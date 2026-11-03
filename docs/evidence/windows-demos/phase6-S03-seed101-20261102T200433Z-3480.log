@@ -1,0 +1,137 @@
+Session ID: windows-phase6-S03-seed101-20261102T200433Z-5328
+Profile: phase6
+Scenario: S03 | seed: 101 | Gazebo GUI: true | RViz: true
+Parking: AUTONOMOUS PARKING — NOT YET LIVE-VALIDATED
+Session log: /home/ashish/AutonomousNavigationCar/docs/evidence/windows-demos/phase6-S03-seed101-20261102T200433Z-3480.log
+REFERENCE NAVIGATION — PREDEFINED MAP
+This mode uses the existing geometry-derived ORACLE_REFERENCE map for localization/planning; it does not validate RGB-only or online LiDAR navigation.
+
+=== REFERENCE NAVIGATION — PREDEFINED MAP ===
+Scenario S03, seed 101
+Goal status: SUCCEEDED / classification: PASS
+Final goal error: 0.1765 m; collisions: 0
+Live result folder: /home/ashish/AutonomousNavigationCar/docs/evidence/phase6/runs/windows-phase6-S03-seed101-20261102T200433Z-5328
+The simulation is paused with the final scene visible. Press Ctrl+C here or select Stop from the launcher menu to clean up.
+{
+  "run_id": "windows-phase6-S03-seed101-20261102T200433Z-5328",
+  "scenario_id": "S03",
+  "seed": 101,
+  "profile": "ORACLE_REFERENCE",
+  "status": "PASS",
+  "classification": "PASS",
+  "action": {
+    "name": "/navigate_to_pose",
+    "goal_accepted": true,
+    "goal_frame": "map",
+    "goal_xyyaw": [
+      3.0,
+      0.0,
+      0.0
+    ],
+    "status_code": 4,
+    "status": "SUCCEEDED",
+    "error_code": 0,
+    "error_msg": "",
+    "timed_out": false,
+    "feedback_samples": 3649,
+    "last_feedback": {
+      "x": 2.8982288596307946,
+      "y": 0.10399924687939602,
+      "distance_remaining_m": 0.14142131805419922,
+      "navigation_time_s": 63.612,
+      "number_of_recoveries": 0
+    },
+    "number_of_recoveries": 0
+  },
+  "metrics": {
+    "action_accepted": true,
+    "action_result": "SUCCEEDED",
+    "action_error_code": 0,
+    "action_error_message": "",
+    "wall_elapsed_s": 86.638,
+    "sim_elapsed_s": 64.468,
+    "truth_path_length_m": 9.0895,
+    "latest_planned_path_length_m": 0.1414,
+    "peak_planned_path_length_m": 9.4552,
+    "plan_message_count": 72,
+    "final_truth_pose": {
+      "monotonic_s": 3741.893478233,
+      "sim_time_s": 72.776,
+      "frame_id": "world",
+      "x": 2.84568,
+      "y": 0.085752,
+      "z": -3.14995e-08,
+      "yaw_rad": -0.16392000000000004,
+      "linear_x_mps": -0.000245969,
+      "angular_z_radps": 0.00793206
+    },
+    "final_xy_goal_error_m": 0.1765,
+    "final_yaw_goal_error_rad": 0.1639,
+    "final_estimated_map_pose": {
+      "x": 2.8980137065772897,
+      "y": 0.10401969668996437,
+      "yaw_rad": -0.16339302915739218
+    },
+    "final_localization_drift_xy_m": 0.0554,
+    "minimum_conservative_clearance_m": 0.0213,
+    "contact_collision_events": 0,
+    "contact_collision_pairs": [],
+    "ground_contact_messages_filtered": 33736,
+    "non_ground_contact_messages": 0,
+    "max_abs_cmd_vel_linear_x_mps": 0.18,
+    "max_abs_cmd_vel_angular_z_radps": 0.45,
+    "command_guard_limits_mps_radps": [
+      0.25,
+      1.0
+    ],
+    "post_action_robot_stopped": true,
+    "post_action_settle_time_s": 0.806,
+    "post_action_settle_window_expired": false,
+    "post_action_truth_pose_window": {
+      "sample_count": 5,
+      "duration_s": 0.802,
+      "xy_delta_m": 0.0,
+      "yaw_delta_rad": 0.0
+    },
+    "post_action_raw_odom_velocity": [
+      0.0,
+      0.0
+    ],
+    "post_action_filtered_odom_velocity": [
+      -0.0009516565957609972,
+      0.000797841525390131
+    ],
+    "post_action_truth_twist_stopped": true,
+    "truth_samples": 367,
+    "raw_odom_samples": 2014,
+    "filtered_odom_samples": 2048,
+    "raw_odom_path_length_m": 9.1291,
+    "filtered_odom_path_length_m": 9.1293,
+    "command_nav_samples": 730,
+    "command_gazebo_samples": 730,
+    "sensor_counts": {
+      "camera_image_raw": 0,
+      "imu_data": 6772,
+      "clock": 36048,
+      "map": 1,
+      "odom": 2014,
+      "odometry_filtered": 2048
+    },
+    "evaluator_truth_errors": []
+  },
+  "runner_error": null,
+  "limitations": [
+    "Gazebo required launch-managed signal escalation during shutdown; the runner still verified the simulation process group was gone."
+  ],
+  "failed_checks": [],
+  "run_dir": "/home/ashish/AutonomousNavigationCar/docs/evidence/phase6/runs/windows-phase6-S03-seed101-20261102T200433Z-5328",
+  "shutdown": {
+    "signal": "SIGINT",
+    "returncode": 0,
+    "group_gone": true,
+    "forced": false,
+    "child_sigterm_escalated": true,
+    "child_sigkill_escalated": true,
+    "gazebo_child_shutdown_clean": false
+  }
+}

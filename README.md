@@ -224,3 +224,7 @@ The eight-package build and 24 Phase 8C unit checks passed. Full evidence and li
 Supplemental results and capability classifications are in docs/phase8c-stage-results.md. Six pure-yaw calibration pulses and a conservative swept-footprint denial guard were validated, but production angular authority remains 0 rad/s. A tuned stationary S00 SLAM run saved a 0.05 m map; moving localization and drift reduction were not demonstrated. Nav2 goal navigation, obstacle avoidance, replanning and live parking remain blocked. The parking proposal passed 7 unit tests but is not wired to velocity authority.
 
 A headless sensor composite and limited RViz setup are indexed in docs/phase8c-lidar-run-guide.md. This is not a global-navigation demo. UNO Q transfer is design-only; hardware validation is pending.
+
+## Native Ubuntu migration checkpoint — 3 November 2026
+
+The latest working branch is `feature/phase8c-lidar`; use the `pre-native-ubuntu-20261103` tag for the migration snapshot. Start with [the native Ubuntu handoff](docs/NATIVE_UBUNTU_HANDOFF.md). The migration release preserves large ignored evidence and Windows tools as separate archives. Full realistic LiDAR goal navigation remains readiness-blocked; the recent monitor checks were synthetic ROS checks, and the repaired Gazebo movement demo awaits a real retest.

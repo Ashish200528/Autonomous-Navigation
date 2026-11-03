@@ -238,13 +238,26 @@ prepare_launch() {
 
 choose_scenario() {
   echo
-  echo "Choose scenario: 1) S00 empty  2) S01 box obstacle  3) S02  4) S03  5) S04  6) S09 no-route"
+  echo "Choose reference-navigation scenario: 1) S00 empty  2) S01 box obstacle  3) S02  4) S03  5) S04  6) S09 no-route"
   local choice
   read -r -p "Scenario [1]: " choice
   case "$choice" in
     ""|1) SCENARIO=S00;; 2) SCENARIO=S01;; 3) SCENARIO=S02;;
     4) SCENARIO=S03;; 5) SCENARIO=S04;; 6) SCENARIO=S09;;
     *) echo "Invalid scenario selection."; return 1;;
+  esac
+}
+
+choose_sensor_scenario() {
+  echo
+  echo "Choose a stationary RGB + LiDAR sensor scenario (these do not move):"
+  echo "1) S01 box obstacle  2) S02 obstacle field  3) S03 narrow corridor  4) S04  5) S09 no-route"
+  local choice
+  read -r -p "Sensor scenario [2]: " choice
+  case "$choice" in
+    ""|2) SCENARIO=S02;; 1) SCENARIO=S01;; 3) SCENARIO=S03;;
+    4) SCENARIO=S04;; 5) SCENARIO=S09;;
+    *) echo "Invalid sensor scenario selection."; return 1;;
   esac
 }
 
@@ -312,7 +325,7 @@ start_profile() {
     local n
     for n in $(seq 1 30); do
       if [[ -f "$SESSION_STATE" ]]; then
-        echo "Demo session started. Use menu option 5 to stop it; option 6 follows its status log."
+        echo "Demo session started. Use menu option 6 to stop it; option 7 follows its status log."
         return 0
       fi
       sleep 0.2
@@ -321,16 +334,36 @@ start_profile() {
     tail -n 40 "$log_path" 2>/dev/null || true
     return 1
   fi
-  echo "Starting the selected demo in this window. Press Ctrl+C after the result to stop cleanly."
-  exec setsid --wait bash "$SESSION_SCRIPT" run "$profile" "$SCENARIO" "$SEED" "$RVIZ" direct "$log_path"
+  echo "Live demo status follows in this window. Ctrl+C stops this tracked project session."
+  env --default-signal=INT,QUIT setsid --wait bash "$SESSION_SCRIPT" run "$profile" "$SCENARIO" "$SEED" "$RVIZ" direct "$log_path" &
+  local session_wait_pid=$! result=0
+  trap 'bash "$SESSION_SCRIPT" stop || true' INT TERM
+  if wait "$session_wait_pid"; then result=0; else result=$?; fi
+  trap - INT TERM
+  return "$result"
 }
 
 run_individual() {
   local profile="$1"
-  choose_scenario || return 1
+  if [[ "$profile" == phase6 ]]; then
+    choose_scenario || return 1
+  else
+    SCENARIO=S00
+    echo "Using S00 clear arena for the guarded LiDAR movement demonstration."
+    echo "It requests a visible straight move up to 0.15 m or 4 seconds, with measured motion and stop confirmation."
+    echo "Obstacle scenarios are sensing-only; Nav2 obstacle navigation is not yet readiness-approved."
+  fi
   choose_seed || return 1
   choose_rviz
   start_profile "$profile" false
+}
+
+run_sensor_only() {
+  local detached="$1"
+  choose_sensor_scenario || return 1
+  choose_seed || return 1
+  choose_rviz
+  start_profile lidar "$detached"
 }
 
 show_parking_status() {
@@ -352,26 +385,36 @@ menu_loop() {
     echo
     echo "=== AUTONOMOUS NAVIGATION CAR — GAZEBO DEMO MENU ==="
     echo "1) Phase 6 reference goal navigation (predefined map)"
-    echo "2) Realistic RGB + LiDAR (validated sensing; S00 guarded forward only)"
-    echo "3) Parking capability status"
-    echo "4) Open latest evidence folder"
-    echo "5) Stop tracked project simulation cleanly"
-    echo "6) View latest launcher status/log"
-    echo "7) Exit"
-    read -r -p "Select [7]: " choice
+    echo "2) RGB + LiDAR movement demo (S00 clear arena; live motion result)"
+    echo "3) RGB + LiDAR sensor viewing (S01/S02/S03/S04/S09; stationary)"
+    echo "4) Parking capability status"
+    echo "5) Open latest evidence folder"
+    echo "6) Stop tracked project simulation cleanly"
+    echo "7) View latest launcher status/log"
+    echo "8) Exit"
+    read -r -p "Select [8]: " choice
     case "$choice" in
-      1|2)
+      1)
         choose_scenario || continue
         choose_seed || continue
         choose_rviz
-        if [[ "$choice" == 1 ]]; then start_profile phase6 true || true; else start_profile lidar true || true; fi
+        start_profile phase6 true || true
         ;;
-      3) show_parking_status;;
-      4) open_latest_evidence;;
-      5) bash "$SESSION_SCRIPT" stop || true;;
-      6) follow_latest_log;;
-      ""|7) echo "Exiting the menu. Any simulation remains tracked and can be stopped by reopening this menu."; break;;
-      *) echo "Select a number from 1 to 7.";;
+      2)
+        SCENARIO=S00
+        echo "S00 movement: 0.05 m/s straight, up to 0.15 m or 4 seconds, after fresh safety authorization."
+        echo "If the current LiDAR/safety state is not valid, the car remains stopped. Obstacle avoidance and Nav2 are not enabled."
+        choose_seed || continue
+        choose_rviz
+        start_profile lidar false || true
+        ;;
+      3) run_sensor_only false || true;;
+      4) show_parking_status;;
+      5) open_latest_evidence;;
+      6) bash "$SESSION_SCRIPT" stop || true;;
+      7) follow_latest_log;;
+      ""|8) echo "Exiting the menu. Any simulation remains tracked and can be stopped by reopening this menu."; break;;
+      *) echo "Select a number from 1 to 8.";;
     esac
   done
 }

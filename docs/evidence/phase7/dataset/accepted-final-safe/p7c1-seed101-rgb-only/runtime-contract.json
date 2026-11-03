@@ -1,0 +1,56 @@
+{
+  "camera_header_timing": {
+    "count": 61,
+    "max_interval_s": 0.068,
+    "median_interval_s": 0.066,
+    "rate_hz": 15.15151515151515
+  },
+  "clock_timing": {
+    "count": 1599,
+    "max_interval_s": 2.200000000000024e-11,
+    "median_interval_s": 1.99999999999978e-12,
+    "rate_hz": 500000000000.05505
+  },
+  "contract_passed": true,
+  "expected_perception_subscriber_topics": [
+    "/camera/image_raw",
+    "/camera/camera_info",
+    "/clock"
+  ],
+  "free_memory_snapshot": "               total        used        free      shared  buff/cache   available\nMem:           3.5Gi       1.3Gi       1.5Gi        57Mi       911Mi       2.2Gi\nSwap:          1.0Gi          0B       1.0Gi\n",
+  "gazebo_truth_subscribed_by_perception": false,
+  "health_sample_count": 84,
+  "health_samples_file": "runtime-health.jsonl",
+  "health_timing_csv": "runtime-health.csv",
+  "launch_command": [
+    "ros2",
+    "launch",
+    "anc_perception",
+    "realistic_perception.launch.py",
+    "world_file:=/home/ashish/AutonomousNavigationCar/docs/evidence/phase7/dataset/accepted-final-safe/p7c1-seed101-rgb-only/world.sdf",
+    "start_x:=-1.100000",
+    "start_y:=-0.200000",
+    "start_yaw:=0.000000"
+  ],
+  "nav2_started": false,
+  "observed_perception_subscriber_topics": [
+    "/camera/camera_info",
+    "/camera/image_raw",
+    "/clock"
+  ],
+  "perception_node_info": "/anc_rgb_perception\n  Subscribers:\n    /camera/camera_info: sensor_msgs/msg/CameraInfo\n    /camera/image_raw: sensor_msgs/msg/Image\n    /clock: rosgraph_msgs/msg/Clock\n  Publishers:\n    /parameter_events: rcl_interfaces/msg/ParameterEvent\n    /perception/confidence: sensor_msgs/msg/Image\n    /perception/health: std_msgs/msg/String\n    /perception/image_mask: sensor_msgs/msg/Image\n    /perception/overlay: sensor_msgs/msg/Image\n    /rosout: rcl_interfaces/msg/Log\n  Service Servers:\n    /anc_rgb_perception/describe_parameters: rcl_interfaces/srv/DescribeParameters\n    /anc_rgb_perception/get_parameter_types: rcl_interfaces/srv/GetParameterTypes\n    /anc_rgb_perception/get_parameters: rcl_interfaces/srv/GetParameters\n    /anc_rgb_perception/get_type_description: type_description_interfaces/srv/GetTypeDescription\n    /anc_rgb_perception/list_parameters: rcl_interfaces/srv/ListParameters\n    /anc_rgb_perception/set_parameters: rcl_interfaces/srv/SetParameters\n    /anc_rgb_perception/set_parameters_atomically: rcl_interfaces/srv/SetParametersAtomically\n  Service Clients:\n\n  Action Servers:\n\n  Action Clients:\n\n",
+  "process_rss_sampled": [
+    {
+      "command": "/opt/ros/jazzy/lib/ros_gz_sim/gzserver --ros-args --params-file /tmp/launch_params_3gyf7mhp ",
+      "pid": 54228,
+      "rss_kib": 505624
+    },
+    {
+      "command": "/usr/bin/python3 /home/ashish/AutonomousNavigationCar/simulation/ros2_ws/install/anc_perception/lib/anc_perception/rgb_perception_node --ros-args -r __node:=anc_rgb_perception --pa",
+      "pid": 54235,
+      "rss_kib": 180972
+    }
+  ],
+  "profile": "REALISTIC_RGB_ONLY",
+  "reference_map_loaded": false
+}
