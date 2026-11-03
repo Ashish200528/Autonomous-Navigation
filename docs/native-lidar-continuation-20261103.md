@@ -64,3 +64,7 @@ See [native-turning-timing-20261103.md](native-turning-timing-20261103.md). Four
 ## Independent stopping/confirmation contract
 
 See native-turn-contract-progress-20261103.md and phase8c-turn-stop-contract.md. A justified V2 evaluator separates the existing 0.75 s physical deadline from the unchanged 0.50 s observation hold, adds uncertainty and cumulative stopping-angle checks, and passed four live calibration fault tests. Full production-controller validation remains pending; no realistic Nav2 goal has run.
+
+## Full V2 calibration matrix
+
+All thirteen native-stream calibration categories now passed the independently tested physical-stop/confirmation contract. Maximum physical stopping-time upper bound 0.494 s and total stopping-angle upper bound 0.04773 rad; zero non-ground contacts in completed trials. The evidence allows only a new bounded production-controller validation run. Normal production authority remains denied until that new matrix passes. See native-turn-contract-progress-20261103.md.

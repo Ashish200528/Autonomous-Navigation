@@ -61,6 +61,25 @@ class CommonContractTests(unittest.TestCase):
                          ["max_linear_speed_mps"], 0.0)
 
 
+    def production_decision(self, vx, wz, mode='production_sequential'):
+        return guarded_command(request=dict(linear_x_mps=vx,angular_z_radps=wz),
+            request_age_s=.01,safety_age_s=.01,
+            safety_state=dict(valid=True,authorized=True,motion_mode=mode,
+                              combined_motion_authorized=False,max_linear_speed_mps=.18,max_angular_speed_radps=.1),
+            command_timeout_s=.3,safety_timeout_s=.25,hard_max_linear_speed_mps=.18,hard_max_angular_speed_radps=.1)
+
+    def test_production_profile_still_denies_unvalidated_mixed_motion(self):
+        self.assertFalse(self.production_decision(.05,.05)['authorized'])
+
+    def test_production_validation_profile_denies_translation(self):
+        self.assertFalse(self.production_decision(.05,0,'production_turn_validation_only')['authorized'])
+
+    def test_forward_stopping_evidence_does_not_authorize_reverse(self):
+        self.assertFalse(self.production_decision(-.05,0)['authorized'])
+        self.assertFalse(self.production_decision(-.05,0,'forward_only')['authorized'])
+        self.assertTrue(self.production_decision(.05,0)['authorized'])
+        self.assertEqual(self.production_decision(0,.5)['angular_z_radps'],.1)
+
     def test_rotation_calibration_guard_allows_yaw_only_and_blocks_translation(self):
         state = {
             "valid": True, "authorized": True,
