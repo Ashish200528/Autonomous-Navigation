@@ -1,0 +1,1077 @@
+{
+  "classification": "REALISTIC_RGB_LIDAR_NAV2_GOAL_TRIAL",
+  "status": "FAIL",
+  "scenario_id": "S00",
+  "seed": 101,
+  "route_expected": true,
+  "runtime_navigation_receives_no_gazebo_truth": true,
+  "localization_mode": "known-start online SLAM",
+  "start_world_pose": [
+    0.0,
+    0.0,
+    0.0
+  ],
+  "goal_world_pose": [
+    0.75,
+    0.0,
+    0.0
+  ],
+  "start_map_pose": [
+    -0.0001718112483985249,
+    8.273944798905322e-09,
+    -0.00035978784543866393
+  ],
+  "goal_map_pose": [
+    0.7498281402088669,
+    -0.0002698326043125037,
+    -0.0003597878454386639
+  ],
+  "start_truth": {
+    "sim_s": 4.494,
+    "x_m": -1.0678604620445583e-05,
+    "y_m": 4.9133079644757e-19,
+    "yaw_rad": -3.91425161528935e-18,
+    "wall_s": 8186.372264217,
+    "linear_x_mps": 0.0,
+    "angular_z_radps": 0.0
+  },
+  "final_truth": {
+    "sim_s": 66.03,
+    "x_m": -0.01605883110288373,
+    "y_m": 0.032046390134944265,
+    "yaw_rad": 0.9292516724113136,
+    "wall_s": 8247.913971787,
+    "linear_x_mps": 0.0016974419668796972,
+    "angular_z_radps": 0.04245203430697061
+  },
+  "final_xy_error_m": 0.7667288333116198,
+  "final_heading_error_rad": 0.9292516724113137,
+  "truth_path_length_m": 0.13609541505448658,
+  "min_evaluator_clearance_m": 2.553953609865056,
+  "nav2_action_status": "TIMEOUT",
+  "travel_limit_exceeded": false,
+  "elapsed_wall_s": 64.0205330610006,
+  "simulated_elapsed_s": 61.536,
+  "sensor_integrity": {
+    "rgb_frame_count": 320,
+    "rgb_fresh": false,
+    "scan_fresh": false,
+    "map_fresh": true,
+    "filtered_odom_received": true
+  },
+  "sole_authoritative_cmd_vel_publisher": true,
+  "sensor_summary": {
+    "scan_count": 320,
+    "rgb_frames": 320,
+    "map_updates": 63,
+    "global_costmap_updates": 42,
+    "plan_messages": 44,
+    "scan_rate_hz": 5.01351606211102
+  },
+  "safety_state": {
+    "angular_motion_status": "evidence_bounded_production_turn",
+    "angular_stopping_model": {
+      "angular_cap_radps": 0.1,
+      "confirmation_window_s": 0.5,
+      "manifest_sha256": "79739d9b422649246431b8847abd6668c7a89d2a08f9b081ce94a8957723ddbd",
+      "measured": true,
+      "physical_stop_time_bound_s": 0.75,
+      "production_authorized": true,
+      "production_validation_active": false,
+      "stopping_angle_bound_rad": 0.05,
+      "validated_for": "production"
+    },
+    "authorized": true,
+    "combined_motion_authorized": false,
+    "corridor_m": 3.200000047683716,
+    "decision_monotonic_s": 8247.894561241,
+    "failures": [],
+    "footprint_width_m": 0.345,
+    "forward_distance_reference": "front_footprint_boundary",
+    "localization_allowance_m": 0.4705050313257851,
+    "map_counts": {
+      "free": 4084,
+      "occupied": 272,
+      "unknown": 28044
+    },
+    "map_frame": "base_link",
+    "max_angular_speed_radps": 0.1,
+    "max_linear_speed_mps": 0.18,
+    "motion_mode": "production_sequential",
+    "node": "anc_lidar_safety_gate",
+    "profile": "REALISTIC_RGB_LIDAR",
+    "reason": "pass",
+    "rotation_calibration_speed_cap_radps": 0.1,
+    "rotation_clearance": {
+      "authorized": true,
+      "center_drift_allowance_m": 0.14,
+      "checked_cells": 112,
+      "footprint_circumradius_m": 0.263592962728522,
+      "inside_grid": true,
+      "occupied_cells": 0,
+      "reason": "swept_disk_clear",
+      "required_radius_m": 0.5235929627285221,
+      "safety_margin_m": 0.1,
+      "sensor_mount_uncertainty_m": 0.02,
+      "unknown_cells": 0
+    },
+    "runtime_uses_world_map_or_truth": false,
+    "safety_margin_m": 0.1,
+    "speed_gate": {
+      "max_linear_speed_mps": 0.18,
+      "reaction_time_s": 0.4947999999999984,
+      "reason": "measured_speed_bound_fits_corridor",
+      "selected": {
+        "passes": true,
+        "reaction_distance_m": 0.08906399999999971,
+        "required_corridor_m": 0.6625490313257848,
+        "speed_mps": 0.18,
+        "stop_distance_m": 0.00298
+      },
+      "tested_speeds": [
+        {
+          "passes": true,
+          "reaction_distance_m": 0.009895999999999969,
+          "required_corridor_m": 0.583381031325785,
+          "speed_mps": 0.02,
+          "stop_distance_m": 0.00298
+        },
+        {
+          "passes": true,
+          "reaction_distance_m": 0.024739999999999922,
+          "required_corridor_m": 0.598225031325785,
+          "speed_mps": 0.05,
+          "stop_distance_m": 0.00298
+        },
+        {
+          "passes": true,
+          "reaction_distance_m": 0.049479999999999844,
+          "required_corridor_m": 0.622965031325785,
+          "speed_mps": 0.1,
+          "stop_distance_m": 0.00298
+        },
+        {
+          "passes": true,
+          "reaction_distance_m": 0.08906399999999971,
+          "required_corridor_m": 0.6625490313257848,
+          "speed_mps": 0.18,
+          "stop_distance_m": 0.00298
+        }
+      ],
+      "valid": true
+    },
+    "speed_gate_inputs": {
+      "connected_full_footprint_corridor_m": 3.200000047683716,
+      "lidar_map_wall_age_s": 0.18360236900116433,
+      "measured_scan_rate_hz": 4.997975078457658,
+      "odom_sim_age_s": 0.01999999999999602,
+      "scan_sim_age_s": 0.2079999999999984,
+      "usable_beam_fraction": 0.9944444444444445
+    },
+    "stopping_model": {
+      "friction_conditions": [
+        0.5,
+        1.2
+      ],
+      "hardware_bound": false,
+      "source": "Phase 8B isolated simulator stopping test",
+      "tested_speeds_mps": [
+        0.02,
+        0.05,
+        0.1,
+        0.18
+      ],
+      "worst_stop_distance_m": 0.00298
+    },
+    "truth_used_only_by_evaluator": true,
+    "valid": true
+  },
+  "guard_state": {
+    "authorized": false,
+    "command_age_s": 0.3106920970003557,
+    "command_count": 610,
+    "decision_monotonic_s": 8247.882366411,
+    "node": "anc_safety_command_guard",
+    "output": {
+      "angular_z_radps": 0.0,
+      "is_zero": true,
+      "linear_x_mps": 0.0
+    },
+    "output_count": 1357,
+    "reason": "command_stale",
+    "request_received_monotonic_s": 8247.571674314,
+    "requested": {
+      "angular_z_radps": 0.0,
+      "linear_x_mps": 0.0
+    },
+    "safety_received_monotonic_s": 8247.794331848,
+    "safety_state": {
+      "angular_motion_status": "evidence_bounded_production_turn",
+      "angular_stopping_model": {
+        "angular_cap_radps": 0.1,
+        "confirmation_window_s": 0.5,
+        "manifest_sha256": "79739d9b422649246431b8847abd6668c7a89d2a08f9b081ce94a8957723ddbd",
+        "measured": true,
+        "physical_stop_time_bound_s": 0.75,
+        "production_authorized": true,
+        "production_validation_active": false,
+        "stopping_angle_bound_rad": 0.05,
+        "validated_for": "production"
+      },
+      "authorized": true,
+      "combined_motion_authorized": false,
+      "corridor_m": 3.200000047683716,
+      "decision_monotonic_s": 8247.793844933,
+      "failures": [],
+      "footprint_width_m": 0.345,
+      "forward_distance_reference": "front_footprint_boundary",
+      "localization_allowance_m": 0.4705050313257851,
+      "map_counts": {
+        "free": 4084,
+        "occupied": 272,
+        "unknown": 28044
+      },
+      "map_frame": "base_link",
+      "max_angular_speed_radps": 0.1,
+      "max_linear_speed_mps": 0.18,
+      "motion_mode": "production_sequential",
+      "node": "anc_lidar_safety_gate",
+      "profile": "REALISTIC_RGB_LIDAR",
+      "reason": "pass",
+      "rotation_calibration_speed_cap_radps": 0.1,
+      "rotation_clearance": {
+        "authorized": true,
+        "center_drift_allowance_m": 0.14,
+        "checked_cells": 112,
+        "footprint_circumradius_m": 0.263592962728522,
+        "inside_grid": true,
+        "occupied_cells": 0,
+        "reason": "swept_disk_clear",
+        "required_radius_m": 0.5235929627285221,
+        "safety_margin_m": 0.1,
+        "sensor_mount_uncertainty_m": 0.02,
+        "unknown_cells": 0
+      },
+      "runtime_uses_world_map_or_truth": false,
+      "safety_margin_m": 0.1,
+      "speed_gate": {
+        "max_linear_speed_mps": 0.18,
+        "reaction_time_s": 0.4608,
+        "reason": "measured_speed_bound_fits_corridor",
+        "selected": {
+          "passes": true,
+          "reaction_distance_m": 0.08294399999999999,
+          "required_corridor_m": 0.656429031325785,
+          "speed_mps": 0.18,
+          "stop_distance_m": 0.00298
+        },
+        "tested_speeds": [
+          {
+            "passes": true,
+            "reaction_distance_m": 0.009216,
+            "required_corridor_m": 0.5827010313257851,
+            "speed_mps": 0.02,
+            "stop_distance_m": 0.00298
+          },
+          {
+            "passes": true,
+            "reaction_distance_m": 0.02304,
+            "required_corridor_m": 0.596525031325785,
+            "speed_mps": 0.05,
+            "stop_distance_m": 0.00298
+          },
+          {
+            "passes": true,
+            "reaction_distance_m": 0.04608,
+            "required_corridor_m": 0.6195650313257851,
+            "speed_mps": 0.1,
+            "stop_distance_m": 0.00298
+          },
+          {
+            "passes": true,
+            "reaction_distance_m": 0.08294399999999999,
+            "required_corridor_m": 0.656429031325785,
+            "speed_mps": 0.18,
+            "stop_distance_m": 0.00298
+          }
+        ],
+        "valid": true
+      },
+      "speed_gate_inputs": {
+        "connected_full_footprint_corridor_m": 3.200000047683716,
+        "lidar_map_wall_age_s": 0.08366799800023728,
+        "measured_scan_rate_hz": 4.997975078457658,
+        "odom_sim_age_s": 0.02200000000000557,
+        "scan_sim_age_s": 0.10800000000000409,
+        "usable_beam_fraction": 0.9944444444444445
+      },
+      "stopping_model": {
+        "friction_conditions": [
+          0.5,
+          1.2
+        ],
+        "hardware_bound": false,
+        "source": "Phase 8B isolated simulator stopping test",
+        "tested_speeds_mps": [
+          0.02,
+          0.05,
+          0.1,
+          0.18
+        ],
+        "worst_stop_distance_m": 0.00298
+      },
+      "truth_used_only_by_evaluator": true,
+      "valid": true
+    },
+    "safety_state_age_s": 0.0880345630012016
+  },
+  "nav2_lifecycle_states": {
+    "planner_server": "active",
+    "controller_server": "active",
+    "behavior_server": "active",
+    "bt_navigator": "active",
+    "velocity_smoother": "active",
+    "collision_monitor": "active"
+  },
+  "command_summary": {
+    "/cmd_vel_nav_raw": {
+      "count": 444,
+      "nonzero": 439,
+      "max_v": 0.0,
+      "max_w": 1.0
+    },
+    "/cmd_vel_smoothed": {
+      "count": 610,
+      "nonzero": 596,
+      "max_v": 0.0,
+      "max_w": 0.1
+    },
+    "/cmd_vel_nav": {
+      "count": 610,
+      "nonzero": 596,
+      "max_v": 0.0,
+      "max_w": 0.1
+    },
+    "/cmd_vel": {
+      "count": 1307,
+      "nonzero": 1192,
+      "max_v": 0.0,
+      "max_w": 0.1
+    }
+  },
+  "cmd_vel_publisher_audit": {
+    "/cmd_vel": {
+      "count": 1,
+      "publisher_names": [
+        "anc_safety_command_guard"
+      ],
+      "exit_code": 0,
+      "output": "Type: geometry_msgs/msg/Twist\n\nPublisher count: 1\n\nNode name: anc_safety_command_guard\nNode namespace: /\nTopic type: geometry_msgs/msg/Twist\nTopic type hash: RIHS01_9c45bf16fe0983d80e3cfe750d6835843d265a9a6c46bd2e609fcddde6fb8d2a\nEndpoint type: PUBLISHER\nGID: 01.0f.09.56.f2.f5.58.a1.00.00.00.00.00.00.13.03\nQoS profile:\n  Reliability: RELIABLE\n  History (Depth): UNKNOWN\n  Durability: VOLATILE\n  Lifespan: Infinite\n  Deadline: Infinite\n  Liveliness: AUTOMATIC\n  Liveliness lease duration: Infinite\n\nSubscription count: 2\n\nNode name: phase8c_lidar_nav_evaluator\nNode namespace: /\nTopic type: geometry_msgs/msg/Twist\nTopic type hash: RIHS01_9c45bf16fe0983d80e3cfe750d6835843d265a9a6c46bd2e609fcddde6fb8d2a\nEndpoint type: SUBSCRIPTION\nGID: 01.0f.09.56.ba.f5.c9.82.00.00.00.00.00.00.38.04\nQoS profile:\n  Reliability: RELIABLE\n  History (Depth): UNKNOWN\n  Durability: VOLATILE\n  Lifespan: Infinite\n  Deadline: Infinite\n  Liveliness: AUTOMATIC\n  Liveliness lease duration: Infinite\n\nNode name: anc_parameter_bridge\nNode namespace: /\nTopic type: geometry_msgs/msg/Twist\nTopic type hash: RIHS01_9c45bf16fe0983d80e3cfe750d6835843d265a9a6c46bd2e609fcddde6fb8d2a\nEndpoint type: SUBSCRIPTION\nGID: 01.0f.09.56.e3.f5.dd.c5.00.00.00.00.00.00.15.04\nQoS profile:\n  Reliability: RELIABLE\n  History (Depth): UNKNOWN\n  Durability: VOLATILE\n  Lifespan: Infinite\n  Deadline: Infinite\n  Liveliness: AUTOMATIC\n  Liveliness lease duration: Infinite\n\n"
+    },
+    "/cmd_vel_nav": {
+      "count": 1,
+      "publisher_names": [
+        "collision_monitor"
+      ],
+      "exit_code": 0,
+      "output": "Type: geometry_msgs/msg/Twist\n\nPublisher count: 1\n\nNode name: collision_monitor\nNode namespace: /\nTopic type: geometry_msgs/msg/Twist\nTopic type hash: RIHS01_9c45bf16fe0983d80e3cfe750d6835843d265a9a6c46bd2e609fcddde6fb8d2a\nEndpoint type: PUBLISHER\nGID: 01.0f.09.56.f9.f5.d9.b3.00.00.00.00.00.00.25.03\nQoS profile:\n  Reliability: RELIABLE\n  History (Depth): UNKNOWN\n  Durability: VOLATILE\n  Lifespan: Infinite\n  Deadline: Infinite\n  Liveliness: AUTOMATIC\n  Liveliness lease duration: Infinite\n\nSubscription count: 2\n\nNode name: phase8c_lidar_nav_evaluator\nNode namespace: /\nTopic type: geometry_msgs/msg/Twist\nTopic type hash: RIHS01_9c45bf16fe0983d80e3cfe750d6835843d265a9a6c46bd2e609fcddde6fb8d2a\nEndpoint type: SUBSCRIPTION\nGID: 01.0f.09.56.ba.f5.c9.82.00.00.00.00.00.00.37.04\nQoS profile:\n  Reliability: RELIABLE\n  History (Depth): UNKNOWN\n  Durability: VOLATILE\n  Lifespan: Infinite\n  Deadline: Infinite\n  Liveliness: AUTOMATIC\n  Liveliness lease duration: Infinite\n\nNode name: anc_safety_command_guard\nNode namespace: /\nTopic type: geometry_msgs/msg/Twist\nTopic type hash: RIHS01_9c45bf16fe0983d80e3cfe750d6835843d265a9a6c46bd2e609fcddde6fb8d2a\nEndpoint type: SUBSCRIPTION\nGID: 01.0f.09.56.f2.f5.58.a1.00.00.00.00.00.00.15.04\nQoS profile:\n  Reliability: RELIABLE\n  History (Depth): UNKNOWN\n  Durability: VOLATILE\n  Lifespan: Infinite\n  Deadline: Infinite\n  Liveliness: AUTOMATIC\n  Liveliness lease duration: Infinite\n\n"
+    },
+    "/cmd_vel_nav_raw": {
+      "count": 5,
+      "publisher_names": [
+        "controller_server",
+        "behavior_server",
+        "behavior_server",
+        "behavior_server",
+        "behavior_server"
+      ],
+      "exit_code": 0,
+      "output": " UNKNOWN\n  Durability: VOLATILE\n  Lifespan: Infinite\n  Deadline: Infinite\n  Liveliness: AUTOMATIC\n  Liveliness lease duration: Infinite\n\nNode name: behavior_server\nNode namespace: /\nTopic type: geometry_msgs/msg/Twist\nTopic type hash: RIHS01_9c45bf16fe0983d80e3cfe750d6835843d265a9a6c46bd2e609fcddde6fb8d2a\nEndpoint type: PUBLISHER\nGID: 01.0f.09.56.f6.f5.15.4e.00.00.00.00.00.00.48.03\nQoS profile:\n  Reliability: RELIABLE\n  History (Depth): UNKNOWN\n  Durability: VOLATILE\n  Lifespan: Infinite\n  Deadline: Infinite\n  Liveliness: AUTOMATIC\n  Liveliness lease duration: Infinite\n\nSubscription count: 2\n\nNode name: phase8c_lidar_nav_evaluator\nNode namespace: /\nTopic type: geometry_msgs/msg/Twist\nTopic type hash: RIHS01_9c45bf16fe0983d80e3cfe750d6835843d265a9a6c46bd2e609fcddde6fb8d2a\nEndpoint type: SUBSCRIPTION\nGID: 01.0f.09.56.ba.f5.c9.82.00.00.00.00.00.00.35.04\nQoS profile:\n  Reliability: RELIABLE\n  History (Depth): UNKNOWN\n  Durability: VOLATILE\n  Lifespan: Infinite\n  Deadline: Infinite\n  Liveliness: AUTOMATIC\n  Liveliness lease duration: Infinite\n\nNode name: velocity_smoother\nNode namespace: /\nTopic type: geometry_msgs/msg/Twist\nTopic type hash: RIHS01_9c45bf16fe0983d80e3cfe750d6835843d265a9a6c46bd2e609fcddde6fb8d2a\nEndpoint type: SUBSCRIPTION\nGID: 01.0f.09.56.f8.f5.df.7a.00.00.00.00.00.00.21.04\nQoS profile:\n  Reliability: RELIABLE\n  History (Depth): UNKNOWN\n  Durability: VOLATILE\n  Lifespan: Infinite\n  Deadline: Infinite\n  Liveliness: AUTOMATIC\n  Liveliness lease duration: Infinite\n\n"
+    },
+    "/cmd_vel_smoothed": {
+      "count": 1,
+      "publisher_names": [
+        "velocity_smoother"
+      ],
+      "exit_code": 0,
+      "output": "Type: geometry_msgs/msg/Twist\n\nPublisher count: 1\n\nNode name: velocity_smoother\nNode namespace: /\nTopic type: geometry_msgs/msg/Twist\nTopic type hash: RIHS01_9c45bf16fe0983d80e3cfe750d6835843d265a9a6c46bd2e609fcddde6fb8d2a\nEndpoint type: PUBLISHER\nGID: 01.0f.09.56.f8.f5.df.7a.00.00.00.00.00.00.20.03\nQoS profile:\n  Reliability: RELIABLE\n  History (Depth): UNKNOWN\n  Durability: VOLATILE\n  Lifespan: Infinite\n  Deadline: Infinite\n  Liveliness: AUTOMATIC\n  Liveliness lease duration: Infinite\n\nSubscription count: 2\n\nNode name: phase8c_lidar_nav_evaluator\nNode namespace: /\nTopic type: geometry_msgs/msg/Twist\nTopic type hash: RIHS01_9c45bf16fe0983d80e3cfe750d6835843d265a9a6c46bd2e609fcddde6fb8d2a\nEndpoint type: SUBSCRIPTION\nGID: 01.0f.09.56.ba.f5.c9.82.00.00.00.00.00.00.36.04\nQoS profile:\n  Reliability: RELIABLE\n  History (Depth): UNKNOWN\n  Durability: VOLATILE\n  Lifespan: Infinite\n  Deadline: Infinite\n  Liveliness: AUTOMATIC\n  Liveliness lease duration: Infinite\n\nNode name: collision_monitor\nNode namespace: /\nTopic type: geometry_msgs/msg/Twist\nTopic type hash: RIHS01_9c45bf16fe0983d80e3cfe750d6835843d265a9a6c46bd2e609fcddde6fb8d2a\nEndpoint type: SUBSCRIPTION\nGID: 01.0f.09.56.f9.f5.d9.b3.00.00.00.00.00.00.24.04\nQoS profile:\n  Reliability: RELIABLE\n  History (Depth): UNKNOWN\n  Durability: VOLATILE\n  Lifespan: Infinite\n  Deadline: Infinite\n  Liveliness: AUTOMATIC\n  Liveliness lease duration: Infinite\n\n"
+    }
+  },
+  "non_ground_contact_events": [],
+  "resource_samples": [
+    {
+      "wall_s": 8187.409157561,
+      "memavailable_kib": 1642756,
+      "swapfree_kib": 2124956,
+      "target_process_count": 21,
+      "target_process_rss_mib": 1716.31,
+      "target_process_cpu_percent": 0.0,
+      "wsl_cpu_percent": 39.0
+    },
+    {
+      "wall_s": 8188.409089922,
+      "memavailable_kib": 1636900,
+      "swapfree_kib": 2124956,
+      "target_process_count": 21,
+      "target_process_rss_mib": 1716.23,
+      "target_process_cpu_percent": 342.0,
+      "wsl_cpu_percent": 49.9
+    },
+    {
+      "wall_s": 8189.408913795,
+      "memavailable_kib": 1643964,
+      "swapfree_kib": 2124956,
+      "target_process_count": 21,
+      "target_process_rss_mib": 1714.2,
+      "target_process_cpu_percent": 341.0,
+      "wsl_cpu_percent": 49.6
+    },
+    {
+      "wall_s": 8190.410448675,
+      "memavailable_kib": 1654036,
+      "swapfree_kib": 2124956,
+      "target_process_count": 21,
+      "target_process_rss_mib": 1714.0,
+      "target_process_cpu_percent": 342.5,
+      "wsl_cpu_percent": 50.1
+    },
+    {
+      "wall_s": 8191.409882047,
+      "memavailable_kib": 1640784,
+      "swapfree_kib": 2124956,
+      "target_process_count": 21,
+      "target_process_rss_mib": 1714.33,
+      "target_process_cpu_percent": 343.0,
+      "wsl_cpu_percent": 50.3
+    },
+    {
+      "wall_s": 8192.410863039,
+      "memavailable_kib": 1640156,
+      "swapfree_kib": 2124956,
+      "target_process_count": 21,
+      "target_process_rss_mib": 1714.39,
+      "target_process_cpu_percent": 347.0,
+      "wsl_cpu_percent": 50.8
+    },
+    {
+      "wall_s": 8193.409109924,
+      "memavailable_kib": 1619796,
+      "swapfree_kib": 2124956,
+      "target_process_count": 21,
+      "target_process_rss_mib": 1714.66,
+      "target_process_cpu_percent": 340.5,
+      "wsl_cpu_percent": 50.6
+    },
+    {
+      "wall_s": 8194.409663684,
+      "memavailable_kib": 1602204,
+      "swapfree_kib": 2124956,
+      "target_process_count": 21,
+      "target_process_rss_mib": 1714.37,
+      "target_process_cpu_percent": 354.0,
+      "wsl_cpu_percent": 52.4
+    },
+    {
+      "wall_s": 8195.410350106,
+      "memavailable_kib": 1615008,
+      "swapfree_kib": 2124956,
+      "target_process_count": 21,
+      "target_process_rss_mib": 1714.62,
+      "target_process_cpu_percent": 349.0,
+      "wsl_cpu_percent": 52.9
+    },
+    {
+      "wall_s": 8196.409384964,
+      "memavailable_kib": 1617076,
+      "swapfree_kib": 2124956,
+      "target_process_count": 21,
+      "target_process_rss_mib": 1714.41,
+      "target_process_cpu_percent": 348.0,
+      "wsl_cpu_percent": 53.3
+    },
+    {
+      "wall_s": 8197.409198098,
+      "memavailable_kib": 1617760,
+      "swapfree_kib": 2124956,
+      "target_process_count": 21,
+      "target_process_rss_mib": 1717.26,
+      "target_process_cpu_percent": 346.0,
+      "wsl_cpu_percent": 52.4
+    },
+    {
+      "wall_s": 8198.408192416,
+      "memavailable_kib": 1620424,
+      "swapfree_kib": 2124956,
+      "target_process_count": 21,
+      "target_process_rss_mib": 1717.05,
+      "target_process_cpu_percent": 345.0,
+      "wsl_cpu_percent": 53.2
+    },
+    {
+      "wall_s": 8199.408286363,
+      "memavailable_kib": 1629292,
+      "swapfree_kib": 2124956,
+      "target_process_count": 21,
+      "target_process_rss_mib": 1717.43,
+      "target_process_cpu_percent": 355.0,
+      "wsl_cpu_percent": 53.3
+    },
+    {
+      "wall_s": 8200.408193923,
+      "memavailable_kib": 1633560,
+      "swapfree_kib": 2124956,
+      "target_process_count": 21,
+      "target_process_rss_mib": 1718.04,
+      "target_process_cpu_percent": 351.0,
+      "wsl_cpu_percent": 53.3
+    },
+    {
+      "wall_s": 8201.411368422,
+      "memavailable_kib": 1618836,
+      "swapfree_kib": 2130640,
+      "target_process_count": 21,
+      "target_process_rss_mib": 1718.27,
+      "target_process_cpu_percent": 357.5,
+      "wsl_cpu_percent": 57.7
+    },
+    {
+      "wall_s": 8202.410258564,
+      "memavailable_kib": 1607396,
+      "swapfree_kib": 2130656,
+      "target_process_count": 21,
+      "target_process_rss_mib": 1715.44,
+      "target_process_cpu_percent": 352.0,
+      "wsl_cpu_percent": 39.1
+    },
+    {
+      "wall_s": 8203.407792637,
+      "memavailable_kib": 1616288,
+      "swapfree_kib": 2130656,
+      "target_process_count": 21,
+      "target_process_rss_mib": 1718.3,
+      "target_process_cpu_percent": 346.6,
+      "wsl_cpu_percent": 37.0
+    },
+    {
+      "wall_s": 8204.409249644,
+      "memavailable_kib": 1613120,
+      "swapfree_kib": 2130656,
+      "target_process_count": 21,
+      "target_process_rss_mib": 1718.09,
+      "target_process_cpu_percent": 351.5,
+      "wsl_cpu_percent": 37.3
+    },
+    {
+      "wall_s": 8205.409960175,
+      "memavailable_kib": 1584024,
+      "swapfree_kib": 2130680,
+      "target_process_count": 21,
+      "target_process_rss_mib": 1715.71,
+      "target_process_cpu_percent": 359.5,
+      "wsl_cpu_percent": 39.9
+    },
+    {
+      "wall_s": 8206.412423004,
+      "memavailable_kib": 1467416,
+      "swapfree_kib": 2130680,
+      "target_process_count": 21,
+      "target_process_rss_mib": 1715.5,
+      "target_process_cpu_percent": 377.4,
+      "wsl_cpu_percent": 53.2
+    },
+    {
+      "wall_s": 8207.40910993,
+      "memavailable_kib": 1611568,
+      "swapfree_kib": 2130680,
+      "target_process_count": 21,
+      "target_process_rss_mib": 1715.73,
+      "target_process_cpu_percent": 386.0,
+      "wsl_cpu_percent": 49.7
+    },
+    {
+      "wall_s": 8208.408883906,
+      "memavailable_kib": 1600736,
+      "swapfree_kib": 2130680,
+      "target_process_count": 21,
+      "target_process_rss_mib": 1715.52,
+      "target_process_cpu_percent": 352.0,
+      "wsl_cpu_percent": 37.2
+    },
+    {
+      "wall_s": 8209.408178436,
+      "memavailable_kib": 1599592,
+      "swapfree_kib": 2130680,
+      "target_process_count": 21,
+      "target_process_rss_mib": 1718.37,
+      "target_process_cpu_percent": 348.0,
+      "wsl_cpu_percent": 43.7
+    },
+    {
+      "wall_s": 8210.408032017,
+      "memavailable_kib": 1602656,
+      "swapfree_kib": 2130680,
+      "target_process_count": 21,
+      "target_process_rss_mib": 1718.16,
+      "target_process_cpu_percent": 358.0,
+      "wsl_cpu_percent": 41.4
+    },
+    {
+      "wall_s": 8211.4077816,
+      "memavailable_kib": 1623444,
+      "swapfree_kib": 2130680,
+      "target_process_count": 21,
+      "target_process_rss_mib": 1718.39,
+      "target_process_cpu_percent": 346.0,
+      "wsl_cpu_percent": 41.8
+    },
+    {
+      "wall_s": 8212.407916997,
+      "memavailable_kib": 1608312,
+      "swapfree_kib": 2130680,
+      "target_process_count": 21,
+      "target_process_rss_mib": 1718.2,
+      "target_process_cpu_percent": 356.0,
+      "wsl_cpu_percent": 39.6
+    },
+    {
+      "wall_s": 8213.407588248,
+      "memavailable_kib": 1603144,
+      "swapfree_kib": 2130680,
+      "target_process_count": 21,
+      "target_process_rss_mib": 1718.43,
+      "target_process_cpu_percent": 354.0,
+      "wsl_cpu_percent": 39.7
+    },
+    {
+      "wall_s": 8214.409831448,
+      "memavailable_kib": 1613764,
+      "swapfree_kib": 2130680,
+      "target_process_count": 21,
+      "target_process_rss_mib": 1718.22,
+      "target_process_cpu_percent": 351.4,
+      "wsl_cpu_percent": 40.7
+    },
+    {
+      "wall_s": 8215.408688839,
+      "memavailable_kib": 1621088,
+      "swapfree_kib": 2130680,
+      "target_process_count": 21,
+      "target_process_rss_mib": 1718.44,
+      "target_process_cpu_percent": 349.1,
+      "wsl_cpu_percent": 41.4
+    },
+    {
+      "wall_s": 8216.40906851,
+      "memavailable_kib": 1617652,
+      "swapfree_kib": 2130680,
+      "target_process_count": 21,
+      "target_process_rss_mib": 1718.22,
+      "target_process_cpu_percent": 356.0,
+      "wsl_cpu_percent": 41.2
+    },
+    {
+      "wall_s": 8217.407405069,
+      "memavailable_kib": 1610944,
+      "swapfree_kib": 2130680,
+      "target_process_count": 21,
+      "target_process_rss_mib": 1718.45,
+      "target_process_cpu_percent": 350.5,
+      "wsl_cpu_percent": 39.6
+    },
+    {
+      "wall_s": 8218.409766168,
+      "memavailable_kib": 1619332,
+      "swapfree_kib": 2130680,
+      "target_process_count": 21,
+      "target_process_rss_mib": 1718.23,
+      "target_process_cpu_percent": 350.4,
+      "wsl_cpu_percent": 40.3
+    },
+    {
+      "wall_s": 8219.40793371,
+      "memavailable_kib": 1620696,
+      "swapfree_kib": 2130680,
+      "target_process_count": 21,
+      "target_process_rss_mib": 1718.46,
+      "target_process_cpu_percent": 357.5,
+      "wsl_cpu_percent": 41.8
+    },
+    {
+      "wall_s": 8220.410182191,
+      "memavailable_kib": 1630492,
+      "swapfree_kib": 2130680,
+      "target_process_count": 21,
+      "target_process_rss_mib": 1718.23,
+      "target_process_cpu_percent": 350.4,
+      "wsl_cpu_percent": 40.8
+    },
+    {
+      "wall_s": 8221.409261583,
+      "memavailable_kib": 1621328,
+      "swapfree_kib": 2130680,
+      "target_process_count": 21,
+      "target_process_rss_mib": 1718.46,
+      "target_process_cpu_percent": 350.1,
+      "wsl_cpu_percent": 39.2
+    },
+    {
+      "wall_s": 8222.408476384,
+      "memavailable_kib": 1617948,
+      "swapfree_kib": 2130680,
+      "target_process_count": 21,
+      "target_process_rss_mib": 1718.23,
+      "target_process_cpu_percent": 349.0,
+      "wsl_cpu_percent": 40.3
+    },
+    {
+      "wall_s": 8223.407854047,
+      "memavailable_kib": 1620456,
+      "swapfree_kib": 2130680,
+      "target_process_count": 21,
+      "target_process_rss_mib": 1718.46,
+      "target_process_cpu_percent": 358.0,
+      "wsl_cpu_percent": 40.4
+    },
+    {
+      "wall_s": 8224.408168384,
+      "memavailable_kib": 1608368,
+      "swapfree_kib": 2130680,
+      "target_process_count": 21,
+      "target_process_rss_mib": 1718.23,
+      "target_process_cpu_percent": 349.0,
+      "wsl_cpu_percent": 40.2
+    },
+    {
+      "wall_s": 8225.408630924,
+      "memavailable_kib": 1619932,
+      "swapfree_kib": 2130680,
+      "target_process_count": 21,
+      "target_process_rss_mib": 1718.46,
+      "target_process_cpu_percent": 347.0,
+      "wsl_cpu_percent": 39.4
+    },
+    {
+      "wall_s": 8226.408795841,
+      "memavailable_kib": 1606744,
+      "swapfree_kib": 2130680,
+      "target_process_count": 21,
+      "target_process_rss_mib": 1718.24,
+      "target_process_cpu_percent": 353.0,
+      "wsl_cpu_percent": 41.4
+    },
+    {
+      "wall_s": 8227.407954852,
+      "memavailable_kib": 1613664,
+      "swapfree_kib": 2130680,
+      "target_process_count": 21,
+      "target_process_rss_mib": 1718.46,
+      "target_process_cpu_percent": 351.0,
+      "wsl_cpu_percent": 40.5
+    },
+    {
+      "wall_s": 8228.408393281,
+      "memavailable_kib": 1608888,
+      "swapfree_kib": 2130680,
+      "target_process_count": 21,
+      "target_process_rss_mib": 1718.24,
+      "target_process_cpu_percent": 356.0,
+      "wsl_cpu_percent": 40.4
+    },
+    {
+      "wall_s": 8229.408493831,
+      "memavailable_kib": 1618504,
+      "swapfree_kib": 2130680,
+      "target_process_count": 21,
+      "target_process_rss_mib": 1718.46,
+      "target_process_cpu_percent": 346.0,
+      "wsl_cpu_percent": 39.4
+    },
+    {
+      "wall_s": 8230.409073987,
+      "memavailable_kib": 1624624,
+      "swapfree_kib": 2130680,
+      "target_process_count": 21,
+      "target_process_rss_mib": 1718.24,
+      "target_process_cpu_percent": 351.0,
+      "wsl_cpu_percent": 40.3
+    },
+    {
+      "wall_s": 8231.408898372,
+      "memavailable_kib": 1618980,
+      "swapfree_kib": 2130680,
+      "target_process_count": 21,
+      "target_process_rss_mib": 1718.46,
+      "target_process_cpu_percent": 354.0,
+      "wsl_cpu_percent": 40.6
+    },
+    {
+      "wall_s": 8232.409696623,
+      "memavailable_kib": 1627368,
+      "swapfree_kib": 2130680,
+      "target_process_count": 21,
+      "target_process_rss_mib": 1718.25,
+      "target_process_cpu_percent": 345.0,
+      "wsl_cpu_percent": 40.1
+    },
+    {
+      "wall_s": 8233.407383931,
+      "memavailable_kib": 1624260,
+      "swapfree_kib": 2130680,
+      "target_process_count": 21,
+      "target_process_rss_mib": 1718.47,
+      "target_process_cpu_percent": 350.8,
+      "wsl_cpu_percent": 39.6
+    },
+    {
+      "wall_s": 8234.409279414,
+      "memavailable_kib": 1618812,
+      "swapfree_kib": 2130680,
+      "target_process_count": 21,
+      "target_process_rss_mib": 1718.25,
+      "target_process_cpu_percent": 356.2,
+      "wsl_cpu_percent": 41.2
+    },
+    {
+      "wall_s": 8235.407212682,
+      "memavailable_kib": 1599252,
+      "swapfree_kib": 2130680,
+      "target_process_count": 21,
+      "target_process_rss_mib": 1718.47,
+      "target_process_cpu_percent": 353.6,
+      "wsl_cpu_percent": 52.6
+    },
+    {
+      "wall_s": 8236.409130239,
+      "memavailable_kib": 1599024,
+      "swapfree_kib": 2130680,
+      "target_process_count": 21,
+      "target_process_rss_mib": 1718.25,
+      "target_process_cpu_percent": 353.5,
+      "wsl_cpu_percent": 53.2
+    },
+    {
+      "wall_s": 8237.408737038,
+      "memavailable_kib": 1610740,
+      "swapfree_kib": 2130680,
+      "target_process_count": 21,
+      "target_process_rss_mib": 1716.38,
+      "target_process_cpu_percent": 353.0,
+      "wsl_cpu_percent": 52.7
+    },
+    {
+      "wall_s": 8238.409274689,
+      "memavailable_kib": 1614516,
+      "swapfree_kib": 2130680,
+      "target_process_count": 21,
+      "target_process_rss_mib": 1718.77,
+      "target_process_cpu_percent": 356.0,
+      "wsl_cpu_percent": 53.4
+    },
+    {
+      "wall_s": 8239.408560376,
+      "memavailable_kib": 1615120,
+      "swapfree_kib": 2130680,
+      "target_process_count": 21,
+      "target_process_rss_mib": 1718.99,
+      "target_process_cpu_percent": 354.0,
+      "wsl_cpu_percent": 53.4
+    },
+    {
+      "wall_s": 8240.409898834,
+      "memavailable_kib": 1627600,
+      "swapfree_kib": 2130680,
+      "target_process_count": 21,
+      "target_process_rss_mib": 1718.77,
+      "target_process_cpu_percent": 355.6,
+      "wsl_cpu_percent": 46.7
+    },
+    {
+      "wall_s": 8241.408986509,
+      "memavailable_kib": 1617860,
+      "swapfree_kib": 2130680,
+      "target_process_count": 21,
+      "target_process_rss_mib": 1718.99,
+      "target_process_cpu_percent": 342.0,
+      "wsl_cpu_percent": 45.8
+    },
+    {
+      "wall_s": 8242.409450993,
+      "memavailable_kib": 1618300,
+      "swapfree_kib": 2130680,
+      "target_process_count": 21,
+      "target_process_rss_mib": 1718.77,
+      "target_process_cpu_percent": 354.0,
+      "wsl_cpu_percent": 46.1
+    },
+    {
+      "wall_s": 8243.409904041,
+      "memavailable_kib": 1610876,
+      "swapfree_kib": 2130680,
+      "target_process_count": 21,
+      "target_process_rss_mib": 1719.0,
+      "target_process_cpu_percent": 357.0,
+      "wsl_cpu_percent": 46.2
+    },
+    {
+      "wall_s": 8244.409033787,
+      "memavailable_kib": 1615392,
+      "swapfree_kib": 2130680,
+      "target_process_count": 21,
+      "target_process_rss_mib": 1718.78,
+      "target_process_cpu_percent": 352.0,
+      "wsl_cpu_percent": 48.3
+    },
+    {
+      "wall_s": 8245.409812751,
+      "memavailable_kib": 1619096,
+      "swapfree_kib": 2130680,
+      "target_process_count": 21,
+      "target_process_rss_mib": 1719.0,
+      "target_process_cpu_percent": 349.0,
+      "wsl_cpu_percent": 48.5
+    },
+    {
+      "wall_s": 8246.411985666,
+      "memavailable_kib": 1616812,
+      "swapfree_kib": 2130680,
+      "target_process_count": 21,
+      "target_process_rss_mib": 1716.17,
+      "target_process_cpu_percent": 356.4,
+      "wsl_cpu_percent": 49.6
+    }
+  ],
+  "resource_summary": {
+    "scope": "best-effort processes matching the ROS/Gazebo/Nav2 command-name patterns; excludes Windows-only processes",
+    "psutil_available": true,
+    "target_process_peak_rss_mib": 1719.0,
+    "target_process_mean_rss_mib": 1717.45,
+    "target_process_mean_cpu_percent": 346.1,
+    "wsl_mean_cpu_percent": 45.23,
+    "sample_count": 60
+  },
+  "runtime_rtf": 0.9936342841256259,
+  "acceptance": {
+    "xy_error_limit_m": 0.3,
+    "heading_error_limit_rad": 0.3,
+    "zero_collisions": true,
+    "unknown_not_plannable": true
+  },
+  "pre_goal_cmd_vel_publishers": [
+    "anc_safety_command_guard"
+  ],
+  "post_goal_stop_confirmed": true,
+  "stop_samples": [
+    {
+      "sim_s": 68.508,
+      "x_m": -0.01605883110288373,
+      "y_m": 0.032046390134944265,
+      "yaw_rad": 0.9292516724113136,
+      "wall_s": 8250.396647033,
+      "linear_x_mps": 0.0,
+      "angular_z_radps": 0.0
+    },
+    {
+      "sim_s": 68.58,
+      "x_m": -0.01605883110288373,
+      "y_m": 0.032046390134944265,
+      "yaw_rad": 0.9292516724113136,
+      "wall_s": 8250.478044158,
+      "linear_x_mps": 0.0,
+      "angular_z_radps": 0.0
+    },
+    {
+      "sim_s": 68.67,
+      "x_m": -0.01605883110288373,
+      "y_m": 0.032046390134944265,
+      "yaw_rad": 0.9292516724113136,
+      "wall_s": 8250.559987233,
+      "linear_x_mps": 0.0,
+      "angular_z_radps": 0.0
+    },
+    {
+      "sim_s": 68.76,
+      "x_m": -0.01605883110288373,
+      "y_m": 0.032046390134944265,
+      "yaw_rad": 0.9292516724113136,
+      "wall_s": 8250.640807988,
+      "linear_x_mps": 0.0,
+      "angular_z_radps": 0.0
+    },
+    {
+      "sim_s": 68.832,
+      "x_m": -0.01605883110288373,
+      "y_m": 0.032046390134944265,
+      "yaw_rad": 0.9292516724113136,
+      "wall_s": 8250.721939998,
+      "linear_x_mps": 0.0,
+      "angular_z_radps": 0.0
+    },
+    {
+      "sim_s": 68.904,
+      "x_m": -0.01605883110288373,
+      "y_m": 0.032046390134944265,
+      "yaw_rad": 0.9292516724113136,
+      "wall_s": 8250.802064833,
+      "linear_x_mps": 0.0,
+      "angular_z_radps": 0.0
+    },
+    {
+      "sim_s": 68.994,
+      "x_m": -0.01605883110288373,
+      "y_m": 0.032046390134944265,
+      "yaw_rad": 0.9292516724113136,
+      "wall_s": 8250.882411589,
+      "linear_x_mps": 0.0,
+      "angular_z_radps": 0.0
+    },
+    {
+      "sim_s": 69.066,
+      "x_m": -0.01605883110288373,
+      "y_m": 0.032046390134944265,
+      "yaw_rad": 0.9292516724113136,
+      "wall_s": 8250.964163993,
+      "linear_x_mps": 0.0,
+      "angular_z_radps": 0.0
+    }
+  ],
+  "final_localization_error_m": 0.03584498372617475,
+  "final_localization_heading_error_rad": 0.0026083372957702577,
+  "final_stopped_truth": {
+    "sim_s": 69.066,
+    "x_m": -0.01605883110288373,
+    "y_m": 0.032046390134944265,
+    "yaw_rad": 0.9292516724113136,
+    "wall_s": 8250.964163993,
+    "linear_x_mps": 0.0,
+    "angular_z_radps": 0.0
+  },
+  "commissioning_goal_distance_m": 0.75,
+  "predefined_map_used": false,
+  "commissioning_prerequisites": {
+    "turn_envelope": {
+      "angular_cap_radps": 0.1,
+      "physical_stop_time_bound_s": 0.75,
+      "stopping_angle_bound_rad": 0.05,
+      "confirmation_window_s": 0.5,
+      "manifest_sha256": "79739d9b422649246431b8847abd6668c7a89d2a08f9b081ce94a8957723ddbd",
+      "validated_for": "production"
+    },
+    "moving_slam": [
+      {
+        "path": "docs/evidence/native-slam-map1s-20261103/trial0-summary.json",
+        "sha256": "0c8ee63b5c98b96e9a11b3f23add6e1694ee1396602db1d7bdb75be6c74590f8",
+        "trial_id": "3c4a2144-83de-473a-a18b-eca6e7293636"
+      },
+      {
+        "path": "docs/evidence/native-slam-map1s-20261103/trial1-summary.json",
+        "sha256": "853fdc6d999f13e700ee7b07bc027808b490c3e91217c065586029c552b7a007",
+        "trial_id": "e991f1f4-27eb-487d-96f3-72af820edbf1"
+      },
+      {
+        "path": "docs/evidence/native-slam-map1s-20261103/trial2-summary.json",
+        "sha256": "df645484304c7762dad69eb7757f79048468dd79294c49b83ab8e45cbd24e7d5",
+        "trial_id": "2a805754-a96a-4289-88f4-9f51fd42760e"
+      }
+    ]
+  }
+}

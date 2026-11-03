@@ -72,3 +72,7 @@ All thirteen native-stream calibration categories now passed the independently t
 ## Production-controller matrix passed
 
 A fresh evidence-bound production-controller validation matrix passed all thirteen categories. Bounded sequential production authority now validates from its hashed manifest: turns <=0.10 rad/s, existing forward gate, mixed and reverse requests denied. Maximum physical stop upper bound .458 s, total stopping-angle upper .04453 rad; zero non-ground contacts. See native-production-turning-20261103.md. Realistic Nav2 commissioning is prepared but not yet live-validated at this checkpoint.
+
+## First realistic S00 goals passed
+
+Two fresh 0.75 m sensor-derived S00 Nav2 goals passed end to end, including live sensor integrity, sole guard publisher, independent truth error/collision checks and post-goal stop confirmation. Measured truth travel .634/.645 m; final goal position errors .132/.122 m; no non-ground contacts. Runtime allows only separately validated forward/pure-turn primitives with an odometry stop interlock. See native-nav2-s00-20261103.md for evidence, preserved failures and exact headless/GUI reproduction commands. S01, parking, exploration and hardware remain unvalidated.

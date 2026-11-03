@@ -122,3 +122,31 @@ def differential_drive_command(msg):
         return None
     return {"linear_x_mps": float(msg.linear.x),
             "angular_z_radps": float(msg.angular.z)}
+
+
+class SequentialMotionInterlock:
+    """Additional authority restriction for separately validated forward/yaw primitives."""
+    def __init__(self):
+        self.last_motion=None
+        self.last_nonzero=None
+        self.slow_since=None
+
+    def apply(self, decision, now, odom_velocity, odom_age):
+        zero=dict(linear_x_mps=0.0,angular_z_radps=0.0,authorized=False)
+        fresh=(odom_velocity is not None and 0<=odom_age<=.20
+               and all(math.isfinite(v) for v in odom_velocity))
+        slow=fresh and math.hypot(odom_velocity[0],odom_velocity[1])<=.005 and abs(odom_velocity[2])<=.01
+        if not slow:self.slow_since=None
+        elif self.slow_since is None:self.slow_since=now
+        if not fresh:return zero|{'reason':'sequential_odometry_missing_or_stale'}
+        if not decision.get('authorized'):return decision
+        v,w=decision['linear_x_mps'],decision['angular_z_radps']
+        if abs(v)<=1e-9 and abs(w)<=1e-9:return decision
+        target=('forward',1) if abs(v)>1e-9 else ('yaw',1 if w>0 else -1)
+        if target!=self.last_motion:
+            held=self.slow_since is not None and now-self.slow_since>=.50
+            stopped_long_enough=self.last_nonzero is None or now-self.last_nonzero>=1.25
+            if not held or not stopped_long_enough:
+                return zero|{'reason':'waiting_for_confirmed_primitive_stop'}
+        self.last_motion=target;self.last_nonzero=now
+        return decision

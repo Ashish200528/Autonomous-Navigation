@@ -2,12 +2,22 @@
 """Offline tests for runtime publisher-audit parsing."""
 import sys
 import unittest
+from unittest.mock import patch
+from types import SimpleNamespace
 from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 from phase8c_navigation_runner import Eval
 
 class PublisherAuditTests(unittest.TestCase):
+    def test_live_audit_uses_discovered_graph_without_blocking_cli(self):
+        node=Eval.__new__(Eval)
+        with patch.object(Eval,'get_publishers_info_by_topic',return_value=[SimpleNamespace(node_name='anc_safety_command_guard')]), \
+                patch('phase8c_navigation_runner.subprocess.run',side_effect=AssertionError('must not block callbacks')):
+            result=node.publisher_count('/cmd_vel')
+        self.assertTrue(Eval.is_sole_guard_publisher(result))
+        self.assertEqual(result['audit_method'],'rclpy_graph')
+
     def test_accepts_only_guard_as_single_cmd_vel_publisher(self):
         text = ("Publisher count: 1\nNode name: anc_safety_command_guard\n"
                 "Node namespace: /\nSubscription count: 1\nNode name: another_node\n")

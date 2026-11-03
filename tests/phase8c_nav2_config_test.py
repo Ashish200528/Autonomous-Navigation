@@ -3,6 +3,9 @@
 from pathlib import Path
 import unittest
 import yaml
+import ast
+import xml.etree.ElementTree as ET
+from ament_index_python.packages import get_package_share_directory
 
 ROOT = Path(__file__).resolve().parents[1]
 SRC = ROOT / "simulation/ros2_ws/src/anc_lidar"
@@ -24,6 +27,21 @@ def assert_unique_yaml_keys(node, path="$"):
 
 
 class Nav2LidarConfigTests(unittest.TestCase):
+    def test_local_costmap_dimensions_match_native_nav2_integer_parameters(self):
+        params=NAV2["local_costmap"]["local_costmap"]["ros__parameters"]
+        self.assertIs(type(params["width"]),int)
+        self.assertIs(type(params["height"]),int)
+    def test_behavior_types_match_installed_plugin_registry(self):
+        registry=ET.parse(Path(get_package_share_directory('nav2_behaviors'))/'behavior_plugin.xml')
+        names={e.get('name',e.get('type')) for e in registry.iter('class')}
+        params=NAV2['behavior_server']['ros__parameters']
+        for behavior in params['behavior_plugins']:
+            self.assertIn(params[behavior]['plugin'],names)
+
+    def test_lookahead_cannot_trigger_goal_rotation_before_position_goal(self):
+        p=NAV2['controller_server']['ros__parameters']
+        self.assertGreater(p['FollowPath']['min_lookahead_dist'],p['goal_checker']['xy_goal_tolerance'])
+
     def test_profile_keeps_simulation_headless_and_navigation_opt_in(self):
         self.assertIn('DeclareLaunchArgument("enable_slam", default_value="false"', PROFILE_LAUNCH)
         self.assertIn('DeclareLaunchArgument("enable_nav2", default_value="false"', PROFILE_LAUNCH)
@@ -53,8 +71,12 @@ class Nav2LidarConfigTests(unittest.TestCase):
         smoother = NAV2["velocity_smoother"]["ros__parameters"]
         collision = NAV2["collision_monitor"]["ros__parameters"]
         self.assertIn('("cmd_vel", "/cmd_vel_nav_raw")', NAV2_LAUNCH)
-        self.assertEqual(smoother["cmd_vel_in_topic"], "/cmd_vel_nav_raw")
-        self.assertEqual(smoother["cmd_vel_out_topic"], "/cmd_vel_smoothed")
+        calls=[n for n in ast.walk(ast.parse(NAV2_LAUNCH)) if isinstance(n,ast.Call)
+               and isinstance(n.func,ast.Name) and n.func.id=='nav_node'
+               and n.args and isinstance(n.args[0],ast.Constant) and n.args[0].value=='nav2_velocity_smoother']
+        self.assertEqual(len(calls),1)
+        self.assertEqual(calls[0].args[3].id,'request_remaps')
+        self.assertNotIn('cmd_vel_in_topic',smoother)
         self.assertEqual(collision["cmd_vel_in_topic"], "/cmd_vel_smoothed")
         self.assertEqual(collision["cmd_vel_out_topic"], "/cmd_vel_nav")
         self.assertIn('"requested_topic": "/cmd_vel_nav"', PROFILE_LAUNCH)

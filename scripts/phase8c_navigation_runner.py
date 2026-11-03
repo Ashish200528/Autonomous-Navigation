@@ -255,11 +255,14 @@ class Eval(Node):
         return info.get("count")==1 and names==["anc_safety_command_guard"]
 
     def publisher_count(self,topic):
+        # Query this node's already-discovered graph without blocking sensor callbacks
+        # on multiple external CLI/daemon processes.
         try:
-            p=subprocess.run(["ros2","topic","info",topic,"--verbose"],capture_output=True,text=True,timeout=6)
-            parsed=self.parse_publisher_info(p.stdout)
-            return {**parsed,"exit_code":p.returncode,"output":(p.stdout+p.stderr)[-1500:]}
-        except Exception as e:return {"error":str(e)}
+            publishers=self.get_publishers_info_by_topic(topic)
+            return dict(count=len(publishers),publisher_names=[p.node_name for p in publishers],
+                        audit_method='rclpy_graph')
+        except Exception as exc:
+            return dict(error=str(exc),count=None,publisher_names=[])
 
 
 def main():

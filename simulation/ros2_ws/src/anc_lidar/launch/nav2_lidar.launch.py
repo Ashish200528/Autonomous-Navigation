@@ -45,7 +45,7 @@ def generate_launch_description():
                  "behavior_server", request_remaps),
         nav_node("nav2_bt_navigator", "bt_navigator", "bt_navigator"),
         nav_node("nav2_velocity_smoother", "velocity_smoother",
-                 "velocity_smoother"),
+                 "velocity_smoother", request_remaps),
         nav_node("nav2_collision_monitor", "collision_monitor",
                  "collision_monitor"),
         Node(

@@ -1,5 +1,5 @@
 from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription
+from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription, TimerAction
 from launch.conditions import IfCondition
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import LaunchConfiguration, PathJoinSubstitution, PythonExpression
@@ -177,6 +177,6 @@ def generate_launch_description():
         safety_gate,
         command_guard,
         slam,
-        nav2,
+        TimerAction(period=6.0, actions=[nav2]),
         rviz,
     ])

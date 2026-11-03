@@ -6,7 +6,8 @@ from geometry_msgs.msg import Twist
 from rclpy.clock import Clock, ClockType
 from rclpy.node import Node
 from std_msgs.msg import String
-from anc_navigation_common.safety import differential_drive_command, guarded_command
+from nav_msgs.msg import Odometry
+from anc_navigation_common.safety import differential_drive_command, guarded_command, SequentialMotionInterlock
 
 
 class SafetyCommandGuard(Node):
@@ -33,6 +34,9 @@ class SafetyCommandGuard(Node):
         self.request = self.request_wall = self.safety_state = self.safety_wall = None
         self.request_malformed = False
         self.command_count = self.output_count = 0
+        self.interlock=SequentialMotionInterlock()
+        self.odom_velocity=None;self.odom_wall=None
+        self.create_subscription(Odometry,'/odometry/filtered',self.on_odometry,10)
         self.output = self.create_publisher(Twist, str(p["output_topic"]), 10)
         self.state = self.create_publisher(String, str(p["guard_state_topic"]), 10)
         self.create_subscription(Twist, str(p["requested_topic"]), self.on_request, 10)
@@ -42,6 +46,11 @@ class SafetyCommandGuard(Node):
         self.get_logger().warning(
             "Guard owns authoritative cmd_vel; stale or invalid inputs produce zero."
         )
+
+    def on_odometry(self, msg):
+        v=msg.twist.twist
+        self.odom_velocity=(float(v.linear.x),float(v.linear.y),float(v.angular.z))
+        self.odom_wall=time.monotonic()
 
     def on_request(self, msg):
         self.request = differential_drive_command(msg)
@@ -72,6 +81,9 @@ class SafetyCommandGuard(Node):
             hard_max_linear_speed_mps=self.hard_max_linear,
             hard_max_angular_speed_radps=self.hard_max_angular,
         )
+        if self.safety_state and self.safety_state.get('motion_mode')=='production_sequential':
+            decision=self.interlock.apply(decision,now,self.odom_velocity,
+                float('inf') if self.odom_wall is None else now-self.odom_wall)
         msg = Twist()
         if decision["authorized"]:
             msg.linear.x = decision["linear_x_mps"]

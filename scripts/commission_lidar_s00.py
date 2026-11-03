@@ -83,11 +83,21 @@ class CommissionEval(Eval):
         estimated=[sw[0]+math.cos(d)*dx-math.sin(d)*dy,sw[1]+math.sin(d)*dx+math.cos(d)*dy,wrap(map_final[2]+d)]
         loc_error=math.hypot(estimated[0]-final['x_m'],estimated[1]-final['y_m'])
         yaw_error=abs(wrap(estimated[2]-final['yaw_rad']))
-        report.update(pre_goal_cmd_vel_publishers=names,post_goal_stop_confirmed=stopped,
+        transitions=[];previous=None
+        mixed=0
+        for wall,v,w in self.cmd['/cmd_vel']:
+            if abs(v)>1e-9 and abs(w)>1e-9:mixed+=1
+            primitive=('forward',1) if abs(v)>1e-9 else ('yaw',1 if w>0 else -1) if abs(w)>1e-9 else None
+            if primitive is None:continue
+            if previous and primitive!=previous[1]:
+                transitions.append(dict(from_primitive=previous[1],to_primitive=primitive,observed_zero_interval_s=wall-previous[0]))
+            previous=(wall,primitive)
+        report.update(guarded_primitive_transitions=transitions,guarded_mixed_output_samples=mixed,
+                      pre_goal_cmd_vel_publishers=names,post_goal_stop_confirmed=stopped,
                       stop_samples=stop_samples,final_localization_error_m=loc_error,
                       final_localization_heading_error_rad=yaw_error,final_stopped_truth=final,
-                      commissioning_goal_distance_m=.75)
-        if not stopped or report['truth_path_length_m']<.1 or loc_error>.1 or yaw_error>.1:report['status']='FAIL'
+                      commissioning_goal_distance_m=.75,planned_path_points=self.plan)
+        if not stopped or mixed or report['truth_path_length_m']<.1 or loc_error>.1 or yaw_error>.1:report['status']='FAIL'
         return report
 
 
@@ -106,16 +116,23 @@ def prerequisites(envelope):
 def main():
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('envelope',type=Path);parser.add_argument('output',type=Path)
-    args=parser.parse_args();proof=prerequisites(args.envelope)
+    parser.add_argument('--timeout-s',type=float,default=60)
+    parser.add_argument('--domain-id',type=int,default=180)
+    parser.add_argument('--gui',action='store_true')
+    parser.add_argument('--rviz',action='store_true')
+    args=parser.parse_args()
+    if not 5<=args.timeout_s<=60:raise SystemExit('timeout must be 5..60 seconds')
+    if not 0<=args.domain_id<=232 or (args.rviz and not args.gui):raise SystemExit('Invalid domain or RViz without GUI')
+    proof=prerequisites(args.envelope)
     available=int(next(l.split()[1] for l in Path('/proc/meminfo').read_text().splitlines() if l.startswith('MemAvailable:')))
-    if available<2048*1024:raise SystemExit('BLOCKED: commissioning requires 2048 MiB available before startup')
+    if available<(2560 if args.gui else 2048)*1024:raise SystemExit('BLOCKED: insufficient available memory for commissioning profile')
     out=args.output.resolve();out.mkdir(parents=True,exist_ok=False)
     (out/'prerequisites.json').write_text(json.dumps(proof,indent=2)+'\n')
     with (out/'scenario.log').open('w') as f:
         subprocess.run(['python3',str(ROOT/'scripts/scenario_generator.py'),'--scenario','S00','--seed','101','--output-dir',str(out/'scenario')],stdout=f,stderr=subprocess.STDOUT,check=True)
     layout=json.loads((out/'scenario/manifest.json').read_text());layout['goal_xyyaw']=[.75,0,0]
     (out/'commission-layout.json').write_text(json.dumps(layout,indent=2)+'\n')
-    os.environ.update(ROS_DOMAIN_ID='180',OPENBLAS_NUM_THREADS='1',OMP_NUM_THREADS='1')
+    os.environ.update(ROS_DOMAIN_ID=str(args.domain_id),OPENBLAS_NUM_THREADS='1',OMP_NUM_THREADS='1')
     rclpy.init();node=CommissionEval();launch=None
     report=dict(status='FAIL',classification='REALISTIC_RGB_LIDAR_NAV2_GOAL_TRIAL',scenario_id='S00')
     try:
@@ -123,8 +140,8 @@ def main():
             launch=subprocess.Popen(['ros2','launch','anc_lidar','realistic_rgb_lidar.launch.py',
                 'world_file:='+layout['world_file'],'production_turning:=true','turn_validation_only:=false',
                 'production_turn_evidence_file:='+str(args.envelope.resolve()),'rotation_calibration_max_radps:=0.0',
-                'enable_slam:=true','enable_nav2:=true'],stdout=f,stderr=subprocess.STDOUT,start_new_session=True)
-            report=node.run(layout,60)
+                'enable_slam:=true','enable_nav2:=true','gui:='+str(args.gui).lower(),'rviz:='+str(args.rviz).lower()],stdout=f,stderr=subprocess.STDOUT,start_new_session=True)
+            report=node.run(layout,args.timeout_s)
     except Exception as exc:
         report.update(reason=f'{type(exc).__name__}: {exc}',safety_state=node.safety,guard_state=node.guard,
                       commands={k:len(v) for k,v in node.cmd.items()},contacts=node.collisions,
@@ -140,6 +157,10 @@ def main():
         with (out/'truth-trajectory.csv').open('w',newline='') as f:
             writer=csv.DictWriter(f,fieldnames=['wall_s','sim_s','x_m','y_m','yaw_rad','linear_x_mps','angular_z_radps'])
             writer.writeheader();writer.writerows(node.truth)
+        with (out/'guarded-commands.csv').open('w',newline='') as f:
+            writer=csv.writer(f);writer.writerow(['wall_s','topic','linear_x_mps','angular_z_radps'])
+            for topic,values in node.cmd.items():
+                for wall,v,w in values:writer.writerow([wall,topic,v,w])
         node.gz.unsubscribe('/world/anc_phase2_test/dynamic_pose/info');node.destroy_node();rclpy.shutdown()
     print(report['status'],report.get('reason',''))
     return 0 if report['status']=='PASS' else 1
