@@ -48,6 +48,7 @@ class Eval(Node):
         self.cmd={t:[] for t in ("/cmd_vel_nav_raw","/cmd_vel_smoothed","/cmd_vel_nav","/cmd_vel")}
         self.contacts=set(); self.collisions=[]; self.clock=[]; self.truth=[]
         self.tf=Buffer(); self.listener=TransformListener(self.tf,self)
+        self.active_goal=None
         self.action=ActionClient(self,NavigateToPose,"/navigate_to_pose")
         self.truth_client=self.create_client(GetEntityState,"/gzserver/get_entity_state")
         self.lifecycle={n:self.create_client(GetState,f"/{n}/get_state") for n in
@@ -105,6 +106,9 @@ class Eval(Node):
             while rclpy.ok() and not f.done() and time.monotonic()<end:rclpy.spin_once(self,timeout_sec=.02)
             out[n]=f.result().current_state.label if f.done() and f.result() else "timeout"
         return out
+    def truth_ready(self, timeout=.1):
+        return self.truth_client.wait_for_service(timeout_sec=timeout)
+
     def ready(self,timeout=35):
         end=time.monotonic()+timeout; last="map_tf_nav2_not_ready"
         while rclpy.ok() and time.monotonic()<end:
@@ -116,7 +120,7 @@ class Eval(Node):
             rgb_fresh=self.rgb>0 and time.monotonic()-self.rgb_last_wall<.7
             if self.map is not None and known>=200 and fresh and rgb_fresh and self.odom and pose and self.safety:
                 states=self.lifecycle_states()
-                if all(v=="active" for v in states.values()) and self.action.wait_for_server(timeout_sec=.1) and self.truth_client.wait_for_service(timeout_sec=.1):
+                if all(v=="active" for v in states.values()) and self.action.wait_for_server(timeout_sec=.1) and self.truth_ready(.1):
                     if self.safety.get("valid") and self.safety.get("max_linear_speed_mps",0)>0:return pose,states
                     last="safety_gate_no_forward_authority:"+str(self.safety.get("reason"))
                 else:last="nav2_not_active:"+json.dumps(states,sort_keys=True)
@@ -131,10 +135,17 @@ class Eval(Node):
         f=self.action.send_goal_async(g); end=time.monotonic()+8
         while rclpy.ok() and not f.done() and time.monotonic()<end:rclpy.spin_once(self,timeout_sec=.02)
         if not f.done() or not f.result() or not f.result().accepted:raise RuntimeError("nav2_goal_not_accepted")
-        gh=f.result(); rf=gh.get_result_async(); t0=time.monotonic(); last_truth=0; timeout=min(timeout_s,45 if not layout.get("route_expected",True) else timeout_s)
+        gh=f.result(); self.active_goal=gh; rf=gh.get_result_async(); t0=time.monotonic(); last_truth=0; timeout=min(timeout_s,45 if not layout.get("route_expected",True) else timeout_s)
         limit=max(8,math.hypot(gw[0]-sw[0],gw[1]-sw[1])+2); over=False; resources=[]
         while rclpy.ok() and not rf.done() and time.monotonic()-t0<timeout:
             rclpy.spin_once(self,timeout_sec=.05); now=time.monotonic()
+            if self.collisions:
+                gh.cancel_goal_async()
+                raise RuntimeError('non_ground_contact_abort')
+            available=int(next(l.split()[1] for l in Path('/proc/meminfo').read_text().splitlines() if l.startswith('MemAvailable:')))
+            if available<768*1024:
+                gh.cancel_goal_async()
+                raise RuntimeError('commission_memory_abort')
             if now-last_truth>.35:
                 p=self.get_truth(); last_truth=time.monotonic()
                 if math.hypot(p["x_m"]-start["x_m"],p["y_m"]-start["y_m"])>limit:

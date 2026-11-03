@@ -68,3 +68,7 @@ See native-turn-contract-progress-20261103.md and phase8c-turn-stop-contract.md.
 ## Full V2 calibration matrix
 
 All thirteen native-stream calibration categories now passed the independently tested physical-stop/confirmation contract. Maximum physical stopping-time upper bound 0.494 s and total stopping-angle upper bound 0.04773 rad; zero non-ground contacts in completed trials. The evidence allows only a new bounded production-controller validation run. Normal production authority remains denied until that new matrix passes. See native-turn-contract-progress-20261103.md.
+
+## Production-controller matrix passed
+
+A fresh evidence-bound production-controller validation matrix passed all thirteen categories. Bounded sequential production authority now validates from its hashed manifest: turns <=0.10 rad/s, existing forward gate, mixed and reverse requests denied. Maximum physical stop upper bound .458 s, total stopping-angle upper .04453 rad; zero non-ground contacts. See native-production-turning-20261103.md. Realistic Nav2 commissioning is prepared but not yet live-validated at this checkpoint.
