@@ -2,7 +2,7 @@ from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription
 from launch.conditions import IfCondition
 from launch.launch_description_sources import PythonLaunchDescriptionSource
-from launch.substitutions import LaunchConfiguration, PathJoinSubstitution
+from launch.substitutions import LaunchConfiguration, PathJoinSubstitution, PythonExpression
 from launch_ros.actions import Node
 from launch_ros.parameter_descriptions import ParameterValue
 from launch_ros.substitutions import FindPackageShare
@@ -96,6 +96,9 @@ def generate_launch_description():
         name="anc_lidar_safety_gate", output="screen",
         parameters=[lidar_config, {
             "rotation_calibration_max_radps": rotation_calibration_cap,
+            "production_turning": ParameterValue(LaunchConfiguration('production_turning'), value_type=bool),
+            "turn_validation_only": ParameterValue(LaunchConfiguration('turn_validation_only'), value_type=bool),
+            "production_turn_evidence_file": ParameterValue(LaunchConfiguration('production_turn_evidence_file'), value_type=str),
         }],
     )
     command_guard = Node(
@@ -110,7 +113,9 @@ def generate_launch_description():
             "command_timeout_s": 0.30,
             "safety_timeout_s": 0.25,
             "hard_max_linear_speed_mps": 0.18,
-            "hard_max_angular_speed_radps": rotation_calibration_cap,
+            "hard_max_angular_speed_radps": ParameterValue(PythonExpression([
+                "0.1 if '", LaunchConfiguration('production_turning'),
+                "'.lower() == 'true' else ", LaunchConfiguration('rotation_calibration_max_radps')]), value_type=float),
         }],
     )
     slam = IncludeLaunchDescription(
@@ -141,6 +146,9 @@ def generate_launch_description():
         condition=IfCondition(LaunchConfiguration("rviz")),
     )
     return LaunchDescription([
+        DeclareLaunchArgument('production_turning', default_value='false'),
+        DeclareLaunchArgument('turn_validation_only', default_value='true'),
+        DeclareLaunchArgument('production_turn_evidence_file', default_value=''),
         DeclareLaunchArgument("gui", default_value="false", description="Open Gazebo GUI."),
         DeclareLaunchArgument(
             "world_file",

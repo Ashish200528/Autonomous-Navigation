@@ -94,6 +94,11 @@ def guarded_command(*, request, request_age_s, safety_state, safety_age_s,
         if abs(vx) > 1e-9 and abs(wz) <= 1e-9:
             return zero | {"reason": "rotation_calibration_translation_blocked",
                            "authorized": False}
+    if (safety_state.get('combined_motion_authorized') is False
+            and abs(vx)>1e-9 and abs(wz)>1e-9):
+        return zero | {'reason':'combined_motion_not_validated','authorized':False}
+    if safety_state.get('motion_mode')=='production_turn_validation_only' and abs(vx)>1e-9:
+        return zero | {'reason':'production_turn_validation_translation_blocked','authorized':False}
     if max_v < 0 or max_w < 0:
         return zero | {"reason": "gate_speed_limit_negative", "authorized": False}
     v = max(-max_v, min(max_v, vx))

@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 """Sequential headless preproduction probes. Runtime authority stays calibration-only."""
 import json
+import argparse
 import os
+import signal
 from pathlib import Path
 import subprocess
 import sys
@@ -28,15 +30,26 @@ CASES = [
 
 
 def main():
-    out=Path(sys.argv[1]).resolve();out.mkdir(parents=True,exist_ok=False)
+    parser=argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('output')
+    parser.add_argument('cases',nargs='*')
+    parser.add_argument('--production-evidence')
+    parser.add_argument('--stream-truth',action='store_true')
+    args=parser.parse_args()
+    out=Path(args.output).resolve();out.mkdir(parents=True,exist_ok=False)
     any_failed = False
-    selected = sys.argv[2:]
+    selected = args.cases
     if set(selected)-{case[0] for case in CASES}:
         raise SystemExit('Unknown case selection')
     for index,(name,speeds,duration,fault,scenario,xy) in enumerate(CASES):
         if selected and name not in selected:
             continue
         b=out/name;b.mkdir()
+        available=int(next(l.split()[1] for l in Path('/proc/meminfo').read_text().splitlines() if l.startswith('MemAvailable:')))
+        if available < 1536*1024:
+            (b/'runner-error.txt').write_text('BLOCKED: less than 1536 MiB available before startup\n')
+            any_failed=True
+            continue
         world=next((ROOT/'simulation/scenarios/worlds').glob(scenario.lower()+'_*'))
         tree=ET.parse(world)
         if name=='low_friction':
@@ -53,8 +66,16 @@ def main():
         with (b/'launch.log').open('w') as log:
             p=subprocess.Popen(['ros2','launch','anc_lidar','realistic_rgb_lidar.launch.py',
                                 f'world_file:={b}/world.sdf',f'start_x:={xy[0]}',f'start_y:={xy[1]}',
-                                'enable_slam:=true','enable_nav2:=false','rotation_calibration_max_radps:=0.10'],
+                                'enable_slam:=true','enable_nav2:=false',
+                                'rotation_calibration_max_radps:='+('0.0' if args.production_evidence else '0.10'),
+                                'production_turning:='+str(bool(args.production_evidence)).lower(),
+                                'production_turn_evidence_file:='+(str(Path(args.production_evidence).resolve()) if args.production_evidence else 'disabled'),
+                                'turn_validation_only:=true'],
                                stdout=log,stderr=subprocess.STDOUT,env=env,start_new_session=True)
+            truth_bridge=None
+            probe=None
+            fault_pid=None
+            resources=[]
             try:
                 time.sleep(12)
                 fault_pid=None
@@ -65,16 +86,32 @@ def main():
                     if len(found)!=1:raise RuntimeError(f'fault process count {len(found)} for {fault}')
                     fault_pid=found[0]
                 spec=dict(case_id=name,obstacles=obstacles,speeds=speeds,duration=duration,
+                          production_turning=bool(args.production_evidence),truth_source="stream" if args.stream_truth else "service",
                           fault=name if name in ['lidar_loss','localization_loss','command_timeout','unknown_swept_region'] else None,
                           fault_pid=fault_pid)
                 (b/'spec.json').write_text(json.dumps(spec,indent=2)+'\n')
                 with (b/'probe.log').open('w') as plog:
-                    subprocess.run(['python3',str(ROOT/'tests/phase8c_turn_matrix_probe.py'),str(b/'spec.json'),str(b/'result.json')],
-                                   env=env,stdout=plog,stderr=subprocess.STDOUT,timeout=80)
+                    probe=subprocess.Popen(['python3',str(ROOT/'tests/phase8c_turn_matrix_probe.py'),str(b/'spec.json'),str(b/'result.json')],
+                                           env=env,stdout=plog,stderr=subprocess.STDOUT,start_new_session=True)
+                    deadline=time.monotonic()+80
+                    while probe.poll() is None:
+                        if time.monotonic()>deadline:raise TimeoutError('probe deadline')
+                        mem={line.split(':')[0]:int(line.split()[1]) for line in Path('/proc/meminfo').read_text().splitlines()
+                             if line.startswith(('MemAvailable:','SwapFree:'))}
+                        rows=subprocess.check_output(['ps','-eo','pgid=,rss='],text=True).splitlines()
+                        mem.update(wall_s=time.time(),project_rss_kib=sum(int(r.split()[1]) for r in rows if int(r.split()[0]) in (p.pid,probe.pid)))
+                        resources.append(mem)
+                        time.sleep(.5)
             except Exception as exc:
                 (b/'runner-error.txt').write_text(str(exc)+'\n')
             finally:
+                if probe is not None:stop(probe)
+                if fault_pid:
+                    try:os.kill(fault_pid,signal.SIGCONT)
+                    except ProcessLookupError:pass
+                if truth_bridge is not None:stop(truth_bridge)
                 stop(p)
+                (b/'resources.json').write_text(json.dumps(resources,indent=2)+'\n')
         result=json.loads((b/'result.json').read_text()) if (b/'result.json').exists() else {}
         any_failed = any_failed or result.get('trial_pass') is not True
         print(name,result.get('trial_pass'),result.get('error'),flush=True)

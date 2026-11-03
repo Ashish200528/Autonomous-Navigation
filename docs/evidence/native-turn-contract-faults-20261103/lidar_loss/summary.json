@@ -1,0 +1,163 @@
+{
+  "case_id": "lidar_loss",
+  "trial_pass": false,
+  "production_angular_authority_enabled": false,
+  "trials": [
+    {
+      "trial_pass": false,
+      "production_angular_authority_enabled": false,
+      "fault": "lidar_loss",
+      "fault_injected": true,
+      "requested_angular_speed_radps": 0.1,
+      "measured_average_yaw_rate_radps": 0.06557527472527472,
+      "yaw_travel_rad": 0.119347,
+      "center_drift_m": 0.004770961314798219,
+      "minimum_clearance_m": 2.5816444972714776,
+      "residual_yaw_after_zero_output_rad": 0.0,
+      "zero_request_to_settled_wall_s": 1.0259045979992152,
+      "stop_timing_diagnostic": {
+        "first_verified_slow_sample_after_trigger_s": 0.48616920499989646,
+        "observation_hold_after_first_slow_s": 0.5397353929993187,
+        "confirmed_settled_after_trigger_s": 1.0259045979992152
+      },
+      "legacy_combined_timing_pass": false,
+      "stop_contract": {
+        "contract": "TURN_STOP_V2",
+        "status": "FAIL",
+        "failures": [
+          "physical_stop_time_exceeded",
+          "stopping_angle_exceeded"
+        ],
+        "physical_stop_limit_s": 0.75,
+        "angle_limit_rad": 0.05,
+        "confirmation_window_s": 0.5,
+        "maximum_sample_gap_s": 0.15,
+        "physical_stop_observed_s": 0.48616920499989646,
+        "physical_stop_time_upper_s": 0.9079595000002882,
+        "stationary_observation_s": 0.5333894099994723,
+        "fault_to_confirmation_s": 1.0259045979992152,
+        "confirmation_deadline_s": 1.4,
+        "measured_total_stopping_angle_rad": 0.033784499999999995,
+        "stopping_angle_upper_rad": 0.08678078710008619,
+        "post_zero_angle_upper_rad": 0.05299628710008619,
+        "zero_to_physical_stop_upper_s": 0.5781099960004212,
+        "max_sample_gap_s": 0.10817257600047014,
+        "max_query_round_trip_s": 0.4217902950003918
+      },
+      "fault_detection_observed_s": 0.31698022599994147,
+      "guard_suppression_after_detection_s": 0.012869277999925544,
+      "first_zero_output_truth": {
+        "wall_s": 6258.813068474,
+        "sim_stamp_s": 13.234,
+        "x_m": -0.000294024,
+        "y_m": 0.00476254,
+        "yaw_rad": 0.11934700000000001,
+        "linear_x_mps": -3.4595e-06,
+        "linear_y_mps": 0.00367221,
+        "angular_z_radps": 0.0918062,
+        "evaluator_only": true,
+        "query_start_wall_s": 6258.794586422
+      },
+      "stop_trigger_wall_s": 6258.452632389,
+      "final_truth": {
+        "wall_s": 6259.478521848,
+        "sim_stamp_s": 13.946,
+        "x_m": -0.000294024,
+        "y_m": 0.00476254,
+        "yaw_rad": 0.11934700000000001,
+        "linear_x_mps": -3.4595e-06,
+        "linear_y_mps": 0.00367221,
+        "angular_z_radps": 0.0918062,
+        "evaluator_only": true,
+        "query_start_wall_s": 6259.472191004,
+        "pose_derived_linear_speed_mps": 0.0,
+        "pose_derived_angular_speed_radps": 0.0
+      },
+      "stop_time_reference": "fault_injection",
+      "zero_output_response_s": 0.329849503999867,
+      "safe_stop_observed": false,
+      "unsafe_reason": null,
+      "odom_truth_heading_delta_error_rad": 7.21820803063905e-05,
+      "contact_records_non_ground": 0,
+      "real_time_factor": 1.2482100153224525,
+      "safety_state_at_stop": {
+        "angular_motion_status": "swept_disk_clear",
+        "angular_stopping_model": {
+          "measured": false,
+          "note": "Calibration-only capped pulses; production yaw remains disabled pending measured stopping bound and review.",
+          "production_authorized": false
+        },
+        "authorized": false,
+        "combined_motion_authorized": false,
+        "corridor_m": 0.0,
+        "failures": [
+          "scan_health_stale",
+          "scan_sim_timestamp_stale_or_future",
+          "lidar_local_map_stale",
+          "lidar_map_invalid:scan_wall_stale"
+        ],
+        "footprint_width_m": 0.345,
+        "forward_distance_reference": "front_footprint_boundary",
+        "localization_allowance_m": 0.4705050313257851,
+        "map_counts": {
+          "free": 4147,
+          "occupied": 274,
+          "unknown": 27979
+        },
+        "map_frame": "base_link",
+        "max_angular_speed_radps": 0.0,
+        "max_linear_speed_mps": 0.0,
+        "motion_mode": "rotation_calibration_only",
+        "node": "anc_lidar_safety_gate",
+        "profile": "REALISTIC_RGB_LIDAR",
+        "reason": "scan_health_stale",
+        "rotation_calibration_speed_cap_radps": 0.1,
+        "rotation_clearance": {
+          "authorized": true,
+          "center_drift_allowance_m": 0.14,
+          "checked_cells": 112,
+          "footprint_circumradius_m": 0.263592962728522,
+          "inside_grid": true,
+          "occupied_cells": 0,
+          "reason": "swept_disk_clear",
+          "required_radius_m": 0.5235929627285221,
+          "safety_margin_m": 0.1,
+          "sensor_mount_uncertainty_m": 0.02,
+          "unknown_cells": 0
+        },
+        "runtime_uses_world_map_or_truth": false,
+        "safety_margin_m": 0.1,
+        "speed_gate": null,
+        "speed_gate_inputs": {
+          "connected_full_footprint_corridor_m": 0.0,
+          "lidar_map_wall_age_s": 1.123784001999411,
+          "measured_scan_rate_hz": 4.999120686923382,
+          "odom_sim_age_s": 0.03200000000000003,
+          "scan_sim_age_s": 1.1419999999999995,
+          "usable_beam_fraction": 0.9916666666666667
+        },
+        "stopping_model": {
+          "friction_conditions": [
+            0.5,
+            1.2
+          ],
+          "hardware_bound": false,
+          "source": "Phase 8B isolated simulator stopping test",
+          "tested_speeds_mps": [
+            0.02,
+            0.05,
+            0.1,
+            0.18
+          ],
+          "worst_stop_distance_m": 0.00298
+        },
+        "truth_used_only_by_evaluator": true,
+        "valid": false
+      },
+      "observed_rotation_sim_duration_s": 1.8200000000000003
+    }
+  ],
+  "cmd_vel_publisher_names": [
+    "anc_safety_command_guard"
+  ]
+}

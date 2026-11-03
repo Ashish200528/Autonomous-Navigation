@@ -22,6 +22,9 @@ def stamp_seconds(stamp):
     return float(stamp.sec)+float(stamp.nanosec)/1_000_000_000.0
 
 
+from anc_lidar.turn_envelope import load_envelope
+
+
 class LidarSafetyGate(Node):
     def __init__(self):
         super().__init__("anc_lidar_safety_gate")
@@ -55,6 +58,9 @@ class LidarSafetyGate(Node):
             "supervisor_period_s": 0.05,
             "publish_rate_hz": 20.0,
             "rotation_calibration_max_radps": 0.0,
+            "production_turning": False,
+            "turn_validation_only": True,
+            "production_turn_evidence_file": "",
             "turn_footprint_vertices_xy_m": [0.215, 0.1525, 0.215, -0.1525,
                                                -0.16, -0.1525, -0.16, 0.1525],
             "turn_center_drift_allowance_m": 0.14,
@@ -64,6 +70,13 @@ class LidarSafetyGate(Node):
         for name, value in defaults.items():
             self.declare_parameter(name, value)
         self.p = {name: self.get_parameter(name).value for name in defaults}
+        self.turn_envelope = None
+        self.turn_envelope_error = None
+        if self.p['production_turning']:
+            try:
+                self.turn_envelope=load_envelope(self.p['production_turn_evidence_file'], self.p['turn_validation_only'])
+            except Exception as exc:
+                self.turn_envelope_error='production_turn_evidence_invalid:'+str(exc)
         self.scan_health = self.map_health = self.rgb_state = None
         self.scan_health_wall = self.map_health_wall = self.rgb_state_wall = None
         self.map_msg = self.rgb_map = self.odom = None
@@ -186,6 +199,14 @@ class LidarSafetyGate(Node):
         elif rotation_calibration_cap > 0.10:
             rotation_calibration_cap = 0.0
             failures.append("rotation_calibration_limit_exceeds_0.10_radps")
+        production=bool(p['production_turning'])
+        if production:
+            if self.turn_envelope_error or self.turn_envelope is None:
+                failures.append(self.turn_envelope_error or 'production_turn_evidence_missing')
+            if rotation_calibration_cap>0:
+                failures.append('production_and_calibration_profiles_conflict')
+            rotation_calibration_cap=0.0 if self.turn_envelope is None else self.turn_envelope['angular_cap_radps']
+        validation_only=production and bool(p['turn_validation_only'])
         scalar_inputs = {}
         if self.scan_health is None:
             failures.append("scan_health_missing")
@@ -380,7 +401,7 @@ class LidarSafetyGate(Node):
                   and rotation_calibration_cap <= 0):
                 failures.append(str(speed_result.get("reason", "no_safe_speed")))
         selected_speed = (
-            0.0 if failures or speed_result is None or rotation_calibration_cap > 0
+            0.0 if failures or speed_result is None or (rotation_calibration_cap > 0 and (not production or validation_only))
             else float(speed_result["max_linear_speed_mps"])
         )
         selected_angular = (
@@ -392,7 +413,7 @@ class LidarSafetyGate(Node):
         gate_authorized = not failures and (selected_speed > 0 or selected_angular > 0)
         if failures:
             gate_reason = failures[0]
-        elif rotation_calibration_cap > 0 and selected_angular <= 0:
+        elif rotation_calibration_cap > 0 and selected_angular <= 0 and selected_speed<=0:
             gate_reason = str(turn_clearance.get("reason", "rotation_clearance_denied"))
         else:
             gate_reason = "pass"
@@ -403,23 +424,26 @@ class LidarSafetyGate(Node):
             "authorized": gate_authorized,
             "reason": gate_reason,
             "failures": failures,
-            "motion_mode": ("rotation_calibration_only" if rotation_calibration_cap > 0
-                            else "forward_only"),
+            "motion_mode": ('production_turn_validation_only' if validation_only else
+                            'production_sequential' if production else
+                            'rotation_calibration_only' if rotation_calibration_cap > 0 else 'forward_only'),
             "combined_motion_authorized": False,
             "max_linear_speed_mps": selected_speed,
             "max_angular_speed_radps": selected_angular,
             "angular_motion_status": (
-                "calibration_only_swept_disk_clear" if selected_angular > 0 else
+                ("evidence_bounded_production_turn" if production else "calibration_only_swept_disk_clear") if selected_angular > 0 else
                 (str(turn_clearance.get("reason", "rotation_clearance_denied"))
                  if rotation_calibration_cap > 0 else
                  "disabled_unmeasured_yaw_stopping")),
             "rotation_calibration_speed_cap_radps": rotation_calibration_cap,
             "rotation_clearance": turn_clearance,
-            "angular_stopping_model": {
+            "angular_stopping_model": (dict(self.turn_envelope, measured=True,
+                production_authorized=not validation_only, production_validation_active=validation_only)
+                if production and self.turn_envelope is not None else {
                 "measured": False,
                 "production_authorized": False,
                 "note": "Calibration-only capped pulses; production yaw remains disabled pending measured stopping bound and review.",
-            },
+            }),
             "corridor_m": corridor,
             "speed_gate": speed_result,
             "speed_gate_inputs": scalar_inputs,
@@ -443,6 +467,7 @@ class LidarSafetyGate(Node):
             "runtime_uses_world_map_or_truth": False,
             "truth_used_only_by_evaluator": True,
         }
+        result["decision_monotonic_s"] = time.monotonic()
         msg = String()
         msg.data = json.dumps(result, sort_keys=True, separators=(",", ":"))
         self.pub.publish(msg)

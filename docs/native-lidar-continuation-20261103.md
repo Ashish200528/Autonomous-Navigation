@@ -60,3 +60,7 @@ See [native-turning-matrix-20261103.md](native-turning-matrix-20261103.md). All 
 ## Fault timing instrumentation follow-up
 
 See [native-turning-timing-20261103.md](native-turning-timing-20261103.md). Four new fault trials separated output stopping, first verified slow samples (0.220–0.474 s), and the approximately 0.54 s confirmation hold. All four remain FAIL under the unchanged 0.75 s confirmed-settling requirement; no production authority or realistic Nav2 goal was enabled. Offline tests: 53 PASS.
+
+## Independent stopping/confirmation contract
+
+See native-turn-contract-progress-20261103.md and phase8c-turn-stop-contract.md. A justified V2 evaluator separates the existing 0.75 s physical deadline from the unchanged 0.50 s observation hold, adds uncertainty and cumulative stopping-angle checks, and passed four live calibration fault tests. Full production-controller validation remains pending; no realistic Nav2 goal has run.

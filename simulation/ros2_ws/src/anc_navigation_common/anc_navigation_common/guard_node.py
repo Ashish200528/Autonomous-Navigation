@@ -80,6 +80,9 @@ class SafetyCommandGuard(Node):
         self.output_count += 1
         state = {
             "node": "anc_safety_command_guard",
+            "decision_monotonic_s": now,
+            "safety_received_monotonic_s": self.safety_wall,
+            "request_received_monotonic_s": self.request_wall,
             "authorized": decision["authorized"],
             "reason": ("malformed_differential_drive_command"
                        if self.request_malformed else decision["reason"]),
