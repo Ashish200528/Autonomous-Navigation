@@ -52,3 +52,7 @@ The existing global readiness check requires a previous successful guarded Nav2 
 The existing bounded pure-yaw trial ran six two-second S00 pulses at +/-0.02, +/-0.05 and +/-0.10 rad/s, all PASS. No non-ground contacts; zero-to-settled times 0.6741–0.7164 s. Production angular authority remained false. See docs/evidence/native-turning-20261103/rotation-summary.json and reproduce.py (source ROS/workspace; use ROS_DOMAIN_ID=140 and single-thread BLAS/OMP).
 
 These extend the earlier 1.2-second pulses, but do not satisfy the 13-case production-turning validator. Low-friction, extended/repeated operation, near-obstacle motion and fault-stop rotation still need measured validation and a reviewed production stopping envelope. Realistic Nav2 S00 and S01 were not attempted. No parking or exploration claim is made.
+
+## Production-turning follow-up
+
+See [native-turning-matrix-20261103.md](native-turning-matrix-20261103.md). All 13 categories were probed under existing calibration authority. Nine motion categories passed; all four fault categories remain failed under the 0.75 s confirmed-settling contract. Production authority, realistic autonomous S00 and S01 remain BLOCKED/NOT RUN. The 49-test offline suite passed; completed measured trials recorded no non-ground contacts. No production readiness flags were enabled.
