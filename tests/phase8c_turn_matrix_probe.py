@@ -14,6 +14,31 @@ from rclpy.qos import qos_profile_sensor_data
 from phase8c_rotation_trial import RotationTrial, angle_delta, pose_yaw
 
 
+def stop_timing_metrics(samples, trigger_wall_s, confirmation_wall_s):
+    """Separate a verified slow interval from the observation hold, using response times.
+
+    Invalid/duplicate-time rate samples and any rebound reset the candidate.
+    This diagnostic never changes the original trial's acceptance decision.
+    """
+    candidate = None
+    for sample in samples:
+        v = sample.get('pose_derived_linear_speed_mps')
+        w = sample.get('pose_derived_angular_speed_radps')
+        slow = (v is not None and w is not None and math.isfinite(v)
+                and math.isfinite(w) and 0 <= v <= .005 and 0 <= w <= .01)
+        if not slow:
+            candidate = None
+        elif candidate is None:
+            candidate = sample['wall_s']
+    verified = (candidate is not None and samples
+                and samples[-1]['wall_s']-candidate >= .5)
+    return dict(first_verified_slow_sample_after_trigger_s=(
+                    candidate-trigger_wall_s if verified else None),
+                observation_hold_after_first_slow_s=(
+                    confirmation_wall_s-candidate if verified else None),
+                confirmed_settled_after_trigger_s=confirmation_wall_s-trigger_wall_s)
+
+
 class MatrixProbe(RotationTrial):
     def __init__(self, obstacles):
         super().__init__()
@@ -98,7 +123,9 @@ class MatrixProbe(RotationTrial):
                         break
                 zero_pose = self.get_truth()
             final, settled, stop_samples, _ = self.settle_from_pose(zero_pose)
-            elapsed = time.monotonic()-stop_start
+            confirmation_wall = time.monotonic()
+            elapsed = confirmation_wall-stop_start
+            timing = stop_timing_metrics(stop_samples, stop_start, confirmation_wall)
             residual = abs(angle_delta(final['yaw_rad'],zero_pose['yaw_rad']))
             drift = max(max_drift, math.hypot(final['x_m']-start['x_m'],final['y_m']-start['y_m']))
             min_clearance = min(min_clearance, *(self.clearance(p) for p in stop_samples))
@@ -116,6 +143,10 @@ class MatrixProbe(RotationTrial):
                         minimum_clearance_m=min_clearance,
                         residual_yaw_after_zero_output_rad=residual,
                         zero_request_to_settled_wall_s=elapsed,
+                        stop_timing_diagnostic=timing,
+                        first_zero_output_truth=zero_pose,
+                        stop_trigger_wall_s=stop_start,
+                        final_truth=final,
                         stop_time_reference='fault_injection' if fault_wall is not None else 'zero_request',
                         zero_output_response_s=None if observed_zero is None else observed_zero-stop_start,
                         safe_stop_observed=safe_stop, unsafe_reason=unsafe,

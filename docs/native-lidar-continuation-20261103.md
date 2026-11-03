@@ -56,3 +56,7 @@ These extend the earlier 1.2-second pulses, but do not satisfy the 13-case produ
 ## Production-turning follow-up
 
 See [native-turning-matrix-20261103.md](native-turning-matrix-20261103.md). All 13 categories were probed under existing calibration authority. Nine motion categories passed; all four fault categories remain failed under the 0.75 s confirmed-settling contract. Production authority, realistic autonomous S00 and S01 remain BLOCKED/NOT RUN. The 49-test offline suite passed; completed measured trials recorded no non-ground contacts. No production readiness flags were enabled.
+
+## Fault timing instrumentation follow-up
+
+See [native-turning-timing-20261103.md](native-turning-timing-20261103.md). Four new fault trials separated output stopping, first verified slow samples (0.220–0.474 s), and the approximately 0.54 s confirmation hold. All four remain FAIL under the unchanged 0.75 s confirmed-settling requirement; no production authority or realistic Nav2 goal was enabled. Offline tests: 53 PASS.
