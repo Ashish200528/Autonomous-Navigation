@@ -223,6 +223,8 @@ class SlamTimeoutProbe(Node):
         return samples, settled
 
     def run(self):
+        from uuid import uuid4
+        trial_id = str(uuid4())
         gate_at_start = self.wait_gate()
         if not self.truth_client.wait_for_service(timeout_sec=4.0):
             raise RuntimeError("evaluator_truth_service_missing")

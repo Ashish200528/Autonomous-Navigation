@@ -58,13 +58,17 @@ PS
  [[ "$value" =~ ^[0-9]+$ ]] || return 1
  printf '%s' "$value"
 }
-host_mib="$(read_windows_available_mib)" || { echo "BLOCKED: Windows RAM is unavailable through WSL interop; no simulation started." >&2; exit 4; }
+# Native Ubuntu has no Windows host; retain the host check only under WSL.
 min_host_mib=2048; [[ "$gui" == true ]] && min_host_mib=2560
 wsl_kib="$(awk '/^MemAvailable:/ {print $2}' /proc/meminfo)"
+host_mib=$((wsl_kib/1024))
+if grep -qi microsoft /proc/sys/kernel/osrelease; then
+ host_mib="$(read_windows_available_mib)" || { echo "BLOCKED: Windows RAM is unavailable through WSL interop; no simulation started." >&2; exit 4; }
+fi
 if ((host_mib<min_host_mib || wsl_kib<1572864)); then
  echo "BLOCKED: insufficient memory; no simulator started."
- echo "Windows available: ${host_mib} MiB; required: ${min_host_mib} MiB."
- echo "WSL available: $((wsl_kib/1024)) MiB; required: 1536 MiB."
+ echo "Host available: ${host_mib} MiB; required: ${min_host_mib} MiB."
+ echo "Linux available: $((wsl_kib/1024)) MiB; required: 1536 MiB."
  exit 4
 fi
 nav2=false; block_reason="goal not requested"
@@ -96,7 +100,7 @@ Nav2 enabled: $nav2
 Readiness: $block_reason
 Full LiDAR goal navigation: DISABLED by this demo unless readiness evidence independently passes; no readiness flags are changed.
 Guarded forward request: $demo_forward (S00-only, request path /cmd_vel_nav; safety guard remains sole /cmd_vel owner)
-Memory: Windows ${host_mib} MiB available; WSL $((wsl_kib/1024)) MiB available
+Memory: host ${host_mib} MiB available; Linux $((wsl_kib/1024)) MiB available
 TXT
 if [[ "$want_goal" == true && "$nav2" != true ]]; then
  echo "GOAL BLOCKED: $block_reason"

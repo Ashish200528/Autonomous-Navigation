@@ -141,6 +141,7 @@ def generate_launch_description():
         condition=IfCondition(LaunchConfiguration("rviz")),
     )
     return LaunchDescription([
+        DeclareLaunchArgument("gui", default_value="false", description="Open Gazebo GUI."),
         DeclareLaunchArgument(
             "world_file",
             default_value=PathJoinSubstitution([
