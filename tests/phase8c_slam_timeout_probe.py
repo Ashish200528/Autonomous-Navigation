@@ -13,6 +13,7 @@ from rclpy.node import Node
 from rclpy.qos import qos_profile_sensor_data
 from ros_gz_interfaces.msg import Contacts
 from sensor_msgs.msg import LaserScan
+from rosgraph_msgs.msg import Clock
 from simulation_interfaces.srv import GetEntityState
 from std_msgs.msg import String
 from tf2_msgs.msg import TFMessage
@@ -37,6 +38,8 @@ class SlamTimeoutProbe(Node):
     def __init__(self):
         super().__init__("phase8c_slam_timeout_probe")
         self.request_pub = self.create_publisher(Twist, "/cmd_vel_nav", 10)
+        self.sim_clock = None
+        self.create_subscription(Clock, "/clock", self.on_clock, qos_profile_sensor_data)
         self.safety = None
         self.guard = None
         self.odom = None
@@ -68,6 +71,9 @@ class SlamTimeoutProbe(Node):
         self.create_subscription(TFMessage, "/tf", self.on_tf, 10)
         self.truth_client = self.create_client(GetEntityState,
                                                "/gzserver/get_entity_state")
+
+    def on_clock(self, msg):
+        self.sim_clock = msg.clock.sec + msg.clock.nanosec / 1e9
 
     def on_safety(self, msg):
         try:
@@ -152,14 +158,14 @@ class SlamTimeoutProbe(Node):
         while rclpy.ok() and time.monotonic() < deadline:
             rclpy.spin_once(self, timeout_sec=0.02)
 
-    def wait_gate(self, stable_s=0.30, timeout_s=6.0):
+    def wait_gate(self, stable_s=0.30, timeout_s=40.0):
         deadline = time.monotonic()+timeout_s
         valid_since = None
         while rclpy.ok() and time.monotonic() < deadline:
             rclpy.spin_once(self, timeout_sec=0.03)
             valid = (self.safety and self.safety.get("valid") is True
                      and float(self.safety.get("max_linear_speed_mps", 0.0)) >= 0.05)
-            if valid:
+            if valid and self.slam_pose is not None and self.map_odom is not None:
                 valid_since = valid_since or time.monotonic()
                 if time.monotonic()-valid_since >= stable_s:
                     return dict(self.safety)
@@ -239,6 +245,7 @@ class SlamTimeoutProbe(Node):
             "map_to_odom": self.map_to_odom_update_count,
         }
         start_contact_pairs = set(self.non_ground_contact_pairs)
+        drive_start_sim = self.sim_clock
         drive_start_wall = time.monotonic()
         drive_duration_s = 4.0
         max_displacement_m = 0.50
@@ -346,6 +353,8 @@ class SlamTimeoutProbe(Node):
         )
         report = {
             "trial_id": trial_id,
+            "real_time_factor": ((self.sim_clock-drive_start_sim) / (time.monotonic()-drive_start_wall)
+                                 if self.sim_clock is not None and drive_start_sim is not None else None),
             "classification": "S00_BOUNDED_FORWARD_SLAM_AND_COMMAND_TIMEOUT_PROBE",
             "status": "FAIL",
             "runtime_received_no_simulator_truth": True,

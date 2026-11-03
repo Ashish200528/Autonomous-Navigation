@@ -11,9 +11,12 @@ slam_toolbox:
     minimum_time_interval: 0.25
     scan_queue_size: 3
     transform_publish_period: 0.05
-    map_update_interval: 3.0
+    # Bounded commissioning needs timely map feedback during a four-second drive.
+    map_update_interval: 1.0
     use_scan_matching: true
     use_scan_barycenter: true
-    minimum_travel_distance: 0.10
+    # Resolve slow 0.05 m/s commissioning motion within the 0.05 m grid.
+    # Time interval still caps processing at 4 Hz.
+    minimum_travel_distance: 0.02
     minimum_travel_heading: 0.10
     do_loop_closing: true
