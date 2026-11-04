@@ -62,7 +62,7 @@ def main():
             if box is not None:
                 p=list(map(float,pose.split()));s=list(map(float,box.text.split()))
                 obstacles.append([p[0],p[1],p[5],s[0],s[1]])
-        env=dict(os.environ,ROS_DOMAIN_ID=str(150+index),OPENBLAS_NUM_THREADS='1',OMP_NUM_THREADS='1')
+        env=dict(os.environ,ROS_DOMAIN_ID=str(60+index),OPENBLAS_NUM_THREADS='1',OMP_NUM_THREADS='1')
         with (b/'launch.log').open('w') as log:
             p=subprocess.Popen(['ros2','launch','anc_lidar','realistic_rgb_lidar.launch.py',
                                 f'world_file:={b}/world.sdf',f'start_x:={xy[0]}',f'start_y:={xy[1]}',

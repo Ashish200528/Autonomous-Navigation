@@ -33,3 +33,18 @@ class CommissionPrerequisitesTest(unittest.TestCase):
         with patch.object(commission,'ROOT',self.root),patch.object(commission,'load_envelope',return_value={'validated_for':'production'}),patch.object(commission,'_validate_moving',return_value=[]):
             result=commission.prerequisites('fixture')
             self.assertEqual(len(result['moving_slam']),3)
+
+    def test_unsafe_linux_ephemeral_domain_is_rejected_before_authority_checks(self):
+        with patch.object(sys,'argv',['commission','missing','unused','--domain-id','180']), \
+                patch.object(commission,'prerequisites',side_effect=AssertionError('must reject domain first')):
+            with self.assertRaises(SystemExit):commission.main()
+
+    def test_s01_spawn_is_preserved_in_launch_arguments(self):
+        from scenario_generator import find_scenario,registry_data
+        layout=find_scenario(registry_data(),'S01')
+        arguments=commission.spawn_arguments(layout)
+        self.assertEqual(float(arguments[0].split(':=')[1]),-3.0)
+        self.assertEqual(float(arguments[1].split(':=')[1]),0.0)
+
+    def test_nonfinite_spawn_is_rejected(self):
+        with self.assertRaises(ValueError):commission.spawn_arguments(dict(start_xyyaw=[float('nan'),0,0]))

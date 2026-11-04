@@ -29,7 +29,7 @@ def main():
     output = Path(sys.argv[1]).resolve()
     output.mkdir(parents=True, exist_ok=False)
     for index in range(3):
-        env = dict(os.environ, ROS_DOMAIN_ID=str(130 + index),
+        env = dict(os.environ, ROS_DOMAIN_ID=str(50 + index),
                    OPENBLAS_NUM_THREADS="1", OMP_NUM_THREADS="1")
         samples = []
         with (output / f"trial{index}-probe.log").open("w") as plog, \

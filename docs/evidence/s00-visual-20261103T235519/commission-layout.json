@@ -1,0 +1,186 @@
+{
+  "arena": {
+    "clearance_margin_m": 0.05,
+    "grid_resolution_m": 0.1,
+    "inner_bounds_xy": [
+      -3.85,
+      3.85,
+      -2.85,
+      2.85
+    ],
+    "outer_bounds_xy": [
+      -4.0,
+      4.0,
+      -3.0,
+      3.0
+    ],
+    "robot_circumscribed_radius_m": 0.264,
+    "wall_height_m": 1.2
+  },
+  "corridor_results": [
+    {
+      "clear": true,
+      "name": "direct_open_lane"
+    }
+  ],
+  "expected_free_corridors": [
+    {
+      "name": "direct_open_lane",
+      "points": [
+        [
+          0.0,
+          0.0
+        ],
+        [
+          2.0,
+          0.0
+        ]
+      ]
+    }
+  ],
+  "goal_xyyaw": [
+    0.75,
+    0,
+    0
+  ],
+  "layout_sha256": "a4f5c35cb0c38bc233519894063f3bd8123fd656a018b4048d9fdf3d62a55f2f",
+  "map_mode": "static_known",
+  "navigation_attempted": false,
+  "obstacles": [],
+  "route_expected": true,
+  "route_validation": {
+    "found": true,
+    "grid_cells": 21,
+    "grid_resolution_m": 0.1,
+    "path_xy": [
+      [
+        0.014,
+        0.014
+      ],
+      [
+        0.114,
+        0.014
+      ],
+      [
+        0.214,
+        0.014
+      ],
+      [
+        0.314,
+        0.014
+      ],
+      [
+        0.414,
+        0.014
+      ],
+      [
+        0.514,
+        0.014
+      ],
+      [
+        0.614,
+        0.014
+      ],
+      [
+        0.714,
+        0.014
+      ],
+      [
+        0.814,
+        0.014
+      ],
+      [
+        0.914,
+        0.014
+      ],
+      [
+        1.014,
+        0.014
+      ],
+      [
+        1.114,
+        0.014
+      ],
+      [
+        1.214,
+        0.014
+      ],
+      [
+        1.314,
+        0.014
+      ],
+      [
+        1.414,
+        0.014
+      ],
+      [
+        1.514,
+        0.014
+      ],
+      [
+        1.614,
+        0.014
+      ],
+      [
+        1.714,
+        0.014
+      ],
+      [
+        1.814,
+        0.014
+      ],
+      [
+        1.914,
+        0.014
+      ],
+      [
+        2.014,
+        0.014
+      ]
+    ]
+  },
+  "scenario_id": "S00",
+  "scenario_name": "empty_open_arena_known_pose",
+  "schema_version": 1,
+  "seed": 101,
+  "sensor_profile": "REFERENCE",
+  "start_xyyaw": [
+    0.0,
+    0.0,
+    0.0
+  ],
+  "validation": {
+    "checks": [
+      {
+        "detail": "start center has at least 0.314 m clearance from arena bounds and every obstacle.",
+        "name": "start_footprint_clearance",
+        "passed": true
+      },
+      {
+        "detail": "goal center has at least 0.314 m clearance from arena bounds and every obstacle.",
+        "name": "goal_footprint_clearance",
+        "passed": true
+      },
+      {
+        "detail": "The expected centerline remains clear after footprint inflation.",
+        "name": "corridor_direct_open_lane_footprint_clear",
+        "passed": true
+      },
+      {
+        "detail": "10 cm footprint-inflated grid found=True; expected=True.",
+        "name": "route_validity_matches_registry",
+        "passed": true
+      },
+      {
+        "detail": "Start and goal are connected in the footprint-inflated grid.",
+        "name": "scenario_is_traversable",
+        "passed": true
+      }
+    ],
+    "passed": true
+  },
+  "validity": "traversable",
+  "world_file": "/home/ashish/AutonomousNavigationCar/docs/evidence/s00-visual-20261103T235519/scenario/world.sdf",
+  "world_sha256": "1259b992c5ccbfa1c78fb468606816cf349b5f755078cb42455c5a34ccb2209c",
+  "world_type": "empty_arena"
+}

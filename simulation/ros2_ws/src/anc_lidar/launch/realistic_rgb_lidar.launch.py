@@ -146,6 +146,7 @@ def generate_launch_description():
         condition=IfCondition(LaunchConfiguration("rviz")),
     )
     return LaunchDescription([
+        DeclareLaunchArgument('nav2_startup_delay_s', default_value='6.0'),
         DeclareLaunchArgument('production_turning', default_value='false'),
         DeclareLaunchArgument('turn_validation_only', default_value='true'),
         DeclareLaunchArgument('production_turn_evidence_file', default_value=''),
@@ -177,6 +178,6 @@ def generate_launch_description():
         safety_gate,
         command_guard,
         slam,
-        TimerAction(period=6.0, actions=[nav2]),
+        TimerAction(period=LaunchConfiguration("nav2_startup_delay_s"), actions=[nav2]),
         rviz,
     ])

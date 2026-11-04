@@ -76,3 +76,7 @@ A fresh evidence-bound production-controller validation matrix passed all thirte
 ## First realistic S00 goals passed
 
 Two fresh 0.75 m sensor-derived S00 Nav2 goals passed end to end, including live sensor integrity, sole guard publisher, independent truth error/collision checks and post-goal stop confirmation. Measured truth travel .634/.645 m; final goal position errors .132/.122 m; no non-ground contacts. Runtime allows only separately validated forward/pure-turn primitives with an odometry stop interlock. See native-nav2-s00-20261103.md for evidence, preserved failures and exact headless/GUI reproduction commands. S01, parking, exploration and hardware remain unvalidated.
+
+## Graphical and distance follow-up
+
+A fresh Gazebo/RViz S00 trial passed with screenshots and measured RAM headroom. A 2 m headless S00 trial also passed (1.934 m travel, .0354 m final localization error). Original S01 aborted safely because its destination was outside the observed map; obstacle avoidance remains unvalidated. The first 3 m trial was interrupted and is incomplete. Low ROS domain defaults remove a native Linux ephemeral-port overlap risk. See native-gui-s01-distance-20261104.md for evidence and exact successful graphical commands.
