@@ -85,3 +85,8 @@ A fresh Gazebo/RViz S00 trial passed with screenshots and measured RAM headroom.
 ## 2026-11-04 observation and localization follow-up
 
 Graphical S00 and direct 2 m navigation passed; the baseline sensor-selected observation workflow also reached its original 2 m destination. Baseline S01 partial legs failed the unchanged .10 m localization limit, and a completed 3 m S00 repeat timed out with .372 m localization error. A 45 s stationary diagnostic isolates an approximately .20 m SLAM map correction while wheel/fused odometry remains accurate. An optional stronger odometry-prior profile is experimental: a direct 2 m goal passed, but its first observation-leg trial timed out. No original S01 goal or S01 graphical success is claimed. See [the measured follow-up](native-lidar-followup-20261104.md) and its machine-readable summary.
+
+
+## 2026-11-04 source-instrumented SLAM correction
+
+Passive source tracing reproduced .234 m scan-stamped S01 bias with accurate odometry. Finite no-return endpoints were incorrectly available to Karto matching. An opt-in separate hit-endpoint scan reduced the corrected S01 maximum scan-stamped error to .023 m, passed two observation legs, and passed direct S00 2 m / 3 m goals with .00546 / .02189 m final localization errors. Baseline inputs/configuration and GUI capability remain preserved. Original S01 goal timed out and is still unvalidated. See [source diagnosis and evidence](native-slam-source-fix-20261104.md).

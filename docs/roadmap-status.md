@@ -2,7 +2,7 @@
 
 Updated: 2026-11-04
 
-The supplied master roadmap remains reference material. This status records the implemented phase gates. The dated 2026-11-02 updates below are historical; current native Ubuntu capability is summarized here and in [the follow-up report](native-lidar-followup-20261104.md).
+The supplied master roadmap remains reference material. This status records the implemented phase gates. The dated 2026-11-02 updates below are historical; current native Ubuntu capability is summarized here and in [the scan source correction report](native-slam-source-fix-20261104.md).
 
 | Phase | Status | Scope |
 |---|---|---|
@@ -18,8 +18,8 @@ The supplied master roadmap remains reference material. This status records the 
 | 8B | COMPLETE WITH LIMITS | Camera candidate sweep and isolated simulated stopping-distance measurements |
 | Phase 8 RGB-only motion gate | BLOCKED | Best connected full-footprint corridor 0.480 m vs 0.656429 m required; candidate occupied recall is inadequate |
 | 8C Branch 1: RGB + 2D LiDAR | PASS WITH LIMITS | Native Ubuntu sensing, three bounded moving-SLAM passes, 13 production turning categories; pure forward/turn primitives only, hardware unvalidated |
-| 8C Stage D: goal navigation | S00 PASS WITH LIMITS | Two original headless trials, a graphical .75 m goal, direct 2 m goal and sensor-selected intermediate-goal workflow passed |
-| 8C Stage D: S01 avoidance / longer routes | BLOCKED / FAILED | S01 partial legs failed localization; baseline 3 m S00 timed out with .372 m localization error; parking/exploration unvalidated |
+| 8C Stage D: goal navigation | S00 PASS WITH LIMITS | Accepted GUI/baseline 2 m/observation results preserved; corrected SLAM endpoint profile passed direct 2 m and 3 m |
+| 8C Stage D: S01 avoidance | BLOCKED / FAILED | Endpoint fix reduced scan-stamped error from .234 m to .023 m; two observation legs passed, original goal timed out; parking/exploration unvalidated |
 
 Phase 8 remains an independent RGB-only stop-only profile with its motion gate blocked. Phase 8C now has accepted native Ubuntu S00 sensor-derived goal evidence with an authoritative guard and bounded sequential pure forward/turn motion. This does not establish S01 obstacle avoidance, general exploration, combined/reverse motion or hardware safety. The original forward-only evidence remains in [Phase 8C evidence](evidence/phase8c/lidar/README.md).
 

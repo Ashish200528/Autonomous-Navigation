@@ -5,6 +5,17 @@ import math
 from anc_navigation_common.contracts import FREE, OCCUPIED, UNKNOWN, classify_range
 
 
+def slam_hit_ranges(ranges,range_min_m,range_max_m):
+    """Encode endpoints for Karto: only actual hits can be scan-match features.
+
+    The local safety mapper separately interprets finite range_max as a clear
+    ray. Karto's unfiltered matching points include that finite endpoint, so
+    its input must mask no-return and invalid endpoints without changing beam
+    indices, angles, timestamps, or the safety map's representation.
+    """
+    return [float(v) if math.isfinite(v) and range_min_m<v<range_max_m else float('nan') for v in ranges]
+
+
 @dataclass(frozen=True)
 class Grid:
     width: int = 180

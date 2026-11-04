@@ -79,7 +79,7 @@ def generate_launch_description():
     scan_conditioner = Node(
         package="anc_lidar", executable="scan_conditioner",
         name="anc_lidar_scan_conditioner", output="screen",
-        parameters=lidar_params,
+        parameters=[*lidar_params, {'publish_slam_hits_only': LaunchConfiguration('slam_hits_only')}],
     )
     local_mapper = Node(
         package="anc_lidar", executable="local_scan_mapper",
@@ -146,6 +146,7 @@ def generate_launch_description():
         condition=IfCondition(LaunchConfiguration("rviz")),
     )
     return LaunchDescription([
+        DeclareLaunchArgument('slam_hits_only', default_value='false'),
         DeclareLaunchArgument('slam_params_file', default_value=slam_config),
         DeclareLaunchArgument('nav2_params_file', default_value=nav2_config),
         DeclareLaunchArgument('nav2_startup_delay_s', default_value='6.0'),

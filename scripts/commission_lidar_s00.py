@@ -52,6 +52,7 @@ class CommissionEval(Eval):
         self.evaluation_layout=None
         self.artifact_dir=None
         self.raw_odom=None
+        self.slam_diagnostics=None
         self.local_map=None;self.local_map_wall=None;self.run_number=0
         super().__init__()
         self.set_parameters([Parameter('use_sim_time',value=True)])
@@ -97,6 +98,7 @@ class CommissionEval(Eval):
     def on_pose(self,msg):
         for p in msg.pose:
             if p.name=='anc_robot':
+                if self.slam_diagnostics is not None:self.slam_diagnostics.truth(msg,p)
                 self.latest=dict(sim_s=msg.header.stamp.sec+msg.header.stamp.nsec/1e9,
                                  x_m=p.position.x,y_m=p.position.y,yaw_rad=quat_yaw(p.orientation))
 
@@ -231,6 +233,8 @@ def main():
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('envelope',type=Path);parser.add_argument('output',type=Path)
     parser.add_argument('--slam-config',type=Path)
+    parser.add_argument('--trace-slam',action='store_true',help='Passive evaluator source trace; no runtime publications')
+    parser.add_argument('--slam-hits-only',action='store_true',help='Experimental Karto endpoint encoding; safety scan unchanged')
     parser.add_argument('--stationary-hold-s',type=float,default=0)
     parser.add_argument('--observation-steps',type=int,default=0,choices=range(4))
     parser.add_argument('--scenario',choices=['S00','S01'],default='S00')
@@ -260,12 +264,16 @@ def main():
     nav_snapshot,nav_provenance=snapshot_configuration(config_dir/('nav2_s01_turn_room.yaml' if args.scenario=='S01' and args.observation_steps else 'nav2_lidar.yaml'),out,'nav2')
     (out/'run-settings.json').write_text(json.dumps(dict(scenario=args.scenario,domain_id=args.domain_id,
         gui=args.gui,rviz=args.rviz,goal=layout['goal_xyyaw'],spawn=layout['start_xyyaw'],timeout_s=args.timeout_s,
-        observation_steps=args.observation_steps,stationary_hold_s=args.stationary_hold_s,
+        observation_steps=args.observation_steps,stationary_hold_s=args.stationary_hold_s,trace_slam=args.trace_slam,
+        slam_hits_only=args.slam_hits_only,
         initial_available_mib=available/1024,slam_config=str(args.slam_config) if args.slam_config else 'baseline',
         configuration_snapshots=dict(slam=slam_provenance,nav2=nav_provenance)),indent=2)+'\n')
     os.environ.update(ROS_DOMAIN_ID=str(args.domain_id),OPENBLAS_NUM_THREADS='1',OMP_NUM_THREADS='1')
     rclpy.init();node=CommissionEval();launch=None
     node.artifact_dir=out
+    if args.trace_slam:
+        from slam_source_diagnostics import SlamSourceDiagnostics
+        node.slam_diagnostics=SlamSourceDiagnostics(node,out)
     node.goal_distance_m=math.hypot(layout['goal_xyyaw'][0]-layout['start_xyyaw'][0],layout['goal_xyyaw'][1]-layout['start_xyyaw'][1])
     node.travel_limit_m=(node.goal_distance_m+2 if extended else 1.5)
     waypoint_reports=[];original_goal_attempted=False
@@ -275,6 +283,7 @@ def main():
             launch=subprocess.Popen(['ros2','launch','anc_lidar','realistic_rgb_lidar.launch.py',
                 'world_file:='+layout['world_file'],
                 'slam_params_file:='+str(slam_snapshot),
+                'slam_hits_only:='+str(args.slam_hits_only).lower(),
                 'nav2_params_file:='+str(nav_snapshot),
                 *spawn_arguments(layout),'production_turning:=true','turn_validation_only:=false',
                 'production_turn_evidence_file:='+str(args.envelope.resolve()),'rotation_calibration_max_radps:=0.0',
@@ -328,6 +337,7 @@ def main():
         report.update(observation_goal_reports=waypoint_reports,original_goal_attempted=original_goal_attempted,localization_trace=node.localization_trace,active_goal_guard_reason_sample_counts=node.active_intervention_counts,
                       guard_interventions=node.interventions,scenario_id=args.scenario,
                       configured_goal_world=layout['goal_xyyaw'],configured_travel_limit_m=node.travel_limit_m)
+        if node.slam_diagnostics is not None:report['slam_source_diagnostics']=node.slam_diagnostics.close()
         if launch:stop(launch)
         report.update(runtime_navigation_receives_no_gazebo_truth=True,predefined_map_used=False,
                       commissioning_prerequisites=proof)
