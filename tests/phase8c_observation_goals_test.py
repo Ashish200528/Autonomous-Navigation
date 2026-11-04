@@ -2,13 +2,41 @@ import sys,unittest
 from pathlib import Path
 import numpy as np
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'scripts'))
-from lidar_observation_goals import select_observation_goal,target_observed
+from lidar_observation_goals import select_observation_goal,target_observed,target_corridor_observed
 
 
 def grid(a):return dict(data=a.ravel().tolist(),width=a.shape[1],height=a.shape[0],resolution=.1,origin=[-5,-5],yaw=0)
 
 
 class ObservationGoalsTests(unittest.TestCase):
+    def test_connected_goal_behind_obstacle_is_not_a_clear_corridor(self):
+        a=np.zeros((100,100),dtype=int);a[48:52,60:64]=100
+        self.assertTrue(target_observed(grid(a),(0,0,0),(3,0,0)))
+        self.assertFalse(target_corridor_observed(grid(a),(0,0,0),(3,0,0)))
+
+    def test_unknown_intersecting_capsule_boundary_denies_goal(self):
+        a=np.zeros((100,100),dtype=int);a[56,60]=-1
+        self.assertFalse(target_corridor_observed(grid(a),(0,0,0),(3,0,0)))
+
+    def test_unknown_far_from_corridor_does_not_block_observed_route(self):
+        a=np.zeros((100,100),dtype=int);a[70,60]=-1
+        self.assertTrue(target_corridor_observed(grid(a),(0,0,0),(3,0,0)))
+
+    def test_corridor_cannot_extend_outside_observed_grid(self):
+        a=np.zeros((100,100),dtype=int)
+        self.assertFalse(target_corridor_observed(grid(a),(0,0,0),(4.8,0,0)))
+
+    def test_arrival_heading_and_shorter_step_preserve_measured_geometry(self):
+        a=np.zeros((100,100),dtype=int)
+        r=select_observation_goal(grid(a),grid(a),(0,0,0),(4,1,0),max_step_m=1.5,heading_policy='arrival')
+        self.assertEqual(r['status'],'SELECTED')
+        self.assertLessEqual(r['step_m'],1.5)
+        self.assertAlmostEqual(r['goal_map'][2],np.arctan2(r['goal_map'][1],r['goal_map'][0]))
+
+    def test_invalid_heading_policy_is_rejected(self):
+        a=np.zeros((100,100),dtype=int)
+        with self.assertRaises(ValueError):select_observation_goal(grid(a),grid(a),(0,0,0),(4,0,0),heading_policy='invalid')
+
     def test_unknown_destination_does_not_become_observed(self):
         a=np.zeros((100,100),dtype=int);a[:,70:]=-1
         self.assertFalse(target_observed(grid(a),(0,0,0),(4,0,0)))

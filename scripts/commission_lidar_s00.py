@@ -40,6 +40,21 @@ def snapshot_configuration(source,out,label):
     return saved,dict(source=str(source),snapshot=saved.name,sha256=hashlib.sha256(payload).hexdigest())
 
 
+def timeout_diagnostic_eligible(report):
+    """A timeout may motivate a separate experiment, never a mission PASS."""
+    numeric=('final_localization_error_m','final_localization_heading_error_rad','min_evaluator_clearance_m')
+    if not all(isinstance(report.get(k),(int,float)) and math.isfinite(report[k]) for k in numeric):return False
+    sensors=report.get('sensor_integrity',{})
+    return (report.get('status')=='FAIL' and report.get('nav2_action_status')=='TIMEOUT'
+            and report.get('post_goal_stop_confirmed') is True
+            and report['final_localization_error_m']<=.1 and report['final_localization_heading_error_rad']<=.1
+            and report['min_evaluator_clearance_m']>=.10
+            and report.get('non_ground_contact_events')==[] and report.get('guarded_mixed_output_samples')==0
+            and report.get('sole_authoritative_cmd_vel_publisher') is True
+            and report.get('travel_limit_exceeded') is False
+            and all(sensors.get(k) for k in ('rgb_fresh','scan_fresh','map_fresh','filtered_odom_received')))
+
+
 class CommissionEval(Eval):
     def __init__(self):
         self.active_intervention_counts={}
@@ -170,6 +185,7 @@ class CommissionEval(Eval):
     def run(self,layout,timeout_s):
         self.evaluation_layout=layout
         current_map,_=self.ready()
+        if self.slam_diagnostics is not None:self.slam_diagnostics.record_parameters()
         if self.reference_map_start is None:
             self.reference_map_start=current_map
             self.reference_world_start=layout['start_xyyaw']
@@ -233,10 +249,16 @@ def main():
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('envelope',type=Path);parser.add_argument('output',type=Path)
     parser.add_argument('--slam-config',type=Path)
+    parser.add_argument('--nav2-config',type=Path,help='Explicit bounded commissioning profile; default unchanged')
     parser.add_argument('--trace-slam',action='store_true',help='Passive evaluator source trace; no runtime publications')
     parser.add_argument('--slam-hits-only',action='store_true',help='Experimental Karto endpoint encoding; safety scan unchanged')
     parser.add_argument('--stationary-hold-s',type=float,default=0)
     parser.add_argument('--observation-steps',type=int,default=0,choices=range(4))
+    parser.add_argument('--observation-max-step-m',type=float,default=2.)
+    parser.add_argument('--observation-heading',choices=['destination','arrival'],default='destination')
+    parser.add_argument('--observation-clear-corridor',action='store_true',help='Require observed .60 m radius capsule before original goal')
+    parser.add_argument('--post-timeout-diagnostic-s',type=float,default=0,
+                        help='Separate S01 experiment after a safe timeout; original mission remains FAIL')
     parser.add_argument('--scenario',choices=['S00','S01'],default='S00')
     parser.add_argument('--distance-m',type=float,default=.75,help='S00 goal distance; S01 uses original goal')
     parser.add_argument('--timeout-s',type=float,default=60)
@@ -244,6 +266,9 @@ def main():
     parser.add_argument('--gui',action='store_true')
     parser.add_argument('--rviz',action='store_true')
     args=parser.parse_args()
+    if not 0<=args.post_timeout_diagnostic_s<=300 or (args.post_timeout_diagnostic_s and args.scenario!='S01'):
+        raise SystemExit('Separate timeout diagnostic is S01 only, bounded to 300 s')
+    if not .35<=args.observation_max_step_m<=2.:raise SystemExit('Observation step must be .35..2 m')
     if not 0<=args.stationary_hold_s<=60:raise SystemExit('stationary diagnostic hold must be 0..60 s')
     if not .75<=args.distance_m<=3.0:raise SystemExit('S00 distance must be .75..3 metres')
     extended=args.scenario=='S01' or args.distance_m>.75
@@ -261,10 +286,13 @@ def main():
     (out/'commission-layout.json').write_text(json.dumps(layout,indent=2)+'\n')
     config_dir=ROOT/'simulation/ros2_ws/src/anc_lidar/config'
     slam_snapshot,slam_provenance=snapshot_configuration(args.slam_config or config_dir/'slam_toolbox.yaml',out,'slam')
-    nav_snapshot,nav_provenance=snapshot_configuration(config_dir/('nav2_s01_turn_room.yaml' if args.scenario=='S01' and args.observation_steps else 'nav2_lidar.yaml'),out,'nav2')
+    nav_snapshot,nav_provenance=snapshot_configuration(args.nav2_config or config_dir/('nav2_s01_turn_room.yaml' if args.scenario=='S01' and args.observation_steps else 'nav2_lidar.yaml'),out,'nav2')
     (out/'run-settings.json').write_text(json.dumps(dict(scenario=args.scenario,domain_id=args.domain_id,
         gui=args.gui,rviz=args.rviz,goal=layout['goal_xyyaw'],spawn=layout['start_xyyaw'],timeout_s=args.timeout_s,
         observation_steps=args.observation_steps,stationary_hold_s=args.stationary_hold_s,trace_slam=args.trace_slam,
+        observation_max_step_m=args.observation_max_step_m,observation_heading=args.observation_heading,
+        observation_clear_corridor=args.observation_clear_corridor,
+        post_timeout_diagnostic_s=args.post_timeout_diagnostic_s,
         slam_hits_only=args.slam_hits_only,
         initial_available_mib=available/1024,slam_config=str(args.slam_config) if args.slam_config else 'baseline',
         configuration_snapshots=dict(slam=slam_provenance,nav2=nav_provenance)),indent=2)+'\n')
@@ -290,17 +318,19 @@ def main():
                 'enable_slam:=true','enable_nav2:=true','nav2_startup_delay_s:='+('12.0' if args.gui else '6.0'),'gui:='+str(args.gui).lower(),'rviz:='+str(args.rviz).lower()],stdout=f,stderr=subprocess.STDOUT,start_new_session=True)
             mission_start=time.monotonic()
             if args.observation_steps:
-                from lidar_observation_goals import select_observation_goal,target_observed
+                from lidar_observation_goals import select_observation_goal,target_observed,target_corridor_observed
                 node.reference_map_start,_=node.ready();node.reference_world_start=layout['start_xyyaw']
                 target=map_goal(node.reference_map_start,layout['start_xyyaw'],layout['goal_xyyaw'])
                 node.save_map('pre-observation',target)
                 visited=[]
                 for index in range(args.observation_steps):
                     pose=node.pose_map()
-                    if target_observed(node.grid_view(node.map),pose,target):break
+                    observed=(target_corridor_observed if args.observation_clear_corridor else target_observed)
+                    if observed(node.grid_view(node.map),pose,target):break
                     if node.local_map is None or time.monotonic()-node.local_map_wall>.35:
                         raise RuntimeError('observation_policy_local_map_stale')
-                    choice=select_observation_goal(node.grid_view(node.map),node.grid_view(node.local_map),pose,target,visited)
+                    choice=select_observation_goal(node.grid_view(node.map),node.grid_view(node.local_map),pose,target,visited,
+                                                   max_step_m=args.observation_max_step_m,heading_policy=args.observation_heading)
                     (out/f'observation-{index}-selection.json').write_text(json.dumps(choice,indent=2)+'\n')
                     if choice['status']!='SELECTED':raise RuntimeError('observation_goal_blocked:'+choice['reason'])
                     goal=choice['goal_map'];visited.append(goal)
@@ -312,11 +342,32 @@ def main():
                     filename=f'observation-{index}-result.json';waypoint_reports.append(filename)
                     (out/filename).write_text(json.dumps(leg,indent=2)+'\n')
                     if leg['status']!='PASS':raise RuntimeError('observation_goal_failed')
+            if args.observation_clear_corridor and args.observation_steps:
+                if not target_corridor_observed(node.grid_view(node.map),node.pose_map(),target):
+                    raise RuntimeError('original_goal_corridor_not_fully_observed')
             remaining=args.timeout_s-(time.monotonic()-mission_start)
             if remaining<5:raise RuntimeError('commission_mission_deadline')
             original_goal_attempted=True
             report=node.run(layout,remaining)
             report['mission_elapsed_wall_s']=time.monotonic()-mission_start
+            if args.post_timeout_diagnostic_s and timeout_diagnostic_eligible(report):
+                from action_msgs.msg import GoalStatus
+                (out/'original-mission-result.json').write_text(json.dumps(report,indent=2)+'\n')
+                previous_result=node.active_goal.get_result_async();deadline=time.monotonic()+2
+                while not previous_result.done() and time.monotonic()<deadline:rclpy.spin_once(node,timeout_sec=.02)
+                if not previous_result.done() or previous_result.result().status!=GoalStatus.STATUS_CANCELED:
+                    report['post_timeout_diagnostic_blocked']='previous_goal_cancellation_unconfirmed'
+                else:
+                    continuation=node.run(layout,args.post_timeout_diagnostic_s)
+                    continuation.update(classification='POST_TIMEOUT_S01_DIAGNOSTIC',diagnostic_only=True,
+                                        qualifies_original_mission=False,metrics_scope='cumulative_since_original_spawn',
+                                        previous_goal_cancellation_confirmed=True)
+                    (out/'post-timeout-diagnostic-result.json').write_text(json.dumps(continuation,indent=2)+'\n')
+                    report=dict(status='FAIL',classification='MISSION_FAILED_WITH_SEPARATE_TIMEOUT_DIAGNOSTIC',
+                                reason='original_mission_timeout_retained',primary_mission_result='original-mission-result.json',
+                                post_timeout_diagnostic_result='post-timeout-diagnostic-result.json',
+                                diagnostic_original_goal_reached=continuation['status']=='PASS',
+                                mission_elapsed_wall_s=time.monotonic()-mission_start)
     except Exception as exc:
         report.update(status='FAIL',reason=f'{type(exc).__name__}: {exc}',safety_state=node.safety,guard_state=node.guard,
                       commands={k:len(v) for k,v in node.cmd.items()},contacts=node.collisions,

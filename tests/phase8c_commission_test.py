@@ -9,6 +9,23 @@ import commission_lidar_s00 as commission
 
 
 class CommissionPrerequisitesTest(unittest.TestCase):
+    def test_timeout_diagnostic_requires_every_existing_safety_observation(self):
+        report=dict(status='FAIL',nav2_action_status='TIMEOUT',post_goal_stop_confirmed=True,
+                    final_localization_error_m=.02,final_localization_heading_error_rad=.01,
+                    min_evaluator_clearance_m=.5,non_ground_contact_events=[],guarded_mixed_output_samples=0,
+                    sole_authoritative_cmd_vel_publisher=True,travel_limit_exceeded=False,
+                    sensor_integrity=dict(rgb_fresh=True,scan_fresh=True,map_fresh=True,filtered_odom_received=True))
+        self.assertTrue(commission.timeout_diagnostic_eligible(report))
+        for field,value in [('post_goal_stop_confirmed',False),('final_localization_error_m',.11),
+                            ('final_localization_heading_error_rad',float('nan')),('min_evaluator_clearance_m',.09),
+                            ('non_ground_contact_events',[['robot','box']]),('guarded_mixed_output_samples',1),
+                            ('sole_authoritative_cmd_vel_publisher',False),('travel_limit_exceeded',True),
+                            ('nav2_action_status','ABORTED')]:
+            with self.subTest(field=field):
+                self.assertFalse(commission.timeout_diagnostic_eligible(dict(report,**{field:value})))
+        for field in report['sensor_integrity']:
+            self.assertFalse(commission.timeout_diagnostic_eligible(dict(report,sensor_integrity={field:False})))
+
     def setUp(self):
         self.temp=tempfile.TemporaryDirectory();self.root=Path(self.temp.name)
         self.base=self.root/'docs/evidence/native-slam-map1s-20261103';self.base.mkdir(parents=True)

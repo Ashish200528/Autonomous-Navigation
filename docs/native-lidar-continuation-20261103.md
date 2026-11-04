@@ -90,3 +90,8 @@ Graphical S00 and direct 2 m navigation passed; the baseline sensor-selected obs
 ## 2026-11-04 source-instrumented SLAM correction
 
 Passive source tracing reproduced .234 m scan-stamped S01 bias with accurate odometry. Finite no-return endpoints were incorrectly available to Karto matching. An opt-in separate hit-endpoint scan reduced the corrected S01 maximum scan-stamped error to .023 m, passed two observation legs, and passed direct S00 2 m / 3 m goals with .00546 / .02189 m final localization errors. Baseline inputs/configuration and GUI capability remain preserved. Original S01 goal timed out and is still unvalidated. See [source diagnosis and evidence](native-slam-source-fix-20261104.md).
+
+
+## 2026-11-04 S01 execution follow-up
+
+The source correction milestone a6c74d5 was directly pushed and its remote SHA verified. Optional Nav2 progress/lookahead/acceleration profiles passed bounded S00 qualifications but did not qualify S01. A stricter sensor-only observation workflow passed S00 and three S01 intermediate goals once, then timed out 2.708 m short of the original S01 destination with .02876 m localization error. A repeat failed an intermediate timeout. The original goal has not been reached. All motion safety limits remain intact. Full rebuild (nine packages), 126 offline tests and separate Phase 6/7/8 static checks passed. See [the execution follow-up](native-s01-controller-investigation-20261104.md).

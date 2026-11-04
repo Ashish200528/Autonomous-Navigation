@@ -58,9 +58,11 @@ def expected_planar_ranges(p,angles,layout):
     return result
 
 
-def analyze(folder):
+def analyze(folder,source=None):
     streams=defaultdict(list)
-    with gzip.open(folder/'slam-source.jsonl.gz','rt') as f:
+    source=source or (folder/'slam-source.jsonl.gz')
+    if not source.exists():source=folder/'controller-source.jsonl.gz'
+    with gzip.open(source,'rt') as f:
         for line in f:
             row=json.loads(line);streams[row['kind']].append(row)
     truth=Stream(streams['truth_evaluator_only']);wheel=Stream(streams['wheel_odom']);fused=Stream(streams['filtered_odom'])
@@ -129,7 +131,9 @@ def analyze(folder):
             if not real and encoded is None:masked_endpoints+=1
         for field in ('frame','angle_min','angle_max','angle_increment','time_increment','scan_time','range_min','range_max'):
             if original[field]!=hit_scan[field]:encoding_mismatches+=1
-    summary=dict(evaluation_only=True,accepted_slam_poses=len(streams['slam_pose']),aligned_slam_pose_samples=len(rows),
+    summary=dict(evaluation_only=True,source_trace=source.name,
+                 source_trace_scope='complete' if streams['raw_scan'] else 'bounded_controller_events',
+                 accepted_slam_poses=len(streams['slam_pose']),aligned_slam_pose_samples=len(rows),
                  maximum_scan_stamped_slam_error_m=max((r['slam_error_m'] for r in rows),default=None),
                  final_scan_stamped_sample=rows[-1] if rows else None,
                  first_slam_error_above_10cm=next((r for r in rows if r['slam_error_m']>.1),None),
@@ -142,7 +146,8 @@ def analyze(folder):
                  largest_existing_graph_vertex_revision_m=max(graph_moves,default=0),graph_counts=graph_counts,
                  static_transforms=streams['tf_static'],
                  slam_endpoint_encoding=dict(paired_scans=encoding_pairs,mismatches=encoding_mismatches,masked_non_hit_endpoints=masked_endpoints))
-    (folder/'slam-source-analysis.json').write_text(json.dumps(summary,indent=2)+'\n')
+    filename='slam-source-analysis.json' if streams['raw_scan'] else 'controller-source-analysis.json'
+    (folder/filename).write_text(json.dumps(summary,indent=2)+'\n')
     with (folder/'slam-scan-corrections.csv').open('w',newline='') as f:
         if rows:
             writer=csv.DictWriter(f,fieldnames=list(rows[0]),lineterminator='\n');writer.writeheader();writer.writerows(rows)
@@ -151,5 +156,6 @@ def analyze(folder):
 
 if __name__=='__main__':
     parser=argparse.ArgumentParser(description=__doc__);parser.add_argument('folder',type=Path)
-    result=analyze(parser.parse_args().folder)
+    parser.add_argument('--source',type=Path,help='Optional full locally archived range trace')
+    args=parser.parse_args();result=analyze(args.folder,args.source)
     print(json.dumps({k:v for k,v in result.items() if k not in ('graph_counts','static_transforms')},indent=2))

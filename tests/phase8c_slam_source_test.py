@@ -1,4 +1,6 @@
 import math
+from array import array
+import json
 from pathlib import Path
 import sys
 import unittest
@@ -8,9 +10,15 @@ ROOT=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT/'scripts'))
 from analyze_slam_source import Stream,compose,inverse
 from anc_lidar.scan_model import slam_hit_ranges
+from slam_source_diagnostics import json_parameter
 
 
 class SlamSourceTests(unittest.TestCase):
+    def test_ros_array_parameter_can_be_saved_in_actual_configuration_audit(self):
+        value=json_parameter(array('d',[.12,0,.1]))
+        self.assertEqual(json.loads(json.dumps(value)),[.12,0,.1])
+        self.assertIs(json_parameter(True),True)
+
     def test_endpoint_mask_retains_indices_and_real_hits(self):
         source=[float('inf'),6.,7.,float('nan'),.12,.5,5.999,-1.]
         output=slam_hit_ranges(source,.12,6.)
@@ -44,3 +52,34 @@ class SlamSourceTests(unittest.TestCase):
         correction=[.2,-.1,.5];odom=[1,2,.3]
         recovered=compose(compose(correction,odom),inverse(odom))
         for a,b in zip(recovered,correction):self.assertAlmostEqual(a,b)
+
+    def test_s01_pose_progress_changes_only_progress_definition(self):
+        config=ROOT/'simulation/ros2_ws/src/anc_lidar/config'
+        baseline=yaml.safe_load((config/'nav2_s01_turn_room.yaml').read_text())
+        candidate=yaml.safe_load((config/'nav2_s01_pose_progress.yaml').read_text())
+        b=baseline['controller_server']['ros__parameters']['progress_checker']
+        c=candidate['controller_server']['ros__parameters']['progress_checker']
+        self.assertEqual(c.pop('plugin'),'nav2_controller::PoseProgressChecker')
+        self.assertEqual(c.pop('required_movement_angle'),.5)
+        b.pop('plugin')
+        self.assertEqual(c['movement_time_allowance'],12.)
+        self.assertEqual(c['required_movement_radius'],.10)
+        self.assertEqual(baseline,candidate)
+
+    def test_longer_lookahead_preserves_every_other_control_limit(self):
+        config=ROOT/'simulation/ros2_ws/src/anc_lidar/config'
+        baseline=yaml.safe_load((config/'nav2_s01_pose_progress.yaml').read_text())
+        candidate=yaml.safe_load((config/'nav2_s01_sequential_lookahead.yaml').read_text())
+        b=baseline['controller_server']['ros__parameters']['FollowPath']
+        c=candidate['controller_server']['ros__parameters']['FollowPath']
+        for field in ('lookahead_dist','min_lookahead_dist'):
+            self.assertEqual(c.pop(field),.60);b.pop(field)
+        self.assertEqual(baseline,candidate)
+
+    def test_measured_slew_keeps_all_other_profile_parameters(self):
+        config=ROOT/'simulation/ros2_ws/src/anc_lidar/config'
+        baseline=yaml.safe_load((config/'nav2_s01_pose_progress.yaml').read_text())
+        candidate=yaml.safe_load((config/'nav2_s01_measured_slew.yaml').read_text())
+        accel=candidate['controller_server']['ros__parameters']['FollowPath'].pop('max_angular_accel')
+        self.assertEqual(accel,candidate['velocity_smoother']['ros__parameters']['max_accel'][2])
+        self.assertEqual(baseline,candidate)
