@@ -19,7 +19,7 @@ from tf2_ros import Buffer, TransformException, TransformListener
 
 from anc_lidar.scan_model import (
     Grid, condition_ranges, fuse_lidar_with_rgb_free, inflate_obstacles,
-    raytrace_scan, validate_scan, slam_hit_ranges,
+    raytrace_scan, validate_scan, slam_hit_ranges, nav2_clearing_ranges,
 )
 
 NANO = 1_000_000_000
@@ -84,6 +84,7 @@ class ScanConditioner(Node):
             "max_wall_age_s": 0.25,
             "max_sim_age_s": 0.25,
             "publish_slam_hits_only": False,
+            "publish_nav2_clearing_scan": False,
         }
         for name, value in defaults.items():
             self.declare_parameter(name, value)
@@ -101,6 +102,8 @@ class ScanConditioner(Node):
         self.health_pub = self.create_publisher(String, self.p["health_topic"], 10)
         self.slam_pub = (self.create_publisher(LaserScan, '/realistic/scan/slam_hits', qos_profile_sensor_data)
                          if self.p['publish_slam_hits_only'] else None)
+        self.nav2_pub = (self.create_publisher(LaserScan, "/realistic/scan/nav2", qos_profile_sensor_data)
+                         if self.p["publish_nav2_clearing_scan"] else None)
         self.create_subscription(LaserScan, self.p["input_topic"], self.on_scan,
                                  qos_profile_sensor_data)
         self.create_subscription(Clock, self.p["clock_topic"], self.on_clock,
@@ -175,6 +178,10 @@ class ScanConditioner(Node):
             hits=copy.deepcopy(out)
             hits.ranges=slam_hit_ranges(out.ranges,out.range_min,out.range_max)
             self.slam_pub.publish(hits)
+        if self.nav2_pub is not None:
+            clearing=copy.deepcopy(out)
+            clearing.ranges=nav2_clearing_ranges(out.ranges,out.range_min,out.range_max)
+            self.nav2_pub.publish(clearing)
         usable_fraction = (counts["usable_beams"]/max(counts["total_beams"], 1))
         sim_age = None if self.clock_s is None else self.clock_s-stamp
         if reason is None and self.clock_s is None:

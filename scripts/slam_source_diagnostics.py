@@ -7,11 +7,12 @@ import time
 from collections import Counter
 
 from geometry_msgs.msg import PoseWithCovarianceStamped, PointStamped
-from nav_msgs.msg import Odometry
+from nav_msgs.msg import Odometry, OccupancyGrid
 from rclpy.qos import QoSProfile, DurabilityPolicy, ReliabilityPolicy, qos_profile_sensor_data
 from sensor_msgs.msg import LaserScan, Imu
 from tf2_msgs.msg import TFMessage
 from visualization_msgs.msg import MarkerArray
+from std_msgs.msg import String
 
 
 def stamp(s):
@@ -45,12 +46,14 @@ class SlamSourceDiagnostics:
         self.file=gzip.open(out/'slam-source.jsonl.gz','wt',compresslevel=1)
         self.bytes=0;self.truncated=False;self.closed=False;self.last_truth=-1;self.last_imu=-1
         self.parameters_recorded=False
+        self.local_costmap=None;self.last_costmap_dump=-1
         self.subscriptions=[]
         def sub(kind,topic,callback,qos=qos_profile_sensor_data):
             self.subscriptions.append(node.create_subscription(kind,topic,callback,qos))
         sub(LaserScan,'/realistic/scan/raw',lambda m:self.scan('raw_scan',m))
         sub(LaserScan,'/realistic/scan',lambda m:self.scan('conditioned_scan',m))
         sub(LaserScan,'/realistic/scan/slam_hits',lambda m:self.scan('slam_hit_scan',m))
+        sub(LaserScan,'/realistic/scan/nav2',lambda m:self.scan('nav2_clearing_scan',m))
         sub(PoseWithCovarianceStamped,'/pose',self.slam_pose,10)
         sub(PointStamped,'/lookahead_point',lambda m:self.write('controller_carrot',stamp(m.header.stamp),
             frame=m.header.frame_id,position=xyz(m.point)),10)
@@ -61,37 +64,71 @@ class SlamSourceDiagnostics:
         staticq=QoSProfile(depth=10,durability=DurabilityPolicy.TRANSIENT_LOCAL,reliability=ReliabilityPolicy.RELIABLE)
         sub(TFMessage,'/tf_static',lambda m:self.transforms(m,True),staticq)
         sub(MarkerArray,'/slam_toolbox/graph_visualization',self.graph,10)
+        sub(String,'/sequential_controller/state',self.controller_state,10)
+        sub(String,'/realistic/command_guard_state',self.guard_decision,10)
+        costq=QoSProfile(depth=1,durability=DurabilityPolicy.TRANSIENT_LOCAL,reliability=ReliabilityPolicy.RELIABLE)
+        sub(OccupancyGrid,'/local_costmap/costmap',lambda m:setattr(self,'local_costmap',m),costq)
+
+    def guard_decision(self,m):
+        try:state=json.loads(m.data)
+        except (ValueError,TypeError):return
+        data={k:state.get(k) for k in ('decision_monotonic_s','reason','output','requested','output_count')}
+        self.write('guard_decision',self.node.clock[-1][1] if self.node.clock else None,data=data)
+
+    def controller_state(self,m):
+        try:data=json.loads(m.data)
+        except (ValueError,TypeError):data={'malformed':True}
+        self.write('sequential_controller',self.node.clock[-1][1] if self.node.clock else None,data=data)
+        if data.get('reason')=='footprint_rejected' and self.local_costmap is not None and time.monotonic()-self.last_costmap_dump>1:
+            self.last_costmap_dump=time.monotonic();grid=self.local_costmap
+            self.write('rejected_local_costmap',stamp(grid.header.stamp),frame=grid.header.frame_id,
+                       width=grid.info.width,height=grid.info.height,resolution=grid.info.resolution,
+                       origin=xyz(grid.info.origin.position),data=list(grid.data))
 
     def record_parameters(self):
         """Query live services after Nav2 activation, before the first goal."""
         if self.parameters_recorded:return
         import rclpy
-        from rcl_interfaces.srv import GetParameters
+        from rcl_interfaces.srv import GetParameters, ListParameters
         from rcl_interfaces.msg import Parameter as ParameterMessage
         from rclpy.parameter import Parameter
         groups={
             'slam_toolbox':['scan_topic','use_scan_matching','do_loop_closing','distance_variance_penalty',
                             'minimum_travel_distance','minimum_time_interval','max_laser_range','base_frame','odom_frame'],
-            'controller_server':['FollowPath.max_angular_accel','FollowPath.rotate_to_heading_min_angle',
+            'controller_server':['FollowPath.plugin','FollowPath.linear_speed_mps','FollowPath.angular_speed_radps',
+                                 'FollowPath.path_heading_limit_rad','FollowPath.turn_stop_error_rad','FollowPath.settle_wall_s',
+                                 'FollowPath.max_angular_accel','FollowPath.rotate_to_heading_min_angle',
                                  'FollowPath.rotate_to_heading_angular_vel','FollowPath.lookahead_dist',
                                  'FollowPath.min_lookahead_dist','progress_checker.required_movement_angle',
                                  'progress_checker.movement_time_allowance','goal_checker.xy_goal_tolerance','goal_checker.yaw_goal_tolerance'],
             'velocity_smoother':['max_accel','max_decel','max_velocity','deadband_velocity'],
-            'anc_lidar_scan_conditioner':['publish_slam_hits_only','input_topic','output_topic','range_min_m','range_max_m'],
+            'anc_lidar_scan_conditioner':['publish_slam_hits_only','publish_nav2_clearing_scan','input_topic','output_topic','range_min_m','range_max_m'],
         }
         audit={}
         for name,names in groups.items():
             client=self.node.create_client(GetParameters,'/'+name+'/get_parameters')
+            lister=self.node.create_client(ListParameters,'/'+name+'/list_parameters')
             try:
-                if not client.wait_for_service(timeout_sec=2):
+                if not client.wait_for_service(timeout_sec=2) or not lister.wait_for_service(timeout_sec=2):
                     audit[name]={'error':'parameter_service_missing'};continue
-                future=client.call_async(GetParameters.Request(names=names));deadline=time.monotonic()+2
+                listing=lister.call_async(ListParameters.Request(depth=0));deadline=time.monotonic()+2
+                while not listing.done() and time.monotonic()<deadline:rclpy.spin_once(self.node,timeout_sec=.02)
+                if not listing.done() or listing.result() is None:
+                    audit[name]={'error':'parameter_listing_timeout'};continue
+                declared=set(listing.result().result.names);query=[key for key in names if key in declared]
+                audit[name]={key:None for key in names}
+                audit[name]['__not_declared']=[key for key in names if key not in declared]
+                if not query:continue
+                future=client.call_async(GetParameters.Request(names=query));deadline=time.monotonic()+2
                 while not future.done() and time.monotonic()<deadline:rclpy.spin_once(self.node,timeout_sec=.02)
                 if not future.done() or future.result() is None:
                     audit[name]={'error':'parameter_response_timeout'};continue
-                audit[name]={key:json_parameter(Parameter.from_parameter_msg(ParameterMessage(name=key,value=value)).value)
-                             for key,value in zip(names,future.result().values)}
-            finally:self.node.destroy_client(client)
+                if len(future.result().values)!=len(query):
+                    audit[name]={'error':'parameter_response_count_mismatch'};continue
+                audit[name].update({key:json_parameter(Parameter.from_parameter_msg(ParameterMessage(name=key,value=value)).value)
+                                    for key,value in zip(query,future.result().values)})
+            finally:
+                self.node.destroy_client(client);self.node.destroy_client(lister)
         (self.out/'actual-runtime-parameters.json').write_text(json.dumps(audit,indent=2)+'\n')
         self.parameters_recorded=True
 
@@ -139,7 +176,9 @@ class SlamSourceDiagnostics:
         t=msg.header.stamp.sec+msg.header.stamp.nsec/1e9
         if t-self.last_truth<.019:return
         self.last_truth=t
-        self.write('truth_evaluator_only',t,position=xyz(p.position),orientation=quaternion(p.orientation))
+        clock=self.node.clock[-1] if self.node.clock else None
+        self.write('truth_evaluator_only',t,position=xyz(p.position),orientation=quaternion(p.orientation),
+                   clock_s=clock[1] if clock else None,clock_receipt_wall_s=clock[0] if clock else None)
 
     def graph(self,m):
         markers=[dict(ns=a.ns,id=a.id,type=a.type,action=a.action,

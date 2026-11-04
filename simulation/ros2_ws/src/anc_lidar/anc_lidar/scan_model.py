@@ -16,6 +16,16 @@ def slam_hit_ranges(ranges,range_min_m,range_max_m):
     return [float(v) if math.isfinite(v) and range_min_m<v<range_max_m else float('nan') for v in ranges]
 
 
+def nav2_clearing_ranges(ranges,range_min_m,range_max_m):
+    """Preserve hits; encode normalized no-return as +Inf for inf_is_valid.
+
+    LaserProjection drops finite values equal to range_max. Invalid, missed,
+    or out-of-range beams remain NaN and never become free-space rays.
+    """
+    return [float(v) if math.isfinite(v) and range_min_m<v<range_max_m else
+            float('inf') if math.isfinite(v) and v==range_max_m else float('nan') for v in ranges]
+
+
 @dataclass(frozen=True)
 class Grid:
     width: int = 180

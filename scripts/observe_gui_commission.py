@@ -8,14 +8,23 @@ import psutil
 def main():
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('output',type=Path);parser.add_argument('--domain-id',default=43,type=int)
+    parser.add_argument('--headless',action='store_true',help='Resource observation without graphical windows')
+    parser.add_argument('--runner-args',nargs=argparse.REMAINDER,default=[],help='Optional commissioning arguments, passed without a shell')
     args=parser.parse_args();out=args.output.resolve()
     if out.exists():raise SystemExit('Output directory must be new')
     monitor=out.with_name(out.name+'-observer');monitor.mkdir(parents=True,exist_ok=False)
     display=None
     command=[sys.executable,'scripts/commission_lidar_s00.py',
              'docs/evidence/native-turn-production-matrix-20261103/envelope.json',str(out),
-             '--gui','--rviz','--timeout-s','60','--domain-id',str(args.domain_id)]
-    samples=[];captures=[];last_capture=0;processes={};abort=None
+             '--domain-id',str(args.domain_id)]
+    if not args.headless:command+=['--gui','--rviz']
+    if '--timeout-s' not in args.runner_args:command+=['--timeout-s','60']
+    command+=args.runner_args
+    timeout=60.
+    if '--timeout-s' in args.runner_args:
+        timeout=float(args.runner_args[args.runner_args.index('--timeout-s')+1])
+    capture_interval=max(10.,timeout/6.)
+    samples=[];captures=[];last_capture=0;processes={};abort=None;launch_offset=0
     with (monitor/'console.log').open('w') as log:
         child=subprocess.Popen(command,stdout=log,stderr=subprocess.STDOUT,start_new_session=True)
         try:
@@ -33,7 +42,14 @@ def main():
                                     system_cpu_percent=psutil.cpu_percent(None),swap_used_mib=swap.used/2**20))
                 if vm.available<512*2**20:
                     abort='observer_memory_floor_512MiB';os.killpg(child.pid,signal.SIGINT);break
-                if now-last_capture>=10 and len(captures)<10:
+                goal_event=False
+                launch_log=out/'launch.log'
+                if not args.headless and launch_log.exists():
+                    with launch_log.open() as stream:
+                        stream.seek(launch_offset);new_log=stream.read();launch_offset=stream.tell()
+                    goal_event='Goal succeeded' in new_log
+                if not args.headless and ((now-last_capture>=capture_interval and len(captures)<12) or
+                                          (goal_event and len(captures)<20)):
                     tree=subprocess.run(['xwininfo','-root','-tree'],capture_output=True,text=True).stdout
                     for line in tree.splitlines():
                         if not re.search(r'"[^"]*(?:Gazebo|RViz)[^"]*"',line,re.I):continue
@@ -57,7 +73,7 @@ def main():
                         pixbuf=Gdk.pixbuf_get_from_window(window,0,0,width,height)
                         if pixbuf:
                             name=f'window-{len(captures):02d}.png';pixbuf.savev(str(monitor/name),'png',[],[])
-                            captures.append(dict(file=name,title=match[2],wall_s=time.time(),monotonic_s=time.monotonic(),width=width,height=height))
+                            captures.append(dict(file=name,title=match[2],wall_s=time.time(),monotonic_s=time.monotonic(),width=width,height=height,trigger="goal_success_log" if goal_event else "periodic"))
                     last_capture=now
                 time.sleep(.5)
         finally:

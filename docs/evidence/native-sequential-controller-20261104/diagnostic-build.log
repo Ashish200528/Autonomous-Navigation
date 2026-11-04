@@ -1,0 +1,14 @@
+Starting >>> anc_nav2_sequential_controller
+--- stderr: anc_nav2_sequential_controller
+/home/ashish/AutonomousNavigationCar/simulation/ros2_ws/src/anc_nav2_sequential_controller/src/sequential_controller.cpp: In member function ‘virtual geometry_msgs::msg::TwistStamped anc_nav2_sequential_controller::SequentialController::computeVelocityCommands(const geometry_msgs::msg::PoseStamped&, const geometry_msgs::msg::Twist&, nav2_core::GoalChecker*)’:
+/home/ashish/AutonomousNavigationCar/simulation/ros2_ws/src/anc_nav2_sequential_controller/src/sequential_controller.cpp:109:13: warning: this ‘if’ clause does not guard... [-Wmisleading-indentation]
+  109 |             if (!first) info<<",";first=false;info<<"["<<point.x<<","<<point.y<<"]";
+      |             ^~
+/home/ashish/AutonomousNavigationCar/simulation/ros2_ws/src/anc_nav2_sequential_controller/src/sequential_controller.cpp:109:35: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the ‘if’
+  109 |             if (!first) info<<",";first=false;info<<"["<<point.x<<","<<point.y<<"]";
+      |                                   ^~~~~
+---
+Finished <<< anc_nav2_sequential_controller [7.89s]
+
+Summary: 1 package finished [8.04s]
+  1 package had stderr output: anc_nav2_sequential_controller

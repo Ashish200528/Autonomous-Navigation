@@ -252,6 +252,7 @@ def main():
     parser.add_argument('--nav2-config',type=Path,help='Explicit bounded commissioning profile; default unchanged')
     parser.add_argument('--trace-slam',action='store_true',help='Passive evaluator source trace; no runtime publications')
     parser.add_argument('--slam-hits-only',action='store_true',help='Experimental Karto endpoint encoding; safety scan unchanged')
+    parser.add_argument('--nav2-clearing-scan',action='store_true')
     parser.add_argument('--stationary-hold-s',type=float,default=0)
     parser.add_argument('--observation-steps',type=int,default=0,choices=range(4))
     parser.add_argument('--observation-max-step-m',type=float,default=2.)
@@ -261,11 +262,14 @@ def main():
                         help='Separate S01 experiment after a safe timeout; original mission remains FAIL')
     parser.add_argument('--scenario',choices=['S00','S01'],default='S00')
     parser.add_argument('--distance-m',type=float,default=.75,help='S00 goal distance; S01 uses original goal')
+    parser.add_argument('--goal-yaw-rad',type=float,default=0,help='S00 turn/stop qualification; original S01 yaw is fixed')
     parser.add_argument('--timeout-s',type=float,default=60)
     parser.add_argument('--domain-id',type=int,default=42)
     parser.add_argument('--gui',action='store_true')
     parser.add_argument('--rviz',action='store_true')
     args=parser.parse_args()
+    if not math.isfinite(args.goal_yaw_rad) or abs(args.goal_yaw_rad)>math.pi or (args.scenario=='S01' and abs(args.goal_yaw_rad)>1e-9):
+        raise SystemExit('S00 goal yaw must be finite within +/-pi; preserve original S01 yaw')
     if not 0<=args.post_timeout_diagnostic_s<=300 or (args.post_timeout_diagnostic_s and args.scenario!='S01'):
         raise SystemExit('Separate timeout diagnostic is S01 only, bounded to 300 s')
     if not .35<=args.observation_max_step_m<=2.:raise SystemExit('Observation step must be .35..2 m')
@@ -282,7 +286,7 @@ def main():
     with (out/'scenario.log').open('w') as f:
         subprocess.run(['python3',str(ROOT/'scripts/scenario_generator.py'),'--scenario',args.scenario,'--seed','101','--output-dir',str(out/'scenario')],stdout=f,stderr=subprocess.STDOUT,check=True)
     layout=json.loads((out/'scenario/manifest.json').read_text())
-    if args.scenario=='S00':layout['goal_xyyaw']=[args.distance_m,0,0]
+    if args.scenario=='S00':layout['goal_xyyaw']=[args.distance_m,0,args.goal_yaw_rad]
     (out/'commission-layout.json').write_text(json.dumps(layout,indent=2)+'\n')
     config_dir=ROOT/'simulation/ros2_ws/src/anc_lidar/config'
     slam_snapshot,slam_provenance=snapshot_configuration(args.slam_config or config_dir/'slam_toolbox.yaml',out,'slam')
@@ -293,7 +297,7 @@ def main():
         observation_max_step_m=args.observation_max_step_m,observation_heading=args.observation_heading,
         observation_clear_corridor=args.observation_clear_corridor,
         post_timeout_diagnostic_s=args.post_timeout_diagnostic_s,
-        slam_hits_only=args.slam_hits_only,
+        slam_hits_only=args.slam_hits_only, nav2_clearing_scan=args.nav2_clearing_scan,
         initial_available_mib=available/1024,slam_config=str(args.slam_config) if args.slam_config else 'baseline',
         configuration_snapshots=dict(slam=slam_provenance,nav2=nav_provenance)),indent=2)+'\n')
     os.environ.update(ROS_DOMAIN_ID=str(args.domain_id),OPENBLAS_NUM_THREADS='1',OMP_NUM_THREADS='1')
@@ -312,6 +316,7 @@ def main():
                 'world_file:='+layout['world_file'],
                 'slam_params_file:='+str(slam_snapshot),
                 'slam_hits_only:='+str(args.slam_hits_only).lower(),
+                'nav2_clearing_scan:='+str(args.nav2_clearing_scan).lower(),
                 'nav2_params_file:='+str(nav_snapshot),
                 *spawn_arguments(layout),'production_turning:=true','turn_validation_only:=false',
                 'production_turn_evidence_file:='+str(args.envelope.resolve()),'rotation_calibration_max_radps:=0.0',

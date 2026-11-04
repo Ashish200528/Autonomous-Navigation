@@ -9,6 +9,11 @@ import commission_lidar_s00 as commission
 
 
 class CommissionPrerequisitesTest(unittest.TestCase):
+    def test_s01_original_goal_orientation_cannot_be_overridden(self):
+        with patch.object(sys,'argv',['commission','missing','unused','--scenario','S01','--goal-yaw-rad','1']), \
+                patch.object(commission,'prerequisites',side_effect=AssertionError('must reject before authority check')):
+            with self.assertRaises(SystemExit):commission.main()
+
     def test_timeout_diagnostic_requires_every_existing_safety_observation(self):
         report=dict(status='FAIL',nav2_action_status='TIMEOUT',post_goal_stop_confirmed=True,
                     final_localization_error_m=.02,final_localization_heading_error_rad=.01,
