@@ -80,3 +80,8 @@ Two fresh 0.75 m sensor-derived S00 Nav2 goals passed end to end, including live
 ## Graphical and distance follow-up
 
 A fresh Gazebo/RViz S00 trial passed with screenshots and measured RAM headroom. A 2 m headless S00 trial also passed (1.934 m travel, .0354 m final localization error). Original S01 aborted safely because its destination was outside the observed map; obstacle avoidance remains unvalidated. The first 3 m trial was interrupted and is incomplete. Low ROS domain defaults remove a native Linux ephemeral-port overlap risk. See native-gui-s01-distance-20261104.md for evidence and exact successful graphical commands.
+
+
+## 2026-11-04 observation and localization follow-up
+
+Graphical S00 and direct 2 m navigation passed; the baseline sensor-selected observation workflow also reached its original 2 m destination. Baseline S01 partial legs failed the unchanged .10 m localization limit, and a completed 3 m S00 repeat timed out with .372 m localization error. A 45 s stationary diagnostic isolates an approximately .20 m SLAM map correction while wheel/fused odometry remains accurate. An optional stronger odometry-prior profile is experimental: a direct 2 m goal passed, but its first observation-leg trial timed out. No original S01 goal or S01 graphical success is claimed. See [the measured follow-up](native-lidar-followup-20261104.md) and its machine-readable summary.

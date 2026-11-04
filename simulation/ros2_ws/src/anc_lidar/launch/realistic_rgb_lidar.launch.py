@@ -121,7 +121,7 @@ def generate_launch_description():
     slam = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(slam_launch),
         launch_arguments={
-            "slam_params_file": slam_config,
+            "slam_params_file": LaunchConfiguration("slam_params_file"),
             "use_sim_time": "true",
             "autostart": "true",
         }.items(),
@@ -130,7 +130,7 @@ def generate_launch_description():
     nav2 = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(nav2_launch),
         launch_arguments={
-            "params_file": nav2_config,
+            "params_file": LaunchConfiguration("nav2_params_file"),
             "use_sim_time": "true",
             "autostart": "true",
         }.items(),
@@ -146,6 +146,8 @@ def generate_launch_description():
         condition=IfCondition(LaunchConfiguration("rviz")),
     )
     return LaunchDescription([
+        DeclareLaunchArgument('slam_params_file', default_value=slam_config),
+        DeclareLaunchArgument('nav2_params_file', default_value=nav2_config),
         DeclareLaunchArgument('nav2_startup_delay_s', default_value='6.0'),
         DeclareLaunchArgument('production_turning', default_value='false'),
         DeclareLaunchArgument('turn_validation_only', default_value='true'),

@@ -27,6 +27,13 @@ def assert_unique_yaml_keys(node, path="$"):
 
 
 class Nav2LidarConfigTests(unittest.TestCase):
+    def test_s01_planning_footprint_has_room_for_validated_turn_disk(self):
+        config=yaml.safe_load((SRC/'config/nav2_s01_turn_room.yaml').read_text())
+        global_map=config['global_costmap']['global_costmap']['ros__parameters']
+        self.assertGreaterEqual(global_map['footprint_padding']+.1525,.5236)
+        self.assertFalse(config['planner_server']['ros__parameters']['GridBased']['allow_unknown'])
+        self.assertEqual(config['velocity_smoother'],NAV2['velocity_smoother'])
+
     def test_local_costmap_dimensions_match_native_nav2_integer_parameters(self):
         params=NAV2["local_costmap"]["local_costmap"]["ros__parameters"]
         self.assertIs(type(params["width"]),int)

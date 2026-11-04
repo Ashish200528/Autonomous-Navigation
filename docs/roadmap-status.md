@@ -1,8 +1,8 @@
 # Autonomous Navigation Car roadmap status
 
-Updated: 2026-11-02
+Updated: 2026-11-04
 
-The supplied master roadmap remains reference material. This status records the implemented phase gates.
+The supplied master roadmap remains reference material. This status records the implemented phase gates. The dated 2026-11-02 updates below are historical; current native Ubuntu capability is summarized here and in [the follow-up report](native-lidar-followup-20261104.md).
 
 | Phase | Status | Scope |
 |---|---|---|
@@ -17,10 +17,11 @@ The supplied master roadmap remains reference material. This status records the 
 | 8 | PASS WITH LIMITS: stop-only baseline | Local RGB traversability and safe-stop supervisor |
 | 8B | COMPLETE WITH LIMITS | Camera candidate sweep and isolated simulated stopping-distance measurements |
 | Phase 8 RGB-only motion gate | BLOCKED | Best connected full-footprint corridor 0.480 m vs 0.656429 m required; candidate occupied recall is inadequate |
-| 8C Branch 1: RGB + 2D LiDAR | PASS WITH LIMITS | Sensor-derived local map, optional RGB fusion, fail-closed safety gate, bounded straight motion and fault stops |
-| 8C Stage D: avoidance / goal navigation | BLOCKED / NOT RUN | Angular authority is 0 rad/s; SLAM/Nav2 global navigation was not established |
+| 8C Branch 1: RGB + 2D LiDAR | PASS WITH LIMITS | Native Ubuntu sensing, three bounded moving-SLAM passes, 13 production turning categories; pure forward/turn primitives only, hardware unvalidated |
+| 8C Stage D: goal navigation | S00 PASS WITH LIMITS | Two original headless trials, a graphical .75 m goal, direct 2 m goal and sensor-selected intermediate-goal workflow passed |
+| 8C Stage D: S01 avoidance / longer routes | BLOCKED / FAILED | S01 partial legs failed localization; baseline 3 m S00 timed out with .372 m localization error; parking/exploration unvalidated |
 
-Phase 8 remains an independent RGB-only stop-only profile with its motion gate blocked. Phase 8C uses a separate LiDAR profile and passed a limited forward-only gate in S00; its fused map did not gain cells from RGB in that clear corridor. The short movement and fault-stop evidence does not establish obstacle avoidance or goal reaching. See [Phase 8C evidence](evidence/phase8c/lidar/README.md).
+Phase 8 remains an independent RGB-only stop-only profile with its motion gate blocked. Phase 8C now has accepted native Ubuntu S00 sensor-derived goal evidence with an authoritative guard and bounded sequential pure forward/turn motion. This does not establish S01 obstacle avoidance, general exploration, combined/reverse motion or hardware safety. The original forward-only evidence remains in [Phase 8C evidence](evidence/phase8c/lidar/README.md).
 
 The 8C speed gate used the Phase 8B simulator stop-distance table, Phase 4 slip-derived localization allowance, current scan/map health, footprint clearance and safety margin. A 0.50 m clearance probe stayed stopped below the 0.583 m minimum tested requirement. No hardware safety claim is made.
 

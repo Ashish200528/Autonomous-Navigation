@@ -2,6 +2,7 @@
 """Offline tests for runtime publisher-audit parsing."""
 import sys
 import unittest
+import math
 from unittest.mock import patch
 from types import SimpleNamespace
 from pathlib import Path
@@ -10,6 +11,15 @@ sys.path.insert(0, str(ROOT / "scripts"))
 from phase8c_navigation_runner import Eval
 
 class PublisherAuditTests(unittest.TestCase):
+    def test_incremental_goals_remain_anchored_at_original_known_start(self):
+        node=Eval.__new__(Eval);node.fixed_goal_map_reference=(0,0,0)
+        self.assertEqual(node.goal_map_pose((1,0,0),(0,0,0),(2,0,0)),[2,0,0])
+
+    def test_rotated_known_start_mapping_preserves_destination(self):
+        node=Eval.__new__(Eval);node.fixed_goal_map_reference=(10,20,math.pi/2)
+        p=node.goal_map_pose((11,21,0),(-3,0,0),(3,0,0))
+        self.assertAlmostEqual(p[0],10);self.assertAlmostEqual(p[1],26)
+
     def test_live_audit_uses_discovered_graph_without_blocking_cli(self):
         node=Eval.__new__(Eval)
         with patch.object(Eval,'get_publishers_info_by_topic',return_value=[SimpleNamespace(node_name='anc_safety_command_guard')]), \

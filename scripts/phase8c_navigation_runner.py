@@ -88,6 +88,9 @@ class Eval(Node):
     def pose_map(self):
         t=self.tf.lookup_transform("map","base_footprint",Time()).transform
         return (t.translation.x,t.translation.y,quat_yaw(t.rotation))
+    def goal_map_pose(self,map_start,start_world,goal_world):
+        return map_goal(getattr(self,"fixed_goal_map_reference",map_start),start_world,goal_world)
+
     def get_truth(self):
         f=self.truth_client.call_async(GetEntityState.Request(entity="anc_robot"))
         end=time.monotonic()+2.5
@@ -128,7 +131,7 @@ class Eval(Node):
     def run(self,layout,timeout_s):
         map_start,states=self.ready()
         start=self.get_truth(); sw=list(map(float,layout["start_xyyaw"])); gw=list(map(float,layout["goal_xyyaw"]))
-        gm=map_goal(map_start,sw,gw)
+        gm=self.goal_map_pose(map_start,sw,gw)
         g=NavigateToPose.Goal(); g.pose=PoseStamped(); g.pose.header.frame_id="map"
         g.pose.header.stamp=self.get_clock().now().to_msg(); g.pose.pose.position.x=gm[0]; g.pose.pose.position.y=gm[1]
         g.pose.pose.orientation.z=math.sin(gm[2]/2); g.pose.pose.orientation.w=math.cos(gm[2]/2)
