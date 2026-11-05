@@ -41,16 +41,20 @@ def main():
  report=dict(status='TRAINED_AND_TESTED_OFFLINE',architecture='4 convolution encoder/decoder + 1x1 classifier; width 8/16; bilinear upsampling',parameters=sum(p.numel() for p in model.parameters()),seed=91,epochs=len(history),history=history,training_seconds=time.perf_counter()-t0,peak_process_rss_bytes=peak,device='cpu',torch_version=torch.__version__,class_training_pixels=counts.tolist(),checkpoint_bytes=(args.output/'best.pt').stat().st_size,checkpoint_sha256=hashlib.sha256((args.output/'best.pt').read_bytes()).hexdigest(),test=metrics(cm),inference_ms_mean=float(np.mean(times)),inference_ms_p95=float(np.percentile(times,95)),split_counts=dict(train=len(train),validation=len(val),test=len(test)))
  from anc_perception.classifier import classify_rgb
  root=Path(__file__).resolve().parents[2];cfg=yaml.safe_load((root/'simulation/ros2_ws/src/anc_perception/config/realistic.yaml').read_text())['/**']['ros__parameters'];cfg.update(camera_height_m=.24,camera_pitch_down_rad=.8,min_ground_forward_m=.1,max_ground_forward_m=.9,floor_seed_row_fraction=.75)
- cm_cv=np.zeros((3,3),np.int64);cv_times=[]
+ cm_cv=np.zeros((3,3),np.int64);cv_times=[];classical_invalid=[]
  palette=np.array([[30,190,60],[220,50,50],[70,100,220]]+[[100,100,100]]*253,np.uint8)
  for n,truth,p in zip(test,ty,preds):
   image=cv2.cvtColor(cv2.imread(str(args.dataset/'images'/f'{n}.png')),cv2.COLOR_BGR2RGB);f=320/(2*np.tan(1.0471975512/2));info=dict(width=320,height=240,k=[f,0,160,0,f,120,0,0,1],d=[0]*5)
-  t=time.perf_counter();raw,_,_=classify_rgb(image,info,cfg);cv_times.append((time.perf_counter()-t)*1000)
+  t=time.perf_counter()
+  try:raw,_,_=classify_rgb(image,info,cfg)
+  except ValueError as exc:
+   classical_invalid.append(dict(id=n,reason=str(exc)));raw=np.full(image.shape[:2],255,np.uint8)
+  cv_times.append((time.perf_counter()-t)*1000)
   # Classical UNKNOWN (-1/255) is an abstention, mapped to other for the 3-class comparison; report this limitation.
   q=np.full(raw.shape,2,np.uint8);q[raw==0]=0;q[raw==100]=1;q=cv2.resize(q,(160,120),interpolation=cv2.INTER_NEAREST);valid=truth.numpy()<3
   cm_cv+=np.bincount(3*truth.numpy()[valid]+q[valid],minlength=9).reshape(3,3)
   tiles=[cv2.resize(image,(160,120)),palette[truth.numpy()],palette[q],palette[p]];cv2.imwrite(str(args.output/f'{n}-comparison.png'),cv2.cvtColor(np.hstack(tiles),cv2.COLOR_RGB2BGR))
- report['classical_cv']=dict(**metrics(cm_cv),latency_ms_mean=float(np.mean(cv_times)),unknown_policy='abstention mapped to other for 3-class comparison; not semantic other recognition')
+ report['classical_cv']=dict(invalid_frames=classical_invalid,**metrics(cm_cv),latency_ms_mean=float(np.mean(cv_times)),unknown_policy='abstention mapped to other for 3-class comparison; not semantic other recognition')
  (args.output/'metrics.json').write_text(json.dumps(report,indent=2)+'\n')
  import matplotlib;matplotlib.use('Agg');import matplotlib.pyplot as plt
  plt.plot([r['training_loss'] for r in history],label='train');plt.plot([r['validation_loss'] for r in history],label='validation');plt.legend();plt.xlabel('Epoch');plt.ylabel('Cross entropy');plt.savefig(args.output/'loss.png');plt.close()

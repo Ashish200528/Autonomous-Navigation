@@ -15,7 +15,7 @@ def array(m):
  if m.step!=m.width*3:raise ValueError('unsupported image stride')
  return np.frombuffer(m.data,np.uint8).reshape(m.height,m.width,3).copy()
 def main():
- ap=argparse.ArgumentParser();ap.add_argument('output',type=Path);ap.add_argument('--scenes',type=int,default=1);args=ap.parse_args()
+ ap=argparse.ArgumentParser();ap.add_argument('output',type=Path);ap.add_argument('--scenes',type=int,default=1);ap.add_argument('--appearance',choices=['baseline','diverse'],default='baseline');ap.add_argument('--scene-offset',type=int,default=0);args=ap.parse_args()
  if not 1<=args.scenes<=40:raise SystemExit('scenes 1..40')
  if args.output.exists():raise SystemExit('new output directory required')
  if psutil.virtual_memory().available<2048*2**20:raise SystemExit('insufficient RAM')
@@ -41,6 +41,9 @@ def main():
    box=copy.deepcopy(world.find("model[@name='phase2_wall']"));box.set('name','dataset_box');box.find('pose').text='.7 .5 .2 0 0 .3'
    for size in box.findall('.//box/size'):size.text='.35 .35 .4'
    world.append(box)
+  if args.appearance=='diverse':
+   from scene_variants import apply
+   apply(world,scene+args.scene_offset)
   topics=[]
   for view in range(3):
    model=copy.deepcopy(robot);model.set('name',f'camera_robot_{view}');label(model,30)
@@ -79,7 +82,7 @@ def main():
        # Ignore antialiased class boundaries rather than inventing precise labels.
        edge=cv2.morphologyEx(mask,cv2.MORPH_GRADIENT,np.ones((3,3),np.uint8))>0;mask[edge]=255
        name=f's{scene:03d}-v{v}';cv2.imwrite(str(args.output/'images'/f'{name}.png'),cv2.cvtColor(im,cv2.COLOR_RGB2BGR));cv2.imwrite(str(args.output/'masks'/f'{name}.png'),mask)
-       records.append(dict(id=name,scene=scene,view=v,stamp=list(t),rgb_stamp=list(stamp(rgb)),semantic_stamp=list(stamp(sem)),width=rgb.width,height=rgb.height,camera_pose=camera.find('pose').text,intrinsics=[320/(2*math.tan(1.0471975512/2)),320/(2*math.tan(1.0471975512/2)),160,120],label_source='Gazebo Label system and semantic segmentation sensor',semantic_mapping={'10':0,'20':1,'30':2,'0':255},static_capture=True,semantic_pixel_format=sem.pixel_format_type));captured.add(v)
+       records.append(dict(id=name,scene=scene,appearance=args.appearance,variant_scene=scene+args.scene_offset,view=v,stamp=list(t),rgb_stamp=list(stamp(rgb)),semantic_stamp=list(stamp(sem)),width=rgb.width,height=rgb.height,camera_pose=camera.find('pose').text,intrinsics=[320/(2*math.tan(1.0471975512/2)),320/(2*math.tan(1.0471975512/2)),160,120],label_source='Gazebo Label system and semantic segmentation sensor',semantic_mapping={'10':0,'20':1,'30':2,'0':255},static_capture=True,semantic_pixel_format=sem.pixel_format_type));captured.add(v)
      time.sleep(.1)
     if len(captured)!=3:raise RuntimeError(f'synchronized capture missing: topics={topics}, received={list(frames)}')
    finally:

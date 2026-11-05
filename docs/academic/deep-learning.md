@@ -20,3 +20,7 @@ curl -fsSL https://bootstrap.pypa.io/get-pip.py -o /tmp/phase9-get-pip.py
 ```
 
 Use the ROS setup scripts before training/comparison or live inference so the existing anc_perception module is available. Only the dedicated virtual environment receives Python packages. Local installed versions are saved in phase9-results/environment-local.txt. No model download occurs; best.pt is trained from random initialization on the committed dataset.
+
+## Phase 9D generalisation follow-up
+
+The narrow-domain result above is preserved. Independent colour/geometry/light shifts expose near-zero obstacle recall, including after one fixed-recipe diverse retrain. The candidate is not promoted. See [the complete shifted-domain comparison and failure evidence](phase9d-generalisation.md).
