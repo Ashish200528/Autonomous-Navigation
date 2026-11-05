@@ -1,5 +1,6 @@
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription, TimerAction
+from launch.conditions import IfCondition
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import Command, FindExecutable, LaunchConfiguration, PathJoinSubstitution
 from launch_ros.actions import Node
@@ -11,6 +12,7 @@ def generate_launch_description():
         FindPackageShare("anc_gazebo"), "worlds", "phase2_test_world.sdf"
     ])
     world = LaunchConfiguration("world_file")
+    gui = LaunchConfiguration("gui")
     start_x = LaunchConfiguration("start_x")
     start_y = LaunchConfiguration("start_y")
     start_yaw = LaunchConfiguration("start_yaw")
@@ -24,6 +26,8 @@ def generate_launch_description():
         FindPackageShare("anc_localization"), "launch", "localization.launch.py"
     ])
 
+    # Use ros_gz_sim's server component in both modes. It exposes the
+    # evaluator-only simulation_interfaces services used by the Phase 6 runner.
     gazebo = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
             PathJoinSubstitution([
@@ -35,6 +39,20 @@ def generate_launch_description():
             "verbosity_level": "3",
         }.items(),
     )
+    # Gazebo Harmonic supports a GUI-only client which attaches to the running
+    # server. Keeping these processes separate preserves the ROS service layer.
+    gazebo_gui = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(
+            PathJoinSubstitution([
+                FindPackageShare("ros_gz_sim"), "launch", "gz_sim.launch.py"
+            ])
+        ),
+        launch_arguments={
+            "gz_args": "-g -v 3",
+            "on_exit_shutdown": "true",
+        }.items(),
+        condition=IfCondition(gui),
+    )
     state_publisher = Node(
         package="robot_state_publisher",
         executable="robot_state_publisher",
@@ -45,8 +63,10 @@ def generate_launch_description():
                 FindExecutable(name="xacro"), " ", robot_xacro,
                 " wheel_surface_mu:=", LaunchConfiguration("wheel_surface_mu"),
                 " camera_enabled:=", LaunchConfiguration("camera_enabled"),
+                " lidar_enabled:=", LaunchConfiguration("lidar_enabled"),
                 " camera_mount_z_m:=", LaunchConfiguration("camera_mount_z_m"),
                 " camera_pitch_down_rad:=", LaunchConfiguration("camera_pitch_down_rad"),
+                " camera_update_rate_hz:=", LaunchConfiguration("camera_update_rate_hz"),
             ]),
             "use_sim_time": True,
         }],
@@ -57,6 +77,15 @@ def generate_launch_description():
         name="anc_parameter_bridge",
         output="screen",
         parameters=[{"config_file": bridge_config}],
+    )
+    lidar_bridge = Node(
+        package="ros_gz_bridge",
+        executable="parameter_bridge",
+        name="anc_lidar_parameter_bridge",
+        output="screen",
+        arguments=["/realistic/scan/raw@sensor_msgs/msg/LaserScan[gz.msgs.LaserScan"],
+        parameters=[{"override_frame_id": "lidar_link"}],
+        condition=IfCondition(LaunchConfiguration("lidar_enabled")),
     )
     imu_sanitizer = Node(
         package="anc_bringup",
@@ -97,6 +126,10 @@ def generate_launch_description():
             description="Enable RGB camera sensor; Phase 6 reference navigation disables it to reduce headless rendering load.",
         ),
         DeclareLaunchArgument(
+            "lidar_enabled", default_value="false",
+            description="Enable the parameterized planar LiDAR and its ROS bridge only in the LiDAR profile.",
+        ),
+        DeclareLaunchArgument(
             "camera_mount_z_m", default_value="0.10",
             description="Provisional camera mount Z relative to base_link, meters.",
         ),
@@ -104,6 +137,12 @@ def generate_launch_description():
             "camera_pitch_down_rad", default_value="0.0",
             description="Positive provisional downward camera pitch in radians.",
         ),
+        DeclareLaunchArgument(
+            "camera_update_rate_hz", default_value="15.0",
+            description="Camera update rate in Hz; default preserves existing profiles.",
+        ),
+        DeclareLaunchArgument("gui", default_value="false",
+                              description="Use the Gazebo GUI; headless remains the default."),
         DeclareLaunchArgument(
             "world_file", default_value=default_world,
             description="Absolute SDF world file; defaults to the Phase 2 baseline world.",
@@ -117,8 +156,10 @@ def generate_launch_description():
         DeclareLaunchArgument("publish_known_start_tf", default_value="true",
                               description="Publish the test-only known-start map-to-odom transform."),
         gazebo,
+        gazebo_gui,
         state_publisher,
         bridge,
+        lidar_bridge,
         imu_sanitizer,
         localization,
         TimerAction(period=4.0, actions=[spawn]),

@@ -1,0 +1,22 @@
+/anc_rgb_lidar_grid_fuser
+  Subscribers:
+    /realistic/local_map/lidar: nav_msgs/msg/OccupancyGrid
+    /realistic/local_traversability: nav_msgs/msg/OccupancyGrid
+  Publishers:
+    /parameter_events: rcl_interfaces/msg/ParameterEvent
+    /realistic/local_map/fused: nav_msgs/msg/OccupancyGrid
+    /realistic/local_map/fused/health: std_msgs/msg/String
+    /rosout: rcl_interfaces/msg/Log
+  Service Servers:
+    /anc_rgb_lidar_grid_fuser/describe_parameters: rcl_interfaces/srv/DescribeParameters
+    /anc_rgb_lidar_grid_fuser/get_parameter_types: rcl_interfaces/srv/GetParameterTypes
+    /anc_rgb_lidar_grid_fuser/get_parameters: rcl_interfaces/srv/GetParameters
+    /anc_rgb_lidar_grid_fuser/get_type_description: type_description_interfaces/srv/GetTypeDescription
+    /anc_rgb_lidar_grid_fuser/list_parameters: rcl_interfaces/srv/ListParameters
+    /anc_rgb_lidar_grid_fuser/set_parameters: rcl_interfaces/srv/SetParameters
+    /anc_rgb_lidar_grid_fuser/set_parameters_atomically: rcl_interfaces/srv/SetParametersAtomically
+  Service Clients:
+
+  Action Servers:
+
+  Action Clients:

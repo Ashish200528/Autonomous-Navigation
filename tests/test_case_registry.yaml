@@ -1,5 +1,5 @@
 version: 2
-status: "Phase 1 REFERENCE Nav2 goal PASS; Phase 2 differential-drive PASS WITH LIMITS; Phase 3 sensor interfaces PASS WITH LIMITS; Phase 4 known-start localization PASS WITH LIMITS; Phase 5 scenario harness PASS WITH LIMITS; Phase 6 ORACLE_REFERENCE navigation PASS WITH LIMITS; Phase 7 RGB-only perception PASS WITH LIMITS; Phase 8 REALISTIC_RGB_ONLY stop-only baseline PASS WITH LIMITS; Phase 8 motion gate BLOCKED."
+status: "Phase 1 REFERENCE Nav2 goal PASS; Phase 2 differential-drive PASS WITH LIMITS; Phase 3 sensor interfaces PASS WITH LIMITS; Phase 4 known-start localization PASS WITH LIMITS; Phase 5 scenario harness PASS WITH LIMITS; Phase 6 ORACLE_REFERENCE navigation PASS WITH LIMITS; Phase 7 RGB-only perception PASS WITH LIMITS; Phase 8 REALISTIC_RGB_ONLY stop-only baseline PASS WITH LIMITS; Phase 8 RGB-only motion gate BLOCKED; Phase 8C Branch 1 RGB + 2D LiDAR PASS WITH LIMITS; Phase 8C Stage 1 calibration PASS WITH LIMITS; Stage 2 stationary SLAM PASS WITH LIMITS; Stages 3-5 BLOCKED; Stage 6 PARTIAL; Stage 7 PARTIAL DESIGN; Stage 8 PASS WITH LIMITS."
 registry:
   - id: T00
     phase: 1
@@ -209,3 +209,129 @@ registry:
     evidence:
       - docs/evidence/phase6/runs/phase8-final-reference-s00-20261102/result.json
       - docs/evidence/phase6/runs/phase8-final-reference-s00-20261102/launch.log
+
+  - id: T17
+    phase: "8C"
+    name: realistic_rgb_lidar_sensor_scan_map_and_fusion
+    scenario_id: S00
+    status: PASS_WITH_LIMITS
+    result: "360-beam scan measured 4.94 Hz with 358/360 usable beams; single-scan map preserved FREE/OCCUPIED/UNKNOWN. RGB added no fused cells in clear S00 and fabricated no metric occupied cells."
+    evidence:
+      - docs/evidence/phase8c/lidar/final-post-motion-live.json
+      - docs/evidence/phase8c/lidar/final-lidar-mapper-graph-audit.log
+      - docs/evidence/phase8c/lidar/final-fuser-graph-audit.log
+      - docs/evidence/phase8c/lidar/final-rgb-perception-graph-audit.log
+      - docs/evidence/phase8c/lidar/final-cmd-vel-publisher-audit.log
+      - tests/phase8c_live_probe.py
+  - id: T18
+    phase: "8C"
+    name: realistic_rgb_lidar_stationary_faults_and_clearance_gate
+    scenario_id: S00
+    status: PASS
+    result: "Invalid scan, scan/RGB/localization process loss, and 0.50 m clearance each failed closed with zero authoritative output; inputs recovered."
+    evidence:
+      - docs/evidence/phase8c/lidar/final-stage-b-invalid-scan-retry.json
+      - docs/evidence/phase8c/lidar/final-stage-b-scan-process-loss.json
+      - docs/evidence/phase8c/lidar/final-stage-b-rgb-process-loss.json
+      - docs/evidence/phase8c/lidar/final-stage-b-localization-loss.json
+      - docs/evidence/phase8c/lidar/final-stage-b-clearance-probe.json
+      - tests/phase8c_invalid_scan_test.py
+      - tests/phase8c_stationary_loss_test.py
+  - id: T19
+    phase: "8C"
+    name: realistic_rgb_lidar_bounded_motion_and_fault_stops
+    scenario_id: S00
+    status: PASS_WITH_LIMITS
+    result: "The 0.05 m/s watchdog trial moved 0.212 m and settled; LiDAR, RGB-perception and localization loss trials stopped within limits. Angular authority remained zero; no avoidance or goal navigation ran."
+    evidence:
+      - docs/evidence/phase8c/lidar/final-stage-c-command-timeout.json
+      - docs/evidence/phase8c/lidar/final-stage-c-lidar-loss-motion.json
+      - docs/evidence/phase8c/lidar/final-stage-c-rgb-loss-motion.json
+      - docs/evidence/phase8c/lidar/final-stage-c-localization-loss-motion.json
+      - tests/phase8c_motion_trial.py
+  - id: T20
+    phase: "8C"
+    name: earlier_phase_regressions_and_profile_isolation
+    scenario_id: S00
+    status: PASS_WITH_LIMITS
+    result: "Phase 3 sensor smoke 20/20; Phase 4 normal localization retry passed with stated return-error limits after one initial threshold failure; Phase 5/6/7/8 static checks 47/47, 19/19, 13/13, 7/7; fresh Phase 8 live check 125/125 zero commands; one Phase 8B low-friction stop was 0.002976 m. Full Nav2 and 24-trial sweep not repeated."
+    evidence:
+      - docs/evidence/phase8c/lidar/final-phase3-regression-console.log
+      - docs/evidence/phase8c/lidar/final-phase4-regression-retry-console.log
+      - docs/evidence/phase8c/lidar/final-regression-phase5-static.log
+      - docs/evidence/phase8c/lidar/final-regression-phase6-static.log
+      - docs/evidence/phase8c/lidar/final-regression-phase7-static.log
+      - docs/evidence/phase8c/lidar/final-regression-phase8-static.log
+      - docs/evidence/phase8c/lidar/final-phase8-live-regression-console.log
+      - docs/evidence/phase8c/lidar/final-phase8b-stop-regression-console.log
+      - docs/evidence/phase8b/stopping-distance/phase8c-lidar-regression-one-stop/stopping-distance-results.json
+
+  - id: T21
+    phase: "8C"
+    name: pure_yaw_rotation_calibration_and_stop_timing
+    scenario_id: S00
+    status: PASS_WITH_LIMITS
+    result: "Six 1.2 s calibration pulses at +/-0.02, +/-0.05 and +/-0.10 rad/s passed. Command-to-zero output 0.00386-0.04985 s; pose-rate settle 0.579-0.722 s; max center drift 0.004337 m; production yaw stayed disabled; no combined-motion test."
+    evidence:
+      - docs/evidence/phase8c/lidar/stage1-rotation-trials-retry.json
+      - docs/evidence/phase8c/lidar/stage1-rotation-trials-retry.log
+      - tests/phase8c_rotation_trial.py
+  - id: T22
+    phase: "8C"
+    name: swept_rotation_clearance_denial_probes
+    scenario_id: "S00,S01,S03"
+    status: PASS_WITH_LIMITS
+    result: "No-motion checks denied unsafe swept disks. Near-wall result isolated swept clearance with 18 occupied and 4 unknown cells; box and constriction also had invalid RGB floor-support state. No probe moved the robot."
+    evidence:
+      - docs/evidence/phase8c/lidar/stage1-s00-near-wall-gate.json
+      - docs/evidence/phase8c/lidar/stage1-s01-near-box-gate.json
+      - docs/evidence/phase8c/lidar/stage1-s03-constriction-gate.json
+      - tests/phase8c_rotation_gate_probe.py
+  - id: T23
+    phase: "8C"
+    name: stationary_s00_slam_map_capture
+    scenario_id: S00
+    status: PASS_WITH_LIMITS
+    result: "25 s wall / 24.53 s simulation, 128 scans, 8 map updates, 508 map-to-odom samples and a 155x115 0.05 m map saved. No SLAM pose messages or motion/drift validation."
+    evidence:
+      - docs/evidence/phase8c/lidar/stage2-s00-stationary-slam-tuned.json
+      - docs/evidence/phase8c/lidar/stage2-s00-stationary-slam-map.pgm
+      - docs/evidence/phase8c/lidar/stage2-s00-stationary-slam-map.yaml
+      - docs/evidence/phase8c/lidar/stage2-s00-stationary-slam-map.png
+      - docs/evidence/phase8c/lidar/stage2-s00-stationary-slam-tuned-launch.log
+      - tests/phase8c_slam_stationary_test.py
+  - id: T24
+    phase: "8C"
+    name: parking_controller_proposal_unit_checks
+    scenario_id: null
+    status: PASS_WITH_LIMITS
+    result: "7/7 tests passed for sequential rotate/approach, caps, invalid safety/localization, calibration lockout and stationary hold. Not runtime-wired; no live parking goal."
+    evidence:
+      - docs/evidence/phase8c/lidar/stage5-parking-controller-tests.log
+      - tests/parking_controller_test.py
+  - id: T25
+    phase: "8C"
+    name: stage6_profile_aggregate_and_report_generation
+    scenario_id: null
+    status: PASS_WITH_LIMITS
+    result: "Generated profile-separated JSON/CSV and comparison/resource plots from saved Phase 6-8C evidence. Sampling is heterogeneous, not a controlled head-to-head navigation benchmark."
+    evidence:
+      - docs/evidence/phase8c/lidar/stage6-comparative-summary.json
+      - docs/evidence/phase8c/lidar/stage6-comparison.csv
+      - docs/evidence/phase8c/lidar/stage6-comparison.png
+      - docs/evidence/phase8c/lidar/stage6-resource-observations.png
+      - scripts/phase8c_stage6_report.py
+
+  - id: T26
+    phase: "8C"
+    name: moving_slam_trial_contract_and_content_validated_readiness_gate
+    scenario_id: S00
+    status: PASS_WITH_LIMITS
+    result: "Offline measurement-contract and evidence-validator regressions passed. The bounded moving-SLAM probe now requires live scan/map/pose/TF updates, truth-relative position/yaw error and no contacts. Nav2 readiness validates actual evidence contents and requires a 13-case turning matrix, 3 distinct moving-SLAM trials, and a successful guarded S00 Nav2 goal. No live simulation was run; readiness remains BLOCKED."
+    evidence:
+      - docs/evidence/phase8c/lidar/moving-slam-readiness-offline-validation-retry2-20261102.log
+      - docs/evidence/phase8c/lidar/moving-slam-readiness-offline-validation-final-20261102.log
+      - scripts/phase8c_readiness.py
+      - tests/phase8c_readiness_test.py
+      - tests/phase8c_slam_timeout_probe.py
+      - simulation/ros2_ws/src/anc_lidar/anc_lidar/scan_model.py

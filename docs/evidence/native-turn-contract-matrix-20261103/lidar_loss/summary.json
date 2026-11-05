@@ -1,0 +1,160 @@
+{
+  "case_id": "lidar_loss",
+  "trial_pass": true,
+  "production_angular_authority_enabled": false,
+  "trials": [
+    {
+      "trial_pass": true,
+      "production_angular_authority_enabled": false,
+      "fault": "lidar_loss",
+      "fault_injected": true,
+      "requested_angular_speed_radps": 0.1,
+      "measured_average_yaw_rate_radps": 0.08706221547799688,
+      "yaw_travel_rad": 0.114748,
+      "center_drift_m": 0.004587219260515999,
+      "minimum_clearance_m": 2.5818272272714777,
+      "residual_yaw_after_zero_output_rad": 0.0,
+      "zero_request_to_settled_wall_s": 0.9963500289995864,
+      "stop_timing_diagnostic": {
+        "first_verified_slow_sample_after_trigger_s": 0.4565317690003212,
+        "observation_hold_after_first_slow_s": 0.5398182599992651,
+        "confirmed_settled_after_trigger_s": 0.9963500289995864
+      },
+      "legacy_combined_timing_pass": false,
+      "stop_contract": {
+        "contract": "TURN_STOP_V2",
+        "status": "PASS",
+        "failures": [],
+        "physical_stop_limit_s": 0.75,
+        "angle_limit_rad": 0.05,
+        "confirmation_window_s": 0.5,
+        "maximum_sample_gap_s": 0.15,
+        "physical_stop_observed_s": 0.4565317690003212,
+        "physical_stop_time_upper_s": 0.4746278140009963,
+        "stationary_observation_s": 0.5334303549998367,
+        "fault_to_confirmation_s": 0.9963500289995864,
+        "confirmation_deadline_s": 1.4,
+        "measured_total_stopping_angle_rad": 0.0308465,
+        "stopping_angle_upper_rad": 0.043473902800080746,
+        "post_zero_angle_upper_rad": 0.013728402800080737,
+        "zero_to_physical_stop_upper_s": 0.1527505040012329,
+        "max_sample_gap_s": 0.10817798300013237,
+        "max_query_round_trip_s": 0.018096045000675076
+      },
+      "fault_detection_observed_s": 0.2905935849994421,
+      "guard_suppression_after_detection_s": 0.03128372500032128,
+      "first_zero_output_truth": {
+        "wall_s": 6623.650275014,
+        "sim_stamp_s": 12.374,
+        "x_m": -0.000271295,
+        "y_m": 0.00457981,
+        "yaw_rad": 0.114748,
+        "linear_x_mps": -0.000118708,
+        "linear_y_mps": 0.00367028,
+        "angular_z_radps": 0.0918062,
+        "evaluator_only": true,
+        "query_start_wall_s": 6623.64196544
+      },
+      "stop_trigger_wall_s": 6623.320058012,
+      "final_truth": {
+        "wall_s": 6624.316391609,
+        "sim_stamp_s": 13.08,
+        "x_m": -0.000271295,
+        "y_m": 0.00457981,
+        "yaw_rad": 0.114748,
+        "linear_x_mps": -0.000118708,
+        "linear_y_mps": 0.00367028,
+        "angular_z_radps": 0.0918062,
+        "evaluator_only": true,
+        "query_start_wall_s": 6624.310020136,
+        "pose_derived_linear_speed_mps": 0.0,
+        "pose_derived_angular_speed_radps": 0.0
+      },
+      "stop_time_reference": "fault_injection",
+      "zero_output_response_s": 0.3218773099997634,
+      "safe_stop_observed": true,
+      "unsafe_reason": null,
+      "odom_truth_heading_delta_error_rad": 0.00022148403607553935,
+      "contact_records_non_ground": 0,
+      "real_time_factor": 1.0131353650811012,
+      "safety_state_at_stop": {
+        "angular_motion_status": "swept_disk_unknown",
+        "angular_stopping_model": {
+          "measured": false,
+          "note": "Calibration-only capped pulses; production yaw remains disabled pending measured stopping bound and review.",
+          "production_authorized": false
+        },
+        "authorized": false,
+        "combined_motion_authorized": false,
+        "corridor_m": 0.0,
+        "failures": [
+          "scan_health_stale",
+          "scan_sim_timestamp_stale_or_future",
+          "lidar_local_map_stale",
+          "lidar_map_invalid:scan_wall_stale"
+        ],
+        "footprint_width_m": 0.345,
+        "forward_distance_reference": "front_footprint_boundary",
+        "localization_allowance_m": 0.4705050313257851,
+        "map_counts": {
+          "free": 0,
+          "occupied": 0,
+          "unknown": 32400
+        },
+        "map_frame": "base_link",
+        "max_angular_speed_radps": 0.0,
+        "max_linear_speed_mps": 0.0,
+        "motion_mode": "rotation_calibration_only",
+        "node": "anc_lidar_safety_gate",
+        "profile": "REALISTIC_RGB_LIDAR",
+        "reason": "scan_health_stale",
+        "rotation_calibration_speed_cap_radps": 0.1,
+        "rotation_clearance": {
+          "authorized": false,
+          "center_drift_allowance_m": 0.14,
+          "checked_cells": 112,
+          "footprint_circumradius_m": 0.263592962728522,
+          "inside_grid": true,
+          "occupied_cells": 0,
+          "reason": "swept_disk_unknown",
+          "required_radius_m": 0.5235929627285221,
+          "safety_margin_m": 0.1,
+          "sensor_mount_uncertainty_m": 0.02,
+          "unknown_cells": 112
+        },
+        "runtime_uses_world_map_or_truth": false,
+        "safety_margin_m": 0.1,
+        "speed_gate": null,
+        "speed_gate_inputs": {
+          "connected_full_footprint_corridor_m": 0.0,
+          "lidar_map_wall_age_s": 0.7162164069995924,
+          "measured_scan_rate_hz": 5.005578765167693,
+          "odom_sim_age_s": 0.013999999999999346,
+          "scan_sim_age_s": 1.0939999999999994,
+          "usable_beam_fraction": 0.9944444444444445
+        },
+        "stopping_model": {
+          "friction_conditions": [
+            0.5,
+            1.2
+          ],
+          "hardware_bound": false,
+          "source": "Phase 8B isolated simulator stopping test",
+          "tested_speeds_mps": [
+            0.02,
+            0.05,
+            0.1,
+            0.18
+          ],
+          "worst_stop_distance_m": 0.00298
+        },
+        "truth_used_only_by_evaluator": true,
+        "valid": false
+      },
+      "observed_rotation_sim_duration_s": 1.3180000000000014
+    }
+  ],
+  "cmd_vel_publisher_names": [
+    "anc_safety_command_guard"
+  ]
+}

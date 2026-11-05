@@ -1,0 +1,285 @@
+{
+  "classification": "FAIL",
+  "display_options": {
+    "gazebo_gui": true,
+    "rviz": false
+  },
+  "goal_xyyaw": [
+    3.0,
+    0.0,
+    0.0
+  ],
+  "launch_command": [
+    "ros2",
+    "launch",
+    "anc_navigation",
+    "reference_navigation.launch.py",
+    "world_file:=/home/ashish/AutonomousNavigationCar/docs/evidence/phase6/runs/windows-phase6-S03-seed101-20261102T151437Z-2514/world.sdf",
+    "map_yaml:=/home/ashish/AutonomousNavigationCar/docs/evidence/phase6/runs/windows-phase6-S03-seed101-20261102T151437Z-2514/oracle_reference_map.yaml",
+    "start_x:=-3.000000",
+    "start_y:=0.000000",
+    "start_yaw:=0.000000",
+    "gui:=true",
+    "rviz:=false"
+  ],
+  "layout_sha256": "a450f573e6c839cea763f8974ed6a1e2d8cd52cada99b53e3ec9eda4f69686d4",
+  "map": {
+    "free_cells": 16672,
+    "height": 120,
+    "occupied_cells": 2528,
+    "origin_xy_m": [
+      -4.0,
+      -3.0
+    ],
+    "profile": "ORACLE_REFERENCE",
+    "resolution_m": 0.05,
+    "width": 160
+  },
+  "map_pgm_sha256": "9e4c12b36ce02935d436eb95aea3c6d5640fdb584b5920a9e6ce88ebf9959988",
+  "map_yaml_sha256": "54fded273ff0d7c14bd483c51a00b5399c2011caab4cb18ff5712a8917bc5126",
+  "navigation_inputs": {
+    "gazebo_truth_used_by_navigation": false,
+    "localization": "Phase 4 wheel/IMU EKF odometry plus known-start map->odom",
+    "map": "run-specific geometry-derived static occupancy map from scenario layout",
+    "obstacle_geometry_sent_to_navigation": false,
+    "reference_map_available_to_realistic_profile": false,
+    "rgb_camera": "Disabled for this headless reference profile; RGB is not a navigation input."
+  },
+  "navigation_profile": "ORACLE_REFERENCE",
+  "obstacle_count": 2,
+  "original_phase5_sensor_profile": "REALISTIC",
+  "phase": 6,
+  "ros_domain_id": 132,
+  "rosbag": {
+    "command": [
+      "ros2",
+      "bag",
+      "record",
+      "--storage",
+      "mcap",
+      "-o",
+      "/home/ashish/AutonomousNavigationCar/docs/evidence/phase6/runs/windows-phase6-S03-seed101-20261102T151437Z-2514/rosbag",
+      "/clock",
+      "/tf",
+      "/tf_static",
+      "/map",
+      "/global_costmap/costmap",
+      "/local_costmap/costmap",
+      "/global_costmap/costmap_raw",
+      "/local_costmap/costmap_raw",
+      "/odom",
+      "/odometry/filtered",
+      "/plan",
+      "/cmd_vel_nav",
+      "/cmd_vel",
+      "/contacts",
+      "/navigate_to_pose/_action/feedback",
+      "/navigate_to_pose/_action/status"
+    ],
+    "path": "/home/ashish/AutonomousNavigationCar/docs/evidence/phase6/runs/windows-phase6-S03-seed101-20261102T151437Z-2514/rosbag",
+    "requested": true,
+    "shutdown": {
+      "returncode": 0,
+      "stopped": true
+    }
+  },
+  "route_expected": true,
+  "route_found_by_geometry_validator": true,
+  "run_id": "windows-phase6-S03-seed101-20261102T151437Z-2514",
+  "runner_error": "RuntimeError: Evaluator-only Gazebo truth service returned no robot pose",
+  "scenario_id": "S03",
+  "schema_version": 1,
+  "seed": 101,
+  "sensor_profile_override": "ORACLE_REFERENCE",
+  "shutdown": {
+    "child_sigkill_escalated": false,
+    "child_sigterm_escalated": false,
+    "forced": false,
+    "gazebo_child_shutdown_clean": true,
+    "group_gone": true,
+    "returncode": 0,
+    "signal": "SIGINT"
+  },
+  "simulation_pause_before_shutdown": {
+    "detail": "TimeoutExpired: Command '['ros2', 'service', 'call', '/gzserver/set_simulation_state', 'simulation_interfaces/srv/SetSimulationState', '{state: {state: 2}}']' timed out after 8 seconds",
+    "requested": true,
+    "success": false
+  },
+  "source_commit": "1414cbca98c6b1b9a7997aafa2cbf0b50cf8097c",
+  "start_xyyaw": [
+    -3.0,
+    0.0,
+    0.0
+  ],
+  "status": "FAIL",
+  "tests": [
+    {
+      "detail": "camera=0, imu=542, odom=160, filtered_odom=162, clock=3735, map=1, navigate_to_pose_server=True, lifecycle_active=True; states={'map_server': {'id': 3, 'label': 'active'}, 'planner_server': {'id': 3, 'label': 'active'}, 'controller_server': {'id': 3, 'label': 'active'}, 'behavior_server': {'id': 3, 'label': 'active'}, 'bt_navigator': {'id': 3, 'label': 'active'}}",
+      "name": "reference_navigation_graph_ready",
+      "status": "PASS"
+    },
+    {
+      "detail": "{\"behavior_server\": {\"id\": 3, \"label\": \"active\"}, \"bt_navigator\": {\"id\": 3, \"label\": \"active\"}, \"controller_server\": {\"id\": 3, \"label\": \"active\"}, \"map_server\": {\"id\": 3, \"label\": \"active\"}, \"planner_server\": {\"id\": 3, \"label\": \"active\"}}",
+      "name": "reference_navigation_lifecycle_active",
+      "status": "PASS"
+    },
+    {
+      "detail": "RGB frames observed=0; camera sensor is disabled in reference launch",
+      "name": "rgb_camera_disabled_for_headless_reference",
+      "status": "PASS"
+    },
+    {
+      "detail": "MCAP /tf_static map->odom count=1; transform={'x': -3.0, 'y': 0.0, 'z': 0.0, 'yaw': 0.0}; expected known start=[-3.0, 0.0, 0.0]; configured sole broadcaster=anc_known_start_map_to_odom",
+      "name": "single_known_start_map_to_odom_transform_present",
+      "status": "PASS"
+    },
+    {
+      "detail": "MCAP /tf odom->base_footprint count=405; active /tf publishers=['robot_state_publisher', 'anc_ekf_filter']; EKF endpoints=1, distinct GIDs=1; unexpected endpoints=[]",
+      "name": "single_ekf_odom_to_base_transform_present",
+      "status": "PASS"
+    },
+    {
+      "detail": "One known-start map->odom transform in /tf_static and one EKF publisher GID for odom->base_footprint in /tf.",
+      "name": "single_authority_tf_chain_present",
+      "status": "PASS"
+    },
+    {
+      "detail": "{\"child_sigkill_escalated\": false, \"child_sigterm_escalated\": false, \"forced\": false, \"gazebo_child_shutdown_clean\": true, \"group_gone\": true, \"returncode\": 0, \"signal\": \"SIGINT\"}",
+      "name": "simulation_shutdown_bounded",
+      "status": "PASS"
+    },
+    {
+      "detail": "{\"detail\": \"TimeoutExpired: Command '['ros2', 'service', 'call', '/gzserver/set_simulation_state', 'simulation_interfaces/srv/SetSimulationState', '{state: {state: 2}}']' timed out after 8 seconds\", \"requested\": true, \"success\": false}",
+      "name": "gazebo_pause_requested_before_shutdown",
+      "status": "FAIL"
+    },
+    {
+      "detail": "{\"returncode\": 0, \"stopped\": true}",
+      "name": "rosbag_closed",
+      "status": "PASS"
+    }
+  ],
+  "tf_authorities": {
+    "amcl_launched": false,
+    "gazebo_truth_in_navigation_graph": false,
+    "map_to_odom": {
+      "node": "anc_known_start_map_to_odom",
+      "topic": "/tf_static",
+      "unique_static_edge_messages": 1
+    },
+    "odom_to_base_footprint": {
+      "node": "anc_ekf_filter",
+      "publisher_gid_count": 1,
+      "publisher_node_names": [
+        "anc_ekf_filter",
+        "robot_state_publisher"
+      ],
+      "topic": "/tf",
+      "unexpected_publisher_node_names": []
+    }
+  },
+  "tf_bag_validation": {
+    "/tf:base_link->left_wheel_link": {
+      "count": 270,
+      "latest": {
+        "x": -0.04,
+        "y": 0.14,
+        "yaw": 0.0,
+        "z": -0.04
+      }
+    },
+    "/tf:base_link->right_wheel_link": {
+      "count": 270,
+      "latest": {
+        "x": -0.04,
+        "y": -0.14,
+        "yaw": 0.0,
+        "z": -0.04
+      }
+    },
+    "/tf:odom->base_footprint": {
+      "count": 405,
+      "latest": {
+        "x": -0.00016954958952639275,
+        "y": -5.682085759065513e-09,
+        "yaw": -0.0003040981676321053,
+        "z": 0.0
+      }
+    },
+    "/tf_static:base_footprint->base_link": {
+      "count": 1,
+      "latest": {
+        "x": 0.0,
+        "y": 0.0,
+        "yaw": 0.0,
+        "z": 0.08
+      }
+    },
+    "/tf_static:base_link->camera_link": {
+      "count": 1,
+      "latest": {
+        "x": 0.1,
+        "y": 0.0,
+        "yaw": 0.0,
+        "z": 0.1
+      }
+    },
+    "/tf_static:base_link->caster_link": {
+      "count": 1,
+      "latest": {
+        "x": 0.19,
+        "y": 0.0,
+        "yaw": 0.0,
+        "z": -0.055
+      }
+    },
+    "/tf_static:base_link->imu_link": {
+      "count": 1,
+      "latest": {
+        "x": 0.0,
+        "y": 0.0,
+        "yaw": 0.0,
+        "z": 0.0
+      }
+    },
+    "/tf_static:camera_link->camera_optical_frame": {
+      "count": 1,
+      "latest": {
+        "x": 0.0,
+        "y": 0.0,
+        "yaw": -1.57079632679,
+        "z": 0.0
+      }
+    },
+    "/tf_static:map->odom": {
+      "count": 1,
+      "latest": {
+        "x": -3.0,
+        "y": 0.0,
+        "yaw": 0.0,
+        "z": 0.0
+      }
+    }
+  },
+  "tf_dynamic_publishers": [
+    {
+      "endpoint_gid": "010ffcf30a0af5bf0000000000001503",
+      "node_name": "robot_state_publisher",
+      "node_namespace": "/",
+      "topic_type": "tf2_msgs/msg/TFMessage"
+    },
+    {
+      "endpoint_gid": "010ffcf33e0a89ab0000000000001d03",
+      "node_name": "anc_ekf_filter",
+      "node_namespace": "/",
+      "topic_type": "tf2_msgs/msg/TFMessage"
+    }
+  ],
+  "tf_final_from_bag": {
+    "x": -3.0001695495895264,
+    "y": -5.682085759065513e-09,
+    "yaw_rad": -0.0003040981676321053
+  },
+  "truth_published_to_ros": false,
+  "world_sha256": "aaacd866ec6b63cb778998876c77d563a9ec3ec0583a2afa1d1450c792c8a496"
+}

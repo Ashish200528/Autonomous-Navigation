@@ -1,0 +1,86 @@
+{
+  "aggregate_metrics": {
+    "camera_sim_timestamp_age_s": {
+      "count": 0,
+      "max": null,
+      "p50": null,
+      "p95": null
+    },
+    "camera_wall_age_s": {
+      "count": 0,
+      "max": null,
+      "p50": null,
+      "p95": null
+    },
+    "false_free_rate_on_known_occupied": null,
+    "measured_wall_fps": {
+      "count": 0,
+      "median": null,
+      "min": null,
+      "p10": null
+    },
+    "occupied_precision": null,
+    "occupied_recall": null,
+    "pixel_totals": {
+      "false_free": 0,
+      "gt_free": 0,
+      "gt_occupied": 0,
+      "pred_free": 0,
+      "pred_occupied": 0,
+      "pred_unknown": 0,
+      "total_px": 0,
+      "tp_free": 0,
+      "tp_occupied": 0
+    },
+    "processing_latency_ms": {
+      "count": 0,
+      "max": null,
+      "p50": null,
+      "p95": null
+    },
+    "unknown_coverage_total": 0.0,
+    "useful_free_coverage_on_known_floor": null
+  },
+  "assessment": "PENDING_SENSOR_FAULT_TEST_AND_FINAL_REVIEW",
+  "extra_challenge": "P7C1 derives from S01 seed 101, uses a floor-like gray unnamed box at a clear viewpoint; the existing directional light casts shadows.",
+  "forbidden_runtime_data": [
+    "/odom",
+    "/imu/data",
+    "/map",
+    "/depth",
+    "/scan",
+    "/gzserver/get_entity_state",
+    "scenario manifests"
+  ],
+  "phase": 7,
+  "profile": "REALISTIC_RGB_ONLY",
+  "resource_observation": {
+    "disk_bytes_added": 229376,
+    "disk_free_after_bytes": 1018379612160,
+    "disk_free_before_bytes": 1018379841536,
+    "free_memory_after": "               total        used        free      shared  buff/cache   available\nMem:           3.5Gi       760Mi       2.0Gi        50Mi       889Mi       2.8Gi\nSwap:          1.0Gi          0B       1.0Gi\n",
+    "process_rss_sampled": []
+  },
+  "runtime_inputs_to_anc_perception": [
+    "/camera/image_raw",
+    "/camera/camera_info",
+    "/clock"
+  ],
+  "runtime_outputs": [
+    "/perception/image_mask",
+    "/perception/confidence",
+    "/perception/overlay",
+    "/perception/health"
+  ],
+  "sample_count": 0,
+  "scenario_cases": [
+    {
+      "case_id": "s00-seed101-rgb-only",
+      "error": "RuntimeError: Perception ROS input contract differs: []",
+      "scenario_id": "S00",
+      "seed": 101,
+      "status": "FAIL"
+    }
+  ],
+  "source_commit": "17999c4e34bc144640d1e680e4b459fae64c95f7"
+}

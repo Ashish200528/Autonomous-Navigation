@@ -1,0 +1,137 @@
+=== WSL resource audit UTC 2026-11-02T17:14:32Z ===
+
+--- distro/context ---
+distribution=Ubuntu-24.04
+user=ashish
+project=/home/ashish/AutonomousNavigationCar
+Linux Ashish 6.6.87.2-microsoft-standard-WSL2 #1 SMP PREEMPT_DYNAMIC Thu Jun  5 18:30:46 UTC 2025 x86_64 x86_64 x86_64 GNU/Linux
+12
+
+--- free -h ---
+               total        used        free      shared  buff/cache   available
+Mem:           3.5Gi       448Mi       2.7Gi       3.4Mi       454Mi       3.1Gi
+Swap:          1.0Gi          0B       1.0Gi
+
+--- /proc/meminfo ---
+MemTotal:        3669200 kB
+MemFree:         2822248 kB
+MemAvailable:    3209376 kB
+Buffers:           59436 kB
+Cached:           381092 kB
+SwapCached:            0 kB
+Active:           146320 kB
+Inactive:         398216 kB
+Active(anon):       2784 kB
+Inactive(anon):   105036 kB
+Active(file):     143536 kB
+Inactive(file):   293180 kB
+Unevictable:           0 kB
+Mlocked:               0 kB
+SwapTotal:       1048576 kB
+SwapFree:        1048576 kB
+Dirty:              2492 kB
+Writeback:             0 kB
+AnonPages:        104372 kB
+Mapped:           163588 kB
+Shmem:              3520 kB
+KReclaimable:      24984 kB
+Slab:              78500 kB
+SReclaimable:      24984 kB
+SUnreclaim:        53516 kB
+KernelStack:        5168 kB
+PageTables:         5564 kB
+SecPageTables:         0 kB
+NFS_Unstable:          0 kB
+Bounce:                0 kB
+WritebackTmp:          0 kB
+CommitLimit:     2883176 kB
+Committed_AS:     773792 kB
+VmallocTotal:   34359738367 kB
+VmallocUsed:       28704 kB
+VmallocChunk:          0 kB
+Percpu:             6656 kB
+HardwareCorrupted:     0 kB
+AnonHugePages:         0 kB
+ShmemHugePages:        0 kB
+ShmemPmdMapped:        0 kB
+FileHugePages:         0 kB
+FilePmdMapped:         0 kB
+Unaccepted:            0 kB
+HugePages_Total:       0
+HugePages_Free:        0
+HugePages_Rsvd:        0
+HugePages_Surp:        0
+Hugepagesize:       2048 kB
+Hugetlb:               0 kB
+DirectMap4k:       62464 kB
+DirectMap2M:     2738176 kB
+DirectMap1G:     9437184 kB
+
+--- swap ---
+Filename				Type		Size		Used		Priority
+/dev/sdc                                partition	1048576		0		-2
+NAME     TYPE      SIZE USED PRIO
+/dev/sdc partition   1G   0B   -2
+
+--- top processes by RSS (with command lines) ---
+your 131072x1 screen size is bogus. expect trouble
+    PID    PPID USER     STAT ELAPSED   RSS COMMAND         COMMAND
+    162       1 root     Ssl        0 33536 snapd           /usr/lib/snapd/snapd
+    286       1 root     Rs         0 29952 journalctl      /bin/journalctl --boot 0 --dmesg --output short-monotonic --quiet --no-pager --no-hostname
+    203       1 root     Ssl        0 22400 unattended-upgr /usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal
+    142       1 systemd+ Ss         1 12800 systemd-resolve /usr/lib/systemd/systemd-resolved
+    165       1 root     Ssl        0 12416 wsl-pro-service /usr/libexec/wsl-pro-service
+     44       1 root     S<s        1 11904 systemd-journal /usr/lib/systemd/systemd-journald
+      1       0 root     Ss         2 11740 systemd         /sbin/init
+    159       1 root     Ssl        0 10240 lttng-sessiond  /usr/bin/lttng-sessiond
+    163       1 root     Ss         0  7680 systemd-logind  /usr/lib/systemd/systemd-logind
+    148       1 systemd+ Ssl        1  7552 systemd-timesyn /usr/lib/systemd/systemd-timesyncd
+    253       1 root     Ss         0  7168 systemd-timedat /usr/lib/systemd/systemd-timedated
+     91       1 root     Ss         1  6400 systemd-udevd   /usr/lib/systemd/systemd-udevd
+    123      91 root     S          1  5040 (udev-worker)   (udev-worker)
+    177       1 syslog   Ssl        0  4992 rsyslogd        /usr/sbin/rsyslogd -n -iNONE
+    155       1 message+ Ss         0  4864 dbus-daemon     @dbus-daemon --system --address=systemd: --nofork --nopidfile --systemd-activation --syslog-only
+    107      91 root     S          1  4828 (udev-worker)   (udev-worker)
+    122      91 root     S          1  4732 (udev-worker)   (udev-worker)
+    112      91 root     S          1  4616 (udev-worker)   (udev-worker)
+    115      91 root     S          1  4508 (udev-worker)   (udev-worker)
+    120      91 root     S          1  4456 (udev-worker)   (udev-worker)
+    113      91 root     S          1  4380 (udev-worker)   (udev-worker)
+    330     303 ashish   R+         0  4224 ps              ps -eo pid,ppid,user,stat,etimes,rss,comm,args --sort=-rss
+    109      91 root     S          1  4196 (udev-worker)   (udev-worker)
+    105      91 root     S          1  4180 (udev-worker)   (udev-worker)
+
+--- ROS/Gazebo/Nav2/RViz process matches ---
+your 131072x1 screen size is bogus. expect trouble
+no matching processes
+
+--- disk ---
+Filesystem      Size  Used Avail Use% Mounted on
+/dev/sdd       1007G  7.9G  948G   1% /
+/dev/sdd       1007G  7.9G  948G   1% /
+E:\              98G   48G   51G  49% /mnt/e
+
+--- distro-local WSL config ---
+[boot]
+systemd=true
+
+[user]
+default=ashish
+
+--- ROS/Gazebo package availability ---
+/opt/ros/jazzy/bin/ros2
+/opt/ros/jazzy/opt/gz_tools_vendor/bin/gz
+/opt/ros/jazzy
+/opt/ros/jazzy
+/opt/ros/jazzy
+/opt/ros/jazzy
+
+--- apt versions ---
+ros-jazzy-ros-gz-sim 1.0.24-1noble.20261006.035056
+ros-jazzy-slam-toolbox 2.8.5-1noble.20260915.204151
+ros-jazzy-nav2-bringup 1.3.13-1noble.20261006.042503
+ros-jazzy-rviz2 14.1.24-1noble.20260915.204213
+
+--- project git state ---
+feature/phase8c-lidar
+2733c0d8031f79cc0eaa5e593e3973f82e634c6e

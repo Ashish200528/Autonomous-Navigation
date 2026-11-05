@@ -1,0 +1,133 @@
+{
+  "base_phase5_scenario": "S01",
+  "camera_info": {
+    "d": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "distortion_model": "plumb_bob",
+    "frame_id": "camera_optical_frame",
+    "height": 240,
+    "k": [
+      277.1281433105469,
+      0.0,
+      160.0,
+      0.0,
+      277.12815284729004,
+      120.0,
+      0.0,
+      0.0,
+      1.0
+    ],
+    "width": 320
+  },
+  "evaluator_truth_pose": {
+    "angular_z_radps": -1.35132e-17,
+    "frame_id": "world",
+    "linear_x_mps": 4.18155e-09,
+    "sim_time_s": 4.052,
+    "x": -1.10001,
+    "y": -0.2,
+    "yaw_rad": 2.65214e-18,
+    "z": -1.18622e-07
+  },
+  "files": {
+    "confidence": "prediction_confidence.png",
+    "evaluator_truth": "evaluator_truth_mask.png",
+    "overlay": "prediction_overlay.png",
+    "prediction_mask": "prediction_mask.png",
+    "rgb": "rgb_input.png"
+  },
+  "ground_truth_source": "Offline ray intersections against deterministic scenario geometry and Gazebo truth pose; withheld from the runtime ROS perception node.",
+  "image_frame_id": "camera_optical_frame",
+  "image_stamp_ns": 4028000000,
+  "image_stamp_s": 4.028,
+  "metrics": {
+    "evaluator_truth_counts_px": {
+      "free": 3377,
+      "occupied": 57449,
+      "unknown": 15974
+    },
+    "false_free_px_on_known_occupied": 0,
+    "false_free_rate_on_known_occupied": 0.0,
+    "known_truth_classification_coverage": 0.0,
+    "known_truth_px": 60826,
+    "occupied_precision": null,
+    "occupied_recall": 0.0,
+    "prediction_counts_px": {
+      "free": 0,
+      "occupied": 0,
+      "total": 76800,
+      "unknown": 76800
+    },
+    "true_free_px": 0,
+    "true_occupied_px": 0,
+    "unknown_coverage_total": 1.0,
+    "useful_free_coverage_on_known_floor": 0.0
+  },
+  "perception_forbidden_inputs": [
+    "/odom",
+    "/imu/data",
+    "/map",
+    "/depth",
+    "/scan",
+    "/gzserver/get_entity_state",
+    "scenario geometry"
+  ],
+  "perception_health": {
+    "camera_info_stamp_s": 4.028,
+    "camera_sim_age_s": 0.018,
+    "camera_wall_age_s": 0.0,
+    "clock_use": "timestamp-age only; not a geometric sensor",
+    "forbidden_inputs": [
+      "odometry",
+      "IMU",
+      "Gazebo entity state",
+      "depth",
+      "oracle map",
+      "scenario geometry"
+    ],
+    "image_stamp_s": 4.028,
+    "input_topics": [
+      "/camera/image_raw",
+      "/camera/camera_info",
+      "/clock"
+    ],
+    "mask_encoding": "mono8: FREE=0, OCCUPIED=100, UNKNOWN=255",
+    "measured_wall_fps": 15.001,
+    "node": "anc_rgb_perception",
+    "processed_frames": 13,
+    "processing_latency_ms": null,
+    "profile": "REALISTIC_RGB_ONLY",
+    "reason": "floor_support_area_too_small",
+    "status": "INVALID_UNKNOWN",
+    "unknown_confidence_value": 0,
+    "valid": false
+  },
+  "perception_input_topics": [
+    "/camera/image_raw",
+    "/camera/camera_info",
+    "/clock"
+  ],
+  "process_rss_snapshot": [
+    {
+      "command": "/opt/ros/jazzy/lib/ros_gz_sim/gzserver --ros-args --params-file /tmp/launch_params_5f5ker7w ",
+      "pid": 61399,
+      "rss_kib": 506316
+    },
+    {
+      "command": "/usr/bin/python3 /home/ashish/AutonomousNavigationCar/simulation/ros2_ws/install/anc_perception/lib/anc_perception/rgb_perception_node --ros-args -r __node:=anc_rgb_perception --pa",
+      "pid": 61406,
+      "rss_kib": 180732
+    }
+  ],
+  "runtime_profile": "REALISTIC_RGB_ONLY",
+  "scenario_id": "P7C1",
+  "seed": 101,
+  "truth_query_time_minus_image_stamp_s": 0.02400000000000002,
+  "viewpoint_id": "view_start",
+  "viewpoint_rotation_evaluator_only": null
+}
