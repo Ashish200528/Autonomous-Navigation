@@ -53,6 +53,22 @@ sensors:
     distortion_model: zero_distortion_provisional
     calibration_file: null
     calibration_note: CameraInfo is generated from the simulated pinhole FOV and image dimensions; this is not physical calibration.
+  pan_servo:
+    status: provisional_simulation_parameters_not_hardware_measured
+    model_assumption: hobby servo (SG90/MG90S class) panning the camera about Z
+    joint_name: camera_pan_joint
+    limit_rad: 1.5708 # +-90 deg
+    max_speed_radps: 4.0 # SG90 ~0.1 s/60 deg unloaded; slowed for stable video
+  ultrasonic:
+    status: provisional_simulation_parameters_not_hardware_measured
+    model_assumption: HC-SR04 class, fixed on the front bumper, facing forward
+    mount_xyz_m: [0.17, 0.0, -0.01] # relative to base_link
+    frame_id: ultrasonic_link
+    field_of_view_rad: 0.26 # ~15 deg beam
+    range_min_m: 0.02
+    range_max_m: 4.0
+    update_rate_hz: 15.0
+    distance_noise_stddev_m: 0.005
   imu:
     status: provisional_simulation_parameters_not_hardware_measured
     mount_xyz_m: [0.0, 0.0, 0.0]

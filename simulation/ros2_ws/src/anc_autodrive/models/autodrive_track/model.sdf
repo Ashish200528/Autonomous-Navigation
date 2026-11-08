@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<sdf version="1.9">
+  <!-- Visual-only road texture (tools/make_textures.py). Physics uses the world ground plane. -->
+  <model name="autodrive_track">
+    <static>true</static>
+    <link name="link">
+      <visual name="track">
+        <pose>0 0 0.002 0 0 0</pose>
+        <geometry><plane><normal>0 0 1</normal><size>16 10</size></plane></geometry>
+        <material>
+          <ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse><specular>0.05 0.05 0.05 1</specular>
+          <pbr><metal>
+            <albedo_map>materials/textures/track.png</albedo_map>
+            <roughness>0.95</roughness><metalness>0.0</metalness>
+          </metal></pbr>
+        </material>
+      </visual>
+    </link>
+  </model>
+</sdf>

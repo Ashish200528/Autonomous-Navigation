@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<sdf version="1.9">
+  <!-- Station sign: 0.50 m board, ArUco DICT_4X4_50 id 0, printed marker side 0.375 m.
+       The board's marker face points along the model's +X axis. -->
+  <model name="aruco_station">
+    <static>true</static>
+    <link name="link">
+      <visual name="post">
+        <pose>-0.02 0 0.06 0 0 0</pose>
+        <geometry><cylinder><radius>0.015</radius><length>0.12</length></cylinder></geometry>
+        <material><ambient>0.3 0.3 0.3 1</ambient><diffuse>0.4 0.4 0.4 1</diffuse></material>
+      </visual>
+      <visual name="back">
+        <pose>-0.006 0 0.35 0 0 0</pose>
+        <geometry><box><size>0.01 0.52 0.52</size></box></geometry>
+        <material><ambient>0.15 0.35 0.75 1</ambient><diffuse>0.15 0.35 0.75 1</diffuse></material>
+      </visual>
+      <visual name="marker">
+        <pose>0.0 0 0.35 0 0 0</pose>
+        <geometry><plane><normal>1 0 0</normal><size>0.5 0.5</size></plane></geometry>
+        <material>
+          <ambient>1 1 1 1</ambient><diffuse>1 1 1 1</diffuse>
+          <pbr><metal><albedo_map>materials/textures/aruco_0.png</albedo_map>
+            <roughness>1.0</roughness><metalness>0.0</metalness></metal></pbr>
+        </material>
+      </visual>
+      <collision name="post_collision">
+        <pose>-0.02 0 0.3 0 0 0</pose>
+        <geometry><box><size>0.04 0.52 0.6</size></box></geometry>
+      </collision>
+    </link>
+  </model>
+</sdf>

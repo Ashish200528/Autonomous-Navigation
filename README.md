@@ -1,5 +1,9 @@
 # Autonomous Navigation Car Simulation
 
+> **Camera-only autonomous driving demo:** `ros2 launch anc_autodrive autodrive.launch.py` —
+> lane following, pan-servo look-around, overtaking, ultrasonic emergency stop, YOLO/ArUco
+> vision, station stop. See [simulation/ros2_ws/src/anc_autodrive/README.md](simulation/ros2_ws/src/anc_autodrive/README.md).
+
 Independent simulation project for the Autonomous Navigation Car. The existing Arduino UNO Q application is out of scope and was not changed.
 
 ## Mission and constraints

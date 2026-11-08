@@ -4,6 +4,7 @@ from launch.conditions import IfCondition
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import Command, FindExecutable, LaunchConfiguration, PathJoinSubstitution
 from launch_ros.actions import Node
+from launch_ros.parameter_descriptions import ParameterValue
 from launch_ros.substitutions import FindPackageShare
 
 
@@ -48,8 +49,8 @@ def generate_launch_description():
             ])
         ),
         launch_arguments={
-            "gz_args": "-g -v 3",
-            "on_exit_shutdown": "true",
+            "gz_args": ["-g -v 3 ", LaunchConfiguration("gui_args")],
+            "on_exit_shutdown": LaunchConfiguration("gui_required"),
         }.items(),
         condition=IfCondition(gui),
     )
@@ -59,7 +60,7 @@ def generate_launch_description():
         name="robot_state_publisher",
         output="screen",
         parameters=[{
-            "robot_description": Command([
+            "robot_description": ParameterValue(Command([
                 FindExecutable(name="xacro"), " ", robot_xacro,
                 " wheel_surface_mu:=", LaunchConfiguration("wheel_surface_mu"),
                 " camera_enabled:=", LaunchConfiguration("camera_enabled"),
@@ -67,7 +68,13 @@ def generate_launch_description():
                 " camera_mount_z_m:=", LaunchConfiguration("camera_mount_z_m"),
                 " camera_pitch_down_rad:=", LaunchConfiguration("camera_pitch_down_rad"),
                 " camera_update_rate_hz:=", LaunchConfiguration("camera_update_rate_hz"),
-            ]),
+                " camera_hfov_rad:=", LaunchConfiguration("camera_hfov_rad"),
+                " camera_width_px:=", LaunchConfiguration("camera_width_px"),
+                " camera_height_px:=", LaunchConfiguration("camera_height_px"),
+                " pan_servo_enabled:=", LaunchConfiguration("pan_servo_enabled"),
+                " ultrasonic_enabled:=", LaunchConfiguration("ultrasonic_enabled"),
+                " robot_style:=", LaunchConfiguration("robot_style"),
+            ]), value_type=str),
             "use_sim_time": True,
         }],
     )
@@ -110,7 +117,7 @@ def generate_launch_description():
         name="spawn_anc_robot",
         output="screen",
         arguments=[
-            "-world", "anc_phase2_test",
+            "-world", LaunchConfiguration("world_name"),
             "-topic", "robot_description",
             "-name", "anc_robot",
             "-x", start_x, "-y", start_y, "-z", "0.0", "-Y", start_yaw,
@@ -141,6 +148,22 @@ def generate_launch_description():
             "camera_update_rate_hz", default_value="15.0",
             description="Camera update rate in Hz; default preserves existing profiles.",
         ),
+        DeclareLaunchArgument("camera_hfov_rad", default_value="1.0471975512",
+                              description="Camera horizontal field of view in radians."),
+        DeclareLaunchArgument("pan_servo_enabled", default_value="false",
+                              description="Mount the camera on a pan servo joint."),
+        DeclareLaunchArgument("ultrasonic_enabled", default_value="false",
+                              description="Add the forward HC-SR04-like ultrasonic sensor."),
+        DeclareLaunchArgument("world_name", default_value="anc_phase2_test",
+                              description="SDF <world name> used when spawning the robot."),
+        DeclareLaunchArgument("camera_width_px", default_value="320"),
+        DeclareLaunchArgument("camera_height_px", default_value="240"),
+        DeclareLaunchArgument("robot_style", default_value="false",
+                              description="Styled robot-car visuals (collision unchanged)."),
+        DeclareLaunchArgument("gui_args", default_value="",
+                              description="Extra Gazebo GUI arguments, e.g. --gui-config <file>."),
+        DeclareLaunchArgument("gui_required", default_value="true",
+                              description="Shut everything down when the Gazebo window closes."),
         DeclareLaunchArgument("gui", default_value="false",
                               description="Use the Gazebo GUI; headless remains the default."),
         DeclareLaunchArgument(
