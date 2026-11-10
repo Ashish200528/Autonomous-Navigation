@@ -1,0 +1,356 @@
+# Autonomous Navigation Car — Phase 8C, Branch 1: RGB + 2D LiDAR Autonomous Navigation
+
+Continue development of the existing Autonomous Navigation Car project.
+
+**GitHub repository:** https://github.com/Ashish200528/Autonomous-Navigation
+
+**WSL workspace:** `/home/ashish/AutonomousNavigationCar`
+
+**Last reviewed commit:** `61c59790ad36194c86e5db86f5a56be170dd6e42`
+
+**Primary Git feature branch:** `feature/phase8c-lidar`
+
+## 1. Project direction
+
+We have decided to develop three sensing approaches for comparison:
+
+1. **RGB + 2D LiDAR — implement this branch first.**
+2. RGB + three directional ToF sensors — future branch.
+3. RGB-only perception and navigation — future branch.
+
+All three must reuse the same basic robot model, localization framework, controller interfaces, safety supervision, evaluation methodology and simulated worlds wherever possible.
+
+The goal is to compare navigation accuracy, obstacle avoidance, processing cost, hardware cost and deployment feasibility across the three approaches.
+
+**Implement only Branch 1 in this task.**
+
+Do not create or implement the other sensing branches yet.
+
+## 2. Existing project baseline
+
+Phases 0–7 are implemented with documented limitations.
+
+- Phase 6 demonstrated successful ORACLE_REFERENCE Nav2 navigation with our custom simulated robot.
+- Phase 7 added class-agnostic RGB FREE/OCCUPIED/UNKNOWN perception.
+- Phase 8 added a conservative local map and an unconditional-zero safe-stop supervisor.
+- Phase 8B evaluated camera geometry and stopping distance.
+- RGB-only autonomous movement remains blocked because of insufficient reliable FREE-space coverage, weak obstacle detection in some camera configurations and localization uncertainty.
+
+Phase 8B measured:
+
+- Best RGB-only connected FREE corridor: 0.480 m.
+- Conservative forward safety requirement: 0.656429 m.
+- 24/24 isolated simulated stopping trials completed.
+- Maximum recorded stopping distance: 0.00298 m under tested conditions.
+- Existing wheel-slip localization error allowance: approximately 0.4705 m.
+
+Read the master roadmap, `docs/PHASE_REPORT.md`, `docs/issues.md`, `docs/phase8-feasibility.md`, and the Phase 8B report and evidence.
+
+Do not erase, weaken or misrepresent these limitations.
+
+## 3. Git branching and reuse strategy
+
+Safely synchronize the working repository first. Preserve all uncommitted changes and existing evidence.
+
+Create `feature/phase8c-lidar` from the verified common baseline.
+
+Organize development into two logically separated groups of commits:
+
+**A. Reusable infrastructure**
+- Common sensing interface contracts.
+- Robot-relative local obstacle-map API.
+- Safety-gate and stopping logic.
+- Velocity command authority and watchdog.
+- Test runner extensions.
+- Evaluation and benchmarking tools.
+- Common configuration and documentation.
+
+**B. LiDAR-specific functionality**
+- Simulated LiDAR model and ROS bridge.
+- LiDAR scan processing.
+- LiDAR-specific mapping and filtering.
+- RGB + LiDAR fusion.
+- LiDAR localization/mapping integration where justified.
+
+Keep the groups clean enough that reusable commits can later be transferred to the ToF and RGB-only branches without bringing LiDAR dependencies with them.
+
+Reserve these future feature branch names:
+- `feature/phase8c-tof`
+- `feature/phase8c-rgb-only`
+
+Do not create or develop them during this task.
+
+Do not automatically merge the LiDAR feature branch into `main`.
+
+## 4. Add a realistic simulated 2D LiDAR
+
+Extend the existing custom robot simulation with a configurable 360-degree 2D LiDAR.
+
+Potential real hardware models for later evaluation include YDLIDAR X2 and RPLIDAR A1, but do not assume either has been purchased.
+
+Keep the LiDAR model parameterized for:
+- Scanning range and minimum distance.
+- Scan frequency.
+- Angular resolution.
+- Field of view.
+- Distance noise.
+- Missed readings.
+- Invalid/out-of-range measurements.
+- Sensor position and orientation on the chassis.
+
+Choose provisional settings consistent with a plausible affordable 2D LiDAR and clearly document them as assumptions, not measured hardware specifications.
+
+Publish valid ROS 2 `sensor_msgs/LaserScan` data on a dedicated realistic sensing topic such as `/realistic/scan`.
+
+Verify the scan frame, TF, timestamps, measured rate and sensor mounting.
+
+The LiDAR must represent a physical planar scanner: objects outside its scan plane or sensing range must not magically appear in its measurements.
+
+No perfect Gazebo obstacle map, object identities, simulator entity poses or hidden scenario geometry may be supplied to runtime navigation nodes.
+
+## 5. Define the new sensing profile
+
+Introduce a dedicated profile:
+
+**`REALISTIC_RGB_LIDAR`**
+
+It should contain:
+- Actual simulated RGB camera.
+- Simulated 2D LiDAR measurements.
+- CameraInfo.
+- Sanitized IMU.
+- Wheel odometry.
+- Existing EKF localization.
+- A local obstacle/traversability representation.
+- Safety supervisor and controlled velocity output.
+
+Preserve the other independently runnable profiles:
+
+- `ORACLE_REFERENCE` — existing Phase 6 baseline.
+- `REALISTIC_RGB_ONLY` — existing Phase 7/8 stop-only baseline.
+
+The new profile must not load Phase 6's oracle-generated reference map as a navigation input.
+
+Explicitly audit ROS subscriptions to verify this separation.
+
+## 6. Develop the LiDAR obstacle representation
+
+Use actual LiDAR range measurements to build a robot-relative local obstacle representation.
+
+Support:
+
+- FREE: space validated by sensor rays within their justified range.
+- OCCUPIED: obstacle endpoints supported by valid range returns.
+- UNKNOWN: unobserved, occluded, invalid, out-of-range or unsupported space.
+
+Maintain ROS occupancy semantics:
+- FREE = 0
+- OCCUPIED = 100
+- UNKNOWN = -1
+
+Use appropriate ray tracing, hit/miss filtering, obstacle inflation and footprint clearance.
+
+A single scan must not turn an entire room into FREE space. Preserve occlusion and range limits.
+
+Account for the robot footprint and the fact that a 2D LiDAR observes only one horizontal plane.
+
+The RGB camera should remain operational. Its FREE/OCCUPIED/UNKNOWN classifications may provide supplementary evidence, but visual labels without reliable metric projection must not overwrite trustworthy LiDAR obstacle locations or fabricate obstacle distances.
+
+Build the fusion logic so it can be disabled and evaluated independently.
+
+Compare:
+1. LiDAR-only local obstacle information.
+2. RGB-only visual perception.
+3. Combined RGB + LiDAR local perception.
+
+## 7. Investigate localization and mapping
+
+Revisit the wheel-slip limitations from Phase 4.
+
+Evaluate whether LiDAR scan matching or another ROS 2-compatible localization/mapping technique can reduce observed drift.
+
+Do not claim that simply adding LiDAR eliminates wheel-slip error.
+
+If `slam_toolbox` or another supported method is already available and appropriate, evaluate it incrementally. Do not install a heavyweight mapping stack without measuring resource impact.
+
+Keep global mapping and local obstacle avoidance conceptually separate.
+
+Do not feed perfect Gazebo pose into localization.
+
+A known initial simulated pose may be used for controlled experiment initialization, but continuous pose correction must come from permitted sensor measurements.
+
+Use evaluator-only Gazebo truth to measure localization quality.
+
+## 8. Implement a measured safety gate
+
+Preserve the original Phase 8 unconditional-zero supervisor as a separate regression profile.
+
+Build a new guarded safety-control path for `REALISTIC_RGB_LIDAR`.
+
+Evaluate:
+- Minimum reliable LiDAR range.
+- Connected footprint-clear forward corridor.
+- Sensor update frequency and stale scans.
+- Scan validity.
+- Camera and perception freshness.
+- Localization confidence and wheel-slip risks.
+- Actual simulated stopping distance.
+- Command reaction delay.
+- Robot footprint and safety margins.
+
+Calculate a defensible maximum permitted speed from the observed safe range and stopping capability.
+
+Require sufficient observable space and a valid safety state before publishing any nonzero velocity.
+
+UNKNOWN must not be treated as FREE.
+
+Do not unlock motion by merely removing the existing stop condition or by reducing safety margins without evidence.
+
+Ensure exactly one node publishes authoritative `/cmd_vel` commands.
+
+Test output commands and actual simulated vehicle motion independently.
+
+## 9. Controlled autonomous experiments
+
+Run experiments in increasing difficulty.
+
+**Stage A — Sensor validation**
+- S00 empty arena: healthy LiDAR and RGB streams.
+- Verify expected scan geometry and obstacle returns.
+- Missing, delayed and invalid scan tests.
+- Check TF, sensor timestamps and fault behavior.
+
+**Stage B — Stationary safety**
+- No sensor input: STOP.
+- Invalid scan: STOP.
+- Invalid localization: STOP.
+- Insufficient obstacle clearance: STOP.
+- Stale commands: STOP.
+
+**Stage C — Conditional low-speed movement**
+
+Only after the safety gate passes:
+
+- Execute a short, bounded S00 forward-motion trial.
+- Verify actual displacement and stopping distance.
+- Test sudden LiDAR loss while moving.
+- Test loss of camera/perception if required by the active safety policy.
+- Test localization loss or excessive uncertainty.
+- Test controller command timeout.
+
+**Stage D — Obstacle avoidance**
+
+Only if the earlier moving tests pass:
+
+- S01: approach and navigate around a box.
+- S02 seeds 101 and 202: multiple randomly positioned obstacles.
+- S03: narrow passages, with conservative clearance.
+- S04: different starting positions.
+- S09: unreachable goal; stop or abort without falsely declaring success.
+
+Integrate Nav2 using realistic scan/local map data if technically justified. Do not reuse the oracle reference occupancy map.
+
+If mapping or localization is insufficient for global goal navigation, demonstrate bounded local obstacle avoidance only and report the remaining limitation.
+
+Distinguish:
+- Successful stationary sensor validation.
+- Successful safe local movement.
+- Successful obstacle avoidance.
+- Successful goal-reaching navigation.
+
+These are separate milestones and must not be conflated.
+
+## 10. Quantitative evaluation
+
+For each scenario, capture:
+
+- Scan frequency and measurement validity.
+- RGB frame rate and perception latency.
+- LiDAR-only and fused obstacle-map coverage.
+- FREE/OCCUPIED/UNKNOWN cell counts.
+- Obstacle detection and missed-obstacle cases.
+- Minimum evaluator-only obstacle clearance.
+- Actual path length and final goal error.
+- Collision and contact events.
+- Stop-command reaction and physical stopping distance.
+- Localization drift and slip.
+- CPU, RAM and peak process usage.
+- Startup and shutdown reliability.
+- Scenario ID, random seed and experiment configuration.
+
+Use real simulated sensor values at runtime.
+
+Simulator geometry and perfect robot position must remain confined to test evaluators.
+
+Assess the impact of LiDAR mounting height and scan-plane blind spots, including low obstacles, overhangs, chair legs and poorly reflective surfaces.
+
+Do not claim full 3D obstacle detection from a 2D scanner.
+
+## 11. Simulation and future hardware constraints
+
+Current environment:
+- Windows 11.
+- WSL2 Ubuntu 24.04.
+- ROS 2 Jazzy and Gazebo Harmonic.
+- Approximately 3.5 GiB WSL RAM.
+- NVIDIA GTX 1650 with 4 GB VRAM.
+- Arduino UNO Q planned for hardware integration.
+
+Prefer headless and memory-efficient simulation.
+
+Do not install large ML models without necessity.
+
+Do not modify the existing Arduino UNO Q application.
+
+Do not buy or assume ownership of LiDAR hardware.
+
+Document future hardware interfaces, including serial/USB communication, mounting geometry, supply requirements and expected ROS driver support, but perform simulation work only.
+
+## 12. Regression protection
+
+Run and preserve representative tests for:
+
+- Phase 3 camera/IMU interfaces.
+- Phase 4 localization.
+- Phase 5 scenario generation.
+- Phase 6 ORACLE_REFERENCE navigation.
+- Phase 7 RGB-only perception.
+- Phase 8 unconditional-zero safety.
+- Phase 8B stopping-distance and geometry calculations.
+
+Changes to shared robot description or launch files must not silently activate LiDAR in the RGB-only or reference profiles.
+
+## 13. Required deliverables
+
+1. LiDAR-specific simulation code and configuration.
+2. Reusable sensing/navigation interface design.
+3. Working ROS 2 LaserScan and frame validation.
+4. Realistic local obstacle representation and optional RGB fusion.
+5. Evidence-backed safety and speed gate.
+6. Actual guarded moving tests if authorized by the gate.
+7. Obstacle-avoidance tests if previous gates pass.
+8. Quantitative performance comparison with RGB-only and ORACLE_REFERENCE baselines.
+9. Updated README, roadmap status, phase report, open issues, test registry and evidence index.
+10. Complete commands, JSON/CSV results, logs, maps and useful screenshots.
+11. Clearly separated reusable and LiDAR-specific Git commits.
+12. A safe push to `feature/phase8c-lidar`.
+
+In the final report, clearly state:
+
+- What common infrastructure was implemented.
+- What is LiDAR-specific.
+- Which tests were actually executed.
+- Whether motion was enabled and justified.
+- Whether the car truly navigated using sensor-derived obstacle information.
+- Whether localization drift improved.
+- What remains unresolved.
+- What can later be reused in the ToF and RGB-only branches.
+- Commit hashes and the feature branch name.
+
+Give separate PASS / PASS WITH LIMITS / FAIL / BLOCKED assessments for sensor integration, local mapping, safety, actual movement and autonomous goal navigation.
+
+**Implement Phase 8C Branch 1 only. Do not begin the ToF branch, RGB-only branch, Phase 9 parking or physical hardware integration.**
+
+If the safety gate remains blocked, preserve the stop-only behavior and explain why. Do not fabricate navigation success.
+
+Proceed independently through routine implementation and verification, requesting input only for genuine blockers or consequential changes.

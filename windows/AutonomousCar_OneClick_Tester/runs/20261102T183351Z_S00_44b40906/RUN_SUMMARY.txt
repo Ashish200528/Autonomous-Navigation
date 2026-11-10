@@ -1,0 +1,66 @@
+AUTONOMOUS NAVIGATION CAR - STANDALONE TEST RUN
+========================================================
+Overall status: BLOCKED
+Reason: one or more tests were blocked by resources or readiness
+Run ID: 20261102T183351Z_S00_44b40906
+Started (UTC): 2026-11-02T18:33:58Z
+Finished (UTC): 2026-11-02T18:34:04Z
+Execution mode: DRY_RUN
+Scenario / seed: S00 / 101
+Project branch: unknown
+Project commit: unknown
+Project path: /home/ashish/AutonomousNavigationCar
+
+Machine and resource summary
+----------------------------
+Windows total / available RAM at final sample: None / None MiB
+Minimum Windows available RAM during sampling: 799 MiB
+Windows memory load / CPU: None% / None%
+WSL available RAM / swap used: None / None MiB
+Windows run-volume free space: None MiB
+
+Test outcomes
+----------------------------
+PASS=0 FAIL=0 BLOCKED=13 TIMEOUT=0 SKIPPED=0 NOT TESTED=0
+- additional_fault_injection: BLOCKED - run interrupted before this test started: Worker exited before report finalization.
+- environment: BLOCKED - run interrupted before this test started: Worker exited before report finalization.
+- lidar_sensors: BLOCKED - run interrupted before this test started: Worker exited before report finalization.
+- map_save: BLOCKED - run interrupted before this test started: Worker exited before report finalization.
+- moving_slam_trial_1: BLOCKED - run interrupted before this test started: Worker exited before report finalization.
+- moving_slam_trial_2: BLOCKED - run interrupted before this test started: Worker exited before report finalization.
+- moving_slam_trial_3: BLOCKED - run interrupted before this test started: Worker exited before report finalization.
+- nav2: BLOCKED - run interrupted before this test started: Worker exited before report finalization.
+- offline_tests: BLOCKED - run interrupted before this test started: Worker exited before report finalization.
+- production_turning: BLOCKED - run interrupted before this test started: Worker exited before report finalization.
+- readiness: BLOCKED - run interrupted before this test started: Worker exited before report finalization.
+- stationary_slam: BLOCKED - run interrupted before this test started: Worker exited before report finalization.
+- turning_clearance_probe: BLOCKED - run interrupted before this test started: Worker exited before report finalization.
+
+Observed sensor and SLAM measurements
+----------------------------
+LiDAR messages / measured wall rate: None / None Hz
+Camera frames: None
+Filtered odometry messages: None
+Stationary SLAM: null
+Bounded moving-SLAM trials:
+  {"reason": "run interrupted before this test started: Worker exited before report finalization.", "status": "BLOCKED", "trial_id": null}
+  {"reason": "run interrupted before this test started: Worker exited before report finalization.", "status": "BLOCKED", "trial_id": null}
+  {"reason": "run interrupted before this test started: Worker exited before report finalization.", "status": "BLOCKED", "trial_id": null}
+Nav2 result: BLOCKED
+Nav2 measured detail: null
+
+Warnings and cleanup
+----------------------------
+Cleanup: PENDING - None
+Notes: Worker exited before report finalization.
+
+Evidence files
+----------------------------
+Run directory: /mnt/c/Users/ajayk/Desktop/AutonomousCar_OneClick_Tester/runs/20261102T183351Z_S00_44b40906
+
+Interpretation
+----------------------------
+A command exit code or successful node launch is not proof of movement, SLAM quality, or autonomous navigation.
+Moving SLAM is reported only from the bounded forward trials and their sensor/pose evidence.
+Phase 6 predefined-map navigation is not part of this run.
+Recommended next action: resolve the exact resource/readiness blocker above, then run the BAT again.

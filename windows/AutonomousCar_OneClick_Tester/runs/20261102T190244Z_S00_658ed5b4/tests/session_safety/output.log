@@ -1,0 +1,33 @@
+your 131072x1 screen size is bogus. expect trouble
+      1       1 /sbin/init
+      2       0 /init
+      8       0 plan9 --control-socket 7 --log-level 4 --server-fd 8 --pipe-fd 10 --log-truncate
+     41      41 /usr/lib/systemd/systemd-journald
+     91      91 /usr/lib/systemd/systemd-udevd
+    147     147 /usr/lib/systemd/systemd-resolved
+    148     148 /usr/lib/systemd/systemd-timesyncd
+    154     154 /usr/sbin/cron -f -P
+    155     155 @dbus-daemon --system --address=systemd: --nofork --nopidfile --systemd-activation --syslog-only
+    159     159 /usr/bin/lttng-sessiond
+    164     164 /usr/lib/systemd/systemd-logind
+    168     168 /usr/libexec/wsl-pro-service
+    171     159 /usr/bin/lttng-sessiond
+    198     198 /sbin/agetty -o -p -- \u --noclear --keep-baud - 115200,38400,9600 vt220
+    202     202 /usr/sbin/rsyslogd -n -iNONE
+    205     205 /sbin/agetty -o -p -- \u --noclear - linux
+    211     211 /usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal
+    306     306 /bin/login -f
+    352     352 /usr/lib/systemd/systemd --user
+    353     352 (sd-pam)
+    370     370 -bash
+    396     395 /init
+    495     485 /usr/bin/python3 -c from ros2cli.daemon.daemonize import main; main() --name ros2-daemon --ros-domain-id 0 --rmw-implementation rmw_fastrtps_cpp
+   1162    1162 /init
+   1163    1162 /init
+   1164    1164 setsid --wait bash /mnt/c/Users/ajayk/Desktop/AutonomousCar_OneClick_Tester/tools/wsl_test_runner.sh --run 20261102T190244Z_S00_658ed5b4 /mnt/c/Users/ajayk/Desktop/AutonomousCar_OneClick_Tester/runs/20261102T190244Z_S00_658ed5b4 /mnt/c/Users/ajayk/Desktop/AutonomousCar_OneClick_Tester/runs/20261102T190244Z_S00_658ed5b4/config/test_settings.json /home/ashish/AutonomousNavigationCar 11352 false 2026-11-02T19:02:44.4165705Z /mnt/c/Users/ajayk/Desktop/AutonomousCar_OneClick_Tester/latest
+   1165    1165 python3 /mnt/c/Users/ajayk/Desktop/AutonomousCar_OneClick_Tester/tools/wsl_orchestrator.py run 20261102T190244Z_S00_658ed5b4 /mnt/c/Users/ajayk/Desktop/AutonomousCar_OneClick_Tester/runs/20261102T190244Z_S00_658ed5b4 /mnt/c/Users/ajayk/Desktop/AutonomousCar_OneClick_Tester/runs/20261102T190244Z_S00_658ed5b4/config/test_settings.json /home/ashish/AutonomousNavigationCar 11352 false 2026-11-02T19:02:44.4165705Z /mnt/c/Users/ajayk/Desktop/AutonomousCar_OneClick_Tester/latest
+   1227      91 (udev-worker)
+   1229      91 (udev-worker)
+   1230      91 (udev-worker)
+   1232      91 (udev-worker)
+   1239    1239 ps -eo pid,pgid,args --no-headers

@@ -1,0 +1,825 @@
+{
+  "classification": "REALISTIC_RGB_LIDAR_NAV2_GOAL_TRIAL",
+  "status": "PASS",
+  "scenario_id": "S00",
+  "seed": 101,
+  "route_expected": true,
+  "runtime_navigation_receives_no_gazebo_truth": true,
+  "localization_mode": "known-start online SLAM",
+  "start_world_pose": [
+    0.0,
+    0.0,
+    0.0
+  ],
+  "goal_world_pose": [
+    0.75,
+    0.0,
+    0.0
+  ],
+  "start_map_pose": [
+    -0.0001717990691102936,
+    -4.402781278756953e-09,
+    0.00033594320283159007
+  ],
+  "goal_map_pose": [
+    0.7498281586092018,
+    0.000251952994603186,
+    0.00033594320283159007
+  ],
+  "start_truth": {
+    "sim_s": 7.588,
+    "x_m": -1.0678604620445583e-05,
+    "y_m": 4.9133079644757e-19,
+    "yaw_rad": -3.91425161528935e-18,
+    "wall_s": 8765.720197799,
+    "linear_x_mps": 0.0,
+    "angular_z_radps": 0.0
+  },
+  "final_truth": {
+    "sim_s": 39.676,
+    "x_m": 0.6177881516834972,
+    "y_m": -0.004703113639209856,
+    "yaw_rad": 0.057985714874877296,
+    "wall_s": 8797.824314105,
+    "linear_x_mps": 0.0034494414849112597,
+    "angular_z_radps": -1.5347601689480202e-05
+  },
+  "final_xy_error_m": 0.1322954727614262,
+  "final_heading_error_rad": 0.05798571487487729,
+  "truth_path_length_m": 0.6340013211330774,
+  "min_evaluator_clearance_m": 2.5642789443089526,
+  "nav2_action_status": "SUCCEEDED",
+  "travel_limit_exceeded": false,
+  "elapsed_wall_s": 32.10101664300055,
+  "simulated_elapsed_s": 32.088,
+  "sensor_integrity": {
+    "rgb_frame_count": 189,
+    "rgb_fresh": true,
+    "scan_fresh": true,
+    "map_fresh": true,
+    "filtered_odom_received": true
+  },
+  "sole_authoritative_cmd_vel_publisher": true,
+  "sensor_summary": {
+    "scan_count": 189,
+    "rgb_frames": 189,
+    "map_updates": 38,
+    "global_costmap_updates": 23,
+    "plan_messages": 27,
+    "scan_rate_hz": 5.011729579867776
+  },
+  "safety_state": {
+    "angular_motion_status": "evidence_bounded_production_turn",
+    "angular_stopping_model": {
+      "angular_cap_radps": 0.1,
+      "confirmation_window_s": 0.5,
+      "manifest_sha256": "79739d9b422649246431b8847abd6668c7a89d2a08f9b081ce94a8957723ddbd",
+      "measured": true,
+      "physical_stop_time_bound_s": 0.75,
+      "production_authorized": true,
+      "production_validation_active": false,
+      "stopping_angle_bound_rad": 0.05,
+      "validated_for": "production"
+    },
+    "authorized": true,
+    "combined_motion_authorized": false,
+    "corridor_m": 3.0000000447034836,
+    "decision_monotonic_s": 8797.8015757,
+    "failures": [],
+    "footprint_width_m": 0.345,
+    "forward_distance_reference": "front_footprint_boundary",
+    "localization_allowance_m": 0.4705050313257851,
+    "map_counts": {
+      "free": 4180,
+      "occupied": 267,
+      "unknown": 27953
+    },
+    "map_frame": "base_link",
+    "max_angular_speed_radps": 0.1,
+    "max_linear_speed_mps": 0.18,
+    "motion_mode": "production_sequential",
+    "node": "anc_lidar_safety_gate",
+    "profile": "REALISTIC_RGB_LIDAR",
+    "reason": "pass",
+    "rotation_calibration_speed_cap_radps": 0.1,
+    "rotation_clearance": {
+      "authorized": true,
+      "center_drift_allowance_m": 0.14,
+      "checked_cells": 112,
+      "footprint_circumradius_m": 0.263592962728522,
+      "inside_grid": true,
+      "occupied_cells": 0,
+      "reason": "swept_disk_clear",
+      "required_radius_m": 0.5235929627285221,
+      "safety_margin_m": 0.1,
+      "sensor_mount_uncertainty_m": 0.02,
+      "unknown_cells": 0
+    },
+    "runtime_uses_world_map_or_truth": false,
+    "safety_margin_m": 0.1,
+    "speed_gate": {
+      "max_linear_speed_mps": 0.18,
+      "reaction_time_s": 0.4608,
+      "reason": "measured_speed_bound_fits_corridor",
+      "selected": {
+        "passes": true,
+        "reaction_distance_m": 0.08294399999999999,
+        "required_corridor_m": 0.656429031325785,
+        "speed_mps": 0.18,
+        "stop_distance_m": 0.00298
+      },
+      "tested_speeds": [
+        {
+          "passes": true,
+          "reaction_distance_m": 0.009216,
+          "required_corridor_m": 0.5827010313257851,
+          "speed_mps": 0.02,
+          "stop_distance_m": 0.00298
+        },
+        {
+          "passes": true,
+          "reaction_distance_m": 0.02304,
+          "required_corridor_m": 0.596525031325785,
+          "speed_mps": 0.05,
+          "stop_distance_m": 0.00298
+        },
+        {
+          "passes": true,
+          "reaction_distance_m": 0.04608,
+          "required_corridor_m": 0.6195650313257851,
+          "speed_mps": 0.1,
+          "stop_distance_m": 0.00298
+        },
+        {
+          "passes": true,
+          "reaction_distance_m": 0.08294399999999999,
+          "required_corridor_m": 0.656429031325785,
+          "speed_mps": 0.18,
+          "stop_distance_m": 0.00298
+        }
+      ],
+      "valid": true
+    },
+    "speed_gate_inputs": {
+      "connected_full_footprint_corridor_m": 3.0000000447034836,
+      "lidar_map_wall_age_s": 0.031239439000273705,
+      "measured_scan_rate_hz": 4.9928769362788215,
+      "odom_sim_age_s": 0.01999999999999602,
+      "scan_sim_age_s": 0.05999999999999517,
+      "usable_beam_fraction": 0.9916666666666667
+    },
+    "stopping_model": {
+      "friction_conditions": [
+        0.5,
+        1.2
+      ],
+      "hardware_bound": false,
+      "source": "Phase 8B isolated simulator stopping test",
+      "tested_speeds_mps": [
+        0.02,
+        0.05,
+        0.1,
+        0.18
+      ],
+      "worst_stop_distance_m": 0.00298
+    },
+    "truth_used_only_by_evaluator": true,
+    "valid": true
+  },
+  "guard_state": {
+    "authorized": false,
+    "command_age_s": 0.8591044820004754,
+    "command_count": 310,
+    "decision_monotonic_s": 8797.777770482,
+    "node": "anc_safety_command_guard",
+    "output": {
+      "angular_z_radps": 0.0,
+      "is_zero": true,
+      "linear_x_mps": 0.0
+    },
+    "output_count": 833,
+    "reason": "command_stale",
+    "request_received_monotonic_s": 8796.918666,
+    "requested": {
+      "angular_z_radps": 0.0,
+      "linear_x_mps": 0.0
+    },
+    "safety_received_monotonic_s": 8797.702896223,
+    "safety_state": {
+      "angular_motion_status": "evidence_bounded_production_turn",
+      "angular_stopping_model": {
+        "angular_cap_radps": 0.1,
+        "confirmation_window_s": 0.5,
+        "manifest_sha256": "79739d9b422649246431b8847abd6668c7a89d2a08f9b081ce94a8957723ddbd",
+        "measured": true,
+        "physical_stop_time_bound_s": 0.75,
+        "production_authorized": true,
+        "production_validation_active": false,
+        "stopping_angle_bound_rad": 0.05,
+        "validated_for": "production"
+      },
+      "authorized": true,
+      "combined_motion_authorized": false,
+      "corridor_m": 3.0000000447034836,
+      "decision_monotonic_s": 8797.702374966,
+      "failures": [],
+      "footprint_width_m": 0.345,
+      "forward_distance_reference": "front_footprint_boundary",
+      "localization_allowance_m": 0.4705050313257851,
+      "map_counts": {
+        "free": 4192,
+        "occupied": 272,
+        "unknown": 27936
+      },
+      "map_frame": "base_link",
+      "max_angular_speed_radps": 0.1,
+      "max_linear_speed_mps": 0.18,
+      "motion_mode": "production_sequential",
+      "node": "anc_lidar_safety_gate",
+      "profile": "REALISTIC_RGB_LIDAR",
+      "reason": "pass",
+      "rotation_calibration_speed_cap_radps": 0.1,
+      "rotation_clearance": {
+        "authorized": true,
+        "center_drift_allowance_m": 0.14,
+        "checked_cells": 112,
+        "footprint_circumradius_m": 0.263592962728522,
+        "inside_grid": true,
+        "occupied_cells": 0,
+        "reason": "swept_disk_clear",
+        "required_radius_m": 0.5235929627285221,
+        "safety_margin_m": 0.1,
+        "sensor_mount_uncertainty_m": 0.02,
+        "unknown_cells": 0
+      },
+      "runtime_uses_world_map_or_truth": false,
+      "safety_margin_m": 0.1,
+      "speed_gate": {
+        "max_linear_speed_mps": 0.18,
+        "reaction_time_s": 0.4608,
+        "reason": "measured_speed_bound_fits_corridor",
+        "selected": {
+          "passes": true,
+          "reaction_distance_m": 0.08294399999999999,
+          "required_corridor_m": 0.656429031325785,
+          "speed_mps": 0.18,
+          "stop_distance_m": 0.00298
+        },
+        "tested_speeds": [
+          {
+            "passes": true,
+            "reaction_distance_m": 0.009216,
+            "required_corridor_m": 0.5827010313257851,
+            "speed_mps": 0.02,
+            "stop_distance_m": 0.00298
+          },
+          {
+            "passes": true,
+            "reaction_distance_m": 0.02304,
+            "required_corridor_m": 0.596525031325785,
+            "speed_mps": 0.05,
+            "stop_distance_m": 0.00298
+          },
+          {
+            "passes": true,
+            "reaction_distance_m": 0.04608,
+            "required_corridor_m": 0.6195650313257851,
+            "speed_mps": 0.1,
+            "stop_distance_m": 0.00298
+          },
+          {
+            "passes": true,
+            "reaction_distance_m": 0.08294399999999999,
+            "required_corridor_m": 0.656429031325785,
+            "speed_mps": 0.18,
+            "stop_distance_m": 0.00298
+          }
+        ],
+        "valid": true
+      },
+      "speed_gate_inputs": {
+        "connected_full_footprint_corridor_m": 3.0000000447034836,
+        "lidar_map_wall_age_s": 0.13935627800128714,
+        "measured_scan_rate_hz": 4.997604836620556,
+        "odom_sim_age_s": 0.020000000000003126,
+        "scan_sim_age_s": 0.1600000000000037,
+        "usable_beam_fraction": 0.9972222222222222
+      },
+      "stopping_model": {
+        "friction_conditions": [
+          0.5,
+          1.2
+        ],
+        "hardware_bound": false,
+        "source": "Phase 8B isolated simulator stopping test",
+        "tested_speeds_mps": [
+          0.02,
+          0.05,
+          0.1,
+          0.18
+        ],
+        "worst_stop_distance_m": 0.00298
+      },
+      "truth_used_only_by_evaluator": true,
+      "valid": true
+    },
+    "safety_state_age_s": 0.07487425900035305
+  },
+  "nav2_lifecycle_states": {
+    "planner_server": "active",
+    "controller_server": "active",
+    "behavior_server": "active",
+    "bt_navigator": "active",
+    "velocity_smoother": "active",
+    "collision_monitor": "active"
+  },
+  "command_summary": {
+    "/cmd_vel_nav_raw": {
+      "count": 241,
+      "nonzero": 240,
+      "max_v": 0.18,
+      "max_w": 0.1
+    },
+    "/cmd_vel_smoothed": {
+      "count": 310,
+      "nonzero": 297,
+      "max_v": 0.12,
+      "max_w": 0.1
+    },
+    "/cmd_vel_nav": {
+      "count": 310,
+      "nonzero": 297,
+      "max_v": 0.12,
+      "max_w": 0.1
+    },
+    "/cmd_vel": {
+      "count": 833,
+      "nonzero": 217,
+      "max_v": 0.12,
+      "max_w": 0.1
+    }
+  },
+  "cmd_vel_publisher_audit": {
+    "/cmd_vel": {
+      "count": 1,
+      "publisher_names": [
+        "anc_safety_command_guard"
+      ],
+      "audit_method": "rclpy_graph"
+    },
+    "/cmd_vel_nav": {
+      "count": 1,
+      "publisher_names": [
+        "collision_monitor"
+      ],
+      "audit_method": "rclpy_graph"
+    },
+    "/cmd_vel_nav_raw": {
+      "count": 5,
+      "publisher_names": [
+        "controller_server",
+        "behavior_server",
+        "behavior_server",
+        "behavior_server",
+        "behavior_server"
+      ],
+      "audit_method": "rclpy_graph"
+    },
+    "/cmd_vel_smoothed": {
+      "count": 1,
+      "publisher_names": [
+        "velocity_smoother"
+      ],
+      "audit_method": "rclpy_graph"
+    }
+  },
+  "non_ground_contact_events": [],
+  "resource_samples": [
+    {
+      "wall_s": 8766.761868496,
+      "memavailable_kib": 1623604,
+      "swapfree_kib": 2224692,
+      "target_process_count": 21,
+      "target_process_rss_mib": 1713.05,
+      "target_process_cpu_percent": 0.0,
+      "wsl_cpu_percent": 46.7
+    },
+    {
+      "wall_s": 8767.761964747,
+      "memavailable_kib": 1625356,
+      "swapfree_kib": 2224692,
+      "target_process_count": 21,
+      "target_process_rss_mib": 1713.27,
+      "target_process_cpu_percent": 332.0,
+      "wsl_cpu_percent": 32.7
+    },
+    {
+      "wall_s": 8768.763160033,
+      "memavailable_kib": 1631980,
+      "swapfree_kib": 2224692,
+      "target_process_count": 21,
+      "target_process_rss_mib": 1714.48,
+      "target_process_cpu_percent": 339.9,
+      "wsl_cpu_percent": 33.9
+    },
+    {
+      "wall_s": 8769.76304598,
+      "memavailable_kib": 1649576,
+      "swapfree_kib": 2224692,
+      "target_process_count": 21,
+      "target_process_rss_mib": 1715.21,
+      "target_process_cpu_percent": 335.0,
+      "wsl_cpu_percent": 34.0
+    },
+    {
+      "wall_s": 8770.761998594,
+      "memavailable_kib": 1661252,
+      "swapfree_kib": 2224692,
+      "target_process_count": 21,
+      "target_process_rss_mib": 1715.38,
+      "target_process_cpu_percent": 345.0,
+      "wsl_cpu_percent": 39.0
+    },
+    {
+      "wall_s": 8771.761801253,
+      "memavailable_kib": 1673012,
+      "swapfree_kib": 2224692,
+      "target_process_count": 21,
+      "target_process_rss_mib": 1715.5,
+      "target_process_cpu_percent": 334.0,
+      "wsl_cpu_percent": 32.3
+    },
+    {
+      "wall_s": 8772.761289375,
+      "memavailable_kib": 1667112,
+      "swapfree_kib": 2224692,
+      "target_process_count": 21,
+      "target_process_rss_mib": 1715.59,
+      "target_process_cpu_percent": 332.0,
+      "wsl_cpu_percent": 32.8
+    },
+    {
+      "wall_s": 8773.762523786,
+      "memavailable_kib": 1675584,
+      "swapfree_kib": 2224692,
+      "target_process_count": 21,
+      "target_process_rss_mib": 1715.65,
+      "target_process_cpu_percent": 339.9,
+      "wsl_cpu_percent": 34.0
+    },
+    {
+      "wall_s": 8774.762746662,
+      "memavailable_kib": 1673248,
+      "swapfree_kib": 2224692,
+      "target_process_count": 21,
+      "target_process_rss_mib": 1716.2,
+      "target_process_cpu_percent": 345.0,
+      "wsl_cpu_percent": 39.5
+    },
+    {
+      "wall_s": 8775.763887975,
+      "memavailable_kib": 1664804,
+      "swapfree_kib": 2224692,
+      "target_process_count": 21,
+      "target_process_rss_mib": 1716.18,
+      "target_process_cpu_percent": 340.0,
+      "wsl_cpu_percent": 52.3
+    },
+    {
+      "wall_s": 8776.761743478,
+      "memavailable_kib": 1674404,
+      "swapfree_kib": 2224692,
+      "target_process_count": 21,
+      "target_process_rss_mib": 1716.21,
+      "target_process_cpu_percent": 337.5,
+      "wsl_cpu_percent": 52.4
+    },
+    {
+      "wall_s": 8777.762510842,
+      "memavailable_kib": 1680676,
+      "swapfree_kib": 2224692,
+      "target_process_count": 21,
+      "target_process_rss_mib": 1718.82,
+      "target_process_cpu_percent": 346.0,
+      "wsl_cpu_percent": 52.8
+    },
+    {
+      "wall_s": 8778.761952885,
+      "memavailable_kib": 1678932,
+      "swapfree_kib": 2224692,
+      "target_process_count": 21,
+      "target_process_rss_mib": 1716.22,
+      "target_process_cpu_percent": 343.0,
+      "wsl_cpu_percent": 52.9
+    },
+    {
+      "wall_s": 8779.762790177,
+      "memavailable_kib": 1678344,
+      "swapfree_kib": 2224692,
+      "target_process_count": 21,
+      "target_process_rss_mib": 1716.25,
+      "target_process_cpu_percent": 340.0,
+      "wsl_cpu_percent": 51.8
+    },
+    {
+      "wall_s": 8780.766710271,
+      "memavailable_kib": 1568236,
+      "swapfree_kib": 2224692,
+      "target_process_count": 21,
+      "target_process_rss_mib": 1716.2,
+      "target_process_cpu_percent": 375.6,
+      "wsl_cpu_percent": 61.1
+    },
+    {
+      "wall_s": 8781.764977769,
+      "memavailable_kib": 1565860,
+      "swapfree_kib": 2224692,
+      "target_process_count": 21,
+      "target_process_rss_mib": 1716.28,
+      "target_process_cpu_percent": 372.5,
+      "wsl_cpu_percent": 61.7
+    },
+    {
+      "wall_s": 8782.76340626,
+      "memavailable_kib": 1488476,
+      "swapfree_kib": 2224692,
+      "target_process_count": 21,
+      "target_process_rss_mib": 1716.31,
+      "target_process_cpu_percent": 379.5,
+      "wsl_cpu_percent": 62.3
+    },
+    {
+      "wall_s": 8783.766475634,
+      "memavailable_kib": 1469056,
+      "swapfree_kib": 2224692,
+      "target_process_count": 21,
+      "target_process_rss_mib": 1716.3,
+      "target_process_cpu_percent": 386.1,
+      "wsl_cpu_percent": 62.5
+    },
+    {
+      "wall_s": 8784.763962268,
+      "memavailable_kib": 1835532,
+      "swapfree_kib": 2224692,
+      "target_process_count": 21,
+      "target_process_rss_mib": 1716.32,
+      "target_process_cpu_percent": 348.6,
+      "wsl_cpu_percent": 54.3
+    },
+    {
+      "wall_s": 8785.764244899,
+      "memavailable_kib": 1807588,
+      "swapfree_kib": 2224692,
+      "target_process_count": 21,
+      "target_process_rss_mib": 1716.44,
+      "target_process_cpu_percent": 351.0,
+      "wsl_cpu_percent": 52.7
+    },
+    {
+      "wall_s": 8786.76140753,
+      "memavailable_kib": 1806028,
+      "swapfree_kib": 2224692,
+      "target_process_count": 21,
+      "target_process_rss_mib": 1716.46,
+      "target_process_cpu_percent": 341.7,
+      "wsl_cpu_percent": 53.1
+    },
+    {
+      "wall_s": 8787.762685708,
+      "memavailable_kib": 1800556,
+      "swapfree_kib": 2224692,
+      "target_process_count": 21,
+      "target_process_rss_mib": 1716.44,
+      "target_process_cpu_percent": 340.9,
+      "wsl_cpu_percent": 52.3
+    },
+    {
+      "wall_s": 8788.76217482,
+      "memavailable_kib": 1826496,
+      "swapfree_kib": 2224692,
+      "target_process_count": 21,
+      "target_process_rss_mib": 1716.46,
+      "target_process_cpu_percent": 332.0,
+      "wsl_cpu_percent": 52.3
+    },
+    {
+      "wall_s": 8789.762267361,
+      "memavailable_kib": 1818696,
+      "swapfree_kib": 2224692,
+      "target_process_count": 21,
+      "target_process_rss_mib": 1716.51,
+      "target_process_cpu_percent": 348.0,
+      "wsl_cpu_percent": 52.9
+    },
+    {
+      "wall_s": 8790.762548728,
+      "memavailable_kib": 1836296,
+      "swapfree_kib": 2224692,
+      "target_process_count": 21,
+      "target_process_rss_mib": 1716.52,
+      "target_process_cpu_percent": 344.0,
+      "wsl_cpu_percent": 52.9
+    },
+    {
+      "wall_s": 8791.76415018,
+      "memavailable_kib": 1831048,
+      "swapfree_kib": 2224692,
+      "target_process_count": 21,
+      "target_process_rss_mib": 1716.51,
+      "target_process_cpu_percent": 340.5,
+      "wsl_cpu_percent": 52.1
+    },
+    {
+      "wall_s": 8792.76290025,
+      "memavailable_kib": 1830856,
+      "swapfree_kib": 2224692,
+      "target_process_count": 21,
+      "target_process_rss_mib": 1716.57,
+      "target_process_cpu_percent": 348.5,
+      "wsl_cpu_percent": 43.1
+    },
+    {
+      "wall_s": 8793.763292999,
+      "memavailable_kib": 1820716,
+      "swapfree_kib": 2224692,
+      "target_process_count": 21,
+      "target_process_rss_mib": 1716.59,
+      "target_process_cpu_percent": 353.0,
+      "wsl_cpu_percent": 43.8
+    },
+    {
+      "wall_s": 8794.76217011,
+      "memavailable_kib": 1813744,
+      "swapfree_kib": 2224692,
+      "target_process_count": 21,
+      "target_process_rss_mib": 1716.65,
+      "target_process_cpu_percent": 346.1,
+      "wsl_cpu_percent": 41.6
+    },
+    {
+      "wall_s": 8795.762206513,
+      "memavailable_kib": 1817072,
+      "swapfree_kib": 2224692,
+      "target_process_count": 21,
+      "target_process_rss_mib": 1719.25,
+      "target_process_cpu_percent": 344.0,
+      "wsl_cpu_percent": 40.8
+    }
+  ],
+  "resource_summary": {
+    "scope": "best-effort processes matching the ROS/Gazebo/Nav2 command-name patterns; excludes Windows-only processes",
+    "psutil_available": true,
+    "target_process_peak_rss_mib": 1719.25,
+    "target_process_mean_rss_mib": 1716.13,
+    "target_process_mean_cpu_percent": 335.38,
+    "wsl_mean_cpu_percent": 47.55,
+    "sample_count": 30
+  },
+  "runtime_rtf": 0.9861010080619117,
+  "acceptance": {
+    "xy_error_limit_m": 0.3,
+    "heading_error_limit_rad": 0.3,
+    "zero_collisions": true,
+    "unknown_not_plannable": true
+  },
+  "pre_goal_cmd_vel_publishers": [
+    "anc_safety_command_guard"
+  ],
+  "post_goal_stop_confirmed": true,
+  "stop_samples": [
+    {
+      "sim_s": 39.694,
+      "x_m": 0.6177881516834972,
+      "y_m": -0.004703113639209856,
+      "yaw_rad": 0.057985714874877296,
+      "wall_s": 8797.828969815,
+      "linear_x_mps": 0.0,
+      "angular_z_radps": 0.0
+    },
+    {
+      "sim_s": 39.766,
+      "x_m": 0.6177881516834972,
+      "y_m": -0.004703113639209856,
+      "yaw_rad": 0.057985714874877296,
+      "wall_s": 8797.909835716,
+      "linear_x_mps": 0.0,
+      "angular_z_radps": 0.0
+    },
+    {
+      "sim_s": 39.856,
+      "x_m": 0.6177881516834972,
+      "y_m": -0.004703113639209856,
+      "yaw_rad": 0.057985714874877296,
+      "wall_s": 8797.991742299,
+      "linear_x_mps": 0.0,
+      "angular_z_radps": 0.0
+    },
+    {
+      "sim_s": 39.928,
+      "x_m": 0.6177881516834972,
+      "y_m": -0.004703113639209856,
+      "yaw_rad": 0.057985714874877296,
+      "wall_s": 8798.072787637,
+      "linear_x_mps": 0.0,
+      "angular_z_radps": 0.0
+    },
+    {
+      "sim_s": 40.018,
+      "x_m": 0.6177881516834972,
+      "y_m": -0.004703113639209856,
+      "yaw_rad": 0.057985714874877296,
+      "wall_s": 8798.15383552,
+      "linear_x_mps": 0.0,
+      "angular_z_radps": 0.0
+    },
+    {
+      "sim_s": 40.09,
+      "x_m": 0.6177881516834972,
+      "y_m": -0.004703113639209856,
+      "yaw_rad": 0.057985714874877296,
+      "wall_s": 8798.235692878,
+      "linear_x_mps": 0.0,
+      "angular_z_radps": 0.0
+    },
+    {
+      "sim_s": 40.18,
+      "x_m": 0.6177881516834972,
+      "y_m": -0.004703113639209856,
+      "yaw_rad": 0.057985714874877296,
+      "wall_s": 8798.316681456,
+      "linear_x_mps": 0.0,
+      "angular_z_radps": 0.0
+    },
+    {
+      "sim_s": 40.252,
+      "x_m": 0.6177881516834972,
+      "y_m": -0.004703113639209856,
+      "yaw_rad": 0.057985714874877296,
+      "wall_s": 8798.39786438,
+      "linear_x_mps": 0.0,
+      "angular_z_radps": 0.0
+    }
+  ],
+  "final_localization_error_m": 0.004928488246174403,
+  "final_localization_heading_error_rad": 0.0009773346191882942,
+  "final_stopped_truth": {
+    "sim_s": 40.252,
+    "x_m": 0.6177881516834972,
+    "y_m": -0.004703113639209856,
+    "yaw_rad": 0.057985714874877296,
+    "wall_s": 8798.39786438,
+    "linear_x_mps": 0.0,
+    "angular_z_radps": 0.0
+  },
+  "commissioning_goal_distance_m": 0.75,
+  "planned_path_points": [
+    [
+      0.6080107323962789,
+      -0.033892524241672994
+    ],
+    [
+      0.658010733141337,
+      -0.033892524241672994
+    ],
+    [
+      0.683010733513866,
+      -0.033892524241672994
+    ],
+    [
+      0.708010733886395,
+      -0.033892524241672994
+    ],
+    [
+      0.7498281586092018,
+      0.000251952994603186
+    ]
+  ],
+  "predefined_map_used": false,
+  "commissioning_prerequisites": {
+    "turn_envelope": {
+      "angular_cap_radps": 0.1,
+      "physical_stop_time_bound_s": 0.75,
+      "stopping_angle_bound_rad": 0.05,
+      "confirmation_window_s": 0.5,
+      "manifest_sha256": "79739d9b422649246431b8847abd6668c7a89d2a08f9b081ce94a8957723ddbd",
+      "validated_for": "production"
+    },
+    "moving_slam": [
+      {
+        "path": "docs/evidence/native-slam-map1s-20261103/trial0-summary.json",
+        "sha256": "0c8ee63b5c98b96e9a11b3f23add6e1694ee1396602db1d7bdb75be6c74590f8",
+        "trial_id": "3c4a2144-83de-473a-a18b-eca6e7293636"
+      },
+      {
+        "path": "docs/evidence/native-slam-map1s-20261103/trial1-summary.json",
+        "sha256": "853fdc6d999f13e700ee7b07bc027808b490c3e91217c065586029c552b7a007",
+        "trial_id": "e991f1f4-27eb-487d-96f3-72af820edbf1"
+      },
+      {
+        "path": "docs/evidence/native-slam-map1s-20261103/trial2-summary.json",
+        "sha256": "df645484304c7762dad69eb7757f79048468dd79294c49b83ab8e45cbd24e7d5",
+        "trial_id": "2a805754-a96a-4289-88f4-9f51fd42760e"
+      }
+    ]
+  }
+}

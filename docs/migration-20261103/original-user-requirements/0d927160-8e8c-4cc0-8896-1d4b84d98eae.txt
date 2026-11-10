@@ -1,0 +1,106 @@
+Continue the existing Autonomous Navigation Car simulation project with **Phase 3 — Sensor Simulation and ROS Interfaces**.
+
+**Repository:** https://github.com/Ashish200528/Autonomous-Navigation
+
+**Local WSL workspace:** `/home/ashish/AutonomousNavigationCar`
+
+**Latest reviewed GitHub commit:** `3bbd45c3247a256e3545d40f08120db7de40c33e`
+
+The project already has ROS 2 Jazzy, Gazebo Harmonic, a reference Nav2 test, and a working Phase 2 differential-drive robot.
+
+Do not restart the project or recreate existing working functionality.
+
+## FIRST — Inspect and synchronize
+
+1. Inspect the Git working tree and existing branches.
+2. Safely synchronize with GitHub `main`, preserving any uncommitted changes.
+3. Read `docs/PHASE_REPORT.md`, `docs/issues.md`, `docs/evidence/README.md`, `config/robot_parameters.yaml`, the current robot Xacro, bringup launch and bridge configuration.
+4. Review the original Simulation Master Roadmap.
+5. Verify the Phase 2 baseline still builds.
+
+Do not overwrite recorded evidence or modify the Arduino UNO Q application.
+
+## MAIN TASK — Implement Phase 3
+
+**A. Simulated RGB camera**
+
+- Add a forward-facing RGB camera sensor to the existing robot.
+- Use documented provisional mounting geometry, resolution and field of view.
+- Publish ROS `/camera/image_raw` and `/camera/camera_info`.
+- Verify the RGB image contains real rendered Gazebo scenery rather than an empty or fabricated image.
+- Validate camera frame, timestamp, calibration parameters and publish rate.
+
+**B. IMU and odometry**
+
+- Add a Gazebo IMU sensor and bridge to ROS `/imu/data`.
+- Preserve the existing wheel-odometry interface.
+- Verify IMU orientation, angular velocity and linear acceleration conventions.
+- Validate frame IDs, timestamps and measurement frequency.
+- Keep all provisional noise/covariance assumptions explicit.
+
+**C. ROS interfaces and TF**
+
+- Extend the existing `ros_gz_bridge` configuration.
+- Verify `/clock`, `/odom`, `/imu/data`, camera topics and TF.
+- Maintain one coherent `odom -> base_footprint -> base_link -> camera_link` hierarchy, with appropriate optical camera frame if required.
+- Check wheel-link transforms and joint-state availability.
+- Avoid duplicate or conflicting TF publishers.
+- Use simulation time consistently.
+
+**D. Address known Phase 2 issues**
+
+- Diagnose why the configured contact sensor produced no reported wall-contact events.
+- Check Gazebo contact sensor configuration, collision names, topic publication, ROS bridge and subscriber behavior.
+- Correct the contact pipeline if possible and verify with a reproducible collision test.
+- Characterize wheel-odometry divergence during physical stall and rotation.
+- Do not replace odometry with simulator-perfect pose to hide this limitation.
+- Document any unresolved physics or sensor limitations accurately.
+
+**E. Visualization and tests**
+
+- Launch the custom robot in Gazebo.
+- Capture and verify at least one actual RGB frame.
+- Verify IMU and odometry messages.
+- Inspect TF and topic rates.
+- If memory permits, show RGB and robot frames in RViz2.
+- Record a small rosbag or bounded sample data.
+- Save logs and screenshots as appropriate.
+- Add repeatable automated smoke tests.
+- Include explicit checks for missing sensors, invalid frame IDs and stale timestamps where applicable.
+
+## RESOURCE CONSTRAINTS
+
+My laptop has Windows 11, 8 GB RAM and NVIDIA GTX 1650 graphics.
+
+- Prefer headless Gazebo for automated testing.
+- Avoid simultaneously running multiple heavy graphical programs.
+- Monitor available RAM and E: disk space.
+- Avoid unnecessary package installations or full system upgrades.
+- Stop simulation processes cleanly after tests.
+
+## NON-NEGOTIABLE PROJECT RULES
+
+- Keep simulator ground truth exclusive to evaluation code.
+- Never feed perfect positions, depth, ideal obstacle maps or hidden object geometry to realistic navigation/perception nodes.
+- Keep REFERENCE and REALISTIC sensing profiles explicitly separated.
+- Preserve FREE/OCCUPIED/UNKNOWN semantics for later perception.
+- Do not add YOLO-based object classification as a navigation dependency.
+- Do not modify my existing Arduino UNO Q application.
+- Do not make destructive or system-wide changes without asking me.
+
+## REQUIRED DELIVERABLES
+
+1. Working simulated RGB camera with actual image evidence.
+2. CameraInfo and IMU topics.
+3. Verified odometry and TF.
+4. Updated Gazebo-to-ROS bridges.
+5. Contact-sensor diagnosis and outcome.
+6. Repeatable Phase 3 tests.
+7. Updated documentation, parameters and evidence index.
+8. `docs/PHASE_REPORT.md` with Phase 3 PASS/FAIL/BLOCKED status.
+9. Git commit(s) and push to the existing GitHub repository after successful tests.
+10. A concise report identifying what worked, what failed, and what remains unresolved.
+
+Work autonomously on ordinary coding, testing and documentation tasks. Request user input only for permissions, consequential system changes or blockers.
+
+**Stop after Phase 3. Do not implement Phase 4 or later phases until Phase 3 has been validated and reviewed.**

@@ -2,8 +2,8 @@
 
 Date: 2026-11-02 (Asia/Calcutta)
 Project: /home/ashish/AutonomousNavigationCar on Ubuntu-24.04 at E:/WSL/Ubuntu-24.04
-Branch: main
-Scope: Phase 0 baseline through Phase 8 REALISTIC_RGB_ONLY stop-only baseline.
+Branch: feature/phase8c-lidar (based on main commit 61c59790ad36194c86e5db86f5a56be170dd6e42)
+Scope: Phase 0 through Phase 8C Branch 1 (RGB + 2D LiDAR), with earlier phase limits preserved.
 
 ## Outcome
 
@@ -15,6 +15,8 @@ Scope: Phase 0 baseline through Phase 8 REALISTIC_RGB_ONLY stop-only baseline.
 - Phase 4 odometry, state estimation, and known-start localization: PASS WITH LIMITS. The wheel/gyro EKF reduced motion RMSE and wall-stall x error in the accepted run, but did not correct wheel slip and was worse than raw odometry at the non-closing rectangle endpoint.
 - Phase 5 reproducible simulation worlds and scenario harness: PASS WITH LIMITS. Six bounded worlds, deterministic seeded layouts, geometry route/no-route checks, four headless runs, known-start TF, sensor streams, evaluator-only truth, and clean shutdown were verified. No navigation or perception was attempted.
 - Phase 6 REFERENCE Nav2 navigation: PASS WITH LIMITS. The selected S00/S01/S02/S03/S04/S09 trials passed using a per-run geometry-derived oracle map, known-start EKF TF, headless Gazebo, collision/clearance/truth evaluation, rosbag evidence, and bounded teardown. This is not RGB or unknown-map navigation.
+
+- Phase 8C Branch 1 RGB + 2D LiDAR: PASS WITH LIMITS for sensors, local mapping, the forward gate and bounded straight/fault-stop tests. Angular motion remains disabled. Stage D avoidance/goal navigation are BLOCKED / NOT RUN. SLAM/Nav2 default off; drift improvement was not demonstrated.
 
 ## Scope and integrity
 
@@ -460,3 +462,111 @@ The conservative gate calculation is:
 The full-footprint width requirement is 0.345 m, including 0.02 m lateral clearance on either side. The 0.470505 m allowance comes from the Phase 4 low-friction endpoint error with no evaluator chassis displacement; it replaces the Phase 8 EKF's zero covariance as the conservative allowance. Since the best corridor is only 0.48 m and C2 missed every known occupied pixel, the motion gate stays BLOCKED. No motion controller, autonomous driving scenario, or RGB Nav2 run was enabled. The existing stop-only lock remains intact.
 
 The seven-package ROS build and Phase 6/7/8 regression checks passed. Candidate, per-view, stopping-distance, and resource evidence is indexed in [docs/evidence/phase8b/README.md](evidence/phase8b/README.md). Full details: [docs/evidence/phase8b/phase8b-report.md](evidence/phase8b/phase8b-report.md).
+
+
+## Phase 8C Branch 1: RGB + 2D LiDAR
+
+### Assessment
+
+| Milestone | Assessment | Evidence |
+|---|---|---|
+| Sensor integration | PASS WITH LIMITS | 360-beam lidar_link scan at 4.94 Hz; 358/360 beams usable (99.44%). RGB/CameraInfo, IMU, filtered odometry and TF were present. |
+| Local map and fusion | PASS WITH LIMITS | Single-scan 180×180, 0.10 m map: 4,206 FREE, 267 OCCUPIED, 27,927 UNKNOWN. RGB yielded 617 FREE, 5,008 UNKNOWN, no metric OCCUPIED; fused S00 grid equaled LiDAR-only. |
+| Safety gate | PASS WITH LIMITS | S00 corridor 3.20 m; 0.656429 m required at 0.18 m/s. A 0.50 m obstacle clearance stayed stopped; 0.582701 m is required at 0.02 m/s. |
+| Actual movement | PASS WITH LIMITS | Bounded straight requests at 0.05 m/s; watchdog trial moved 0.212 m, then settled. Fault trials settled after 0.047–0.057 m total travel with post-zero movement 0–0.000082 m. |
+| Avoidance / goal navigation | BLOCKED / NOT RUN | Angular limit is 0 rad/s. No obstacle-course avoidance or Nav2 goal success is claimed. |
+
+### Implementation and runtime boundary
+
+anc_lidar adds REALISTIC_RGB_LIDAR: parameterized Gazebo planar scanner and bridge, scan conditioner, single-scan ray-traced map, footprint inflation, optional conservative RGB fusion, measured speed gate, and command guard. Provisional config uses 360 samples over ±π, 0.12–6.0 m, 5 Hz, 0.01 m distance-noise sigma, and configurable missed/invalid readings. This generic sensor is not a hardware specification. Its scan plane is 0.16 m above ground and cannot guarantee detection below it or overhead.
+
+Observed Gazebo unobstructed rays arrived as +Inf; the conditioner maps that observed representation to a finite max-range no-return. NaN, negative infinity and invalid/out-of-range samples remain UNKNOWN. Valid return endpoints are OCCUPIED; only measured space before them is FREE; behind hits and unobserved space remains UNKNOWN. The map is a fresh single-scan snapshot. RGB cannot erase LiDAR OCCUPIED cells or fabricate metric obstacle locations.
+
+Graph audits confirmed runtime nodes did not consume the Phase 6 reference map or Gazebo truth. Truth was queried only by evaluators, never published to runtime. anc_safety_command_guard was the sole /cmd_vel publisher; requests were isolated on /cmd_vel_nav. Shared launch keeps LiDAR disabled by default. Phase 8 remains a separate unconditional-zero profile.
+
+### Safety and controlled trials
+
+The gate uses scan validity, age/rate, paired map health, filtered-localization freshness/covariance, processing/supervisor delay, Phase 8B stopping data, Phase 4 slip allowance, full-footprint clearance and margin. The clearance probe yielded 0.50 m and was denied motion (0.582701 m required at 0.02 m/s). Invalid scan, paused scan conditioner, stale localization, paused RGB perception and stale command tests produced zero authoritative output; recovery followed restored inputs.
+
+Moving fault trials at 0.05 m/s request speed:
+- LiDAR loss: 0.046981 m total displacement, 0.000082 m after zero.
+- RGB-perception loss: 0.056990 m total, 0 m after zero.
+- Localization loss: 0.049390 m total, 0 m after zero.
+- Command timeout: 0.212 m total forward displacement, 0 m after zero.
+
+Each trial settled within the 0.50 m displacement and 0.10298 m stopping limits. The gate’s clear-corridor cap was 0.18 m/s; no yaw command was permitted. One Phase 8B low-friction sample measured 0.002976 m at 0.1588 m/s observed speed (target 0.18, μ=0.5). This is a simulator sample, not a hardware stopping bound.
+
+### Resource and localization limits
+
+WSL has about 3.5 GiB RAM. The LiDAR profile reduces camera rate to 5 Hz. Under the combined profile Gazebo used about 106% CPU and an EKF update-rate warning occurred; other ROS processes also used substantial CPU. Optional SLAM generated /map and stationary map→odom but had a full scan queue and EKF timing warnings. No drift improvement was established, so SLAM/Nav2 remain off.
+
+A fresh Phase 4 normal replay had one initial wall-stationarity assertion failure at 0.01255 m/s; a retry passed. Retry filtered motion RMSE was 0.0568 m vs 0.1731 m raw, but filtered return-to-start error (0.1014 m, 0.533 rad) was worse than raw (0.0145 m, 0.014 rad). This wheel/gyro regression does not show LiDAR scan-matching drift correction.
+
+### Regression record
+
+The final build completed eight ROS packages. Phase 8C tests passed common 8/8, scan/map 13/13, CameraInfo pairing 3/3. Fresh Phase 3 sensor smoke passed 20/20 (RGB/CameraInfo 15.07 Hz, IMU 99.69 Hz, odometry 29.41 Hz, TF/contact passed). Phase 4 normal retry passed with the stated return-error limits. Static regressions passed Phase 5 47/47, Phase 6 profile 19/19, Phase 7 13/13, Phase 8 projection 7/7. Fresh Phase 8 S00 stop-only regression had 125/125 zero /cmd_vel samples, sole Phase 8 publisher, no Nav2 and no displacement. Phase 8B one-sample repeat passed at 0.002976 m. Existing full Phase 6 Nav2 trials and Phase 8B 24-run sweep were retained but not repeated on this low-memory branch. See docs/evidence/phase8c/lidar/README.md.
+
+### Remaining work
+
+The 2D plane misses low obstacles and overhead structure; reflectivity, dynamic obstacles and varied surfaces were not evaluated. RGB added no cells on the tested corridor and supplies no metric obstacle range. Wheel/gyro return error remains significant, and scan matching has not been shown to improve it. No obstacle course, goal reaching, parking, hardware integration or UNO Q change is included. Stage D remains blocked pending yaw stopping, turning clearance, localization/map quality and resource validation.
+
+
+## Phase 8C remaining LiDAR stages: supplemental report (2026-11-02)
+
+This additive continuation preserves earlier report history and failed attempts. Full matrix is in docs/phase8c-stage-results.md.
+
+### Stage 1: calibration-only rotation and swept clearance
+
+Six S00 1.2-second pure-yaw pulses at +/-0.02, +/-0.05 and +/-0.10 rad/s passed. Command-to-zero output latency was 0.00386-0.04985 s; first slow pose-derived rate followed 0.019-0.172 s after zero; settling took 0.579-0.722 s. Maximum center drift was 0.004337 m; residual yaw was zero in saved samples and there were no non-ground contacts. Swept disk radius was 0.523593 m from provisional footprint circumradius, 0.14 m drift allowance, 0.02 m sensor uncertainty and 0.10 m margin.
+
+The near-wall no-motion gate denied rotation with 18 occupied and 4 unknown cells. Near-box/constriction probes also found occupied/unknown cells, but both additionally failed RGB floor-support validation and are not isolated clearance-only tests. The sole /cmd_vel publisher remained the guard. Production angular speed stays 0.0 rad/s: short clear-arena pulses do not establish general yaw stopping distance or combined-motion safety. The initial failed evaluation remains at stage1-rotation-trials.json/.log.
+
+### Stage 2: tuned stationary SLAM map
+
+SLAM now uses a 0.25 s minimum scan interval (4 Hz processing), queue size 3, 0.05 s transform publishing and 3 s map updates. In 25.001 wall seconds / 24.53 simulation seconds, stationary S00 received 128 scans, 8 map messages and 508 map-to-odom TF messages. It saved a 155 x 115 map at 0.05 m resolution: 1,447 free, 6 occupied, 16,372 unknown. All 520 /cmd_vel samples were zero; there were no non-ground contacts.
+
+No SLAM pose messages arrived. Stationary truth drift is not localization accuracy or drift improvement. The tuned log had no queue-full or EKF missed-update-rate warning during this 25-second interval, but did include a startup TF-cache drop and diagnostic-subscriber QoS warnings. This does not prove earlier timing issues resolved. The first failed monitor QoS attempt remains preserved.
+
+### Stages 3-5: navigation and parking
+
+Nav2 goals, obstacle traversal, dynamic-obstacle response, replanning and live parking were not attempted. They require production yaw stopping and moving localization evidence not established. The non-authoritative parking proposal passed 7/7 unit tests, blocks in calibration mode, and is not wired to runtime velocity.
+
+### Stage 6: profile-separated evaluation and resources
+
+Generated JSON, CSV and plots aggregate saved evidence. Phase 6 ORACLE_REFERENCE succeeded on reachable S00-S04 (5/5), with mean final XY error 0.14382 m and zero collisions; S09 aborted for the expected no-route case. Phase 7 RGB had 12 views, 0 false-FREE rate on known occupied pixels, 88.01% useful floor FREE coverage, 100% occupied precision, 26.67% occupied recall and 80.98% UNKNOWN. Phase 8 RGB-only stop profile passed 9/9 with 1,052/1,052 zero command samples and maximum displacement 0.00001055 m. Phase 8C had 358/360 usable beams at 4.94 Hz; RGB added no cells over LiDAR in tested clear S00.
+
+These are different profiles, not a head-to-head benchmark. Phase 6 used oracle map; Phase 7 evaluated RGB labels; Phase 8 stayed stopped; Phase 8C measured LiDAR and bounded straight motion.
+
+WSL has about 3.5 GiB RAM. Phase 8 recorded max sampled process RSS 852,672 KiB and minimum available memory 1,956,248 KiB. One summarized process sample during stationary SLAM reported about 2.2 GiB available, Gazebo RSS about 508,616 KiB and instantaneous process CPU near 112%; this is not a whole-system peak or time series. After simulation shutdown idle available memory was about 3.0 GiB. These are capacity observations, not a controlled benchmark ranking.
+
+### Stage 7: UNO Q transfer preparation
+
+docs/phase8c-hardware-transfer.md documents Linux MPU / STM32 responsibilities, Bridge contract, watchdog/E-stop requirements, LiDAR comparison and checklist. UNO Q Debian Trixie compatibility with ROS Jazzy remains unverified; Jazzy Tier 1 is Ubuntu Noble arm64. No UNO Q software, Arduino app, wiring or hardware changed. Hardware readiness is PARTIAL; physical validation PENDING HARDWARE.
+
+### Stage 8: saved demo and run guide
+
+A headless sensor composite is saved at docs/evidence/live-demo-2026-11-02/phase8c-live-demo.mp4 and described by its report. It shows RGB, scan, safety state and /cmd_vel; it is not a Gazebo desktop video or Nav2 path. MP4 remains local under the existing *.mp4 ignore rule. The operation guide and config/phase8c_lidar.rviz provide sensor/stationary-map workflows. RViz was not opened in this pass.
+
+### Final capability classifications
+
+| Capability | Result |
+|---|---|
+| LiDAR sensing | PASS WITH LIMITS |
+| Local mapping | PASS WITH LIMITS |
+| Safe rotation | PASS WITH LIMITS - calibration only; production yaw disabled |
+| SLAM and moving localization | BLOCKED |
+| Autonomous goal navigation | BLOCKED |
+| Obstacle avoidance | BLOCKED |
+| Replanning | BLOCKED |
+| Autonomous parking | BLOCKED live; 7 unit tests pass |
+| Fault handling | PASS WITH LIMITS for tested forward-motion and stop-only faults |
+| Full simulation evaluation | BLOCKED / INCOMPLETE |
+| Hardware deployment readiness | PARTIAL |
+| Physical hardware validation | PENDING HARDWARE |
+
+GitHub issue listing returned no existing issues; none was created. Branch remains feature/phase8c-lidar; no merge to main was made.
+
+
+## Phase 8C Stage 9 update (2026-11-02)
+
+Nav2 launch/configuration, a guarded command chain, an evaluator, a GUI/RViz path and a memory/readiness-gated demo launcher were added. A follow-up strengthened moving-SLAM trial measurements and replaced the launcher file-existence check with content-based evidence validation. The single-package anc_lidar build and offline checks pass. A post-build host-memory probe measured 926 MiB available on Windows and 3134 MiB in WSL; Windows remains below the headless launcher's 2 GiB threshold, so no new Gazebo, moving-SLAM or Nav2 trial was started. Production yaw remains zero and the readiness gate is blocked with evidence references unset. Full results and the current capability matrix are in docs/phase8c-stage9-report.md.

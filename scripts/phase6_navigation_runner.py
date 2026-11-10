@@ -611,6 +611,7 @@ def run(args):
         "scenario_id": args.scenario, "seed": args.seed,
         "source_commit": source_commit,
         "navigation_profile": "ORACLE_REFERENCE",
+        "display_options": {"gazebo_gui": bool(args.gui), "rviz": bool(args.rviz)},
         "original_phase5_sensor_profile": layout["sensor_profile"],
         "sensor_profile_override": "ORACLE_REFERENCE",
         "navigation_inputs": {
@@ -677,6 +678,8 @@ def run(args):
             f"start_x:={layout['start_xyyaw'][0]:.6f}",
             f"start_y:={layout['start_xyyaw'][1]:.6f}",
             f"start_yaw:={layout['start_xyyaw'][2]:.6f}",
+            f"gui:={str(args.gui).lower()}",
+            f"rviz:={str(args.rviz).lower()}",
         ]
         result["launch_command"] = command
         process = subprocess.Popen(command, cwd=ROOT, env=env, stdout=launch_log,
@@ -1247,6 +1250,24 @@ def run(args):
                 result["tf_bag_validation_error"] = f"{type(exc).__name__}: {exc}"
                 set_check("single_authority_tf_chain_present", False,
                           result["tf_bag_validation_error"])
+        if args.hold_window and process is not None and process.poll() is None:
+            action_summary = result.get("action", {})
+            metric_summary = result.get("metrics", {})
+            print("\n=== REFERENCE NAVIGATION — PREDEFINED MAP ===", flush=True)
+            print(f"Scenario {args.scenario}, seed {args.seed}", flush=True)
+            print(f"Goal status: {action_summary.get('status', 'unavailable')} / "
+                  f"classification: {result.get('classification', 'unavailable')}", flush=True)
+            print(f"Final goal error: {metric_summary.get('final_xy_goal_error_m', 'unavailable')} m; "
+                  f"collisions: {metric_summary.get('contact_collision_events', 'unavailable')}", flush=True)
+            print(f"Live result folder: {run_dir}", flush=True)
+            print("The simulation is paused with the final scene visible. "
+                  "Press Ctrl+C here or select Stop from the launcher menu to clean up.", flush=True)
+            while process.poll() is None:
+                try:
+                    time.sleep(0.25)
+                except KeyboardInterrupt:
+                    print("\nStopping the held reference scene cleanly...", flush=True)
+                    break
         if process is not None:
             shutdown = shutdown_group(process)
         result["shutdown"] = shutdown or {
@@ -1322,7 +1343,14 @@ def main():
     parser.add_argument("--run-id", required=True)
     parser.add_argument("--startup-timeout-s", type=float, default=90.0)
     parser.add_argument("--navigation-timeout-s", type=float, default=100.0)
+    parser.add_argument("--gui", action="store_true", help="Start Gazebo with its graphical interface.")
+    parser.add_argument("--rviz", action="store_true", help="Also start optional RViz displays.")
+    parser.add_argument("--hold-window", action="store_true", help="Keep the paused final Gazebo scene visible until interrupted.")
     args = parser.parse_args()
+    if args.rviz and not args.gui:
+        parser.error("--rviz requires --gui")
+    if args.hold_window and not args.gui:
+        parser.error("--hold-window requires --gui")
     try:
         sys.exit(run(args))
     except Exception as exc:

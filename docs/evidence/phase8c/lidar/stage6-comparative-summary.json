@@ -1,0 +1,310 @@
+{
+  "generated_at_utc": "2026-11-02T12:52:55.568941+00:00",
+  "branch": "feature/phase8c-lidar",
+  "classification": "PARTIAL_WITH_SAFETY_BLOCKERS",
+  "interpretation": "These are separate profile-specific experiments, not a head-to-head navigation benchmark.",
+  "stages": [
+    {
+      "stage": 1,
+      "status": "PASS_WITH_LIMITS_CALIBRATION_ONLY",
+      "production_yaw_enabled": false,
+      "combined_motion_tested": false
+    },
+    {
+      "stage": 2,
+      "status": "PASS_WITH_LIMITS_STATIONARY_MAPPING_ONLY",
+      "moving_localization_validated": false,
+      "drift_improvement_demonstrated": false
+    },
+    {
+      "stage": 3,
+      "status": "BLOCKED_NOT_RUN"
+    },
+    {
+      "stage": 4,
+      "status": "BLOCKED_NOT_RUN"
+    },
+    {
+      "stage": 5,
+      "status": "BLOCKED_LIVE",
+      "parking_unit_tests_passed": 7,
+      "runtime_wired": false
+    },
+    {
+      "stage": 6,
+      "status": "PARTIAL_WITH_LIMITS"
+    },
+    {
+      "stage": 7,
+      "status": "PARTIAL_DESIGN_ONLY",
+      "physical_validation": "PENDING_HARDWARE"
+    },
+    {
+      "stage": 8,
+      "status": "PASS_WITH_LIMITS_HEADLESS_RECORDING_AND_GUIDE"
+    }
+  ],
+  "capabilities": [
+    {
+      "name": "LiDAR sensing",
+      "status": "PASS_WITH_LIMITS"
+    },
+    {
+      "name": "local mapping",
+      "status": "PASS_WITH_LIMITS"
+    },
+    {
+      "name": "safe rotation",
+      "status": "PASS_WITH_LIMITS_CALIBRATION_ONLY"
+    },
+    {
+      "name": "SLAM and moving localization",
+      "status": "BLOCKED"
+    },
+    {
+      "name": "autonomous goal navigation",
+      "status": "BLOCKED"
+    },
+    {
+      "name": "obstacle avoidance",
+      "status": "BLOCKED"
+    },
+    {
+      "name": "replanning",
+      "status": "BLOCKED"
+    },
+    {
+      "name": "autonomous parking",
+      "status": "BLOCKED_LIVE"
+    },
+    {
+      "name": "fault handling",
+      "status": "PASS_WITH_LIMITS"
+    },
+    {
+      "name": "full simulation evaluation",
+      "status": "BLOCKED_INCOMPLETE"
+    },
+    {
+      "name": "hardware deployment readiness",
+      "status": "PARTIAL"
+    },
+    {
+      "name": "physical hardware validation",
+      "status": "PENDING_HARDWARE"
+    }
+  ],
+  "comparisons": {
+    "phase6_oracle_reference": {
+      "status": "PASS_WITH_LIMITS",
+      "S00_S04_goal_successes": 5,
+      "reachable_scenarios": 5,
+      "S09_action_status": "ABORTED",
+      "S09_expected_no_route": true,
+      "mean_truth_path_m_S00_S04": 5.9669,
+      "mean_final_xy_error_m_S00_S04": 0.14382,
+      "mean_localization_drift_m_S00_S04": 0.03402,
+      "collisions_S00_S04": 0,
+      "not_realistic_LiDAR_navigation": true,
+      "source": "docs/evidence/phase6/phase6-summary.json"
+    },
+    "phase7_rgb_perception": {
+      "status": "PASS WITH LIMITS",
+      "views": 12,
+      "false_free_rate": 0.0,
+      "known_floor_free_coverage": 0.8801333952177127,
+      "occupied_precision": 1.0,
+      "occupied_recall": 0.266704209852077,
+      "unknown_coverage": 0.8098068576388889,
+      "median_fps": 14.093,
+      "p95_latency_ms": 22.902,
+      "source": "docs/evidence/phase7/dataset/accepted-phase7-final-verified/dataset-results.json"
+    },
+    "phase8_rgb_stop_only": {
+      "status": "PASS_WITH_LIMITS_STOP_ONLY",
+      "runs_passed": 9,
+      "runs": 9,
+      "cmd_vel_samples": 1052,
+      "nonzero_samples": 0,
+      "max_truth_displacement_m": 1.05475e-05,
+      "max_sampled_process_rss_kib": 852672,
+      "min_available_memory_kib": 1956248,
+      "source": "docs/evidence/phase8/phase8-summary.json"
+    },
+    "phase8c_lidar": {
+      "status": "PASS_WITH_LIMITS",
+      "scan_hz": 4.94,
+      "usable_beams": 358,
+      "total_beams": 360,
+      "usable_fraction": 0.9944,
+      "forward_corridor_m": 3.2,
+      "required_corridor_m_at_0_18_mps": 0.656429,
+      "production_angular_speed_radps": 0.0,
+      "local_map": {
+        "frame_id": "base_link",
+        "free": 4206,
+        "height": 180,
+        "occupied": 267,
+        "resolution_m": 0.1,
+        "unknown": 27927,
+        "width": 180
+      },
+      "source": "docs/evidence/phase8c/lidar/phase8c-summary.json"
+    },
+    "fusion_effect": {
+      "tested_scene": "S00 clear corridor",
+      "fused_equals_LiDAR_only": true,
+      "RGB_added_metric_cells": 0,
+      "interpretation": "No measurable RGB map contribution in this S00 snapshot.",
+      "source": "docs/evidence/phase8c/lidar/phase8c-summary.json"
+    },
+    "rotation_calibration": {
+      "trials_passed": 6,
+      "trials": 6,
+      "requested_radps": [
+        0.02,
+        -0.02,
+        0.05,
+        -0.05,
+        0.1,
+        -0.1
+      ],
+      "max_center_drift_m": 0.004336733415844927,
+      "max_residual_yaw_rad": 0.0,
+      "command_to_zero_output_s_range": [
+        0.0038602770000011333,
+        0.04984612800000576
+      ],
+      "first_slow_pose_rate_after_stop_s_range": [
+        0.01871390200000178,
+        0.1716670600000043
+      ],
+      "settle_s_range": [
+        0.5793384979999985,
+        0.7222325480000009
+      ],
+      "max_abs_yaw_change_rad": 0.10848890200000003,
+      "production_yaw_enabled": false,
+      "swept_disk_radius_m": 0.5235929627285221,
+      "combined_motion_authorized": false,
+      "clearance_probes": {
+        "stage1-s00-near-wall-gate": {
+          "authorized": false,
+          "gate_reason": "swept_disk_occupied",
+          "clearance_reason": "swept_disk_occupied",
+          "occupied_cells": 18,
+          "unknown_cells": 4,
+          "truth_xy_drift_m": 0.0,
+          "truth_yaw_change_rad": 0.0
+        },
+        "stage1-s01-near-box-gate": {
+          "authorized": false,
+          "gate_reason": "rgb_input:perception_invalid_unknown:floor_seed_unobservable",
+          "clearance_reason": "swept_disk_occupied",
+          "occupied_cells": 8,
+          "unknown_cells": 21,
+          "truth_xy_drift_m": 0.0,
+          "truth_yaw_change_rad": 0.0
+        },
+        "stage1-s03-constriction-gate": {
+          "authorized": false,
+          "gate_reason": "rgb_input:perception_invalid_unknown:floor_seed_unobservable",
+          "clearance_reason": "swept_disk_occupied",
+          "occupied_cells": 10,
+          "unknown_cells": 22,
+          "truth_xy_drift_m": 0.0,
+          "truth_yaw_change_rad": 0.0
+        }
+      },
+      "source": "docs/evidence/phase8c/lidar/stage1-rotation-trials-retry.json"
+    },
+    "stationary_slam": {
+      "status": "PASS_WITH_LIMITS_STATIONARY_ONLY",
+      "wall_s": 25.000724805000004,
+      "sim_s": 24.53,
+      "scan_messages": 128,
+      "map_messages": 8,
+      "map_to_odom_messages": 508,
+      "slam_pose_messages": 0,
+      "map": {
+        "frame_id": "map",
+        "free_cells": 1447,
+        "height": 115,
+        "occupied_cells": 6,
+        "resolution_m": 0.05000000074505806,
+        "sim_stamp_s": 75.8,
+        "unknown_cells": 16372,
+        "width": 155
+      },
+      "stationary_truth_drift_m": 0.0,
+      "moving_localization_validated": false,
+      "drift_improvement_demonstrated": false,
+      "map_saved": true,
+      "limits": [
+        "Startup TF-cache message-filter drop logged.",
+        "QoS warnings from diagnostic subscriptions logged.",
+        "No queue-full or EKF missed-rate warning appeared in this 25-second tuned log only.",
+        "No SLAM pose messages arrived; moving accuracy remains untested."
+      ],
+      "source": "docs/evidence/phase8c/lidar/stage2-s00-stationary-slam-tuned.json"
+    },
+    "parking": {
+      "unit_tests_passed": 7,
+      "unit_tests_total": 7,
+      "runtime_wired": false,
+      "live_goal_executed": false,
+      "source": "tests/parking_controller_test.py"
+    }
+  },
+  "resources": {
+    "host_ram_gib": 8,
+    "WSL_assigned_ram_gib": 3.5,
+    "phase8_max_sampled_process_rss_kib": 852672,
+    "phase8_min_available_memory_kib": 1956248,
+    "stationary_SLAM_single_sample": {
+      "available_memory_gib_approx": 2.2,
+      "process_rss_kib": {
+        "gzserver": 508616,
+        "EKF": 43008,
+        "RGB_perception": 187392,
+        "scan_conditioner": 79872,
+        "local_mapper": 82944,
+        "safety_gate": 78848,
+        "slam_toolbox": 54272
+      },
+      "CPU_percent_sample": {
+        "gzserver": 112.0,
+        "EKF": 14.5,
+        "RGB_perception": 51.8,
+        "scan_conditioner": 34.5,
+        "local_mapper": 50.1,
+        "safety_gate": 49.7,
+        "slam_toolbox": 8.9
+      },
+      "scope": "Single ps/free sample, not time-series peak or normalized total; raw sample not retained separately."
+    },
+    "idle_after_shutdown": {
+      "captured_at_utc": "2026-11-02T12:52:55.566590+00:00",
+      "state": "idle_after_simulator_shutdown",
+      "memory_total_bytes": 3757260800,
+      "memory_used_bytes": 519024640,
+      "memory_available_bytes": 3238236160,
+      "memory_available_gib": 3.016,
+      "swap_total_bytes": 1073741824,
+      "swap_used_bytes": 0,
+      "repository_filesystem_available_bytes": 1017741742080,
+      "simulator_processes_running": false,
+      "source_command": "free -b and df -B1"
+    },
+    "comparison_limit": "Run durations and resource sampling differ. Treat values as capacity observations, not a controlled benchmark ranking."
+  },
+  "historical_failures_preserved": [
+    "docs/evidence/phase8c/lidar/stage1-rotation-trials.json",
+    "docs/evidence/phase8c/lidar/stage2-s00-stationary-slam-tuned.log",
+    "docs/evidence/phase8c/lidar/stage2-s00-stationary-slam-tuned-launch.log"
+  ],
+  "github_issue_review": {
+    "result": "gh issue list returned no issues",
+    "new_issue_created": false
+  }
+}

@@ -1,0 +1,129 @@
+AUTONOMOUS NAVIGATION CAR - STANDALONE TEST RUN
+========================================================
+Overall status: FAIL
+Reason: one or more tests failed
+Run ID: 20261102T190244Z_S00_658ed5b4
+Started (UTC): 2026-11-02T19:02:55Z
+Finished (UTC): 2026-11-02T19:04:18Z
+Execution mode: FULL
+Scenario / seed: S00 / 101
+Project branch: feature/phase8c-lidar
+Project commit: 567ac430544fe7fb945f8fb9c7aac4f47e779804
+Project path: /home/ashish/AutonomousNavigationCar
+
+Machine and resource summary
+----------------------------
+Windows total / available RAM at final sample: 7521 / 3758 MiB
+Minimum Windows available RAM during sampling: 1937 MiB
+Windows memory load / CPU: 50% / 24%
+WSL available RAM / swap used: 3035 / 0 MiB
+GPU: command=nvidia-smi --query-gpu=name,memory.total,memory.free --format=csv,noheader
+exit_code=0
+NVIDIA GeForce GTX 1650, 4096 MiB, 3935 MiB
+Windows run-volume free space: 35554 MiB
+
+Test outcomes
+----------------------------
+PASS=12 FAIL=3 BLOCKED=6 TIMEOUT=0 SKIPPED=2 NOT TESTED=0
+- additional_fault_injection: SKIPPED - disabled by safe defaults
+- environment: PASS - ROS 2 Jazzy, Gazebo, project workspace and required packages verified
+- lidar_sensors: PASS - live sensor checks passed
+- map_save: FAIL - YAML/PGM map evidence missing
+- moving_slam_trial_1: BLOCKED - live safety/guard did not explicitly authorize motion
+  trial_id: 20261102T190244Z_S00_658ed5b4-S00-moving-1
+- moving_slam_trial_2: BLOCKED - live safety/guard did not explicitly authorize motion
+  trial_id: 20261102T190244Z_S00_658ed5b4-S00-moving-2
+- moving_slam_trial_3: BLOCKED - live safety/guard did not explicitly authorize motion
+  trial_id: 20261102T190244Z_S00_658ed5b4-S00-moving-3
+- nav2: BLOCKED - evidence-backed readiness is not READY
+- offline_common_infrastructure_test: PASS - existing offline pytest (no simulator/motion)
+- offline_lidar_model_test: PASS - existing offline pytest (no simulator/motion)
+- offline_nav2_config_test: PASS - existing offline pytest (no simulator/motion)
+- offline_nav2_runner_test: PASS - existing offline pytest (no simulator/motion)
+- offline_readiness_test: PASS - existing offline pytest (no simulator/motion)
+- offline_tests: PASS - all selected offline tests passed
+- production_turning: SKIPPED - production turning remains disabled; no angular request
+- readiness: BLOCKED - BLOCKED	production_turning_verified:evidence_reference_missing; moving_slam_verified:evidence_reference_missing; moving_slam_verified:three_distinct_moving_trials_required; guarded_command_chain_verified:evidence_reference_missing; guarded_command_chain_verified:at_least_one_S00_navigation_trial_required
+- readiness_after_trials: BLOCKED - readiness validator: BLOCKED	production_turning_verified:evidence_reference_missing; moving_slam_verified:evidence_reference_missing; moving_slam_verified:three_distinct_moving_trials_required; guarded_command_chain_verified:evidence_reference_missing; guarded_command_chain_verified:at_least_one_S00_navigation_trial_required
+- resource_gate: PASS - RAM thresholds met
+- rgb_camera_pair: FAIL - camera pair evidence missing or >100 ms
+- session_safety: PASS - no existing matching simulation session
+- simulation_cleanup: PASS - test-owned launcher stopped by SIGINT
+- stationary_slam: PASS - stationary no-command SLAM diagnostic passed
+- turning_clearance_probe: FAIL - expected denial evidence missing
+
+Observed sensor and SLAM measurements
+----------------------------
+LiDAR messages / measured wall rate: 47 / 5.03281356259074 Hz
+Camera frames: 47
+Filtered odometry messages: 278
+Stationary SLAM: {"diagnostic_pass": true, "error": null, "map_messages": 6, "map_snapshot": {"frame_id": "map", "free_cells": 1491, "height": 115, "occupied_cells": 10, "resolution_m": 0.05000000074505806, "sim_stamp_s": 35.6, "unknown_cells": 16324, "width": 155}, "map_to_odom_tf_messages": 404, "scan_messages": 96, "slam_pose_messages": 0}
+Bounded moving-SLAM trials:
+  {"reason": "live safety/guard did not explicitly authorize motion", "slam_relative_displacement_error_m": null, "slam_relative_yaw_error_rad": null, "status": "BLOCKED", "trial_id": "20261102T190244Z_S00_658ed5b4-S00-moving-1", "truth_forward_displacement_m": null}
+  {"reason": "live safety/guard did not explicitly authorize motion", "slam_relative_displacement_error_m": null, "slam_relative_yaw_error_rad": null, "status": "BLOCKED", "trial_id": "20261102T190244Z_S00_658ed5b4-S00-moving-2", "truth_forward_displacement_m": null}
+  {"reason": "live safety/guard did not explicitly authorize motion", "slam_relative_displacement_error_m": null, "slam_relative_yaw_error_rad": null, "status": "BLOCKED", "trial_id": "20261102T190244Z_S00_658ed5b4-S00-moving-3", "truth_forward_displacement_m": null}
+Nav2 result: BLOCKED
+Nav2 measured detail: {"nav2_launched": false}
+
+Warnings and cleanup
+----------------------------
+Cleanup: PASS - SIGINT only; no WSL shutdown or broad process termination
+Notes: none
+
+Evidence files
+----------------------------
+Run directory: C:\Users\ajayk\Desktop\AutonomousCar_OneClick_Tester\runs\20261102T190244Z_S00_658ed5b4
+WSL run path: /mnt/c/Users/ajayk/Desktop/AutonomousCar_OneClick_Tester/runs/20261102T190244Z_S00_658ed5b4
+- tests/additional_fault_injection/result.json
+- tests/additional_fault_injection/output.log
+- tests/environment/result.json
+- tests/environment/output.log
+- tests/lidar_sensors/result.json
+- tests/lidar_sensors/output.log
+- tests/map_save/result.json
+- tests/map_save/output.log
+- tests/moving_slam_trial_1/result.json
+- tests/moving_slam_trial_1/output.log
+- tests/moving_slam_trial_2/result.json
+- tests/moving_slam_trial_2/output.log
+- tests/moving_slam_trial_3/result.json
+- tests/moving_slam_trial_3/output.log
+- tests/nav2/result.json
+- tests/nav2/output.log
+- tests/offline_common_infrastructure_test/result.json
+- tests/offline_common_infrastructure_test/output.log
+- tests/offline_lidar_model_test/result.json
+- tests/offline_lidar_model_test/output.log
+- tests/offline_nav2_config_test/result.json
+- tests/offline_nav2_config_test/output.log
+- tests/offline_nav2_runner_test/result.json
+- tests/offline_nav2_runner_test/output.log
+- tests/offline_readiness_test/result.json
+- tests/offline_readiness_test/output.log
+- tests/offline_tests/result.json
+- tests/offline_tests/output.log
+- tests/production_turning/result.json
+- tests/production_turning/output.log
+- tests/readiness/result.json
+- tests/readiness/output.log
+- tests/readiness_after_trials/result.json
+- tests/readiness_after_trials/output.log
+- tests/resource_gate/result.json
+- tests/resource_gate/output.log
+- tests/rgb_camera_pair/result.json
+- tests/rgb_camera_pair/output.log
+- tests/session_safety/result.json
+- tests/session_safety/output.log
+- tests/simulation_cleanup/result.json
+- tests/simulation_cleanup/output.log
+- tests/stationary_slam/result.json
+- tests/stationary_slam/output.log
+- tests/turning_clearance_probe/result.json
+- tests/turning_clearance_probe/output.log
+
+Interpretation
+----------------------------
+A command exit code or successful node launch is not proof of movement, SLAM quality, or autonomous navigation.
+Moving SLAM is reported only from the bounded forward trials and their sensor/pose evidence.
+Phase 6 predefined-map navigation is not part of this run.
+Recommended next action: inspect the listed failing or skipped test logs before changing navigation code.

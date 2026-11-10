@@ -1,0 +1,349 @@
+{
+  "aggregate_metrics": {
+    "camera_sim_timestamp_age_s": {
+      "count": 46,
+      "max": 0.066,
+      "p50": 0.02,
+      "p95": 0.027
+    },
+    "camera_wall_age_s": {
+      "count": 46,
+      "max": 0.0,
+      "p50": 0.0,
+      "p95": 0.0
+    },
+    "false_free_rate_on_known_occupied": 0.0,
+    "measured_wall_fps": {
+      "count": 46,
+      "median": 14.4,
+      "min": 0.0,
+      "p10": 13.9245
+    },
+    "occupied_precision": 1.0,
+    "occupied_recall": 0.8435011854630383,
+    "pixel_totals": {
+      "false_free": 0,
+      "gt_free": 60800,
+      "gt_occupied": 56518,
+      "pred_free": 54524,
+      "pred_occupied": 47673,
+      "pred_unknown": 51403,
+      "total_px": 153600,
+      "tp_free": 54524,
+      "tp_occupied": 47673
+    },
+    "processing_latency_ms": {
+      "count": 46,
+      "max": 180.43,
+      "p50": 13.73,
+      "p95": 22.633249999999997
+    },
+    "unknown_coverage_total": 0.33465494791666667,
+    "useful_free_coverage_on_known_floor": 0.8967763157894737
+  },
+  "assessment": "PENDING_SENSOR_FAULT_TEST_AND_FINAL_REVIEW",
+  "extra_challenge": "P7C1 derives from S01 seed 101, uses a floor-like gray unnamed box at a clear viewpoint; the existing directional light casts shadows.",
+  "forbidden_runtime_data": [
+    "/odom",
+    "/imu/data",
+    "/map",
+    "/depth",
+    "/scan",
+    "/gzserver/get_entity_state",
+    "scenario manifests"
+  ],
+  "phase": 7,
+  "profile": "REALISTIC_RGB_ONLY",
+  "resource_observation": {
+    "disk_bytes_added": 307200,
+    "disk_free_after_bytes": 1018378752000,
+    "disk_free_before_bytes": 1018379059200,
+    "free_memory_after": "               total        used        free      shared  buff/cache   available\nMem:           3.5Gi       719Mi       2.1Gi        53Mi       892Mi       2.8Gi\nSwap:          1.0Gi          0B       1.0Gi\n",
+    "process_rss_sampled": [
+      {
+        "command": "/opt/ros/jazzy/lib/ros_gz_sim/gzserver --ros-args --params-file /tmp/launch_params_e75_x_9d ",
+        "pid": 47380,
+        "rss_kib": 500092
+      },
+      {
+        "command": "/usr/bin/python3 /home/ashish/AutonomousNavigationCar/simulation/ros2_ws/install/anc_perception/lib/anc_perception/rgb_perception_node --ros-args -r __node:=anc_rgb_perception --pa",
+        "pid": 47387,
+        "rss_kib": 180732
+      },
+      {
+        "command": "/opt/ros/jazzy/lib/ros_gz_sim/gzserver --ros-args --params-file /tmp/launch_params_e75_x_9d ",
+        "pid": 47380,
+        "rss_kib": 500092
+      },
+      {
+        "command": "/usr/bin/python3 /home/ashish/AutonomousNavigationCar/simulation/ros2_ws/install/anc_perception/lib/anc_perception/rgb_perception_node --ros-args -r __node:=anc_rgb_perception --pa",
+        "pid": 47387,
+        "rss_kib": 180700
+      }
+    ]
+  },
+  "runtime_inputs_to_anc_perception": [
+    "/camera/image_raw",
+    "/camera/camera_info",
+    "/clock"
+  ],
+  "runtime_outputs": [
+    "/perception/image_mask",
+    "/perception/confidence",
+    "/perception/overlay",
+    "/perception/health"
+  ],
+  "sample_count": 2,
+  "scenario_cases": [
+    {
+      "camera_header_timing": {
+        "count": 47,
+        "max_interval_s": 0.068,
+        "median_interval_s": 0.066,
+        "rate_hz": 15.15151515151515
+      },
+      "case_id": "s00-seed101-rgb-only",
+      "clock_timing": {
+        "count": 2664,
+        "max_interval_s": 1.379999999999999e-10,
+        "median_interval_s": 2.0000000000000016e-12,
+        "rate_hz": 499999999999.99963
+      },
+      "elapsed_wall_s": 13.465,
+      "health_sample_count": 56,
+      "launch_command": [
+        "ros2",
+        "launch",
+        "anc_perception",
+        "realistic_perception.launch.py",
+        "world_file:=/home/ashish/AutonomousNavigationCar/docs/evidence/phase7/dataset/pilot-s00-finalcheck/s00-seed101-rgb-only/world.sdf",
+        "start_x:=0.000000",
+        "start_y:=0.000000",
+        "start_yaw:=0.000000"
+      ],
+      "limitations": [],
+      "perception_node_input_contract_passed": true,
+      "run_directory": "docs/evidence/phase7/dataset/pilot-s00-finalcheck/s00-seed101-rgb-only",
+      "sample_count": 2,
+      "samples": [
+        {
+          "base_phase5_scenario": "S00",
+          "health": {
+            "camera_forward_offset_assumption_m": 0.1,
+            "camera_height_assumption_m": 0.18,
+            "camera_info_stamp_s": 3.5,
+            "camera_pitch_down_assumption_rad": 0.0,
+            "camera_sim_age_s": 0.016,
+            "camera_wall_age_s": 0.0,
+            "clock_use": "timestamp-age only; not a geometric sensor",
+            "counts": {
+              "floor_seed_px": 3072,
+              "free_px": 26761,
+              "ground_band_px": 29760,
+              "occupied_px": 24000,
+              "total_px": 76800,
+              "unknown_px": 26039
+            },
+            "floor_color_threshold_lab_weighted": 12.0,
+            "floor_reference_lab": [
+              171.0,
+              128.0,
+              128.0
+            ],
+            "floor_seed_gradient_threshold": 22.0,
+            "forbidden_inputs": [
+              "odometry",
+              "IMU",
+              "Gazebo entity state",
+              "depth",
+              "oracle map",
+              "scenario geometry"
+            ],
+            "ground_projection_valid_forward_band_m": [
+              0.4,
+              2.0
+            ],
+            "image_stamp_s": 3.5,
+            "input_topics": [
+              "/camera/image_raw",
+              "/camera/camera_info",
+              "/clock"
+            ],
+            "intrinsics": {
+              "cx_px": 160.0,
+              "cy_px": 120.0,
+              "fx_px": 277.1281433105469,
+              "fy_px": 277.12815284729004
+            },
+            "mask_encoding": "mono8: FREE=0, OCCUPIED=100, UNKNOWN=255",
+            "measured_wall_fps": 14.438,
+            "node": "anc_rgb_perception",
+            "processed_frames": 15,
+            "processing_latency_ms": 14.413,
+            "profile": "REALISTIC_RGB_ONLY",
+            "reason": "ok",
+            "status": "VALID",
+            "unknown_confidence_value": 0,
+            "valid": true
+          },
+          "metrics": {
+            "evaluator_truth_counts_px": {
+              "free": 30400,
+              "occupied": 28480,
+              "unknown": 17920
+            },
+            "false_free_px_on_known_occupied": 0,
+            "false_free_rate_on_known_occupied": 0.0,
+            "known_truth_classification_coverage": 0.862109375,
+            "known_truth_px": 58880,
+            "occupied_precision": 1.0,
+            "occupied_recall": 0.8426966292134831,
+            "prediction_counts_px": {
+              "free": 26761,
+              "occupied": 24000,
+              "total": 76800,
+              "unknown": 26039
+            },
+            "true_free_px": 26761,
+            "true_occupied_px": 24000,
+            "unknown_coverage_total": 0.33904947916666667,
+            "useful_free_coverage_on_known_floor": 0.880296052631579
+          },
+          "process_rss_snapshot": [
+            {
+              "command": "/opt/ros/jazzy/lib/ros_gz_sim/gzserver --ros-args --params-file /tmp/launch_params_e75_x_9d ",
+              "pid": 47380,
+              "rss_kib": 500092
+            },
+            {
+              "command": "/usr/bin/python3 /home/ashish/AutonomousNavigationCar/simulation/ros2_ws/install/anc_perception/lib/anc_perception/rgb_perception_node --ros-args -r __node:=anc_rgb_perception --pa",
+              "pid": 47387,
+              "rss_kib": 180732
+            }
+          ],
+          "sample_dir": "docs/evidence/phase7/dataset/pilot-s00-finalcheck/s00-seed101-rgb-only/view_start",
+          "scenario_id": "S00",
+          "seed": 101,
+          "truth_query_time_minus_image_stamp_s": 0.05400000000000027,
+          "viewpoint_id": "view_start"
+        },
+        {
+          "base_phase5_scenario": "S00",
+          "health": {
+            "camera_forward_offset_assumption_m": 0.1,
+            "camera_height_assumption_m": 0.18,
+            "camera_info_stamp_s": 5.546,
+            "camera_pitch_down_assumption_rad": 0.0,
+            "camera_sim_age_s": 0.016,
+            "camera_wall_age_s": 0.0,
+            "clock_use": "timestamp-age only; not a geometric sensor",
+            "counts": {
+              "floor_seed_px": 3072,
+              "free_px": 27763,
+              "ground_band_px": 29760,
+              "occupied_px": 23673,
+              "total_px": 76800,
+              "unknown_px": 25364
+            },
+            "floor_color_threshold_lab_weighted": 12.0,
+            "floor_reference_lab": [
+              171.0,
+              128.0,
+              128.0
+            ],
+            "floor_seed_gradient_threshold": 22.0,
+            "forbidden_inputs": [
+              "odometry",
+              "IMU",
+              "Gazebo entity state",
+              "depth",
+              "oracle map",
+              "scenario geometry"
+            ],
+            "ground_projection_valid_forward_band_m": [
+              0.4,
+              2.0
+            ],
+            "image_stamp_s": 5.546,
+            "input_topics": [
+              "/camera/image_raw",
+              "/camera/camera_info",
+              "/clock"
+            ],
+            "intrinsics": {
+              "cx_px": 160.0,
+              "cy_px": 120.0,
+              "fx_px": 277.1281433105469,
+              "fy_px": 277.12815284729004
+            },
+            "mask_encoding": "mono8: FREE=0, OCCUPIED=100, UNKNOWN=255",
+            "measured_wall_fps": 14.668,
+            "node": "anc_rgb_perception",
+            "processed_frames": 46,
+            "processing_latency_ms": 10.1,
+            "profile": "REALISTIC_RGB_ONLY",
+            "reason": "ok",
+            "status": "VALID",
+            "unknown_confidence_value": 0,
+            "valid": true
+          },
+          "metrics": {
+            "evaluator_truth_counts_px": {
+              "free": 30400,
+              "occupied": 28038,
+              "unknown": 18362
+            },
+            "false_free_px_on_known_occupied": 0,
+            "false_free_rate_on_known_occupied": 0.0,
+            "known_truth_classification_coverage": 0.8801807043362195,
+            "known_truth_px": 58438,
+            "occupied_precision": 1.0,
+            "occupied_recall": 0.8443184249946502,
+            "prediction_counts_px": {
+              "free": 27763,
+              "occupied": 23673,
+              "total": 76800,
+              "unknown": 25364
+            },
+            "true_free_px": 27763,
+            "true_occupied_px": 23673,
+            "unknown_coverage_total": 0.33026041666666667,
+            "useful_free_coverage_on_known_floor": 0.9132565789473684
+          },
+          "process_rss_snapshot": [
+            {
+              "command": "/opt/ros/jazzy/lib/ros_gz_sim/gzserver --ros-args --params-file /tmp/launch_params_e75_x_9d ",
+              "pid": 47380,
+              "rss_kib": 500092
+            },
+            {
+              "command": "/usr/bin/python3 /home/ashish/AutonomousNavigationCar/simulation/ros2_ws/install/anc_perception/lib/anc_perception/rgb_perception_node --ros-args -r __node:=anc_rgb_perception --pa",
+              "pid": 47387,
+              "rss_kib": 180700
+            }
+          ],
+          "sample_dir": "docs/evidence/phase7/dataset/pilot-s00-finalcheck/s00-seed101-rgb-only/view_turned",
+          "scenario_id": "S00",
+          "seed": 101,
+          "truth_query_time_minus_image_stamp_s": 0.0699999999999994,
+          "viewpoint_id": "view_turned"
+        }
+      ],
+      "scenario_id": "S00",
+      "seed": 101,
+      "shutdown": {
+        "forced": false,
+        "group_gone": true,
+        "returncode": 0,
+        "signal": "SIGINT"
+      },
+      "start_xyyaw": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "status": "PASS"
+    }
+  ],
+  "source_commit": "17999c4e34bc144640d1e680e4b459fae64c95f7"
+}

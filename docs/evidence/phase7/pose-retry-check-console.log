@@ -1,0 +1,60 @@
+START s03-seed101-rgb-only
+{"case_id": "s03-seed101-rgb-only", "error": null, "samples": 2, "shutdown": {"forced": false, "group_gone": true, "returncode": 0, "signal": "SIGINT"}, "status": "PASS"}
+START p7c1-seed101-rgb-only
+{"case_id": "p7c1-seed101-rgb-only", "error": null, "samples": 2, "shutdown": {"forced": false, "group_gone": true, "returncode": 0, "signal": "SIGINT"}, "status": "PASS"}
+{
+  "sample_count": 4,
+  "scenario_statuses": [
+    [
+      "s03-seed101-rgb-only",
+      "PASS"
+    ],
+    [
+      "p7c1-seed101-rgb-only",
+      "PASS"
+    ]
+  ],
+  "aggregate_metrics": {
+    "pixel_totals": {
+      "pred_free": 12800,
+      "pred_occupied": 0,
+      "pred_unknown": 294400,
+      "gt_free": 17213,
+      "gt_occupied": 217566,
+      "tp_free": 0,
+      "tp_occupied": 0,
+      "false_free": 0,
+      "total_px": 307200
+    },
+    "false_free_rate_on_known_occupied": 0.0,
+    "occupied_precision": null,
+    "occupied_recall": 0.0,
+    "useful_free_coverage_on_known_floor": 0.0,
+    "unknown_coverage_total": 0.9583333333333334,
+    "processing_latency_ms": {
+      "count": 49,
+      "p50": 10.029,
+      "p95": 19.843199999999975,
+      "max": 360.411
+    },
+    "measured_wall_fps": {
+      "count": 49,
+      "p10": 11.457600000000001,
+      "median": 14.105,
+      "min": 0.0
+    },
+    "camera_sim_timestamp_age_s": {
+      "count": 49,
+      "p50": 0.018,
+      "p95": 0.08759999999999979,
+      "max": 0.204
+    },
+    "camera_wall_age_s": {
+      "count": 49,
+      "p50": 0.0,
+      "p95": 0.0,
+      "max": 0.0
+    }
+  },
+  "report": "/home/ashish/AutonomousNavigationCar/docs/evidence/phase7/dataset/pose-retry-check/dataset-results.json"
+}

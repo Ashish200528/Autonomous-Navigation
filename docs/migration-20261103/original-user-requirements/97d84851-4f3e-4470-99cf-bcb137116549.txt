@@ -1,0 +1,768 @@
+# AUTONOMOUS NAVIGATION CAR — CONTINUE AND COMPLETE REALISTIC RGB + LIDAR AUTONOMY
+
+## PRIMARY MISSION
+
+Continue my existing Autonomous Navigation Car project using ROS 2 Jazzy and Gazebo Harmonic.
+
+I have already visually observed the predefined-map Phase 6 navigation system working. **Do not spend another development iteration on that reference navigation demonstration.**
+
+The next goal is to make the car autonomously navigate using its own simulated RGB camera, 2D LiDAR, wheel odometry and IMU measurements.
+
+I want the robot to start in an environment without being handed a predefined obstacle map, build its own map, estimate its own pose, turn, move, detect obstacles, plan paths and reach navigation goals.
+
+Then extend that capability to obstacle avoidance, replanning, autonomous exploration where necessary, and parking.
+
+**Complete as much of the entire remaining LiDAR navigation track as technically possible in one continuous Work assignment.**
+
+Do not repeatedly ask me for the next development-phase prompt. Perform implementation, integration, testing, debugging and evidence collection autonomously.
+
+However, do not bypass safety conditions, fabricate success, or report an untested system as working.
+
+---
+
+# 1. Project information
+
+Repository:
+https://github.com/Ashish200528/Autonomous-Navigation
+
+WSL project:
+`/home/ashish/AutonomousNavigationCar`
+
+Primary development branch:
+`feature/phase8c-lidar`
+
+Last reviewed GitHub HEAD:
+`5161a89ad7f5b21a7c8e30b903d34eefec705f2b`
+
+Use the actual latest commit after checking the local and remote repositories.
+
+Environment:
+
+- Windows 11
+- WSL2 Ubuntu 24.04
+- ROS 2 Jazzy
+- Gazebo Harmonic
+- Nav2
+- SLAM Toolbox
+- robot_localization
+- 8 GB physical Windows RAM
+- Approximately 3.5 GiB WSL memory limit
+- NVIDIA GTX 1650
+
+Existing Windows BAT launchers are installed for visual demonstrations.
+
+Preserve them and preserve the working Phase 6 reference navigation functionality.
+
+Do not modify the existing Arduino UNO Q application, install hardware firmware, purchase components or perform physical motor operations.
+
+---
+
+# 2. Current status and blockers
+
+First inspect all current implementation, documentation, test evidence and recent commit changes.
+
+Especially review:
+
+- `docs/phase8c-stage-results.md`
+- `docs/phase8c-stage9-report.md`
+- `docs/PHASE_REPORT.md`
+- `docs/issues.md`
+- `docs/windows-gazebo-demo-report.md`
+- `docs/phase8c-architecture.md`
+- `config/phase8c_demo_readiness.json`
+- `simulation/ros2_ws/src/anc_lidar/`
+- `simulation/ros2_ws/src/anc_navigation_common/`
+- `scripts/phase8c_navigation_runner.py`
+- `scripts/run_lidar_demo.sh`
+
+Previously demonstrated:
+
+1. Working simulated 360° 2D LiDAR.
+2. Valid LaserScan data at approximately 4.94 Hz.
+3. Robot-relative LiDAR occupancy maps.
+4. RGB perception and conservative sensor fusion.
+5. Short forward-motion trials at 0.05 m/s.
+6. Selected fault-injection stopping tests.
+7. Six short pure-rotation calibration trials.
+8. Swept-footprint rotational clearance checks.
+9. Stationary SLAM map generation.
+10. Nav2 launch/configuration and offline tests.
+11. Windows GUI demonstration launchers.
+
+Critical limitations:
+
+- Production turning is still disabled.
+- Combined linear/angular movement is not validated.
+- Moving SLAM localization remains unverified.
+- Low-friction wheel slip creates significant odometry uncertainty.
+- The Nav2 readiness gate is currently BLOCKED.
+- No successful realistic LiDAR Nav2 goal has been demonstrated.
+- Obstacle avoidance and replanning remain unverified.
+- Parking has unit tests but no live Gazebo execution.
+- GUI and Windows host RAM pressure require attention.
+
+**This assignment must directly resolve these blockers, rather than only documenting them again.**
+
+---
+
+# 3. Define the required final operating mode
+
+Implement and validate a profile named:
+
+**REALISTIC_RGB_LIDAR_AUTONOMOUS**
+
+Use the existing profile naming conventions where practical.
+
+The robot must use:
+
+- Actual simulated RGB images.
+- CameraInfo.
+- Physically modeled simulated 2D LiDAR measurements.
+- Wheel odometry.
+- Sanitized IMU.
+- Sensor-derived local/global maps.
+- Online localization and TF.
+- ROS 2 Nav2.
+- The existing authoritative safety command guard.
+
+The target operating behavior is:
+
+**Unknown environment → scan surroundings → build a map → localize → select a safe route → move and turn → avoid obstacles → reach the requested goal → stop or park.**
+
+A predefined occupancy map generated from Gazebo world geometry must not be supplied to realistic navigation.
+
+Gazebo ground truth may be used only by independent test evaluators for measuring actual position, collision and performance.
+
+Known-start initialization is acceptable for the first controlled experiment if explicitly labeled and implemented without continuous ground-truth correction.
+
+Unknown-start localization must be evaluated separately.
+
+Do not confuse a known-start goal coordinate with a predefined obstacle map.
+
+---
+
+# 4. FIRST — Fix runtime resources and establish reliable headless operation
+
+The previous agent encountered low Windows host memory, sometimes below 1 GiB available.
+
+Do not assume that giving WSL more RAM will solve this. First investigate the actual Windows/WSL memory situation.
+
+Tasks:
+
+1. Inspect current Windows and WSL available RAM.
+2. Inspect relevant process memory usage and CPU load.
+3. Determine whether old Gazebo, RViz, ROS or simulation processes remain running.
+4. Gracefully shut down stale project-owned processes.
+5. Avoid terminating unrelated Windows applications, active Work sessions or unsaved work.
+6. Check the existing WSL configuration.
+7. Evaluate whether 4–4.5 GB WSL memory or additional swap would be useful, considering the 8 GB host limit.
+8. Do not increase WSL memory if Windows is already under significant memory pressure.
+9. Avoid disruptive WSL restarts without checking other sessions and obtaining any necessary approval.
+10. Run core tests headlessly before opening Gazebo GUI or RViz.
+11. Measure scan rates, real-time factor and localization update rates under actual load.
+12. Optimize launch composition and ROS processing if necessary.
+
+Prefer making the headless system stable and efficient rather than weakening a memory check.
+
+Separate three operating modes:
+
+- Lightweight headless development and testing.
+- Gazebo-only graphical demonstration.
+- Gazebo + RViz visual inspection when resources allow.
+
+If the GUI is too heavy, this must not prevent progress on headless navigation development.
+
+---
+
+# 5. SECOND — Make production-safe turning work
+
+The robot has successfully performed calibration-only rotation but cannot yet use rotation during normal navigation.
+
+This is the first major motion blocker.
+
+Investigate:
+
+- Differential-drive wheel response.
+- Actual yaw rate versus requested yaw rate.
+- Rotation stopping angle.
+- Residual movement after stop.
+- Center drift.
+- Wheel slip.
+- Motor command latency.
+- Sensor delay.
+- Controller cycle time.
+- Footprint clearance.
+- Obstacle uncertainty.
+
+Implement a measured, conservative rotational stopping model.
+
+Use actual simulated movement and evaluator-only truth to establish the stopping envelope.
+
+Test:
+
+- Clockwise rotation.
+- Anticlockwise rotation.
+- Several low angular velocities.
+- Repeated turns.
+- Extended rotation.
+- Near-wall clearance.
+- Near-box clearance.
+- Narrow-passage clearance.
+- Normal and low-friction conditions.
+- LiDAR loss while turning.
+- Localization loss while turning.
+- Command timeout.
+- Unknown occupied cells in the swept region.
+
+Implement a production rotation safety gate based on validated evidence.
+
+Do not simply change the angular speed cap to a nonzero number.
+
+Keep the existing calibration-only mode distinct.
+
+After pure turning passes, evaluate combined linear/angular movement with conservative limits.
+
+If combined movement is not yet safe, investigate whether sequential rotate-then-drive motion can provide a valid initial navigation capability without compromising safety.
+
+**Required evidence:** The robot actually turns safely in Gazebo, stops within measured bounds, and refuses turns when required clearance is unavailable.
+
+---
+
+# 6. THIRD — Establish moving online SLAM and localization
+
+The existing SLAM Toolbox configuration generated a stationary map, but moving localization remains unverified.
+
+This is the second major blocker.
+
+Perform a focused investigation of:
+
+- `map → odom → base_footprint → base_link`.
+- TF publishers and frame consistency.
+- Scan matching.
+- Wheel/IMU EKF quality.
+- Sensor timestamp alignment.
+- DDS/QoS behavior.
+- Message-filter drops.
+- Scan-queue overflow.
+- CPU scheduling.
+- Real-time factor.
+- Map update frequency.
+- Localization covariance.
+- Slip-related odometry drift.
+
+Run the smallest valid moving-SLAM experiment first.
+
+Do not require the full Nav2 navigation stack merely to test moving SLAM.
+
+Use independently bounded, guarded movement tests to generate legitimate sensor observations while evaluating localization.
+
+Suggested progression:
+
+1. Stationary map stability.
+2. Short straight trajectory.
+3. Pure rotation.
+4. Straight-and-turn sequence.
+5. Return-to-start.
+6. Simple closed-loop trajectory.
+7. Obstacle-rich localization.
+8. Low-friction and slip tests.
+
+For each run, record:
+
+- Actual Gazebo evaluator trajectory.
+- Estimated SLAM/EKF trajectory.
+- Position error.
+- Heading error.
+- Drift over distance.
+- Map updates.
+- Scan rate.
+- TF timing.
+- Lost-scan events.
+- CPU and memory use.
+
+Determine whether scan matching actually improves localization during wheel slip.
+
+Do not substitute perfect Gazebo pose for the estimator.
+
+Do not reduce uncertainty values merely to make the navigation gate pass.
+
+If moving SLAM fails, debug and correct its measurable cause. Preserve failed trials and perform bounded retries.
+
+**Acceptance:** A repeatable moving robot trajectory with a valid sensor-built map and quantified localization error.
+
+---
+
+# 7. FOURTH — Validate the complete guarded Nav2 command chain
+
+The current software includes a proposed Nav2 pipeline:
+
+Nav2 controller
+
+→ Velocity smoother
+
+→ Collision monitor
+
+→ Safety guard
+
+→ `/cmd_vel`
+
+→ Robot.
+
+However, its live execution has not been demonstrated.
+
+Validate:
+
+1. Nav2 lifecycle activation.
+2. Planner and controller availability.
+3. Correct map and TF availability.
+4. Valid localization.
+5. Global and local costmap updates.
+6. Live LaserScan obstacle marking and clearing.
+7. Unknown-cell handling.
+8. Velocity topic routing.
+9. Exactly one authoritative `/cmd_vel` publisher.
+10. Motion limits and acceleration limits.
+11. Obstacle inflation and robot footprint.
+12. Correct stop behavior on missing inputs.
+13. No unintended command bypass through recovery behaviors.
+
+Run a live publisher and command-graph audit rather than relying only on static YAML checks.
+
+The existing readiness file currently has false prerequisite flags.
+
+**Do not manually change them to true.**
+
+Improve readiness handling so every prerequisite is backed by an actual passing test result, including measured behavior and valid evidence contents—not merely the existence of an evidence file.
+
+Each prerequisite should be independently verifiable.
+
+Do not use the global blocked Nav2 gate as a reason to avoid running the independent calibration and moving-SLAM tests needed to satisfy it.
+
+---
+
+# 8. FIFTH — Demonstrate the first true LiDAR-only-map autonomous goal
+
+This is the most important milestone of the assignment.
+
+### Required S00 experiment
+
+Start in S00 using the realistic RGB + LiDAR profile.
+
+Do not load the Phase 6 reference occupancy map.
+
+The robot must:
+
+1. Start from a documented initial position.
+2. Observe its surroundings.
+3. Build a map using LiDAR measurements.
+4. Estimate its pose.
+5. Receive a goal.
+6. Generate a valid path using its sensor-built map.
+7. Begin movement through the safety guard.
+8. Turn when necessary.
+9. Drive toward the goal.
+10. Arrive and stop.
+
+Measure:
+
+- Actual robot displacement.
+- Nav2 action status.
+- Final XY error.
+- Heading error.
+- Path length.
+- Elapsed simulation time.
+- Minimum obstacle clearance.
+- Collision/contact events.
+- Moving localization error.
+- Sensor freshness.
+- CPU/RAM usage.
+
+For the initial navigation acceptance, target final XY error no worse than 0.30 m, with a separately stated heading tolerance and no non-ground collisions.
+
+Require nontrivial actual movement.
+
+A successful action response without corresponding physical movement is not PASS.
+
+A robot moving under the predefined Phase 6 map does not count.
+
+**Do not declare this milestone complete until there is a real, measurable, sensor-derived S00 goal-reaching trial.**
+
+---
+
+# 9. SIXTH — Autonomous obstacle avoidance and navigation
+
+After S00 passes, proceed to the actual obstacle environments.
+
+### S01 — Box blocking the direct route
+
+Demonstrate that the robot:
+
+- Detects the box using LiDAR.
+- Marks its location in the sensor-derived map.
+- Recognizes that the direct route is blocked.
+- Plans a valid alternative path.
+- Turns around the obstacle with safe clearance.
+- Drives to the destination.
+- Stops without collision.
+
+### S02 — Randomized obstacles
+
+Test seeds 101, 202 and 303.
+
+Measure success rates, path lengths and obstacle clearances.
+
+### S03 — Narrow corridors
+
+Verify that the full robot footprint can pass, including conservative margins.
+
+Stop or reject the path when clearance is inadequate.
+
+### S04 — Different starting positions
+
+Test known-start localization and navigation from varying start poses.
+
+### S09 — No route
+
+Require a correctly bounded failure or safe stop.
+
+Do not claim full global no-route proof if the system has only observed part of the environment.
+
+### Dynamic obstacles
+
+Where practical, extend the existing simulator test scenarios to include moving obstacles and temporary blockages.
+
+Use actual simulated LiDAR observations rather than passing obstacle coordinates directly into navigation.
+
+Test safe stopping, costmap updates and replanning.
+
+Preserve UNKNOWN space and the 2D LiDAR's known blind spots.
+
+---
+
+# 10. SEVENTH — Add exploration for initially unknown environments
+
+My eventual goal is not just to build a map while driving to a previously known goal.
+
+I also want the robot to operate in an environment whose geometry it has not seen before.
+
+After basic online SLAM and Nav2 goal navigation are working, evaluate an exploration behavior.
+
+A possible approach is frontier-based exploration using sensor-built occupancy maps.
+
+Implement only if it fits the existing ROS architecture and resource budget.
+
+The robot should be able to:
+
+1. Identify boundaries between known FREE and UNKNOWN space.
+2. Evaluate reachable, safely observed exploration targets.
+3. Navigate toward appropriate frontier locations.
+4. Update its map.
+5. Repeat with bounded time and travel limits.
+6. Stop safely if exploration becomes impossible.
+7. Navigate to a user-specified destination once a safe route is known.
+
+Do not treat unknown space as free space to force exploration.
+
+Keep exploration as a separate mode from normal NavigateToPose goal execution.
+
+Use no predefined scenario obstacle layout in runtime navigation.
+
+Evaluate map completeness and explored area using evaluator-only geometry.
+
+If exploration cannot be completed safely in this assignment, preserve its incomplete status without delaying validation of basic S00 and S01 goal navigation.
+
+---
+
+# 11. EIGHTH — Connect and validate autonomous parking
+
+The project already has a non-authoritative parking proposal module with passing unit tests.
+
+Use it as the starting point.
+
+Only integrate live parking once production motion and localization are sufficiently validated.
+
+Target acceptance:
+
+- Final XY error ≤ 0.20 m.
+- Final yaw error ≤ 10 degrees.
+- Stationary hold ≥ 5 seconds.
+- No unsafe non-ground collisions.
+
+Create or reuse a suitable simulated parking location.
+
+The robot should navigate to the parking area, align itself, perform the final approach and stop.
+
+Measure actual final position and orientation from evaluator-only Gazebo truth.
+
+Test multiple approaches where safe.
+
+Do not label an ordinary navigation stop as precision parking.
+
+Do not label a parking unit test as a physical simulation parking success.
+
+---
+
+# 12. NINTH — Make RGB + LiDAR fusion technically useful
+
+The earlier accepted S00 fusion test showed no additional metric occupancy cells from RGB.
+
+Investigate whether the RGB camera contributes valuable information in obstacle-rich scenes.
+
+Compare:
+
+- LiDAR-only navigation.
+- RGB + LiDAR navigation.
+- Existing RGB-only baseline.
+
+Use RGB information conservatively.
+
+RGB must not fabricate metric depth or overwrite valid LiDAR obstacles.
+
+Investigate the previous problem where poor visible floor support caused the combined system to block movement even when the LiDAR scan was healthy.
+
+Design and validate an explicit sensor-dependency policy.
+
+For example, distinguish cases where:
+
+- LiDAR provides sufficient metric collision clearance.
+- RGB provides additional obstacle warning.
+- RGB is merely supplementary.
+- RGB supplies evidence of a hazard outside the LiDAR scan plane.
+- Either required sensor becomes stale or invalid.
+
+Allow a deliberately defined, well-tested LiDAR-only profile if justified, rather than silently ignoring RGB faults.
+
+Do not weaken fail-closed behavior without measured evidence.
+
+---
+
+# 13. TENTH — Visual demonstration using the existing Windows launchers
+
+The Windows BAT files already exist and the predefined-map demonstration has been viewed.
+
+Preserve that functionality.
+
+Do not rebuild the entire Windows launcher system.
+
+Once the realistic LiDAR navigation has passed its required tests, extend the existing LiDAR demonstration pathway so I can watch it.
+
+The demonstration should show:
+
+- Gazebo 3D robot and environment.
+- Live LiDAR scans.
+- Sensor-built map.
+- Robot localization.
+- Global planned path.
+- Local navigation trajectory.
+- Obstacle inflation and footprint where practical.
+- Actual robot movement.
+- Goal arrival.
+- Safety stops and faults.
+- Autonomous parking if validated.
+
+Update the existing `02_WATCH_RGB_LIDAR.bat` and menu integration as appropriate.
+
+Provide a simple mode selection:
+
+- Sensor observation.
+- Guarded movement.
+- Online mapping.
+- Autonomous navigation.
+- Obstacle avoidance.
+- Parking.
+
+Only expose modes that have passed the necessary tests.
+
+If Windows resources are insufficient for Gazebo and RViz simultaneously, prioritize Gazebo GUI, use lightweight diagnostics, and preserve headless test evidence.
+
+Do not allow a GUI limitation to prevent headless engineering progress.
+
+Save a genuine video recording of navigation where feasible.
+
+The video must show actual movement from the validated realistic LiDAR run, not a reference-map replay or a stationary sensor visualization.
+
+---
+
+# 14. Testing, regression protection and evaluation
+
+For every meaningful functionality:
+
+1. Implement.
+2. Build.
+3. Run unit tests.
+4. Run an actual Gazebo experiment.
+5. Measure physical simulated behavior.
+6. Investigate failure.
+7. Fix and repeat within bounded limits.
+8. Save evidence.
+9. Commit validated progress.
+10. Continue to the next dependency.
+
+Protect:
+
+- Phase 3 sensors.
+- Phase 4 wheel/IMU localization.
+- Phase 5 scenarios.
+- Phase 6 reference navigation.
+- Phase 7 RGB-only perception.
+- Phase 8 stop-only safety.
+- Phase 8B stopping feasibility.
+- Existing Phase 8C LiDAR sensing and guarded motion.
+- Windows BAT launchers.
+
+Never introduce a hidden perfect-map dependency to make realistic navigation succeed.
+
+Never bypass the safety guard.
+
+Do not silently increase speed limits, reduce safety margins or turn off obstacle inflation.
+
+If you identify a faulty model assumption, correct it through a documented, measured change.
+
+Separate simulation performance from future hardware performance.
+
+---
+
+# 15. Git and project management
+
+Work on:
+
+`feature/phase8c-lidar`
+
+Use meaningful commits for validated milestones.
+
+Examples:
+
+- Safe production turning.
+- Moving LiDAR SLAM.
+- Guarded Nav2 navigation.
+- Obstacle avoidance.
+- Online exploration.
+- Parking.
+- Demonstration and evaluation.
+
+Do not create unnecessary new feature branches.
+
+Do not modify the future ToF or RGB-only branches.
+
+Do not automatically merge into `main`.
+
+Do not overwrite unrelated working-tree changes.
+
+Push validated changes safely.
+
+If a critical blocker remains, save its failed evidence and continue with independent work that does not compromise safety.
+
+---
+
+# 16. Required final deliverables
+
+At completion, provide:
+
+### Implementation
+
+- Updated ROS packages.
+- Working motion and turning controls.
+- Online mapping/localization configuration.
+- Guarded Nav2 navigation.
+- Obstacle avoidance and replanning.
+- Exploration where validated.
+- Parking where validated.
+- Existing BAT demo integration.
+
+### Evidence
+
+- Unit and static tests.
+- Actual moving Gazebo trials.
+- Navigation action results.
+- Robot truth trajectories.
+- Localization error measurements.
+- Collision and clearance reports.
+- Stopping and fault-response measurements.
+- CPU/RAM/real-time-factor benchmarks.
+- Sensor-derived maps.
+- Screenshots and valid demonstration recordings.
+
+### Documentation
+
+Update the roadmap, phase reports, issues, test registry, evidence index and user-facing operating guide.
+
+### Final capability matrix
+
+Report each as PASS, PASS WITH LIMITS, FAIL, BLOCKED, NOT TESTED or PENDING HARDWARE:
+
+1. LiDAR sensing.
+2. RGB + LiDAR fusion.
+3. Safe forward movement.
+4. Production-safe turning.
+5. Combined motion.
+6. Moving SLAM/localization.
+7. Sensor-built map generation.
+8. Autonomous Nav2 goal navigation.
+9. S01 obstacle avoidance.
+10. S02 multi-obstacle navigation.
+11. S03 constrained navigation.
+12. S04 randomized-start navigation.
+13. S09 safe no-route handling.
+14. Dynamic obstacle replanning.
+15. Unknown-environment exploration.
+16. Autonomous parking.
+17. Fault handling.
+18. Resource efficiency.
+19. Gazebo graphical demonstration.
+20. Arduino UNO Q deployment readiness.
+
+Physical hardware validation must remain PENDING HARDWARE unless actually performed.
+
+---
+
+# 17. Important execution priorities
+
+The previous development efforts sometimes produced additional architecture, configuration and documentation without obtaining the required live autonomous-navigation result.
+
+This assignment should prioritize experiments that establish actual movement.
+
+Follow this order:
+
+**Priority A:** Make production turning safe.
+
+**Priority B:** Make moving SLAM/localization demonstrably work.
+
+**Priority C:** Verify the complete live Nav2-to-safety-guard-to-robot command chain.
+
+**Priority D:** Achieve a real sensor-derived S00 navigation goal.
+
+**Priority E:** Achieve S01 box avoidance and destination reaching.
+
+**Priority F:** Extend to multi-obstacle worlds, exploration, replanning and parking.
+
+**Priority G:** Deliver a repeatable one-click visual demonstration.
+
+Do not declare completion after Priority A or B.
+
+Do not abandon the entire assignment merely because a readiness flag currently says BLOCKED. Implement and perform the independent safety-gated experiments needed to determine whether that flag can legitimately change.
+
+Do not repeatedly create new documentation describing the same unresolved blockers without performing meaningful debugging and measurable experiments.
+
+However, if safety testing genuinely demonstrates that navigation is unsafe, keep motion disabled and report the technical blocker honestly.
+
+---
+
+# FINAL INSTRUCTION
+
+I have already seen the custom car navigate successfully using the predefined reference map.
+
+**Now I want the same car to navigate using its own LiDAR-derived map and localization.**
+
+Complete the remaining realistic LiDAR navigation development in one comprehensive Work assignment as far as technically achievable.
+
+I want to see the robot build a map, move, turn, choose a route, avoid obstacles and reach a goal in Gazebo.
+
+If successful, extend it to exploration and parking.
+
+Use the existing code and simulation setup. Preserve all safety checks and separate the realistic mode from ORACLE_REFERENCE.
+
+Deliver real test evidence, updated GitHub commits and a Windows one-click demonstration I can watch.
+
+Do not require another prompt after every internal development milestone.
+
+**The most important acceptance result is a successful, measured S00 and then S01 autonomous navigation run with no predefined obstacle map.**
