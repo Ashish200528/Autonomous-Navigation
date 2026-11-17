@@ -1,0 +1,246 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fire Bird Autodrive</title>
+<style>
+  :root { --bg:#111317; --panel:#1b1e24; --line:#2a2f38; --text:#e6e8ec; --dim:#8b93a1;
+          --ok:#3ccf6e; --warn:#ffa630; --bad:#ff4d4f; --accent:#4da3ff; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--bg); color:var(--text); font:14px/1.4 system-ui, sans-serif; }
+  header { display:flex; gap:12px; align-items:center; padding:10px 16px; border-bottom:1px solid var(--line); flex-wrap:wrap; }
+  header h1 { font-size:16px; margin:0 12px 0 0; }
+  .pill { padding:2px 10px; border-radius:999px; background:var(--panel); border:1px solid var(--line); font-variant-numeric:tabular-nums; }
+  main { display:grid; grid-template-columns: minmax(0,2fr) minmax(280px,1fr); gap:12px; padding:12px 16px; }
+  @media (max-width: 800px) { main { grid-template-columns: 1fr; } }
+  .card { background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:12px; }
+  .video { position:relative; aspect-ratio:4/3; background:#000; border-radius:8px; overflow:hidden; }
+  .video img, .video canvas { position:absolute; inset:0; width:100%; height:100%; }
+  h2 { font-size:13px; text-transform:uppercase; letter-spacing:.06em; color:var(--dim); margin:0 0 8px; }
+  #state { font-size:22px; font-weight:700; }
+  #note { color:var(--dim); min-height:1.4em; }
+  table { width:100%; border-collapse:collapse; font-variant-numeric:tabular-nums; }
+  td, th { padding:4px 6px; border-bottom:1px solid var(--line); text-align:left; }
+  th { color:var(--dim); font-weight:500; }
+  button, input, select { font:inherit; color:var(--text); background:#252a33; border:1px solid var(--line); border-radius:6px; padding:6px 10px; }
+  button { cursor:pointer; }
+  button.on { background:var(--accent); color:#fff; border-color:var(--accent); }
+  button.stop { background:var(--bad); border-color:var(--bad); color:#fff; font-weight:700; }
+  .row { display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin:6px 0; }
+  .pad { display:grid; grid-template-columns:repeat(3,56px); gap:6px; justify-content:center; user-select:none; }
+  .pad button { height:48px; }
+  .kv { display:grid; grid-template-columns:auto 1fr; gap:2px 12px; font-variant-numeric:tabular-nums; }
+  .kv span:nth-child(odd) { color:var(--dim); }
+  .FLAGGED { color:var(--bad); } .WARNING { color:var(--warn); } .SAFE { color:var(--ok); }
+</style>
+</head>
+<body>
+<header>
+  <h1>Fire Bird Autodrive</h1>
+  <span class="pill" id="link">robot: —</span>
+  <span class="pill" id="batt">battery: —</span>
+  <span class="pill" id="yolo">YOLO: —</span>
+  <span class="pill" id="temp">Pi: —</span>
+</header>
+<main>
+  <section>
+    <div class="card">
+      <div class="video"><img id="cam" alt="camera"><canvas id="ov" width="640" height="480"></canvas></div>
+    </div>
+    <div class="card" style="margin-top:12px">
+      <h2>Objects (camera distance)</h2>
+      <table><thead><tr><th>#</th><th>class</th><th>distance</th><th>known-h / floor / depth</th><th>zone</th><th>TTC</th><th>status</th></tr></thead>
+      <tbody id="objs"></tbody></table>
+      <div id="markers" style="margin-top:8px;color:var(--dim)"></div>
+    </div>
+    <div class="card" style="margin-top:12px">
+      <h2>3D map — camera-derived pseudo-LiDAR (drag to rotate, wheel to zoom)</h2>
+      <canvas id="map3d" width="800" height="420" style="width:100%;background:#0b0d10;border-radius:8px;touch-action:none"></canvas>
+      <div class="row" style="color:var(--dim)">
+        <span><b style="color:#4da3ff">●</b> camera depth</span><span><b style="color:#3ccf6e">●</b> Sharp (measured)</span>
+        <span><b style="color:#ffa630">●</b> YOLO object</span><span><b style="color:#ff4d4f">—</b> virtual scan</span>
+        <span id="mapinfo"></span>
+      </div>
+    </div>
+  </section>
+  <section>
+    <div class="card">
+      <div id="state">—</div><div id="note"></div>
+      <div class="kv" style="margin-top:8px">
+        <span>command</span><span id="cmd">—</span>
+        <span>front range</span><span id="front">—</span>
+        <span>pose</span><span id="pose">—</span>
+        <span>PWM L / R</span><span id="pwm">—</span>
+        <span>ages (ms)</span><span id="ages">—</span>
+        <span>ATmega flags</span><span id="flags">—</span>
+        <span>depth</span><span id="depth">—</span>
+        <span>recording</span><span id="rec">—</span>
+      </div>
+    </div>
+    <div class="card" style="margin-top:12px">
+      <h2>Control</h2>
+      <div class="row"><input id="token" placeholder="token (config/secret)" style="flex:1" type="password"></div>
+      <div class="row">
+        <button class="stop" data-mode="stop">STOP</button>
+        <button data-mode="manual">Manual</button>
+        <button data-mode="auto">Auto</button>
+        <button id="go">GO</button>
+        <button id="clear">Clear E-stop</button>
+      </div>
+      <div class="row">
+        <button id="recbtn">Start recording</button>
+        <button id="mapclear">Clear 3D map</button>
+      </div>
+      <p style="color:var(--dim);margin:6px 0">Manual: hold arrow keys / WASD or the pad.</p>
+      <div class="pad">
+        <span></span><button data-k="up">▲</button><span></span>
+        <button data-k="left">◀</button><button data-k="down">▼</button><button data-k="right">▶</button>
+      </div>
+    </div>
+    <div class="card" style="margin-top:12px">
+      <h2>Distance calibration</h2>
+      <div class="row">
+        <input id="ccls" placeholder="class, e.g. bottle" style="width:140px">
+        <input id="cdist" placeholder="metres" style="width:80px" type="number" step="0.01">
+        <button id="cal">Calibrate focal</button>
+      </div>
+      <div class="row"><button id="calreset">Reset Sharp self-calibration</button></div>
+      <div class="kv" id="corr"></div>
+    </div>
+  </section>
+</main>
+<script>
+const $ = (id) => document.getElementById(id);
+const tok = $('token');
+try { tok.value = localStorage.getItem('token') || ''; } catch {}
+tok.onchange = () => { try { localStorage.setItem('token', tok.value); } catch {} };
+const post = (path, body) => fetch(path, { method: 'POST', headers: { 'x-token': tok.value, 'content-type': 'application/json' }, body: JSON.stringify(body || {}) }).then((r) => r.json()).then((j) => j.error && alert(j.error));
+
+$('cam').src = '/stream.mjpg';
+let ws, state = null;
+function connect() {
+  ws = new WebSocket(`ws://${location.host}/ws`);
+  ws.binaryType = 'arraybuffer';
+  ws.onmessage = (e) => {
+    if (e.data instanceof ArrayBuffer) { cloud = new Float32Array(e.data); return drawMap(); }
+    const m = JSON.parse(e.data);
+    if (m.type === 'state') { render(state = m); drawMap(); } else if (m.error) console.warn(m.error);
+  };
+  ws.onclose = () => setTimeout(connect, 1000);
+}
+connect();
+
+document.querySelectorAll('[data-mode]').forEach((b) => b.onclick = () => post('/api/mode', { mode: b.dataset.mode }));
+$('go').onclick = () => post('/api/go');
+$('clear').onclick = () => post('/api/clear');
+$('cal').onclick = () => post('/api/calibrate', { class: $('ccls').value.trim(), distance_m: Number($('cdist').value) });
+$('calreset').onclick = () => post('/api/calibrate/reset');
+$('recbtn').onclick = () => post('/api/record', { on: !(state && state.recording) });
+$('mapclear').onclick = () => post('/api/map/clear');
+
+// ---- 3D map: tiny orbit camera around the robot, no library needed
+let cloud = new Float32Array(0), yawV = -2.4, pitchV = 0.9, zoom = 140, drag = null;
+const mc = $('map3d'), mx = mc.getContext('2d');
+mc.onpointerdown = (e) => { drag = [e.clientX, e.clientY]; mc.setPointerCapture(e.pointerId); };
+mc.onpointermove = (e) => { if (!drag) return; yawV += (e.clientX - drag[0]) * 0.01; pitchV = Math.max(0.05, Math.min(1.5, pitchV + (e.clientY - drag[1]) * 0.01)); drag = [e.clientX, e.clientY]; drawMap(); };
+mc.onpointerup = () => { drag = null; };
+mc.onwheel = (e) => { e.preventDefault(); zoom = Math.max(30, Math.min(600, zoom * (e.deltaY > 0 ? 0.9 : 1.1))); drawMap(); };
+function drawMap() {
+  if (!state) return;
+  const W = mc.width = mc.clientWidth * devicePixelRatio, H = mc.height = 420 * devicePixelRatio, p = state.pose;
+  mx.fillStyle = '#0b0d10'; mx.fillRect(0, 0, W, H);
+  const cy = Math.cos(yawV), sy = Math.sin(yawV), cp = Math.cos(pitchV), sp = Math.sin(pitchV), Z = zoom * devicePixelRatio;
+  const proj = (x, y, z) => { // world -> screen, orbiting the robot
+    x -= p.x; y -= p.y;
+    const a = x * cy - y * sy, b = x * sy + y * cy;
+    const depth = 6 + b * cp + z * sp, s = (Z * 6) / Math.max(0.5, depth);
+    return [W / 2 + a * s, H * 0.6 - (z * cp - b * sp) * s, depth];
+  };
+  mx.strokeStyle = '#1f242c'; mx.lineWidth = 1; // 0.5 m floor grid
+  for (let g = -4; g <= 4; g += 0.5) {
+    let [a, b] = [proj(p.x + g, p.y - 4, 0), proj(p.x + g, p.y + 4, 0)]; mx.beginPath(); mx.moveTo(a[0], a[1]); mx.lineTo(b[0], b[1]); mx.stroke();
+    [a, b] = [proj(p.x - 4, p.y + g, 0), proj(p.x + 4, p.y + g, 0)]; mx.beginPath(); mx.moveTo(a[0], a[1]); mx.lineTo(b[0], b[1]); mx.stroke();
+  }
+  const cols = ['#4da3ff', '#3ccf6e', '#ffa630'];
+  for (let i = 0; i < cloud.length; i += 4) {
+    const [u, v] = proj(cloud[i], cloud[i + 1], cloud[i + 2]);
+    mx.fillStyle = cols[cloud[i + 3]] || '#888'; mx.fillRect(u - 1.5, v - 1.5, 3, 3);
+  }
+  if (state.scan) { // virtual laser scan in the robot frame
+    mx.strokeStyle = '#ff4d4f'; mx.lineWidth = 1.5; mx.beginPath(); let pen = false;
+    for (let d = 0; d < 360; d++) {
+      const r = state.scan[d]; if (r == null) { pen = false; continue; }
+      const a = p.yaw + d * Math.PI / 180, [u, v] = proj(p.x + r * Math.cos(a), p.y + r * Math.sin(a), 0.05);
+      pen ? mx.lineTo(u, v) : mx.moveTo(u, v); pen = true;
+    }
+    mx.stroke();
+  }
+  const nose = proj(p.x + 0.12 * Math.cos(p.yaw), p.y + 0.12 * Math.sin(p.yaw), 0.05); // robot: circle + heading
+  const c0 = proj(p.x, p.y, 0.05);
+  mx.strokeStyle = '#fff'; mx.lineWidth = 2; mx.beginPath();
+  for (let k = 0; k <= 24; k++) { const a = k / 24 * 2 * Math.PI, [u, v] = proj(p.x + 0.08 * Math.cos(a), p.y + 0.08 * Math.sin(a), 0.05); k ? mx.lineTo(u, v) : mx.moveTo(u, v); }
+  mx.moveTo(c0[0], c0[1]); mx.lineTo(nose[0], nose[1]); mx.stroke();
+  $('mapinfo').textContent = `${state.mapVoxels} voxels`;
+}
+
+// manual drive: keys held -> v, w; sent at 10 Hz while in manual mode (robot stops 0.5 s after the last one)
+const keys = new Set();
+const map = { ArrowUp: 'up', w: 'up', ArrowDown: 'down', s: 'down', ArrowLeft: 'left', a: 'left', ArrowRight: 'right', d: 'right' };
+addEventListener('keydown', (e) => { if (map[e.key] && e.target.tagName !== 'INPUT') { keys.add(map[e.key]); e.preventDefault(); } });
+addEventListener('keyup', (e) => keys.delete(map[e.key]));
+document.querySelectorAll('[data-k]').forEach((b) => {
+  const k = b.dataset.k;
+  b.onpointerdown = () => keys.add(k);
+  b.onpointerup = b.onpointerleave = () => keys.delete(k);
+});
+setInterval(() => {
+  if (!state || state.mode !== 'manual' || ws.readyState !== 1) return;
+  const v = (keys.has('up') ? 0.15 : 0) - (keys.has('down') ? 0.1 : 0);
+  const w = (keys.has('left') ? 1.2 : 0) - (keys.has('right') ? 1.2 : 0);
+  ws.send(JSON.stringify({ type: 'drive', v, w, token: tok.value }));
+}, 100);
+
+const f2 = (x, d = 2) => (x == null ? '—' : Number(x).toFixed(d));
+const ctx = $('ov').getContext('2d');
+function render(s) {
+  $('link').textContent = `robot: ${s.link ? 'connected' : 'offline'}`;
+  $('batt').textContent = `battery: ${s.batt == null ? '—' : s.batt.toFixed(2) + ' V'}`;
+  $('yolo').textContent = s.yolo.on ? `YOLO: ${s.yolo.hz.toFixed(1)} Hz, ${f2(s.yolo.ms, 0)} ms` : 'YOLO: off (no model)';
+  $('temp').textContent = `Pi: ${s.temp.toFixed(0)} °C`;
+  $('state').textContent = `${s.mode.toUpperCase()} · ${s.brain.state}`;
+  $('note').textContent = s.brain.note;
+  $('cmd').textContent = `v ${f2(s.cmd.v)} m/s, w ${f2(s.cmd.w)} rad/s — ${s.cmd.reason}`;
+  $('front').textContent = s.front.m == null ? 'clear' : `${(s.front.m * 100).toFixed(0)} cm${s.front.proxHit ? ' (IR prox)' : ''}${s.front.blindHold ? ' (blind-zone hold)' : ''}`;
+  $('pose').textContent = `x ${f2(s.pose.x)} y ${f2(s.pose.y)} yaw ${f2(s.pose.yaw * 57.3, 0)}° ±${f2(s.pose.sigma)} m`;
+  $('pwm').textContent = s.pwm.join(' / ');
+  $('ages').textContent = `telem ${f2(s.ages.telem, 0)} · cam ${f2(s.ages.frame, 0)} · yolo ${f2(s.ages.yolo, 0)}`;
+  $('flags').textContent = s.mcuFlags == null ? '—' : '0x' + s.mcuFlags.toString(16);
+  $('objs').innerHTML = s.objects.map((o) => `<tr><td>${o.id ?? ''}</td><td>${o.cls} ${f2(o.conf)}</td>
+    <td>${o.dist == null ? '—' : f2(o.dist) + ' ± ' + f2(o.sigma)} m${o.inconsistent ? ' ⚠' : ''}</td>
+    <td>${f2(o.cues.B)} / ${f2(o.cues.A)} / ${f2(o.cues.C)}</td><td>${o.zone}</td><td>${o.ttc == null ? '—' : f2(o.ttc, 1) + ' s'}</td>
+    <td class="${o.status}">${o.status}</td></tr>`).join('');
+  $('markers').textContent = s.aruco.length ? 'ArUco: ' + s.aruco.map((m) => `#${m.id} ${m.dist.toFixed(2)} m ${m.angle_deg.toFixed(0)}°`).join(', ') : '';
+  const d = s.depth;
+  $('depth').textContent = !d ? 'off (no model)' : d.fit && d.fit.ok
+    ? `${f2(d.ms, 0)} ms, fit ${d.fit.inliers}/${d.fit.n} anchors, err ${(d.fit.medErr * 100).toFixed(0)} %`
+    : `${f2(d.ms, 0)} ms, no fit (${d.fit ? d.fit.reason : '—'})`;
+  $('rec').textContent = s.recording || 'off';
+  $('recbtn').textContent = s.recording ? 'Stop recording' : 'Start recording';
+  $('corr').innerHTML = Object.entries(s.heightCorr).map(([k, v]) => `<span>${k}</span><span>height × ${v.toFixed(2)}</span>`).join('');
+  ctx.canvas.width = s.frame.w; ctx.canvas.height = s.frame.h;
+  ctx.clearRect(0, 0, s.frame.w, s.frame.h);
+  ctx.lineWidth = 3; ctx.font = '16px system-ui';
+  for (const o of s.objects) {
+    const col = { FLAGGED: '#ff4d4f', WARNING: '#ffa630', SAFE: '#3ccf6e' }[o.status] || '#aaa';
+    const [x1, y1, x2, y2] = o.box;
+    ctx.strokeStyle = col; ctx.strokeRect(x1, y1, x2 - x1, y2 - y1);
+    const label = `${o.cls} ${o.dist == null ? '' : o.dist.toFixed(2) + ' m'}`;
+    const tw = ctx.measureText(label).width + 8;
+    ctx.fillStyle = col; ctx.fillRect(x1, Math.max(0, y1 - 22), tw, 22);
+    ctx.fillStyle = '#000'; ctx.fillText(label, x1 + 4, Math.max(16, y1 - 6));
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,155 @@
+{
+  "serial": { "path": "/dev/firebird", "baud": 115200 },
+
+  "firmware": {
+    "timeout_ms": 250,
+    "dwell_ms": 300,
+    "batt_cutoff_mv": 8000,
+    "reflex_sharp_ch": 2,
+    "reflex_sharp_m": 0.25,
+    "reflex_prox_mask": 0,
+    "reflex_prox_adc": 300
+  },
+
+  "robot": {
+    "mm_per_pulse": [5.44, 5.44],
+    "track_m": 0.15,
+    "max_speed_mps": 0.24,
+    "deadband_pwm": [60, 60],
+    "kp": 300,
+    "ki": 600,
+    "accel_mps2": 0.4
+  },
+
+  "range": {
+    "sharp_front_index": 2,
+    "sharp_formula": "nex",
+    "sharp_min_m": 0.10,
+    "sharp_max_m": 0.80,
+    "prox_front_mask": 0,
+    "prox_hit_adc": 300,
+    "prox_hit_m": 0.08
+  },
+
+  "camera": {
+    "width": 640,
+    "height": 480,
+    "ffmpeg_input": ["-f", "v4l2", "-input_format", "yuyv422", "-video_size", "640x480", "-framerate", "15", "-i", "/dev/video0"],
+    "hfov_deg": 90,
+    "focal_px": null,
+    "height_m": 0.18,
+    "tilt_deg": 8
+  },
+
+  "servo": {
+    "pan": { "ch": 0, "center_us": 1500, "us_per_rad": 600, "min_us": 700, "max_us": 2300 },
+    "tilt": { "ch": 1, "center_us": 1500, "us_per_rad": 600, "min_us": 900, "max_us": 2100 }
+  },
+
+  "yolo": {
+    "model": "models/yolo26n_256x320.onnx",
+    "names": "models/yolo26n_256x320.json",
+    "input_w": 320,
+    "input_h": 256,
+    "conf": 0.45,
+    "iou": 0.5,
+    "max_det": 30,
+    "threads": 3,
+    "classes": null
+  },
+
+  "distance": {
+    "flag_m": 0.30,
+    "warn_m": 1.20,
+    "default_height_m": 0.50,
+    "known_heights_m": {
+      "person": 1.55, "bicycle": 1.10, "car": 1.50, "motorcycle": 1.10, "bus": 3.20, "truck": 3.00,
+      "traffic light": 0.75, "stop sign": 0.75, "fire hydrant": 0.75, "bench": 0.90, "dog": 0.55,
+      "cat": 0.30, "chair": 0.95, "bottle": 0.25, "laptop": 0.25, "cell phone": 0.15, "backpack": 0.50
+    },
+    "history": 5,
+    "selfcal": { "enabled": true, "bound": 0.4, "samples": 15 }
+  },
+
+  "brain": {
+    "autostart": false,
+    "cruise_speed": 0.15,
+    "slow_speed": 0.07,
+    "steer_kp": 1.1,
+    "steer_kd": 0.15,
+    "max_turn_rate": 0.9,
+    "decide_distance_m": 0.8,
+    "scan_pan_rad": 1.2,
+    "scan_dwell_s": 1.6,
+    "blocked_fraction": 0.01,
+    "yolo_block_distance_m": 2.0,
+    "scan_roi": [0.37, 0.62],
+    "allow_right_overtake": false,
+    "station_marker_id": 0,
+    "station_detect_distance_m": 3.0,
+    "station_stop_before_m": 0.3,
+    "station_wait_s": 5.0,
+    "target_laps": 2,
+    "sensor_timeout_s": 0.6,
+    "overtake_shift_m": 0.3,
+    "overtake_pass_m": 0.8,
+    "max_nudges": 3,
+    "nudge_reverse_m": 0.10,
+    "stop_sign_stop_distance_m": 1.0,
+    "stop_sign_wait_s": 3.0,
+    "yield_distance_m": 1.3,
+    "pedestrian_caution_m": 1.6
+  },
+
+  "safety": {
+    "telemetry_stale_ms": 200,
+    "camera_stale_ms": 300,
+    "yolo_stale_ms": 1000,
+    "range_stop_m": 0.30,
+    "brake_mps2": 0.5,
+    "temp_slow_c": 75,
+    "temp_stop_c": 80,
+    "batt_warn_v": 8.4
+  },
+
+  "aruco": {
+    "enabled": true,
+    "dictionary": "ARUCO_7X7_1000",
+    "marker_size_m": 0.10,
+    "max_hamming": 3,
+    "rate_hz": 5
+  },
+
+  "depth": {
+    "model": "models/midas_small_256_int8.onnx",
+    "size": 256,
+    "threads": 1,
+    "max_hz": 1,
+    "max_age_ms": 1500,
+    "ransac_iters": 60,
+    "inlier_rel_err": 0.15,
+    "min_inliers": 6
+  },
+
+  "mount": {
+    "camera_x_m": 0.02,
+    "sharp_x_m": 0.08,
+    "sharp_height_m": 0.05
+  },
+
+  "map": {
+    "voxel_m": 0.05,
+    "max_range_m": 4.0,
+    "floor_z_m": 0.03,
+    "robot_height_m": 0.25,
+    "max_z_m": 1.0,
+    "fade_s": 10,
+    "max_points": 20000,
+    "side_sector_deg": [20, 100],
+    "side_block_m": 1.0
+  },
+
+  "record": { "enabled": false, "dir": "runs", "frame_every_ms": 500, "max_mb": 500 },
+
+  "server": { "port": 8080, "mjpeg_fps": 8 }
+}

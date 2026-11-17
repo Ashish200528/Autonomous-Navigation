@@ -1,0 +1,4 @@
+# Fire Bird V on-board FT232 (USB-UART2 of the ATmega2560).
+# If you have other FTDI devices, add ATTRS{serial}=="<from: udevadm info /dev/ttyUSB0>".
+SUBSYSTEM=="tty", ATTRS{idVendor}=="0403", ATTRS{idProduct}=="6001", SYMLINK+="firebird", MODE="0660", GROUP="dialout"
+ACTION=="add", SUBSYSTEM=="usb-serial", DRIVER=="ftdi_sio", ATTR{latency_timer}="1"
