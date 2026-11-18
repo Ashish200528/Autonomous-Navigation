@@ -62,7 +62,8 @@
       </div>
     </div>
     <div class="card vision-only" style="margin-top:12px">
-      <div class="video"><img id="cam" alt="camera"><canvas id="ov" width="640" height="480"></canvas></div>
+      <div class="video"><img id="cam" alt="camera"><canvas id="ov" width="640" height="480"></canvas>
+        <div id="camwait" style="position:absolute;inset:0;display:none;align-items:center;justify-content:center;text-align:center;padding:24px;color:var(--dim)"></div></div>
     </div>
     <div class="card vision-only" style="margin-top:12px">
       <h2>Objects (camera distance)</h2>
@@ -98,8 +99,10 @@
         <select id="irsig"><option value="raw">raw — LEDs on, like NEX (any firmware)</option>
           <option value="reflection">reflection — room light cancelled (fw v3, IRP jumper out)</option></select>
       </div>
-      <p style="color:var(--dim);margin:4px 0">1. Clear everything within 20 cm of the robot and click <b>Zero</b> (raw mode only).
-        2. Hold a flat, light object square in front of a sensor, enter its distance from the sensor face, click <b>Record</b>.
+      <p style="color:var(--dim);margin:4px 0">Each sensor learns its own "nothing near" level by itself (raw mode). <b>Zero</b> just sets
+        it at once - click it with nothing within 20 cm, e.g. right after start. Red = closer than the IR drive's blocking
+        distance (ir_drive.block_m): IR drive turns away from red, slows for amber.
+        To make the cm exact: hold a flat, light object square in front of a sensor, enter its distance from the sensor face, click <b>Record</b>.
         Do 4–6 distances per sensor (e.g. 1, 2, 4, 6, 9 cm). Beyond the farthest point reads "clear".</p>
       <div class="row"><button id="irzero">Zero (nothing near)</button>
         <span style="color:var(--dim)" id="irled"></span></div>
@@ -306,7 +309,8 @@ setInterval(() => {
 const f2 = (x, d = 2) => (x == null ? '—' : Number(x).toFixed(d));
 const ctx = $('ov').getContext('2d');
 const DIRS = ['left', 'front-left', 'front', 'front-right', 'right', 'rear-right', 'rear', 'rear-left'];
-const irClass = (s) => (s.st === 'dist' ? (s.m < 0.06 ? 'near' : 'mid') : s.st === 'clear' ? 'clear' : 'nodata');
+// red = closer than ir_drive.block_m = what IR drive treats as blocked; amber = seen, not blocking
+const irClass = (s) => (s.st === 'dist' ? (s.m < (state?.irBlockM ?? 0.06) ? 'near' : 'mid') : s.st === 'clear' ? 'clear' : 'nodata');
 const irText = (s) => ({ dist: s.m != null && `${(s.m * 100).toFixed(1)} cm`, clear: 'clear', uncal: 'not calibrated', nodata: 'no data' }[s.st]);
 const irCol = { near: '#ff4d4f', mid: '#ffa630', clear: '#3ccf6e', nodata: '#4a515c' };
 function drawIr(ir) { // top-down robot, nose up; ray length = distance (clear = full, faint)
@@ -330,6 +334,12 @@ function drawIr(ir) { // top-down robot, nose up; ray length = distance (clear =
 function render(s) {
   document.querySelectorAll('.vision-only').forEach((e) => { e.style.display = s.vision ? '' : 'none'; });
   if (s.vision && !camOn) { $('cam').src = '/stream.mjpg'; camOn = true; }
+  const noFrames = s.vision && !(s.ages.frame < 2000);
+  $('camwait').style.display = noFrames ? 'flex' : 'none';
+  if (noFrames) $('camwait').innerHTML = s.camSource === 'net'
+    ? `No camera frames. No USB webcam on this board, so it is waiting for one on port 5000.<br>On the laptop run:<br>
+       <code>powershell -ExecutionPolicy Bypass -File backend\\tools\\laptop-camera.ps1 -Robot ${location.hostname}</code><br>or plug a USB webcam into the board.`
+    : 'No camera frames yet: is the webcam plugged in?';
   if (s.ir) {
     drawIr(s.ir);
     $('irrows').innerHTML = s.ir.map((x) => `<tr><td>${x.n}</td><td>${DIRS[x.n - 1]} <span style="color:var(--dim)">${x.deg}° · ${x.mcu}</span></td>

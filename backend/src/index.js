@@ -103,9 +103,13 @@ robot.on('telemetry', (t, at) => {
 });
 
 // Nearest YOLO object straight ahead (camera facing forward, fresh result).
+// ...and the camera depth map straight ahead, which also sees things YOLO has no class for.
 function cameraAhead() {
-  if (Math.abs(S.pan) > 0.05 || nowMs() - S.yoloT > 1000) return Infinity;
-  return Math.min(Infinity, ...S.objects.filter((o) => o.zone === 'Center' && o.dist != null).map((o) => o.dist));
+  if (Math.abs(S.pan) > 0.05) return Infinity;
+  const yolo = nowMs() - S.yoloT > 1000 ? Infinity
+    : Math.min(Infinity, ...S.objects.filter((o) => o.zone === 'Center' && o.dist != null).map((o) => o.dist));
+  const depth = cfg.brain.depth_ahead_deg ? map.nearestAhead(odom.pose, cfg.brain.depth_ahead_deg, [KIND.CAMERA]) : Infinity;
+  return Math.min(yolo, depth);
 }
 
 function pushVision(t) {
@@ -236,9 +240,9 @@ setInterval(() => {
 
   const t = robot.last;
   if (S.mode === 'ir') S.irCmd = irDriver.tick(S.ir, S.front.m, now / 1000);
-  // ponytail: front IR prox only joins the stop range in IR mode until the IR table is calibrated
-  const rangeM = S.mode === 'ir' ? Math.min(S.front.m, nearestIr(S.ir, [2, 3, 4])) : S.front.m;
-  S.cmd = arbitrate({
+  // ponytail: the front IR stop applies in the autonomous modes; extend to manual once IR is trusted
+  const irFrontM = S.mode === 'ir' || S.mode === 'auto' ? nearestIr(S.ir, [2, 3, 4]) : Infinity, rangeM = S.front.m;
+  S.cmd = arbitrate({ irFrontM,
     mode: S.mode, brain: S.brain, manual: S.manual, manualAgeMs: now - S.manual.t, ir: S.irCmd,
     telemAgeMs: now - S.telemT, frameAgeMs: now - S.frameT, yoloAgeMs: yolo ? now - S.yoloT : Infinity,
     mcuFlags: t?.flags ?? 0, rangeM, rearM: nearestIr(S.ir, [6, 7, 8]), temp: S.temp, throttled: S.throttled,
@@ -282,8 +286,8 @@ startServer({
     heightCorr: distance.heightCorr, recording: rec.on ? rec.dir : null, mapVoxels: map.vox.size,
     // st: dist (m metres) | clear | uncal (no calibration for this signal) | nodata (rear: firmware v2 + J4)
     ir: S.ir?.map(({ n, deg, mcu, lit, dark, sig, m, own, st, kind }) => ({ n, deg, mcu, lit, dark, sig, m: fin(m), own, st, kind })) ?? null,
-    irCal: cfg.ir.cal_by_sensor, irSignal: cfg.ir.signal, irBaseline: cfg.ir.baseline,
-    irDrive: S.irCmd, fw: robot.last?.fw ?? robot.boot?.version ?? null, vision, port: robot.lastPath,
+    irCal: cfg.ir.cal_by_sensor, irSignal: cfg.ir.signal, irBaseline: cfg.ir.baseline, irBlockM: cfg.ir_drive.block_m,
+    irDrive: S.irCmd, fw: robot.last?.fw ?? robot.boot?.version ?? null, vision, port: robot.lastPath, camSource: camera.source ?? null,
     odo: { dist: fin(odom.dist), wheel: odom.wheel.map((d) => fin(d)), enc: robot.last?.enc ?? null, resets: odom.resets },
   }),
   cloud: () => map.cloud(),
@@ -337,6 +341,7 @@ startServer({
     if (!['stop', 'manual', 'auto', 'ir'].includes(m)) return { error: 'mode must be stop|manual|auto|ir' };
     if (m === 'auto' && !vision) return { error: 'auto needs the camera (camera.enabled is false); use IR drive' };
     if (m === 'ir' && S.mode !== 'ir') irDriver.reset();
+    if (m === 'auto' && S.mode !== 'auto') brain.go(); // choosing Auto (a token-protected action) is the start; GO stays for re-starts
     S.mode = m; log('mode', m);
     if (m === 'stop') wheels.reset();
     return { mode: m };

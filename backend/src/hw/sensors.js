@@ -27,10 +27,13 @@ const median = (a) => { const s = [...a].sort((x, y) => x - y); return s[s.lengt
 // (8-bit, scaled to 10-bit). Hardware manual §3.11: each is an IR LED + photodiode whose output
 // is ~3.3 V (ADC ~675) with nothing near and FALLS as an obstacle reflects more light.
 // The signal is that drop, in ADC counts, measured one of two ways (ir.signal):
-//   'raw'        drop = baseline - lit. Works on any firmware with the LEDs on, as NEX's examples
-//                read them. The baseline is that sensor's no-obstacle reading ("Zero" on the
-//                dashboard), else ir.baseline_adc. Room light also lowers the reading, so zero
-//                and calibrate in the light you drive in.
+//   'raw'        drop = zero - lit. Works on any firmware with the LEDs on, as NEX's examples
+//                read them. Each sensor's zero ("nothing near" level) differs a lot - measured
+//                on one robot: 647, 535, 627, 463, 580 - so one fixed level read 5-12 cm on every
+//                sensor with nothing near. The zero is therefore learned per sensor: an obstacle
+//                only ever LOWERS the reading, so the zero is the upper envelope of the readings,
+//                sinking ir.zero_decay counts per frame to follow room light. "Zero" on the
+//                dashboard sets it at once; it starts at the saved one or the first reading.
 //   'reflection' drop = dark - lit, the robot's own IR only: room light cancels. Needs firmware
 //                v3 and the IRP jumper (J1-2 on the main board) removed, else lit == dark.
 // Per frame: drop -> median of the last ir.median frames -> metres through that sensor's own
@@ -41,6 +44,7 @@ export class IrRing {
     this.ir = ir; this.kind = null; this.ring = null;
     this.hist = Array.from({ length: 8 }, () => []); // drop
     this.litHist = Array.from({ length: 8 }, () => []);
+    this.zeroLvl = Array(8).fill(null); // raw mode: learned "nothing near" level per sensor
   }
 
   table(n, kind) {
@@ -60,16 +64,26 @@ export class IrRing {
       // rear 0: the SPI link to the ATmega8 is open (J4 jumpers out) - a 3.3 V sensor never reads 0
       if (l == null || (i >= 5 && l === 0)) return { ...e, sig: null, m: null, own: false, st: 'nodata' };
       push(this.litHist[i], l);
-      push(this.hist[i], kind === 'reflection' ? dark[i] - l : (ir.baseline?.[n] ?? ir.baseline_adc) - l);
-      const sig = median(this.hist[i].slice(-ir.median)), t = this.table(n, kind), m = irM(sig, t.pts);
+      let sig;
+      if (kind === 'reflection') {
+        push(this.hist[i], dark[i] - l);
+        sig = median(this.hist[i].slice(-ir.median));
+      } else {
+        const lm = median(this.litHist[i].slice(-ir.median)); // spike-free reading
+        const z = this.zeroLvl[i] = Math.max(lm, (this.zeroLvl[i] ?? ir.baseline?.[n] ?? lm) - ir.zero_decay);
+        sig = z - lm;
+        push(this.hist[i], sig); // record() reads it
+      }
+      const t = this.table(n, kind), m = irM(sig, t.pts);
       return { ...e, sig, m, own: t.own, st: m === Infinity ? 'clear' : 'dist' };
     });
   }
 
-  // "Zero": sensor n's lit reading with nothing near becomes its raw-mode baseline.
+  // "Zero": sensor n's reading now, with nothing near, becomes its raw-mode zero at once.
   zero(n) {
     const h = this.litHist[n - 1];
-    return h.length < this.ir.history ? { error: `sensor ${n}: not enough readings yet` } : { value: median(h) };
+    if (h.length < this.ir.history) return { error: `sensor ${n}: not enough readings yet` };
+    return { value: this.zeroLvl[n - 1] = median(h) };
   }
 
   // Calibration point: the median drop of the last ir.history frames (~0.5 s) of sensor n is its

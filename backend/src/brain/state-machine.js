@@ -122,10 +122,14 @@ export class Brain {
       return;
     }
     this.crossYaw = null;
-    let err, speed;
+    let err, speed, roam = false;
     if (centre == null) {
-      if (now - this.laneSeenT > 1.0) { this.note = 'LANE LOST - stopped'; return; }
-      err = this.lastErr; speed = p.slow_speed; // brief dropout: keep the last correction, go slow
+      if (now - this.laneSeenT > 1.0) {
+        // No lane lines (e.g. a plain floor): free roam drives straight at slow speed; every obstacle
+        // rule above (stop, slow, scan and pass, yield, stop sign) still applies.
+        if (!p.free_roam) { this.note = 'LANE LOST - stopped'; return; }
+        err = 0; speed = p.slow_speed; roam = true;
+      } else { err = this.lastErr; speed = p.slow_speed; } // brief dropout: keep the last correction, go slow
     } else { err = laneError(centre, this.img.w); speed = p.cruise_speed; }
     if (this.stationGoal) speed = Math.min(speed, p.slow_speed);
     let caution = '';
@@ -136,7 +140,8 @@ export class Brain {
     const derr = err - this.lastErr; this.lastErr = err;
     this.w = Math.max(-p.max_turn_rate, Math.min(p.max_turn_rate, -(p.steer_kp * err + (p.steer_kd * derr) / 0.05)));
     this.v = speed * (1 - 0.5 * Math.min(1, Math.abs(err))); // slow in sharp corrections
-    this.note = this.stationGoal ? 'station ahead - slowing to stop' : caution || `lane error ${err >= 0 ? '+' : ''}${err.toFixed(2)}`;
+    this.note = this.stationGoal ? 'station ahead - slowing to stop' : caution
+      || (roam ? 'no lane lines - driving straight (free roam)' : `lane error ${err >= 0 ? '+' : ''}${err.toFixed(2)}`);
   }
 
   doStopSign(now) {

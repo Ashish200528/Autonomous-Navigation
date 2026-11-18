@@ -60,9 +60,9 @@ test('arbiter priorities', () => {
   assert.equal(arbitrate({ ...ok, yoloAgeMs: 5000 }, cfg).v, 0);
   assert.equal(arbitrate({ ...ok, mcuFlags: 4 }, cfg).v, 0);
   assert.equal(arbitrate({ ...ok, temp: 85 }, cfg).v, 0);
-  assert.equal(arbitrate({ ...ok, rangeM: 0.2 }, cfg).v, 0);
-  assert.equal(arbitrate({ ...ok, rangeM: 0.2, brain: { v: -0.1, w: 0 } }, cfg).v, -0.1); // backing away is allowed
-  assert.ok(arbitrate({ ...ok, rangeM: 0.32 }, cfg).v < 0.15);                            // braking-distance cap
+  assert.equal(arbitrate({ ...ok, rangeM: 0.15 }, cfg).v, 0);
+  assert.equal(arbitrate({ ...ok, rangeM: 0.15, brain: { v: -0.1, w: 0 } }, cfg).v, -0.1); // backing away is allowed
+  assert.ok(arbitrate({ ...ok, rangeM: 0.20 }, cfg).v < 0.15);                            // braking-distance cap
   assert.equal(arbitrate({ ...ok, mode: 'manual', manual: { v: 0.1, w: 0 }, manualAgeMs: 900 }, cfg).v, 0);
   assert.equal(arbitrate({ ...ok, mode: 'manual', manual: { v: 0.1, w: 0 }, yoloAgeMs: 1e9 }, cfg).v, 0.1); // manual needs no YOLO
 });

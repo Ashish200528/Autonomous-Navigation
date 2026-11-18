@@ -12,10 +12,12 @@
 #include <avr/io.h>
 #include <avr/wdt.h>
 #include <stdlib.h>
+#include <string.h>
+#include <util/delay.h>
 
 #include "protocol.h"
 
-#define FW_VERSION 3
+#define FW_VERSION 4
 #define TICKS_PER_MS 230UL           /* Timer3, prescaler 64: 230.4 ticks per ms */
 #define TELEM_PERIOD_MS 20
 #define MIN_EDGE_TICKS (5 * TICKS_PER_MS)   /* glitch filter: real pulses are >= 25 ms apart */
@@ -278,6 +280,65 @@ static void init(void) {
     UCSR2B = (1 << RXEN2) | (1 << TXEN2) | (1 << RXCIE2);
 }
 
+/* ------------------------------------------------------- LCD: motion direction */
+/* 16x2 HD44780 in 4-bit mode, wired as in NEX's lcd.c: RS PC0, RW PC1 (always 0 = write),
+ * EN PC2, D4-D7 PC4-PC7. PC3 is the buzzer and is never touched. NEX waits 5 ms per nibble;
+ * the controller needs ~40 us, so a full 2-line refresh here takes ~4 ms, done at most every
+ * LCD_PERIOD_MS and only when the text changed. */
+#define LCD_PERIOD_MS 250
+
+static void lcd_nibble(uint8_t v, uint8_t rs) {
+    PORTC = (PORTC & (1 << PC3)) | (v & 0xF0) | (rs ? (1 << PC0) : 0);
+    PORTC |= (1 << PC2); _delay_us(2); PORTC &= ~(1 << PC2);
+    _delay_us(60);
+}
+static void lcd_byte(uint8_t v, uint8_t rs) { lcd_nibble(v, rs); lcd_nibble(v << 4, rs); }
+
+static void lcd_line(uint8_t row, const char *s) { /* pads to 16 chars so old text is overwritten */
+    lcd_byte(row ? 0xC0 : 0x80, 0);
+    for (uint8_t i = 0; i < 16; i++) lcd_byte(*s ? *s++ : ' ', 1);
+}
+
+static void lcd_init(void) { /* HD44780 4-bit start-up; runs before the watchdog is enabled */
+    DDRC |= 0xF7;
+    _delay_ms(40);
+    for (uint8_t i = 0; i < 3; i++) { lcd_nibble(0x30, 0); _delay_ms(5); }
+    lcd_nibble(0x20, 0); _delay_ms(1);
+    lcd_byte(0x28, 0); /* 4-bit, 2 lines */
+    lcd_byte(0x0C, 0); /* display on, no cursor */
+    lcd_byte(0x06, 0); /* left to right */
+    lcd_byte(0x01, 0); _delay_ms(2); /* clear */
+    lcd_line(0, "FIRE BIRD V");
+    lcd_line(1, "READY");
+}
+
+/* Direction of what the motors actually get (after every fail-safe). The heading turns by
+ * (right - left): positive = left. Within 25 % of each other counts as straight. */
+static const char *motion_name(int16_t l, int16_t r) {
+    if (!l && !r) return "STOPPED";
+    if ((l > 0 && r < 0) || (l < 0 && r > 0)) return r > 0 ? "SPIN LEFT" : "SPIN RIGHT";
+    int16_t al = abs(l), ar = abs(r), mx = al > ar ? al : ar, turn = r - l;
+    uint8_t straight = (uint16_t)abs(al - ar) * 4 <= (uint16_t)mx;
+    if (l >= 0 && r >= 0) return straight ? "FORWARD" : turn > 0 ? "FORWARD LEFT" : "FORWARD RIGHT";
+    return straight ? "BACKWARD" : turn > 0 ? "BACKWARD LEFT" : "BACKWARD RIGHT";
+}
+
+static void lcd_motion(int16_t l, int16_t r, uint16_t flags) {
+    static char shown[2][17];
+    char line2[17] = "L", *p = line2 + 1;
+    if (!l && !r && (flags & (FLAG_ESTOP | FLAG_BATT_LOW | FLAG_UNARMED | FLAG_TIMEOUT))) {
+        const char *why = (flags & FLAG_ESTOP) ? "E-STOP" : (flags & FLAG_BATT_LOW) ? "BATTERY LOW"
+                        : (flags & FLAG_UNARMED) ? "WAITING FOR PI" : "NO COMMAND";
+        for (uint8_t i = 0; (line2[i] = why[i]); i++);
+    } else { /* "L+120  R-120" */
+        *p++ = l < 0 ? '-' : '+'; itoa(abs(l), p, 10); p += strlen(p);
+        *p++ = ' '; *p++ = ' '; *p++ = 'R'; *p++ = r < 0 ? '-' : '+'; itoa(abs(r), p, 10);
+    }
+    const char *line1 = motion_name(l, r);
+    if (strcmp(line1, shown[0])) { lcd_line(0, line1); strcpy(shown[0], line1); }
+    if (strcmp(line2, shown[1])) { lcd_line(1, line2); strcpy(shown[1], line2); }
+}
+
 static uint16_t batt_mv(void) { return 700 + (uint16_t)(((uint32_t)adc[0] * 20151) / 1024); }
 
 int main(void) {
@@ -285,6 +346,7 @@ int main(void) {
     MCUSR = 0;
     wdt_disable();
     init();
+    lcd_init(); /* ~60 ms of start-up delays: before the 60 ms watchdog is enabled */
     sei();
     wdt_enable(WDTO_60MS);
 
@@ -295,7 +357,7 @@ int main(void) {
     fb_parser parser = {0};
     uint16_t crc_seen = 0;
     uint8_t seq_ack = 0, armed = 0, estop = 0, batt_low = 0;
-    uint32_t last_cmd = now_ticks(), last_telem = last_cmd, batt_bad_since = 0, estop_since = 0;
+    uint32_t last_cmd = now_ticks(), last_telem = last_cmd, last_lcd = last_cmd, batt_bad_since = 0, estop_since = 0;
 
     for (;;) {
         wdt_reset();
@@ -392,6 +454,9 @@ int main(void) {
             if (want[i] < -255) want[i] = -255;
         }
         motors_apply(want[0], want[1]);
+
+        /* --- LCD: show the direction the robot is actually driving */
+        if (now - last_lcd >= LCD_PERIOD_MS * TICKS_PER_MS) { last_lcd = now; lcd_motion(applied[0], applied[1], flags); }
 
         /* --- telemetry */
         if (now - last_telem >= TELEM_PERIOD_MS * TICKS_PER_MS) {

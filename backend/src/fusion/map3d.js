@@ -65,6 +65,20 @@ export class VoxelMap {
   }
 }
 
+// Nearest map point of the given kinds within ±halfDeg of the robot's heading, at or below robot
+// height (metres from the robot centre; Infinity = none). Auto mode uses it with KIND.CAMERA so
+// obstacles YOLO has no class for (boxes, walls) still count as "ahead".
+VoxelMap.prototype.nearestAhead = function (pose, halfDeg, kinds) {
+  const lim = (halfDeg * Math.PI) / 180, top = this.cfg.map.robot_height_m;
+  let r = Infinity;
+  for (const v of this.vox.values()) {
+    if (!kinds.includes(v.kind) || v.z > top) continue;
+    const dx = v.x - pose.x, dy = v.y - pose.y, a = Math.atan2(dy, dx) - pose.yaw;
+    if (Math.abs(Math.atan2(Math.sin(a), Math.cos(a))) <= lim) r = Math.min(r, Math.hypot(dx, dy));
+  }
+  return r;
+};
+
 // Nearest range in a bearing sector [a, b] degrees (a < b, may be negative).
 export function nearestIn(scan, a, b) {
   let r = Infinity;

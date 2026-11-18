@@ -47,7 +47,7 @@ test('person ahead -> YIELD; stop sign close -> STOP_SIGN', () => {
 
 test('emergency rule: never forward under flag distance', () => {
   const b = new Brain({ ...P, decide_distance_m: 0.1 }, cfg.camera);
-  fresh(b, 1, 0.2);
+  fresh(b, 1, 0.15);
   assert.equal(b.tick(1).v, 0);
 });
 
@@ -59,4 +59,25 @@ test('HOLD waits for GO', () => {
   fresh(b, 2);
   b.tick(2);
   assert.equal(b.tick(2).state, 'DRIVE');
+});
+
+test('no lane lines: free roam drives straight slowly (obstacle rules still on); free_roam off stops', async () => {
+  const floor = { w: 160, h: 120, data: new Uint8Array(160 * 120 * 3).fill(120) }; // plain grey floor
+  const run = (p, range = Infinity) => {
+    const b = new Brain(p, cfg.camera);
+    b.onImage(floor, 0); b.onRange(range, 0); b.onPose({ x: 0, y: 0, yaw: 0 }); b.onVision({ objects: [], aruco: [] }, 0);
+    b.tick(0); b.onImage(floor, 1.5); b.onRange(range, 1.5); b.onVision({ objects: [], aruco: [] }, 1.5);
+    return b.tick(1.5);
+  };
+  const roam = run({ ...P, free_roam: true });
+  assert.equal(roam.state, 'DRIVE'); assert.equal(roam.v, P.slow_speed); assert.ok(Math.abs(roam.w) < 1e-9); assert.match(roam.note, /free roam/);
+  assert.equal(run({ ...P, free_roam: false }).v, 0);
+  assert.equal(run({ ...P, free_roam: true }, 0.5).state, 'SCAN'); // something 0.5 m ahead: look for a way past
+
+  const { VoxelMap, KIND } = await import('../src/fusion/map3d.js');
+  const m = new VoxelMap(cfg), pose = { x: 0, y: 0, yaw: 0 };
+  m.addRobotPoint(0.6, 0.05, 0.1, pose, 0, KIND.CAMERA);   // depth point straight ahead
+  m.addRobotPoint(0.3, 0.4, 0.1, pose, 0, KIND.CAMERA);    // off to the side
+  m.addRobotPoint(0.2, 0, 0.1, pose, 0, KIND.IR);          // other kinds are not "camera ahead"
+  assert.ok(Math.abs(m.nearestAhead(pose, 12, [KIND.CAMERA]) - 0.6) < 0.06);
 });

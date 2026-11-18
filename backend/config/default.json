@@ -41,7 +41,7 @@
     "height_m": 0.05,
     "rear_scale": 4,
     "signal": "raw",
-    "baseline_adc": 675,
+    "zero_decay": 0.1,
     "baseline": {},
     "median": 5,
     "history": 25,
@@ -50,15 +50,15 @@
   },
 
   "ir_drive": {
+    "block_m": 0.06,
+    "free_s": 0.3,
     "cruise_speed": 0.12,
     "slow_speed": 0.06,
     "turn_rate": 1.0,
     "side_turn": 0.5,
-    "decide_m": 0.35,
-    "slow_m": 0.60,
-    "clear_m": 0.50,
-    "side_block_m": 0.12,
-    "rear_stop_m": 0.06,
+    "sharp_decide_m": 0.35,
+    "sharp_slow_m": 0.60,
+    "sharp_clear_m": 0.50,
     "reverse_s": 1.0,
     "turn_timeout_s": 4.0
   },
@@ -67,7 +67,8 @@
     "enabled": true,
     "width": 640,
     "height": 480,
-    "ffmpeg_input": ["-f", "v4l2", "-input_format", "yuyv422", "-video_size", "640x480", "-framerate", "15", "-i", "/dev/video0"],
+    "ffmpeg_input": ["-f", "v4l2", "-input_format", "yuyv422", "-video_size", "640x480", "-framerate", "15", "-i", "auto"],
+    "fallback_input": ["-f", "mjpeg", "-i", "tcp://0.0.0.0:5000?listen=1"],
     "hfov_deg": 90,
     "focal_px": null,
     "height_m": 0.18,
@@ -92,7 +93,7 @@
   },
 
   "distance": {
-    "flag_m": 0.30,
+    "flag_m": 0.18,
     "warn_m": 1.20,
     "default_height_m": 0.50,
     "known_heights_m": {
@@ -106,6 +107,8 @@
 
   "brain": {
     "autostart": false,
+    "free_roam": true,
+    "depth_ahead_deg": 12,
     "cruise_speed": 0.15,
     "slow_speed": 0.07,
     "steer_kp": 1.1,
@@ -138,8 +141,9 @@
     "telemetry_stale_ms": 200,
     "camera_stale_ms": 300,
     "yolo_stale_ms": 1000,
-    "range_stop_m": 0.30,
+    "range_stop_m": 0.18,
     "rear_stop_m": 0.05,
+    "ir_stop_m": 0.04,
     "brake_mps2": 0.5,
     "temp_slow_c": 75,
     "temp_stop_c": 80,

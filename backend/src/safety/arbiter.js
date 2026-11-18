@@ -17,6 +17,8 @@ export function arbitrate(s, cfg) {
     if (s.yoloAgeMs > c.yolo_stale_ms) return stop(`YOLO stale ${s.yoloAgeMs.toFixed(0)} ms`);
   }
   if (v > 0) {
+    // IR proximity sees only ~12 cm, so it gets its own, IR-scale stop distance
+    if (s.irFrontM < c.ir_stop_m) return { v: 0, w, reason: `front IR ${(s.irFrontM * 100).toFixed(0)} cm` };
     if (s.rangeM < c.range_stop_m) return { v: 0, w, reason: `front ${(s.rangeM * 100).toFixed(0)} cm` };
     // always able to stop inside what the sensors see
     const vmax = Math.sqrt(2 * c.brake_mps2 * Math.max(0, s.rangeM - c.range_stop_m));
