@@ -3,7 +3,7 @@
 // clear and odometry drift does not pile up. scan() gives a LiDAR-like 1° virtual laser scan.
 import { camToRobot, intrinsics, robotToWorld } from './geometry.js';
 
-export const KIND = { CAMERA: 0, SHARP: 1, OBJECT: 2 };
+export const KIND = { CAMERA: 0, SHARP: 1, OBJECT: 2, IR: 3 };
 
 export class VoxelMap {
   constructor(cfg) { this.cfg = cfg; this.vox = new Map(); }
@@ -37,9 +37,9 @@ export class VoxelMap {
     return added;
   }
 
-  prune(nowMs) {
-    const maxAge = this.cfg.map.fade_s * 1000;
-    for (const [k, v] of this.vox) if (nowMs - v.t > maxAge) this.vox.delete(k);
+  prune(nowMs) { // IR hits stay longer: they draw the walls along the driven path
+    const m = this.cfg.map, maxAge = m.fade_s * 1000, irAge = (m.ir_fade_s ?? m.fade_s) * 1000;
+    for (const [k, v] of this.vox) if (nowMs - v.t > (v.kind === KIND.IR ? irAge : maxAge)) this.vox.delete(k);
   }
 
   // Float32Array [x, y, z, kind]*, newest first, capped at map.max_points

@@ -16,10 +16,22 @@ export class FireBird extends EventEmitter {
     this.last = null;      // latest telemetry
     this.lastT = 0;        // Pi ms when it arrived
     this.boot = null;
+    this.lastPath = null;  // port actually in use (serial.path may be "auto")
   }
 
-  start() {
-    const { path, baud } = this.cfg.serial;
+  // serial.path "auto": the first FTDI FT232 (the Fire Bird's USB chip, VID 0403), so swapping
+  // robots or USB sockets (COM13 -> COM16 ...) needs no config change. Re-resolved on every retry.
+  async resolvePath() {
+    const { path } = this.cfg.serial;
+    if (path !== 'auto') return path;
+    const ports = await SerialPort.list().catch(() => []);
+    return ports.find((p) => p.vendorId?.toLowerCase() === '0403')?.path ?? null;
+  }
+
+  async start() {
+    const path = await this.resolvePath(), { baud } = this.cfg.serial;
+    if (!path) { setTimeout(() => this.start(), 1000); return; }
+    if (path !== this.lastPath) { this.lastPath = path; this.emit('port', path); }
     const port = new SerialPort({ path, baudRate: baud, autoOpen: false });
     port.on('data', (d) => this.onData(d));
     port.on('close', () => this.lost(port));
@@ -61,10 +73,11 @@ export class FireBird extends EventEmitter {
 
   sendConfig() {
     const f = this.cfg.firmware;
-    const C = P.CFG;
+    const C = P.CFG, sharp = f.reflex_sharp_m && this.cfg.range.sharp_front_index != null; // no Sharp: reflex off
     for (const [k, v] of [[C.TIMEOUT_MS, f.timeout_ms], [C.DWELL_MS, f.dwell_ms], [C.BATT_CUTOFF_MV, f.batt_cutoff_mv],
-      [C.REFLEX_SHARP_CH, f.reflex_sharp_ch], [C.REFLEX_SHARP_ADC, f.reflex_sharp_m ? sharpAdcFor(f.reflex_sharp_m) : 0],
-      [C.REFLEX_PROX_MASK, f.reflex_prox_mask], [C.REFLEX_PROX_ADC, f.reflex_prox_adc]]) this.write(P.config(k, v));
+      [C.REFLEX_SHARP_CH, f.reflex_sharp_ch], [C.REFLEX_SHARP_ADC, sharp ? sharpAdcFor(f.reflex_sharp_m) : 0],
+      [C.REFLEX_PROX_MASK, f.reflex_prox_mask], [C.REFLEX_PROX_ADC, f.reflex_prox_adc],
+      [C.IR_OFF_MS, f.ir_off_ms], [C.IR_ON_MS, f.ir_on_ms], [C.IR_WIN_MS, f.ir_win_ms], [C.IR_LED_PINS, f.ir_led_pins]]) this.write(P.config(k, v));
   }
 
   drive(l, r) { this.seq = (this.seq + 1) & 0xff; this.write(P.drive(this.seq, l, r)); }

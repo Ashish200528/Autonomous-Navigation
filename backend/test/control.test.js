@@ -6,7 +6,7 @@ import { Odometry } from '../src/fusion/odometry.js';
 import { FrontRange, sharpAdcFor, sharpM } from '../src/hw/sensors.js';
 import { arbitrate } from '../src/safety/arbiter.js';
 
-const cfg = loadConfig();
+const cfg = loadConfig({ local: false });
 const near = (a, b, tol) => assert.ok(Math.abs(a - b) <= tol, `${a} not within ${tol} of ${b}`);
 const telem = (o = {}) => ({ tMs: 0, enc: [0, 0], periodUs: [0, 0], sharp: [0, 0, 0, 0, 0], prox: [1023, 1023, 1023, 1023, 1023], flags: 0, ...o });
 

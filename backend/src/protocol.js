@@ -3,9 +3,9 @@
 
 export const T = { DRIVE: 0x01, SERVO: 0x02, CONFIG: 0x03, STOP: 0x04, CLEAR: 0x05, BOOT: 0x80, TELEM: 0x81 };
 export const CFG = { TIMEOUT_MS: 1, REFLEX_SHARP_ADC: 2, REFLEX_SHARP_CH: 3, REFLEX_PROX_MASK: 4,
-  REFLEX_PROX_ADC: 5, BATT_CUTOFF_MV: 6, DWELL_MS: 7 };
+  REFLEX_PROX_ADC: 5, BATT_CUTOFF_MV: 6, DWELL_MS: 7, IR_OFF_MS: 8, IR_ON_MS: 9, IR_WIN_MS: 10, IR_LED_PINS: 11 };
 export const FLAGS = { TIMEOUT: 1, REFLEX: 2, ESTOP: 4, BATT_LOW: 8, DWELL: 16, CRC_ERR: 32, UNARMED: 64 };
-const MAX_PAYLOAD = 64;
+const MAX_PAYLOAD = 96;
 
 export function crc8(bytes, crc = 0) {
   for (const b of bytes) {
@@ -61,6 +61,12 @@ export function decodeTelem(p) {
     tMs: p.readUInt32LE(0), seqAck: p[4], flags: p.readUInt16LE(5),
     enc: [p.readInt32LE(7), p.readInt32LE(11)], periodUs: [p.readUInt32LE(15), p.readUInt32LE(19)],
     sharp: u16s(23, 5), prox: u16s(33, 5), line: u16s(43, 3), battMv: p.readUInt16LE(49), servoUs: u16s(51, 3),
+    // IR proximity, firmware v2+: prox/proxRear are read with the IR LEDs on, proxDark (1-8) with
+    // them off (ambient light). 6-8 come from the ATmega8 (8-bit). v1: prox only, ambient included.
+    // v3 sends proxDark 0xFFFF when it keeps the LEDs on (ir_off_ms 0): no ambient reading.
+    proxRear: p.length >= 63 ? u16s(57, 3) : null,
+    proxDark: p.length >= 79 && p.readUInt16LE(63) !== 0xffff ? u16s(63, 8) : null,
+    fw: p.length >= 80 ? p[79] : p.length >= 63 ? 2 : 1, // v3+ sends it; older ones by length
   };
 }
 

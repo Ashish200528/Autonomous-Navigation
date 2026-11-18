@@ -13,9 +13,10 @@ export function merge(base, over) {
   return base;
 }
 
-export function loadConfig() {
+// Tests pass { local: false } so a machine's own overrides cannot change their results.
+export function loadConfig({ local = true } = {}) {
   const cfg = read('default.json');
-  if (existsSync(new URL('local.json', dir))) merge(cfg, read('local.json'));
+  if (local && existsSync(new URL('local.json', dir))) merge(cfg, read('local.json'));
   return cfg;
 }
 

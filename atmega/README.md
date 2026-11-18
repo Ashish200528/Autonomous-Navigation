@@ -31,7 +31,33 @@ Flashing uses the same USB port the Pi drives the robot through:
 
 - Crystal **14.7456 MHz** (robots after Dec 2010). If yours is 11.0592 MHz, change
   `F_CPU`, `UBRR2` (5 for 115200), `TICKS_PER_MS` and the tick conversions.
-- Jumper **J1** = USB (default), **J2** on (IR proximity on the ADC), **J4** off.
+- Jumper **J1** = USB (default), **J2** shorted (IR proximity 1–4 on ADC4–7).
+- The three **J4** jumpers on the ATmega2560 adaptor board **on**: they join the SPI bus to the
+  ATmega8, which reads IR proximity 6–8 (rear). NEX ships them **open**; remove them only while
+  flashing over ISP, then put them back. Without them the rear sensors read 0 (shown as "no data").
+- **IRP jumper (J1-2 on the main board) out** if you want room light cancelled ("reflection"
+  mode). Robots ship with it in, which keeps the IR LEDs on for good, so the firmware's LED-off
+  reading equals the LED-on one. With it in, use "raw" mode (LEDs on, like NEX's examples).
+- JTAG is switched off at start-up (`JTD`), because IR proximity 1–4 share PF4–PF7 with the JTAG
+  pins: with the JTAGEN fuse set (factory default) those four readings were random and IR3
+  (TDO) read 5 V.
+
+## IR proximity sensors (verified against NEX examples 10, 14_A, 14_B)
+
+| Sensor | Read by | Channel | Bearing |
+|---|---|---|---|
+| 1 | ATmega2560 | ADC4 (PF4) | 90° left |
+| 2 | ATmega2560 | ADC5 (PF5) | 45° front-left |
+| 3 | ATmega2560 | ADC6 (PF6) | 0° front |
+| 4 | ATmega2560 | ADC7 (PF7) | 45° front-right |
+| 5 | ATmega2560 | ADC8 (PK0) | 90° right |
+| 6 | ATmega8 via SPI | its ADC5 | 135° rear-right |
+| 7 | ATmega8 via SPI | its ADC6 | 180° rear |
+| 8 | ATmega8 via SPI | its ADC7 | 135° rear-left |
+
+Sensors 1–5 are 10-bit; 6–8 come back 8-bit from the ATmega8 (the Pi scales them ×4).
+The ATmega8 keeps NEX's default firmware; nothing on it needs flashing. The bearings are the
+Fire Bird V layout and live in `backend/config/default.json` (`ir.sensors`) if yours differ.
 - Pad **P1** open (default), so PE7 is the on-board button, used as E-stop.
 
 ## Fail-safes (all stop-only)

@@ -33,6 +33,10 @@
   .kv { display:grid; grid-template-columns:auto 1fr; gap:2px 12px; font-variant-numeric:tabular-nums; }
   .kv span:nth-child(odd) { color:var(--dim); }
   .FLAGGED { color:var(--bad); } .WARNING { color:var(--warn); } .SAFE { color:var(--ok); }
+  .irwrap { display:flex; gap:12px; flex-wrap:wrap; align-items:flex-start; }
+  #irring { width:220px; height:220px; flex:none; }
+  #irtab { flex:1; min-width:200px; }
+  .near { color:var(--bad); font-weight:600; } .mid { color:var(--warn); } .clear { color:var(--ok); } .nodata { color:var(--dim); }
 </style>
 </head>
 <body>
@@ -46,22 +50,25 @@
 <main>
   <section>
     <div class="card">
+      <h2>3D virtual map — driven path, IR walls (drag to rotate, wheel to zoom)</h2>
+      <canvas id="map3d" width="800" height="420" style="width:100%;background:#0b0d10;border-radius:8px;touch-action:none"></canvas>
+      <div class="row" style="color:var(--dim)">
+        <button id="viewfollow" class="on">Follow robot</button><button id="viewpath">Whole path</button>
+        <span><b style="color:#5fd4ff">━</b> driven path</span><span><b style="color:#3ccf6e">⚑</b> start</span>
+        <span><b style="color:#c77dff">●</b> IR wall</span><span><b style="color:#ff4d4f">━</b> IR ray (hit)</span>
+        <span class="vision-only"><b style="color:#4da3ff">●</b> camera depth</span><span><b style="color:#3ccf6e">●</b> Sharp</span>
+        <span class="vision-only"><b style="color:#ffa630">●</b> YOLO object</span>
+        <span id="mapinfo"></span>
+      </div>
+    </div>
+    <div class="card vision-only" style="margin-top:12px">
       <div class="video"><img id="cam" alt="camera"><canvas id="ov" width="640" height="480"></canvas></div>
     </div>
-    <div class="card" style="margin-top:12px">
+    <div class="card vision-only" style="margin-top:12px">
       <h2>Objects (camera distance)</h2>
       <table><thead><tr><th>#</th><th>class</th><th>distance</th><th>known-h / floor / depth</th><th>zone</th><th>TTC</th><th>status</th></tr></thead>
       <tbody id="objs"></tbody></table>
       <div id="markers" style="margin-top:8px;color:var(--dim)"></div>
-    </div>
-    <div class="card" style="margin-top:12px">
-      <h2>3D map — camera-derived pseudo-LiDAR (drag to rotate, wheel to zoom)</h2>
-      <canvas id="map3d" width="800" height="420" style="width:100%;background:#0b0d10;border-radius:8px;touch-action:none"></canvas>
-      <div class="row" style="color:var(--dim)">
-        <span><b style="color:#4da3ff">●</b> camera depth</span><span><b style="color:#3ccf6e">●</b> Sharp (measured)</span>
-        <span><b style="color:#ffa630">●</b> YOLO object</span><span><b style="color:#ff4d4f">—</b> virtual scan</span>
-        <span id="mapinfo"></span>
-      </div>
     </div>
   </section>
   <section>
@@ -79,12 +86,51 @@
       </div>
     </div>
     <div class="card" style="margin-top:12px">
+      <h2>IR proximity — 8 directions</h2>
+      <div class="irwrap">
+        <canvas id="irring" width="220" height="220"></canvas>
+        <table id="irtab"><thead><tr><th>#</th><th>direction</th><th title="signal (lit / ambient)">signal</th><th>distance</th></tr></thead><tbody id="irrows"></tbody></table>
+      </div>
+      <div id="irnote" style="color:var(--dim);margin-top:6px"></div>
+      <h2 style="margin-top:12px">Calibrate IR distance</h2>
+      <div class="row">
+        <span style="color:var(--dim)">signal</span>
+        <select id="irsig"><option value="raw">raw — LEDs on, like NEX (any firmware)</option>
+          <option value="reflection">reflection — room light cancelled (fw v3, IRP jumper out)</option></select>
+      </div>
+      <p style="color:var(--dim);margin:4px 0">1. Clear everything within 20 cm of the robot and click <b>Zero</b> (raw mode only).
+        2. Hold a flat, light object square in front of a sensor, enter its distance from the sensor face, click <b>Record</b>.
+        Do 4–6 distances per sensor (e.g. 1, 2, 4, 6, 9 cm). Beyond the farthest point reads "clear".</p>
+      <div class="row"><button id="irzero">Zero (nothing near)</button>
+        <span style="color:var(--dim)" id="irled"></span></div>
+      <div class="row">
+        <select id="irsel"><option value="front">front 1–5</option><option>1</option><option>2</option><option>3</option><option>4</option>
+          <option>5</option><option>6</option><option>7</option><option>8</option></select>
+        <input id="ircm" type="number" step="0.5" placeholder="cm" style="width:80px">
+        <button id="irrec">Record</button><button id="irreset">Reset</button>
+      </div>
+      <div id="ircal" style="color:var(--dim);font-variant-numeric:tabular-nums"></div>
+    </div>
+    <div class="card" style="margin-top:12px">
+      <h2>Odometry — wheel encoders</h2>
+      <div class="kv">
+        <span>distance travelled</span><span id="odist">—</span>
+        <span>left / right wheel</span><span id="owheel">—</span>
+        <span>encoder counts L / R</span><span id="oenc">—</span>
+        <span>speed</span><span id="ospeed">—</span>
+        <span>heading</span><span id="ohead">—</span>
+        <span>from start</span><span id="ofrom">—</span>
+      </div>
+      <div class="row"><button id="odomreset">Reset path &amp; distance</button></div>
+    </div>
+    <div class="card" style="margin-top:12px">
       <h2>Control</h2>
       <div class="row"><input id="token" placeholder="token (config/secret)" style="flex:1" type="password"></div>
       <div class="row">
         <button class="stop" data-mode="stop">STOP</button>
         <button data-mode="manual">Manual</button>
-        <button data-mode="auto">Auto</button>
+        <button data-mode="ir">IR drive</button>
+        <button data-mode="auto" class="vision-only">Auto (camera)</button>
         <button id="go">GO</button>
         <button id="clear">Clear E-stop</button>
       </div>
@@ -98,7 +144,7 @@
         <button data-k="left">◀</button><button data-k="down">▼</button><button data-k="right">▶</button>
       </div>
     </div>
-    <div class="card" style="margin-top:12px">
+    <div class="card vision-only" style="margin-top:12px">
       <h2>Distance calibration</h2>
       <div class="row">
         <input id="ccls" placeholder="class, e.g. bottle" style="width:140px">
@@ -117,15 +163,14 @@ try { tok.value = localStorage.getItem('token') || ''; } catch {}
 tok.onchange = () => { try { localStorage.setItem('token', tok.value); } catch {} };
 const post = (path, body) => fetch(path, { method: 'POST', headers: { 'x-token': tok.value, 'content-type': 'application/json' }, body: JSON.stringify(body || {}) }).then((r) => r.json()).then((j) => j.error && alert(j.error));
 
-$('cam').src = '/stream.mjpg';
-let ws, state = null;
+let ws, state = null, camOn = false;
 function connect() {
   ws = new WebSocket(`ws://${location.host}/ws`);
   ws.binaryType = 'arraybuffer';
   ws.onmessage = (e) => {
     if (e.data instanceof ArrayBuffer) { cloud = new Float32Array(e.data); return drawMap(); }
     const m = JSON.parse(e.data);
-    if (m.type === 'state') { render(state = m); drawMap(); } else if (m.error) console.warn(m.error);
+    if (m.type === 'state') { render(state = m); syncPath(m); drawMap(); } else if (m.error) console.warn(m.error);
   };
   ws.onclose = () => setTimeout(connect, 1000);
 }
@@ -138,49 +183,106 @@ $('cal').onclick = () => post('/api/calibrate', { class: $('ccls').value.trim(),
 $('calreset').onclick = () => post('/api/calibrate/reset');
 $('recbtn').onclick = () => post('/api/record', { on: !(state && state.recording) });
 $('mapclear').onclick = () => post('/api/map/clear');
+$('odomreset').onclick = () => post('/api/odom/reset');
+$('irsig').onchange = () => fetch('/api/config', { method: 'PUT', headers: { 'x-token': tok.value, 'content-type': 'application/json' },
+  body: JSON.stringify({ ir: { signal: $('irsig').value } }) }).then((r) => r.json()).then((j) => j.error && alert(j.error));
+$('irzero').onclick = () => post('/api/ir/zero', { sensor: $('irsel').value === 'front' ? 'all' : $('irsel').value });
+$('irrec').onclick = () => post('/api/ir/calibrate', { sensor: $('irsel').value, distance_m: Number($('ircm').value) / 100 });
+$('irreset').onclick = () => confirm(`Delete the calibration of sensor ${$('irsel').value}?`) &&
+  post('/api/ir/calibrate/reset', { sensor: $('irsel').value === 'front' ? 'all' : $('irsel').value });
 
-// ---- 3D map: tiny orbit camera around the robot, no library needed
-let cloud = new Float32Array(0), yawV = -2.4, pitchV = 0.9, zoom = 140, drag = null;
+// ---- driven path: full copy from /api/path after each reset, then appended from the live pose
+let path = [], pathResets = null;
+function syncPath(s) {
+  if (s.odo.resets !== pathResets) {
+    pathResets = s.odo.resets;
+    fetch('/api/path').then((r) => r.json()).then((p) => { path = p; drawMap(); }).catch(() => {});
+    return;
+  }
+  const last = path[path.length - 1];
+  if (!last || Math.hypot(s.pose.x - last[0], s.pose.y - last[1]) >= 0.02) path.push([s.pose.x, s.pose.y]);
+}
+
+// ---- 3D virtual map: tiny orbit camera, no library needed. World z is up, metres.
+let cloud = new Float32Array(0), yawV = -2.4, pitchV = 0.9, zoom = 140, drag = null, follow = true;
 const mc = $('map3d'), mx = mc.getContext('2d');
 mc.onpointerdown = (e) => { drag = [e.clientX, e.clientY]; mc.setPointerCapture(e.pointerId); };
 mc.onpointermove = (e) => { if (!drag) return; yawV += (e.clientX - drag[0]) * 0.01; pitchV = Math.max(0.05, Math.min(1.5, pitchV + (e.clientY - drag[1]) * 0.01)); drag = [e.clientX, e.clientY]; drawMap(); };
 mc.onpointerup = () => { drag = null; };
-mc.onwheel = (e) => { e.preventDefault(); zoom = Math.max(30, Math.min(600, zoom * (e.deltaY > 0 ? 0.9 : 1.1))); drawMap(); };
+mc.onwheel = (e) => { e.preventDefault(); zoom = Math.max(10, Math.min(600, zoom * (e.deltaY > 0 ? 0.9 : 1.1))); drawMap(); };
+const pathBox = () => {
+  let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity;
+  for (const [x, y] of path) { x0 = Math.min(x0, x); x1 = Math.max(x1, x); y0 = Math.min(y0, y); y1 = Math.max(y1, y); }
+  return path.length ? { cx: (x0 + x1) / 2, cy: (y0 + y1) / 2, ext: Math.max(x1 - x0, y1 - y0, 0.5) } : { cx: 0, cy: 0, ext: 1 };
+};
+$('viewfollow').onclick = () => { follow = true; zoom = 140; $('viewfollow').classList.add('on'); $('viewpath').classList.remove('on'); drawMap(); };
+$('viewpath').onclick = () => {
+  follow = false; zoom = Math.max(10, Math.min(600, 330 / pathBox().ext));
+  $('viewpath').classList.add('on'); $('viewfollow').classList.remove('on'); drawMap();
+};
+const deg = (r) => r * 180 / Math.PI;
 function drawMap() {
   if (!state) return;
-  const W = mc.width = mc.clientWidth * devicePixelRatio, H = mc.height = 420 * devicePixelRatio, p = state.pose;
+  const W = mc.width = mc.clientWidth * devicePixelRatio, H = mc.height = 420 * devicePixelRatio, p = state.pose, dpr = devicePixelRatio;
   mx.fillStyle = '#0b0d10'; mx.fillRect(0, 0, W, H);
-  const cy = Math.cos(yawV), sy = Math.sin(yawV), cp = Math.cos(pitchV), sp = Math.sin(pitchV), Z = zoom * devicePixelRatio;
-  const proj = (x, y, z) => { // world -> screen, orbiting the robot
-    x -= p.x; y -= p.y;
+  const box = pathBox(), [ox, oy] = follow ? [p.x, p.y] : [box.cx, box.cy];
+  const cy = Math.cos(yawV), sy = Math.sin(yawV), cp = Math.cos(pitchV), sp = Math.sin(pitchV), Z = zoom * dpr;
+  const proj = (x, y, z) => { // world -> screen, orbiting the view centre
+    x -= ox; y -= oy;
     const a = x * cy - y * sy, b = x * sy + y * cy;
     const depth = 6 + b * cp + z * sp, s = (Z * 6) / Math.max(0.5, depth);
     return [W / 2 + a * s, H * 0.6 - (z * cp - b * sp) * s, depth];
   };
-  mx.strokeStyle = '#1f242c'; mx.lineWidth = 1; // 0.5 m floor grid
-  for (let g = -4; g <= 4; g += 0.5) {
-    let [a, b] = [proj(p.x + g, p.y - 4, 0), proj(p.x + g, p.y + 4, 0)]; mx.beginPath(); mx.moveTo(a[0], a[1]); mx.lineTo(b[0], b[1]); mx.stroke();
-    [a, b] = [proj(p.x - 4, p.y + g, 0), proj(p.x + 4, p.y + g, 0)]; mx.beginPath(); mx.moveTo(a[0], a[1]); mx.lineTo(b[0], b[1]); mx.stroke();
+  const line = (pts, col, w = 1) => { mx.strokeStyle = col; mx.lineWidth = w; mx.beginPath(); pts.forEach(([x, y, z], k) => { const [u, v] = proj(x, y, z); k ? mx.lineTo(u, v) : mx.moveTo(u, v); }); mx.stroke(); };
+
+  const R = follow ? 4 : Math.ceil(box.ext / 2 + 1); // 0.5 m floor grid around the view centre
+  for (let g = -R; g <= R; g += 0.5) {
+    line([[ox + g, oy - R, 0], [ox + g, oy + R, 0]], g === 0 ? '#2a313c' : '#1a1f26');
+    line([[ox - R, oy + g, 0], [ox + R, oy + g, 0]], g === 0 ? '#2a313c' : '#1a1f26');
   }
-  const cols = ['#4da3ff', '#3ccf6e', '#ffa630'];
+
+  const cols = ['#4da3ff', '#3ccf6e', '#ffa630', '#c77dff']; // camera, Sharp, YOLO, IR
   for (let i = 0; i < cloud.length; i += 4) {
     const [u, v] = proj(cloud[i], cloud[i + 1], cloud[i + 2]);
-    mx.fillStyle = cols[cloud[i + 3]] || '#888'; mx.fillRect(u - 1.5, v - 1.5, 3, 3);
+    mx.fillStyle = cols[cloud[i + 3]] || '#888'; mx.fillRect(u - 1.5 * dpr, v - 1.5 * dpr, 3 * dpr, 3 * dpr);
   }
-  if (state.scan) { // virtual laser scan in the robot frame
-    mx.strokeStyle = '#ff4d4f'; mx.lineWidth = 1.5; mx.beginPath(); let pen = false;
-    for (let d = 0; d < 360; d++) {
-      const r = state.scan[d]; if (r == null) { pen = false; continue; }
-      const a = p.yaw + d * Math.PI / 180, [u, v] = proj(p.x + r * Math.cos(a), p.y + r * Math.sin(a), 0.05);
-      pen ? mx.lineTo(u, v) : mx.moveTo(u, v); pen = true;
-    }
-    mx.stroke();
+
+  // driven path: old -> new fades from dark blue to cyan, as a ribbon on the floor
+  const n = path.length, CH = 100;
+  for (let k = 0; k < n - 1; k += CH) {
+    const f = (k + CH / 2) / Math.max(1, n), seg = path.slice(k, k + CH + 1).map(([x, y]) => [x, y, 0.004]);
+    line(seg, `hsl(${200 - 10 * f}, 90%, ${30 + 35 * f}%)`, 3 * dpr);
   }
-  const nose = proj(p.x + 0.12 * Math.cos(p.yaw), p.y + 0.12 * Math.sin(p.yaw), 0.05); // robot: circle + heading
-  const c0 = proj(p.x, p.y, 0.05);
-  mx.strokeStyle = '#fff'; mx.lineWidth = 2; mx.beginPath();
-  for (let k = 0; k <= 24; k++) { const a = k / 24 * 2 * Math.PI, [u, v] = proj(p.x + 0.08 * Math.cos(a), p.y + 0.08 * Math.sin(a), 0.05); k ? mx.lineTo(u, v) : mx.moveTo(u, v); }
-  mx.moveTo(c0[0], c0[1]); mx.lineTo(nose[0], nose[1]); mx.stroke();
+  if (n) { // start flag
+    const [sx, sy0] = path[0];
+    line([[sx, sy0, 0], [sx, sy0, 0.2]], '#3ccf6e', 2 * dpr);
+    line([[sx, sy0, 0.2], [sx + 0.08, sy0, 0.17], [sx, sy0, 0.14]], '#3ccf6e', 2 * dpr);
+    const [u, v] = proj(sx, sy0, 0.22); mx.fillStyle = '#3ccf6e'; mx.font = `${11 * dpr}px system-ui`; mx.fillText('START', u - 14 * dpr, v - 4 * dpr);
+  }
+
+  // robot: Fire Bird V is a ~16 cm disc, ~8 cm tall; heading arrow on top
+  const RR = 0.08, HH = 0.08, ring = (z) => Array.from({ length: 25 }, (_, k) => { const a = k / 24 * 2 * Math.PI; return [p.x + RR * Math.cos(a), p.y + RR * Math.sin(a), z]; });
+  line(ring(0.01), '#9aa4b2', 1.5 * dpr); line(ring(HH), '#fff', 2 * dpr);
+  for (let k = 0; k < 8; k++) { const a = k / 8 * 2 * Math.PI; line([[p.x + RR * Math.cos(a), p.y + RR * Math.sin(a), 0.01], [p.x + RR * Math.cos(a), p.y + RR * Math.sin(a), HH]], '#5c6573', 1); }
+  const hx = Math.cos(p.yaw), hy = Math.sin(p.yaw);
+  line([[p.x - 0.04 * hx, p.y - 0.04 * hy, HH], [p.x + 0.14 * hx, p.y + 0.14 * hy, HH]], '#ffd166', 3 * dpr);
+  line([[p.x + 0.10 * hx - 0.03 * hy, p.y + 0.10 * hy + 0.03 * hx, HH], [p.x + 0.14 * hx, p.y + 0.14 * hy, HH], [p.x + 0.10 * hx + 0.03 * hy, p.y + 0.10 * hy - 0.03 * hx, HH]], '#ffd166', 3 * dpr);
+
+  // live IR rays from the robot body: red to the hit, faint grey when clear
+  for (const s of state.ir || []) {
+    if (s.st !== 'dist' && s.st !== 'clear') continue;
+    const a = p.yaw + s.deg * Math.PI / 180, ca = Math.cos(a), sa = Math.sin(a), z = 0.05, hit = s.st === 'dist';
+    const r = hit ? s.m : 0.15, from = [p.x + RR * ca, p.y + RR * sa, z], to = [p.x + (RR + r) * ca, p.y + (RR + r) * sa, z];
+    line([from, to], hit ? '#ff4d4f' : '#39414d', (hit ? 2.5 : 1) * dpr);
+  }
+
+  // HUD: what the path means in numbers
+  const o = state.odo, fromR = Math.hypot(p.x - (path[0]?.[0] ?? 0), p.y - (path[0]?.[1] ?? 0));
+  mx.fillStyle = 'rgba(11,13,16,.75)'; mx.fillRect(8 * dpr, 8 * dpr, 300 * dpr, 52 * dpr);
+  mx.fillStyle = '#e6e8ec'; mx.font = `${13 * dpr}px system-ui`;
+  mx.fillText(`travelled ${f2(o.dist)} m   ·   heading ${f2(deg(p.yaw), 0)}°`, 16 * dpr, 28 * dpr);
+  mx.fillStyle = '#8b93a1';
+  mx.fillText(`${f2(fromR)} m from start   ·   ${n} path points`, 16 * dpr, 48 * dpr);
   $('mapinfo').textContent = `${state.mapVoxels} voxels`;
 }
 
@@ -203,13 +305,71 @@ setInterval(() => {
 
 const f2 = (x, d = 2) => (x == null ? '—' : Number(x).toFixed(d));
 const ctx = $('ov').getContext('2d');
+const DIRS = ['left', 'front-left', 'front', 'front-right', 'right', 'rear-right', 'rear', 'rear-left'];
+const irClass = (s) => (s.st === 'dist' ? (s.m < 0.06 ? 'near' : 'mid') : s.st === 'clear' ? 'clear' : 'nodata');
+const irText = (s) => ({ dist: s.m != null && `${(s.m * 100).toFixed(1)} cm`, clear: 'clear', uncal: 'not calibrated', nodata: 'no data' }[s.st]);
+const irCol = { near: '#ff4d4f', mid: '#ffa630', clear: '#3ccf6e', nodata: '#4a515c' };
+function drawIr(ir) { // top-down robot, nose up; ray length = distance (clear = full, faint)
+  const c = $('irring'), g = c.getContext('2d'), d = devicePixelRatio, S = 220;
+  c.width = S * d; c.height = S * d; g.scale(d, d);
+  const cx = S / 2, cy = S / 2, R = 30, L = 58, MAX = 0.15;
+  g.fillStyle = '#252a33'; g.strokeStyle = '#8b93a1'; g.lineWidth = 2;
+  g.beginPath(); g.arc(cx, cy, R, 0, 2 * Math.PI); g.fill(); g.stroke();
+  g.fillStyle = '#ffd166'; g.beginPath(); g.moveTo(cx, cy - 8); g.lineTo(cx - 6, cy + 4); g.lineTo(cx + 6, cy + 4); g.fill(); // heading
+  g.font = '12px system-ui'; g.textAlign = 'center'; g.textBaseline = 'middle';
+  for (const s of ir) {
+    const a = s.deg * Math.PI / 180, ux = -Math.sin(a), uy = -Math.cos(a); // bearing 0 = up, + = left
+    const k = irClass(s), len = s.st === 'dist' ? Math.min(1, s.m / MAX) * L : L;
+    g.strokeStyle = irCol[k]; g.lineWidth = k === 'clear' || k === 'nodata' ? 2 : 5; g.globalAlpha = k === 'clear' || k === 'nodata' ? 0.45 : 1;
+    g.beginPath(); g.moveTo(cx + ux * R, cy + uy * R); g.lineTo(cx + ux * (R + len), cy + uy * (R + len)); g.stroke();
+    g.globalAlpha = 1; g.fillStyle = irCol[k];
+    g.fillText({ dist: s.st === 'dist' && (s.m * 100).toFixed(0), clear: '—', uncal: 'cal?', nodata: '?' }[s.st], cx + ux * (R + L + 12), cy + uy * (R + L + 12));
+    g.fillStyle = '#e6e8ec'; g.fillText(s.n, cx + ux * (R - 10), cy + uy * (R - 10));
+  }
+}
 function render(s) {
-  $('link').textContent = `robot: ${s.link ? 'connected' : 'offline'}`;
+  document.querySelectorAll('.vision-only').forEach((e) => { e.style.display = s.vision ? '' : 'none'; });
+  if (s.vision && !camOn) { $('cam').src = '/stream.mjpg'; camOn = true; }
+  if (s.ir) {
+    drawIr(s.ir);
+    $('irrows').innerHTML = s.ir.map((x) => `<tr><td>${x.n}</td><td>${DIRS[x.n - 1]} <span style="color:var(--dim)">${x.deg}° · ${x.mcu}</span></td>
+      <td>${x.sig ?? '—'} <span style="color:var(--dim)">${x.lit == null ? '' : `lit ${x.lit}${x.dark != null ? ` · amb ${x.dark}` : ''}`}</span></td>
+      <td class="${irClass(x)}">${irText(x)}${x.own ? ' ✓' : ''}</td></tr>`).join('');
+    const live = s.ir.filter((x) => x.st !== 'nodata'), rearDead = s.ir.slice(5).every((x) => x.st === 'nodata');
+    const led = live.some((x) => x.dark != null) ? Math.max(...live.filter((x) => x.dark != null).map((x) => Math.abs(x.dark - x.lit))) : null;
+    $('irnote').textContent = [
+      s.ir[0].kind === 'raw' ? 'Signal = drop below each sensor\'s no-obstacle level (LEDs on). Zero and calibrate in the light you drive in.'
+        : 'Signal = reflection of the robot\'s own IR (ambient − lit): room light cancels.',
+      rearDead ? 'Rear 6–8 read nothing: fit the three J4 jumpers on the microcontroller adaptor board (SPI to the ATmega8; open by default).' : '',
+      '✓ = calibrated for this sensor.'].filter(Boolean).join(' ');
+    $('irled').textContent = led == null ? 'LED switching: no ambient reading (firmware v1/v3 with LEDs kept on)'
+      : led < 6 ? `LED switching has NO effect (max ${led}): remove the IRP jumper (J1-2, main board) and flash firmware v3 — until then use raw`
+      : `LED switching works (up to ${led} counts) — reflection mode available`;
+    $('irled').style.color = led != null && led < 6 ? 'var(--warn)' : '';
+    if (document.activeElement !== $('irsig')) $('irsig').value = s.irSignal;
+    $('ircal').innerHTML = Object.entries(s.irCal || {}).filter(([, c]) => c).map(([n, c]) =>
+      `#${n}: ${c.pts.map(([a, m]) => `${(m * 100).toFixed(1)} cm→${a}`).join(', ')}${c.kind !== s.ir[0].kind ? ` (${c.kind} mode, unused now)` : ''}`).join('<br>')
+      + (Object.keys(s.irBaseline || {}).length ? `<br>zero: ${Object.entries(s.irBaseline).map(([n, v]) => `#${n} ${v}`).join(', ')}` : '');
+  }
+  const o = s.odo, p = s.pose, st = path[0] || [0, 0], dx = p.x - st[0], dy = p.y - st[1];
+  $('odist').textContent = `${f2(o.dist)} m`;
+  $('owheel').textContent = `${f2(o.wheel[0])} / ${f2(o.wheel[1])} m`;
+  $('oenc').textContent = o.enc ? `${o.enc[0]} / ${o.enc[1]}` : '—';
+  $('ospeed').textContent = `${f2(p.v)} m/s · turning ${f2(deg(p.w), 0)}°/s`;
+  $('ohead').textContent = `${f2(deg(p.yaw), 0)}° (0° = start direction, + = left)`;
+  $('ofrom').textContent = `${f2(Math.hypot(dx, dy))} m at ${f2(deg(Math.atan2(dy, dx)), 0)}°  (x ${f2(dx)}, y ${f2(dy)})`;
+  const talking = s.link && s.ages.telem < 1000;
+  $('link').textContent = !s.link ? `robot: offline${s.port ? ` (${s.port} not open)` : ' (no FTDI port found)'}`
+    : talking ? `robot: connected · ${s.port}${s.fw != null ? ` · fw v${s.fw}` : ''}`
+    : `robot: ${s.port} open, NO DATA (robot off / J1 not USB / other firmware)`;
+  $('link').style.color = talking ? '' : 'var(--bad)';
   $('batt').textContent = `battery: ${s.batt == null ? '—' : s.batt.toFixed(2) + ' V'}`;
   $('yolo').textContent = s.yolo.on ? `YOLO: ${s.yolo.hz.toFixed(1)} Hz, ${f2(s.yolo.ms, 0)} ms` : 'YOLO: off (no model)';
   $('temp').textContent = `Pi: ${s.temp.toFixed(0)} °C`;
-  $('state').textContent = `${s.mode.toUpperCase()} · ${s.brain.state}`;
-  $('note').textContent = s.brain.note;
+  const irMode = s.mode === 'ir';
+  $('state').textContent = `${irMode ? 'IR DRIVE' : s.mode.toUpperCase()} · ${irMode ? s.irDrive.state : s.brain.state}`;
+  $('note').textContent = irMode ? s.irDrive.note : s.brain.note;
+  document.querySelectorAll('[data-mode]').forEach((b) => b.classList.toggle('on', b.dataset.mode === s.mode && s.mode !== 'stop'));
   $('cmd').textContent = `v ${f2(s.cmd.v)} m/s, w ${f2(s.cmd.w)} rad/s — ${s.cmd.reason}`;
   $('front').textContent = s.front.m == null ? 'clear' : `${(s.front.m * 100).toFixed(0)} cm${s.front.proxHit ? ' (IR prox)' : ''}${s.front.blindHold ? ' (blind-zone hold)' : ''}`;
   $('pose').textContent = `x ${f2(s.pose.x)} y ${f2(s.pose.y)} yaw ${f2(s.pose.yaw * 57.3, 0)}° ±${f2(s.pose.sigma)} m`;

@@ -2,7 +2,8 @@
  *
  * The Pi decides everything. This firmware only:
  *   - applies motor PWM/direction and servo pulses the Pi sends,
- *   - streams raw sensors (encoders, Sharp IR, IR proximity, white line, battery) at 50 Hz,
+ *   - streams raw sensors (encoders, Sharp IR, IR proximity 1-8, white line, battery) at 50 Hz,
+ *     IR proximity 1-5 from its own ADC, 6-8 from the ATmega8 slave over SPI,
  *   - stops on its own: command timeout, E-stop, battery cutoff, optional front reflex,
  *     and a 60 ms hardware watchdog.
  * Pins from the Fire Bird V ATMEGA2560 Hardware Manual V1.08. Crystal 14.7456 MHz.
@@ -14,7 +15,7 @@
 
 #include "protocol.h"
 
-#define FW_VERSION 1
+#define FW_VERSION 3
 #define TICKS_PER_MS 230UL           /* Timer3, prescaler 64: 230.4 ticks per ms */
 #define TELEM_PERIOD_MS 20
 #define MIN_EDGE_TICKS (5 * TICKS_PER_MS)   /* glitch filter: real pulses are >= 25 ms apart */
@@ -28,6 +29,10 @@ static uint8_t cfg_reflex_prox_mask = 0;    /* off until the Pi sends calibrated
 static uint16_t cfg_reflex_prox_adc = 300;
 static uint16_t cfg_batt_cutoff_mv = 8000;
 static uint16_t cfg_dwell_ms = 300;
+static uint16_t cfg_ir_off_ms = 10; /* LEDs off this long before the ambient reading; 0 = LEDs always on */
+static uint16_t cfg_ir_on_ms = 2;   /* LEDs on this long before the lit reading */
+static uint16_t cfg_ir_win_ms = 10; /* each reading averages this window (10 ms = one 100 Hz flicker cycle) */
+static uint8_t cfg_ir_led_pins = 3; /* bit0 PH2, bit1 PH3: NEX's manual says PH2, its example code PH3 */
 
 /* ----------------------------------------------------------------- clock */
 static volatile uint16_t t3_hi;
@@ -65,6 +70,9 @@ ISR(INT5_vect) { encoder_edge(1); } /* right, PE5 */
 #define N_ADC 14
 static volatile uint16_t adc[N_ADC];
 static volatile uint8_t adc_ch, adc_discard;
+/* IR proximity window accumulators: 0-4 filled by the ADC ISR, 5-7 by spi_poll() */
+static volatile uint32_t acc_sum[8];
+static volatile uint16_t acc_n[8];
 
 static void adc_select(uint8_t ch) {
     ADMUX = ch & 7; /* REFS = 00: external AREF (tied to 5V uC on the board) */
@@ -76,11 +84,94 @@ ISR(ADC_vect) {
     if (adc_discard) adc_discard = 0; /* first result after a mux change is unreliable */
     else {
         adc[adc_ch] = v;
+        if (adc_ch >= 4 && adc_ch <= 8) { acc_sum[adc_ch - 4] += v; acc_n[adc_ch - 4]++; }
         adc_ch = (adc_ch + 1) % N_ADC;
         adc_select(adc_ch);
         adc_discard = 1;
     }
     ADCSRA |= (1 << ADSC);
+}
+
+/* ------------------------------------------- IR proximity 1-8, ambient light rejected */
+/* Hardware manual V1.08 §3.11: each sensor is an IR LED + photodiode; ~3.3 V with nothing
+ * near, falling as an obstacle comes closer. The photodiode also sees room light, so the
+ * manual recommends reading with the LEDs on and off and taking the difference. All 8 LEDs
+ * share one switch (T3/T4, logic 1 = off). It only works with the IRP jumper (J1-2 on the
+ * main board) removed - robots ship with it inserted, which keeps the LEDs on for good.
+ * The manual says the switch is PH2, NEX's example code says PH3: cfg_ir_led_pins drives
+ * either or both (default both; PH2 also powers Sharp 1+5, PH3 Sharp 1-5 per the manual).
+ *
+ * Cycle: LEDs off, wait ir_off_ms (the LED supply has to discharge), average ir_win_ms ->
+ * dark; LEDs on, wait ir_on_ms, average ir_win_ms -> lit. A 10 ms window spans one 100 Hz
+ * flicker cycle of mains lighting, so the flicker averages out of both readings.
+ * Sensors 1-5: ADC4-8, averaged by the ADC ISR. Sensors 6-8: the ATmega8 over SPI (NEX
+ * examples 14_A/14_B: send channel 5/6/7, wait for its conversion, clock a dummy byte, the
+ * reply is its 8-bit ADC). The SPI needs the three J4 jumpers on the adaptor board (open
+ * by default; remove them only for ISP). Everything is non-blocking. */
+static uint16_t ir_lit[8], ir_dark[8];
+static uint8_t ir_phase, ir_epoch; /* epoch changes at every window start */
+static uint32_t ir_t;
+
+static void ir_leds(uint8_t on) {
+    uint8_t m = ((cfg_ir_led_pins & 1) ? (1 << PH2) : 0) | ((cfg_ir_led_pins & 2) ? (1 << PH3) : 0);
+    if (on) PORTH &= ~m; else PORTH |= m;
+}
+
+static void acc_reset(void) {
+    uint8_t s = SREG;
+    cli();
+    for (uint8_t i = 0; i < 8; i++) { acc_sum[i] = 0; acc_n[i] = 0; }
+    ir_epoch++;
+    SREG = s;
+}
+
+static void acc_take(uint16_t *out) { /* keeps the old value if a sensor got no sample */
+    uint8_t s = SREG;
+    cli();
+    for (uint8_t i = 0; i < 8; i++) if (acc_n[i]) out[i] = acc_sum[i] / acc_n[i];
+    SREG = s;
+}
+
+static void ir_poll(uint32_t now) {
+    uint32_t dt = now - ir_t;
+    if (!cfg_ir_off_ms) { /* LEDs always on, as in NEX's examples: no ambient reading */
+        ir_leds(1);
+        if (dt >= cfg_ir_win_ms * TICKS_PER_MS) {
+            acc_take(ir_lit); acc_reset(); ir_t = now;
+            for (uint8_t i = 0; i < 8; i++) ir_dark[i] = 0xFFFF; /* tells the Pi: no ambient */
+        }
+        return;
+    }
+    switch (ir_phase) {
+    case 0: if (dt >= cfg_ir_off_ms * TICKS_PER_MS) { acc_reset(); ir_t = now; ir_phase = 1; } break;
+    case 1: if (dt >= cfg_ir_win_ms * TICKS_PER_MS) { acc_take(ir_dark); ir_leds(1); ir_t = now; ir_phase = 2; } break;
+    case 2: if (dt >= cfg_ir_on_ms * TICKS_PER_MS) { acc_reset(); ir_t = now; ir_phase = 3; } break;
+    default: if (dt >= cfg_ir_win_ms * TICKS_PER_MS) { acc_take(ir_lit); ir_leds(0); ir_t = now; ir_phase = 0; } break;
+    }
+}
+
+/* Each rear channel is asked twice in a row and only the second answer is kept: the ATmega8
+ * switches its ADC mux just before converting, and a photodiode's high source impedance
+ * cannot recharge the sample capacitor that fast, so a first answer carries some of the
+ * previous sensor's voltage (the same effect made unconnected inputs copy their neighbour). */
+static uint8_t spi_ch, spi_rep, spi_phase, spi_tag;
+static uint32_t spi_t;
+
+static void spi_poll(uint32_t now) {
+    switch (spi_phase) {
+    case 0: PORTB &= ~(1 << PB0); spi_tag = ir_epoch; SPDR = 5 + spi_ch; spi_phase = 1; break; /* SS low, ask */
+    case 1: if (SPSR & (1 << SPIF)) { (void)SPDR; spi_t = now; spi_phase = 2; } break;
+    case 2: if (now - spi_t >= TICKS_PER_MS / 2) { SPDR = 0x50; spi_phase = 3; } break; /* dummy byte */
+    default:
+        if (!(SPSR & (1 << SPIF))) break;
+        uint8_t v = SPDR;
+        PORTB |= (1 << PB0); /* SS high */
+        if (spi_rep && spi_tag == ir_epoch) { acc_sum[5 + spi_ch] += v; acc_n[5 + spi_ch]++; } /* same window only */
+        if (spi_rep) spi_ch = spi_ch == 2 ? 0 : spi_ch + 1;
+        spi_rep ^= 1;
+        spi_phase = 0;
+        break;
+    }
 }
 
 /* ------------------------------------------------------------------ UART2 */
@@ -131,6 +222,14 @@ static void servo_set(uint8_t ch, uint16_t us) {
 }
 
 static void init(void) {
+    /* JTAG off. IR proximity 1-4 sit on PF4-7 = TCK/TMS/TDO/TDI. With the JTAGEN fuse set (the
+     * ATmega2560 factory default) the JTAG port owns those pins: the sensor voltages clock its
+     * state machine at random and it drives TDO (IR3 read 1022 = 5 V from a 3.3 V sensor).
+     * JTD must be written twice within 4 cycles; two back-to-back stores, interrupts still off. */
+    uint8_t mcucr = MCUCR | (1 << JTD);
+    MCUCR = mcucr;
+    MCUCR = mcucr;
+
     /* Motors: PA0-PA3 direction, PL3/PL4 PWM (Timer5 fast PWM 8-bit, /64 = 900 Hz) */
     DDRA |= 0x0F; PORTA &= 0xF0;
     DDRL |= (1 << PL3) | (1 << PL4);
@@ -156,7 +255,8 @@ static void init(void) {
     EICRB |= (1 << ISC41) | (1 << ISC51);
     EIMSK |= (1 << INT4) | (1 << INT5);
 
-    /* Sensor power: PH2 (IR prox), PH3 (Sharp), PG2 (white line LEDs) low = on */
+    /* Sensor power, low = on: PG2 Sharp 2-4 + white line LEDs; PH2/PH3 IR proximity LEDs and
+     * Sharp 1/5 (NEX's manual and example disagree which is which) - switched by ir_poll() */
     DDRH |= (1 << PH2) | (1 << PH3); PORTH &= ~((1 << PH2) | (1 << PH3));
     DDRG |= (1 << PG2); PORTG &= ~(1 << PG2);
 
@@ -164,6 +264,12 @@ static void init(void) {
     adc_select(0);
     adc_discard = 1;
     ADCSRA = (1 << ADEN) | (1 << ADIE) | (1 << ADPS2) | (1 << ADPS1) | (1 << ADPS0) | (1 << ADSC);
+
+    /* SPI master to the ATmega8: PB0 SS, PB1 SCK, PB2 MOSI out (SS must be an output or a low
+     * level on it drops us out of master mode). Mode 0, fosc/128 = 115 kHz, as in NEX's example. */
+    DDRB |= (1 << PB0) | (1 << PB1) | (1 << PB2);
+    PORTB |= (1 << PB0);
+    SPCR = (1 << SPE) | (1 << MSTR) | (1 << SPR1) | (1 << SPR0);
 
     /* UART2 (FT232 USB): 115200 8N1, UBRR = 7 at 14.7456 MHz (0 % error) */
     UBRR2 = 7;
@@ -194,6 +300,8 @@ int main(void) {
     for (;;) {
         wdt_reset();
         uint32_t now = now_ticks();
+        ir_poll(now);
+        spi_poll(now);
 
         /* --- receive */
         while (rx_tail != rx_head) {
@@ -224,6 +332,10 @@ int main(void) {
                 case CFG_REFLEX_PROX_ADC: cfg_reflex_prox_adc = v; break;
                 case CFG_BATT_CUTOFF_MV: cfg_batt_cutoff_mv = v; break;
                 case CFG_DWELL_MS: cfg_dwell_ms = v > 2000 ? 2000 : v; break;
+                case CFG_IR_OFF_MS: cfg_ir_off_ms = v > 200 ? 200 : v; break;
+                case CFG_IR_ON_MS: cfg_ir_on_ms = v > 200 ? 200 : v; break;
+                case CFG_IR_WIN_MS: cfg_ir_win_ms = v < 1 ? 1 : (v > 200 ? 200 : v); break;
+                case CFG_IR_LED_PINS: cfg_ir_led_pins = v & 3; break;
                 }
                 break;
             }
@@ -254,8 +366,10 @@ int main(void) {
         if (flags) want[0] = want[1] = 0;
 
         uint8_t close = cfg_reflex_sharp_adc && adc[9 + cfg_reflex_sharp_ch] >= cfg_reflex_sharp_adc;
-        for (uint8_t i = 0; i < 5; i++)
-            if ((cfg_reflex_prox_mask & (1 << i)) && adc[i < 4 ? 4 + i : 8] <= cfg_reflex_prox_adc) close = 1;
+        for (uint8_t i = 0; i < 5; i++) { /* reflection = ambient - lit (voltage falls as light grows) */
+            int16_t refl = ir_dark[i] == 0xFFFF ? 675 - (int16_t)ir_lit[i] : (int16_t)ir_dark[i] - (int16_t)ir_lit[i];
+            if ((cfg_reflex_prox_mask & (1 << i)) && refl >= (int16_t)cfg_reflex_prox_adc) close = 1;
+        }
         if (close && want[0] + want[1] > 0) { /* keep only the turn-in-place part */
             int16_t turn = (want[1] - want[0]) / 2;
             want[0] = -turn;
@@ -300,12 +414,15 @@ int main(void) {
             put_u32(t + TELEM_PER_L, ticks_to_us(p0));
             put_u32(t + TELEM_PER_R, ticks_to_us(p1));
             for (uint8_t i = 0; i < 5; i++) put_u16(t + TELEM_SHARP + 2 * i, a[9 + i]);
-            for (uint8_t i = 0; i < 5; i++) put_u16(t + TELEM_PROX + 2 * i, a[i < 4 ? 4 + i : 8]);
+            for (uint8_t i = 0; i < 5; i++) put_u16(t + TELEM_PROX + 2 * i, ir_lit[i]);
             put_u16(t + TELEM_LINE + 0, a[3]);
             put_u16(t + TELEM_LINE + 2, a[2]);
             put_u16(t + TELEM_LINE + 4, a[1]);
             put_u16(t + TELEM_BATT_MV, batt_mv());
             for (uint8_t i = 0; i < 3; i++) put_u16(t + TELEM_SERVO + 2 * i, servo_us[i]);
+            for (uint8_t i = 0; i < 3; i++) put_u16(t + TELEM_PROX_REAR + 2 * i, ir_lit[5 + i]);
+            for (uint8_t i = 0; i < 8; i++) put_u16(t + TELEM_PROX_DARK + 2 * i, ir_dark[i]);
+            t[TELEM_FW] = FW_VERSION;
             send_frame(FB_TELEM, t, TELEM_LEN);
         }
     }

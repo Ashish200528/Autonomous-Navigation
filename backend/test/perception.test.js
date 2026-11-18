@@ -108,7 +108,7 @@ test('tracker keeps the id across frames', () => {
   assert.equal(a, b);
 });
 test('distance: floor contact + known height fuse; Sharp self-calibrates the class height', () => {
-  const cfg = loadConfig();
+  const cfg = loadConfig({ local: false });
   cfg.camera.focal_px = 320; cfg.camera.tilt_deg = 0; cfg.camera.height_m = 0.18;
   const est = new DistanceEstimator(cfg), tr = new Tracker();
   // bottle really 0.20 m tall (table says 0.25) standing 0.6 m away (inside Sharp range):

@@ -14,7 +14,7 @@ import { Recorder } from '../src/record/recorder.js';
 import { replay } from '../src/record/replay.js';
 
 const near = (a, b, tol) => assert.ok(Math.abs(a - b) <= tol, `${a} not within ${tol} of ${b}`);
-const cfg = loadConfig();
+const cfg = loadConfig({ local: false });
 cfg.camera.focal_px = 320; cfg.camera.intrinsics = undefined;
 
 test('geometry: camera <-> robot round trip, floor pixel lands on the floor', () => {

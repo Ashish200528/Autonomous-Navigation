@@ -14,7 +14,7 @@ SRC = main.c protocol.c
 
 firebird.hex: firebird.elf
 	avr-objcopy -O ihex -R .eeprom $< $@
-	avr-size --mcu=$(MCU) -C $<
+	avr-size $<
 
 firebird.elf: $(SRC) protocol.h
 	avr-gcc $(CFLAGS) -Wl,--gc-sections -o $@ $(SRC)

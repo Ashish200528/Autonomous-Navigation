@@ -8,7 +8,11 @@
     "reflex_sharp_ch": 2,
     "reflex_sharp_m": 0.25,
     "reflex_prox_mask": 0,
-    "reflex_prox_adc": 300
+    "reflex_prox_adc": 300,
+    "ir_off_ms": 10,
+    "ir_on_ms": 2,
+    "ir_win_ms": 10,
+    "ir_led_pins": 3
   },
 
   "robot": {
@@ -31,7 +35,36 @@
     "prox_hit_m": 0.08
   },
 
+  "ir": {
+    "bearing_deg": [90, 45, 0, -45, -90, -135, 180, 135],
+    "mount_r_m": 0.08,
+    "height_m": 0.05,
+    "rear_scale": 4,
+    "signal": "raw",
+    "baseline_adc": 675,
+    "baseline": {},
+    "median": 5,
+    "history": 25,
+    "cal": [[450, 0.02], [300, 0.04], [150, 0.06], [60, 0.09], [25, 0.12]],
+    "cal_by_sensor": {}
+  },
+
+  "ir_drive": {
+    "cruise_speed": 0.12,
+    "slow_speed": 0.06,
+    "turn_rate": 1.0,
+    "side_turn": 0.5,
+    "decide_m": 0.35,
+    "slow_m": 0.60,
+    "clear_m": 0.50,
+    "side_block_m": 0.12,
+    "rear_stop_m": 0.06,
+    "reverse_s": 1.0,
+    "turn_timeout_s": 4.0
+  },
+
   "camera": {
+    "enabled": true,
     "width": 640,
     "height": 480,
     "ffmpeg_input": ["-f", "v4l2", "-input_format", "yuyv422", "-video_size", "640x480", "-framerate", "15", "-i", "/dev/video0"],
@@ -106,6 +139,7 @@
     "camera_stale_ms": 300,
     "yolo_stale_ms": 1000,
     "range_stop_m": 0.30,
+    "rear_stop_m": 0.05,
     "brake_mps2": 0.5,
     "temp_slow_c": 75,
     "temp_stop_c": 80,
@@ -144,6 +178,7 @@
     "robot_height_m": 0.25,
     "max_z_m": 1.0,
     "fade_s": 10,
+    "ir_fade_s": 600,
     "max_points": 20000,
     "side_sector_deg": [20, 100],
     "side_block_m": 1.0

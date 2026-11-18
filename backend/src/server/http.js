@@ -37,6 +37,11 @@ export function startServer(app, { port, mjpeg_fps }, secret) {
     'POST /api/calibrate/reset': (req, res) => json(res, 200, app.resetSelfcal()),
     'POST /api/record': async (req, res) => json(res, 200, app.record(!!(await body(req)).on)),
     'POST /api/map/clear': (req, res) => json(res, 200, app.clearMap()),
+    'GET /api/path': (req, res) => json(res, 200, app.path()), // [[x, y]*] every 2 cm since the last reset
+    'POST /api/odom/reset': (req, res) => json(res, 200, app.resetOdom()),
+    'POST /api/ir/calibrate': async (req, res) => { const b = await body(req); json(res, 200, app.calibrateIr(b.sensor, Number(b.distance_m))); },
+    'POST /api/ir/calibrate/reset': async (req, res) => json(res, 200, app.resetIrCal((await body(req)).sensor)),
+    'POST /api/ir/zero': async (req, res) => json(res, 200, app.zeroIr((await body(req)).sensor)),
   };
 
   const server = createServer(async (req, res) => {

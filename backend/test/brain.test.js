@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { loadConfig } from '../src/config.js';
 import { Brain } from '../src/brain/state-machine.js';
 
-const cfg = loadConfig();
+const cfg = loadConfig({ local: false });
 const P = { ...cfg.brain, autostart: true, flag_m: cfg.distance.flag_m, warn_m: cfg.distance.warn_m };
 
 function roadImg(yx = 50, wx = 130, w = 160, h = 120) {
