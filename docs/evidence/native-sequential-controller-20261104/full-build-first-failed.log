@@ -1,0 +1,33 @@
+Starting >>> anc_description
+Finished <<< anc_description [0.41s]
+Starting >>> anc_gazebo
+Finished <<< anc_gazebo [0.40s]
+Starting >>> anc_localization
+Finished <<< anc_localization [1.84s]
+Starting >>> anc_nav2_sequential_controller
+--- stderr: anc_nav2_sequential_controller
+/home/ashish/AutonomousNavigationCar/simulation/ros2_ws/src/anc_nav2_sequential_controller/test/costmap_tests.cpp: In member function ‘virtual void SensorFusion_UnknownIsNotFreeAndNeitherSourceClearsAnObstacle_Test::TestBody()’:
+/home/ashish/AutonomousNavigationCar/simulation/ros2_ws/src/anc_nav2_sequential_controller/test/costmap_tests.cpp:13:64: error: cannot declare variable ‘rays’ to be of abstract type ‘ObservationLayer’
+   13 |   Costmap2D master(8,8,.1,0,0,NO_INFORMATION);ObservationLayer rays;
+      |                                                                ^~~~
+/home/ashish/AutonomousNavigationCar/simulation/ros2_ws/src/anc_nav2_sequential_controller/test/costmap_tests.cpp:5:7: note:   because the following virtual functions are pure within ‘ObservationLayer’:
+    5 | class ObservationLayer : public CostmapLayer {
+      |       ^~~~~~~~~~~~~~~~
+In file included from /opt/ros/jazzy/include/nav2_costmap_2d/nav2_costmap_2d/costmap_layer.hpp:42,
+                 from /home/ashish/AutonomousNavigationCar/simulation/ros2_ws/src/anc_nav2_sequential_controller/test/costmap_tests.cpp:2:
+/opt/ros/jazzy/include/nav2_costmap_2d/nav2_costmap_2d/layer.hpp:86:16: note:     ‘virtual void nav2_costmap_2d::Layer::reset()’
+   86 |   virtual void reset() = 0;
+      |                ^~~~~
+/opt/ros/jazzy/include/nav2_costmap_2d/nav2_costmap_2d/layer.hpp:90:16: note:     ‘virtual bool nav2_costmap_2d::Layer::isClearable()’
+   90 |   virtual bool isClearable() = 0;
+      |                ^~~~~~~~~~~
+gmake[2]: *** [CMakeFiles/costmap_tests.dir/build.make:76: CMakeFiles/costmap_tests.dir/test/costmap_tests.cpp.o] Error 1
+gmake[1]: *** [CMakeFiles/Makefile2:213: CMakeFiles/costmap_tests.dir/all] Error 2
+gmake: *** [Makefile:146: all] Error 2
+---
+Failed   <<< anc_nav2_sequential_controller [24.8s, exited with code 2]
+
+Summary: 3 packages finished [27.7s]
+  1 package failed: anc_nav2_sequential_controller
+  1 package had stderr output: anc_nav2_sequential_controller
+  6 packages not processed

@@ -1,0 +1,188 @@
+{
+  "classical_invalid_frames": [
+    {
+      "id": "s009-v0",
+      "reason": "floor_seed_unobservable"
+    },
+    {
+      "id": "s009-v1",
+      "reason": "floor_seed_unobservable"
+    },
+    {
+      "id": "s009-v2",
+      "reason": "floor_seed_unobservable"
+    },
+    {
+      "id": "s019-v0",
+      "reason": "floor_seed_unobservable"
+    },
+    {
+      "id": "s019-v1",
+      "reason": "floor_seed_unobservable"
+    },
+    {
+      "id": "s019-v2",
+      "reason": "floor_seed_unobservable"
+    },
+    {
+      "id": "s029-v0",
+      "reason": "floor_seed_unobservable"
+    },
+    {
+      "id": "s029-v1",
+      "reason": "floor_seed_unobservable"
+    },
+    {
+      "id": "s029-v2",
+      "reason": "floor_seed_unobservable"
+    }
+  ],
+  "checkpoint_sha256": "19595d900bca332fd149b95d6c2f31397c0048d1020948e82f1febfd6c2aca66",
+  "split": "test",
+  "images": 9,
+  "dataset": "/home/ashish/.local/state/phase9d-diverse",
+  "samples": [
+    {
+      "id": "s009-v0",
+      "accuracy": 0.9958482236703805,
+      "unknown_fraction_at_06": 0.00036787891528274123,
+      "mean_confidence_wrong": 0.8638086318969727,
+      "obstacle_false_negative_pixels": 0
+    },
+    {
+      "id": "s009-v1",
+      "accuracy": 0.8686398051569862,
+      "unknown_fraction_at_06": 0.0015883941335310002,
+      "mean_confidence_wrong": 0.8347176909446716,
+      "obstacle_false_negative_pixels": 2425
+    },
+    {
+      "id": "s009-v2",
+      "accuracy": 0.9959533319318898,
+      "unknown_fraction_at_06": 0.00026277065377338656,
+      "mean_confidence_wrong": 0.8694697618484497,
+      "obstacle_false_negative_pixels": 0
+    },
+    {
+      "id": "s019-v0",
+      "accuracy": 0.9959007778011352,
+      "unknown_fraction_at_06": 0.00021021652301870928,
+      "mean_confidence_wrong": 0.9131051898002625,
+      "obstacle_false_negative_pixels": 0
+    },
+    {
+      "id": "s019-v1",
+      "accuracy": 0.9959533319318898,
+      "unknown_fraction_at_06": 0.00026277065377338656,
+      "mean_confidence_wrong": 0.9164081811904907,
+      "obstacle_false_negative_pixels": 0
+    },
+    {
+      "id": "s019-v2",
+      "accuracy": 0.9959533319318898,
+      "unknown_fraction_at_06": 0.00026277065377338656,
+      "mean_confidence_wrong": 0.9140636920928955,
+      "obstacle_false_negative_pixels": 0
+    },
+    {
+      "id": "s029-v0",
+      "accuracy": 0.9646326013513513,
+      "unknown_fraction_at_06": 0.0052259290540540545,
+      "mean_confidence_wrong": 0.8022820949554443,
+      "obstacle_false_negative_pixels": 601
+    },
+    {
+      "id": "s029-v1",
+      "accuracy": 0.996426319108682,
+      "unknown_fraction_at_06": 0.008093336136220307,
+      "mean_confidence_wrong": 0.8145849108695984,
+      "obstacle_false_negative_pixels": 0
+    },
+    {
+      "id": "s029-v2",
+      "accuracy": 0.996426319108682,
+      "unknown_fraction_at_06": 0.001156190876602901,
+      "mean_confidence_wrong": 0.8108118772506714,
+      "obstacle_false_negative_pixels": 0
+    }
+  ],
+  "convention": "classical UNKNOWN maps to other; CNN 160x120 and classical native 320x240",
+  "results": {
+    "cnn": {
+      "confusion_matrix": [
+        [
+          145482,
+          1,
+          0
+        ],
+        [
+          3021,
+          0,
+          5
+        ],
+        [
+          648,
+          0,
+          21870
+        ]
+      ],
+      "iou": [
+        0.9753942287062862,
+        0.0,
+        0.9710074146428096
+      ],
+      "mean_iou": 0.648800547783032,
+      "precision": [
+        0.9754007683488545,
+        0.0,
+        0.9997714285714285
+      ],
+      "recall": [
+        0.9999931263446589,
+        0.0,
+        0.9712230215827338
+      ],
+      "latency_ms_mean": 1.633876666649788,
+      "latency_ms_p95": 2.682076599739957,
+      "obstacle_false_negative_pixels": 3026
+    },
+    "classical": {
+      "confusion_matrix": [
+        [
+          0,
+          0,
+          145483
+        ],
+        [
+          0,
+          0,
+          3026
+        ],
+        [
+          0,
+          0,
+          22518
+        ]
+      ],
+      "iou": [
+        0.0,
+        0.0,
+        0.13166342156501604
+      ],
+      "mean_iou": 0.04388780718833868,
+      "precision": [
+        0.0,
+        0.0,
+        0.13166342156501604
+      ],
+      "recall": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "latency_ms_mean": 12.504113999865593,
+      "latency_ms_p95": 57.810193799923546,
+      "obstacle_false_negative_pixels": 3026
+    }
+  }
+}

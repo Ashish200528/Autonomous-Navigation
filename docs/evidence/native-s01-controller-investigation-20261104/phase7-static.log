@@ -1,0 +1,14 @@
+PASS useful_free_on_uniform_floor: free=5120 ground_band=5120
+PASS above_ground_band_unknown: unknown_above_horizon_roi=True
+PASS unknown_confidence_zero: nonzero_unknown_confidence=0
+PASS chromatic_unknown_shape_reports_occupied: occupied_in_generic_rectangle=2550
+PASS free_regions_remain_useful_with_obstacle: free=4704
+PASS low_contrast_obstacle_not_declared_free: free=0 unknown=2550
+PASS calibrated_floor_seed_survives_center_occlusion: floor_seed=1228 free_in_occluder=0 free_total=4988
+PASS missing_calibrated_floor_support_fails_closed: frame without visible calibrated floor appearance is rejected as unobservable
+PASS small_ambiguous_floor_patch_fails_closed: a calibrated-looking patch below the contiguous support minimum cannot publish FREE
+PASS distinct_non_floor_wall_reports_occupied: occupied_wall_px=18560
+PASS ambiguous_top_border_stays_unknown: occupied_top_border_px=0
+PASS gray_ground_shadow_remains_unknown: free=0 occupied=0 unknown=3200
+PASS unrectified_distortion_rejected: nonzero D is not silently treated as rectified
+SUMMARY: 13/13 checks passed

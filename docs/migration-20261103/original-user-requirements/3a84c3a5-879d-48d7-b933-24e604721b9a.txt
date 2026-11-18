@@ -1,0 +1,93 @@
+Continue the Autonomous Navigation Car project with **Phase 6 — Nav2 REFERENCE Navigation for the Custom ANC Robot**.
+
+GitHub: https://github.com/Ashish200528/Autonomous-Navigation
+
+Local WSL project: `/home/ashish/AutonomousNavigationCar`
+
+Last reviewed Phase 5 commit: `d60eddbabbf45d1d9bf69e974a3d40eb773c2921`
+
+Phases 0–5 are implemented. Phase 5 is PASS WITH LIMITS: six generated worlds, 47/47 static checks and 52/52 live-run checks. No autonomous navigation was attempted in the new worlds.
+
+**Goal:** Make the existing custom `anc_robot` drive automatically from its configured start to a reachable goal using Nav2 in a clearly labeled REFERENCE setup.
+
+### Step A — Review and validate baseline
+
+Inspect the existing repository, Git status, master roadmap, Phase 5 report, scenario generator, runner, localization package and sensor interfaces.
+
+Safely synchronize with GitHub without overwriting uncommitted work.
+
+Build the ROS workspace and rerun the core Phase 5 validation against the checked-out committed version.
+
+Verify that camera, IMU, EKF, odometry and TF remain operational.
+
+### Step B — Implement reference-only Nav2 integration
+
+Create an `anc_navigation` ROS 2 package.
+
+Configure Nav2 Jazzy for the physical dimensions, kinematics, velocity limits and footprint of the custom differential-drive robot.
+
+Configure the global and local costmaps, controller, planner, behavior server, lifecycle management and NavigateToPose action.
+
+Use the Phase 5 scenario environments and start/goal positions.
+
+Provide an occupancy map corresponding to the reference scenario. Reference-only maps may be generated from known simulation geometry, but must be labeled ORACLE/REFERENCE and must not become available to realistic perception or navigation.
+
+If required, add a simulated 2D laser sensor exclusively to the REFERENCE robot configuration, with an explicit switch or separate launch profile. Do not make the laser or perfect map accessible to the later REALISTIC RGB-only profile.
+
+Never use Gazebo ground-truth pose as Nav2 localization input.
+
+Reuse the existing EKF and known-start localization where appropriate. Ensure exactly one authoritative TF publisher for `map -> odom` and `odom -> base_footprint`; if using AMCL, remove conflicting known-start TF publication and initialize correctly.
+
+### Step C — Automated autonomous navigation trials
+
+Extend the existing scenario runner to support a separate navigation-test mode while preserving Phase 5's stationary validation mode.
+
+Run these tests in order:
+
+1. S00: a simple reachable goal in the empty arena.
+2. S01: navigate around the box obstructing the direct path.
+3. S02: navigate among seeded randomly placed obstacles.
+4. S03: test narrower clearances without exceeding the robot's collision footprint.
+5. S04: test a nonzero, seeded known-start position.
+6. S09: verify that an unreachable destination does not lead to indefinite unsafe driving or a falsely reported successful goal.
+
+For each test, record actual goal acceptance and result, robot motion, path length, elapsed time, final pose error, collisions, localization drift, timeouts and recovery behavior.
+
+Only claim success when the ROS NavigateToPose action and independently measured robot position support it. Treat timeouts, collisions and unreachable paths as failures or expected no-route outcomes as appropriate.
+
+Do not artificially command the robot along a precomputed geometry-validator path to claim Nav2 success.
+
+### Step D — Engineering safeguards
+
+Preserve the boundaries between REFERENCE and REALISTIC profiles.
+
+Gazebo truth must only be accessed by the evaluator, never by Nav2 controllers or localization.
+
+Keep evaluation-only world geometry and reference occupancy data out of realistic nodes.
+
+Watch for the existing wheel-slip and rectangle-turning limitations. Do not hide or erase them.
+
+Use bounded goals and process timeouts, and cleanly terminate all ROS/Gazebo processes.
+
+Keep the test headless when possible because the laptop has only 8 GB RAM.
+
+Do not alter the Arduino UNO Q application or run destructive system operations.
+
+### Step E — Evidence and deliverables
+
+- New Nav2 configuration and launch files for the actual ANC robot.
+- Working REFERENCE map and sensor configuration.
+- At least one verified successful NavigateToPose trial on S00 before advancing to harder scenarios.
+- Repeatable scenario-based navigation tests.
+- Quantitative JSON/CSV/log evidence and optional bounded visualizations.
+- A clear account of all successful, failed and blocked trials.
+- Updated README, phase report, issue list, scenario registry and test case registry.
+- Git commit and push after validation.
+
+If S00 fails, diagnose and repair the baseline before attempting the harder scenarios.
+
+Report whether Phase 6 is PASS, PASS WITH LIMITS, FAIL or BLOCKED. State exactly what navigation capability has been demonstrated.
+
+**Stop after Phase 6. Do not implement Phase 7 RGB perception, realistic obstacle avoidance or parking yet.**
+
+Continue independently within existing permissions and ask for input only if a genuine blocker or consequential action requires approval.

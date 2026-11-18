@@ -1,6 +1,7 @@
 """Headless REFERENCE-only Nav2 bringup for Phase 6."""
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription, TimerAction
+from launch.conditions import IfCondition
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import LaunchConfiguration, PathJoinSubstitution
 from launch_ros.actions import Node
@@ -12,16 +13,28 @@ def generate_launch_description():
     nav_share = FindPackageShare("anc_navigation")
     sim_launch = PathJoinSubstitution([bringup_share, "launch", "sim.launch.py"])
     nav_params = PathJoinSubstitution([nav_share, "config", "nav2_reference.yaml"])
+    rviz_config = PathJoinSubstitution([nav_share, "config", "phase6_reference.rviz"])
 
     simulation = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(sim_launch),
         launch_arguments={
             "world_file": LaunchConfiguration("world_file"),
             "camera_enabled": "false",
+            "gui": LaunchConfiguration("gui"),
             "start_x": LaunchConfiguration("start_x"),
             "start_y": LaunchConfiguration("start_y"),
             "start_yaw": LaunchConfiguration("start_yaw"),
         }.items(),
+    )
+
+    rviz = Node(
+        package="rviz2",
+        executable="rviz2",
+        name="phase6_reference_rviz",
+        output="screen",
+        arguments=["-d", rviz_config],
+        parameters=[{"use_sim_time": True}],
+        condition=IfCondition(LaunchConfiguration("rviz")),
     )
 
     map_server = Node(
@@ -112,6 +125,8 @@ def generate_launch_description():
 
     return LaunchDescription([
         DeclareLaunchArgument("world_file", description="Generated Phase 5 SDF world."),
+        DeclareLaunchArgument("gui", default_value="false", description="Use the Gazebo graphical interface."),
+        DeclareLaunchArgument("rviz", default_value="false", description="Open optional RViz displays."),
         DeclareLaunchArgument("map_yaml", description="Run-specific ORACLE_REFERENCE occupancy map."),
         DeclareLaunchArgument("start_x", default_value="0.0"),
         DeclareLaunchArgument("start_y", default_value="0.0"),
@@ -120,6 +135,7 @@ def generate_launch_description():
         map_lifecycle,
         command_guard,
         simulation,
+        rviz,
         TimerAction(period=7.0, actions=[
             planner, controller, behavior, bt_navigator, nav_lifecycle,
         ]),

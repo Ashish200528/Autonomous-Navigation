@@ -1,0 +1,15 @@
+[Unit]
+Description=Fire Bird autodrive backend
+After=network.target
+
+[Service]
+User=__USER__
+WorkingDirectory=__DIR__
+ExecStart=/usr/bin/node src/index.js
+Restart=always
+RestartSec=2
+Nice=-5
+Environment=NODE_ENV=production
+
+[Install]
+WantedBy=multi-user.target

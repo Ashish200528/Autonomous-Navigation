@@ -1,0 +1,28 @@
+AUTONOMOUS NAVIGATION CAR - PACKAGE VALIDATION
+==============================================
+
+PowerShell parser: PASS (Run-VisualDemo.ps1 parsed without syntax errors).
+Embedded Win32 window API: PASS (C# compiled; visible desktop titles enumerated).
+Bash wrapper: PASS (bash -n completed without errors).
+WSL path conversion: PASS (Windows package path converted to /mnt/c/... format).
+Session dispatch: observed as intended (the intentionally invalid profile
+reached the project helper and was rejected on stderr with exit code 2 before
+it could create a run).
+
+Existing project diagnostics: PASS for Ubuntu-24.04 on WSL2, E:\WSL\Ubuntu-24.04,
+branch feature/phase8c-lidar, ROS 2 Jazzy, ros_gz_sim, anc_gazebo,
+anc_navigation, anc_lidar, Gazebo Sim, and WSLg. No active tracked project
+simulation was found.
+
+Resource preflight: BLOCKED. The latest package snapshot measured 350 MiB of
+available Windows RAM, 3059 MiB available in WSL, 970495 MiB free in the WSL
+project filesystem, and 35567 MiB free on the package drive. The existing
+diagnostics then measured 314 MiB Windows RAM. The package requires at least
+2560 MiB Windows RAM for Phase 6, 3328 MiB for LiDAR + RViz, 1536 MiB in WSL,
+3072 MiB WSL project space, and 4096 MiB package-drive space.
+
+Because the RAM gate failed, the FFmpeg archive was not downloaded, NVENC and
+software encoders were not tested, Gazebo/RViz were not launched, and no real
+simulation video or screenshots were produced. The four per-demo results and
+RUN_SUMMARY.txt record this blocked state. Do not present any file in this
+package as simulation footage until the normal launcher saves and validates it.

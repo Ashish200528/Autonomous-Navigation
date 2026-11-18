@@ -1,0 +1,132 @@
+Session ID: windows-phase6-S02-seed101-20261102T200739Z-6165
+Profile: phase6
+Scenario: S02 | seed: 101 | Gazebo GUI: true | RViz: true
+Parking: AUTONOMOUS PARKING — NOT YET LIVE-VALIDATED
+Session log: /home/ashish/AutonomousNavigationCar/docs/evidence/windows-demos/phase6-S02-seed101-20261102T200739Z-3480.log
+REFERENCE NAVIGATION — PREDEFINED MAP
+This mode uses the existing geometry-derived ORACLE_REFERENCE map for localization/planning; it does not validate RGB-only or online LiDAR navigation.
+{
+  "run_id": "windows-phase6-S02-seed101-20261102T200739Z-6165",
+  "scenario_id": "S02",
+  "seed": 101,
+  "profile": "ORACLE_REFERENCE",
+  "status": "FAIL",
+  "classification": "PASS",
+  "action": {
+    "name": "/navigate_to_pose",
+    "goal_accepted": true,
+    "goal_frame": "map",
+    "goal_xyyaw": [
+      3.0,
+      0.0,
+      0.0
+    ],
+    "status_code": 4,
+    "status": "SUCCEEDED",
+    "error_code": 0,
+    "error_msg": "",
+    "timed_out": false,
+    "feedback_samples": 2379,
+    "last_feedback": {
+      "x": 2.8883792106437003,
+      "y": 0.09438444911322501,
+      "distance_remaining_m": 0.14142131805419922,
+      "navigation_time_s": 41.318,
+      "number_of_recoveries": 0
+    },
+    "number_of_recoveries": 0
+  },
+  "metrics": {
+    "action_accepted": true,
+    "action_result": "SUCCEEDED",
+    "action_error_code": 0,
+    "action_error_message": "",
+    "wall_elapsed_s": 59.607,
+    "sim_elapsed_s": 42.102,
+    "truth_path_length_m": 6.6342,
+    "latest_planned_path_length_m": 0.1414,
+    "peak_planned_path_length_m": 6.8614,
+    "plan_message_count": 47,
+    "final_truth_pose": {
+      "monotonic_s": 3885.813633082,
+      "sim_time_s": 48.78,
+      "frame_id": "world",
+      "x": 2.86448,
+      "y": 0.0774269,
+      "z": -3.14995e-08,
+      "yaw_rad": -0.17060800000000004,
+      "linear_x_mps": -0.000214386,
+      "angular_z_radps": 0.00664518
+    },
+    "final_xy_goal_error_m": 0.1561,
+    "final_yaw_goal_error_rad": 0.1706,
+    "final_estimated_map_pose": {
+      "x": 2.8883588946361716,
+      "y": 0.09437559199984283,
+      "yaw_rad": -0.16749674529474182
+    },
+    "final_localization_drift_xy_m": 0.0293,
+    "minimum_conservative_clearance_m": 0.1201,
+    "contact_collision_events": 0,
+    "contact_collision_pairs": [],
+    "ground_contact_messages_filtered": 22779,
+    "non_ground_contact_messages": 0,
+    "max_abs_cmd_vel_linear_x_mps": 0.18,
+    "max_abs_cmd_vel_angular_z_radps": 0.45,
+    "command_guard_limits_mps_radps": [
+      0.25,
+      1.0
+    ],
+    "post_action_robot_stopped": true,
+    "post_action_settle_time_s": 0.807,
+    "post_action_settle_window_expired": false,
+    "post_action_truth_pose_window": {
+      "sample_count": 5,
+      "duration_s": 0.815,
+      "xy_delta_m": 2e-05,
+      "yaw_delta_rad": 0.0004
+    },
+    "post_action_raw_odom_velocity": [
+      0.0,
+      0.0
+    ],
+    "post_action_filtered_odom_velocity": [
+      -0.0010069648863272808,
+      3.059621500903242e-05
+    ],
+    "post_action_truth_twist_stopped": true,
+    "truth_samples": 241,
+    "raw_odom_samples": 1361,
+    "filtered_odom_samples": 1388,
+    "raw_odom_path_length_m": 6.639,
+    "filtered_odom_path_length_m": 6.6387,
+    "command_nav_samples": 476,
+    "command_gazebo_samples": 476,
+    "sensor_counts": {
+      "camera_image_raw": 0,
+      "imu_data": 4583,
+      "clock": 24144,
+      "map": 1,
+      "odom": 1361,
+      "odometry_filtered": 1388
+    },
+    "evaluator_truth_errors": []
+  },
+  "runner_error": null,
+  "limitations": [],
+  "failed_checks": [
+    "single_ekf_odom_to_base_transform_present",
+    "single_authority_tf_chain_present",
+    "gazebo_pause_requested_before_shutdown"
+  ],
+  "run_dir": "/home/ashish/AutonomousNavigationCar/docs/evidence/phase6/runs/windows-phase6-S02-seed101-20261102T200739Z-6165",
+  "shutdown": {
+    "signal": "SIGINT",
+    "returncode": 0,
+    "group_gone": true,
+    "forced": false,
+    "child_sigterm_escalated": false,
+    "child_sigkill_escalated": false,
+    "gazebo_child_shutdown_clean": true
+  }
+}

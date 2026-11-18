@@ -10,7 +10,7 @@ setup(
         ("share/ament_index/resource_index/packages", ["resource/anc_navigation"]),
         ("share/" + package_name, ["package.xml"]),
         ("share/" + package_name + "/launch", ["launch/reference_navigation.launch.py"]),
-        ("share/" + package_name + "/config", ["config/nav2_reference.yaml"]),
+        ("share/" + package_name + "/config", ["config/nav2_reference.yaml", "config/phase6_reference.rviz"]),
     ],
     install_requires=["setuptools"],
     zip_safe=True,

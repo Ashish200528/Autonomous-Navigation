@@ -1,0 +1,56 @@
+{
+  "camera_header_timing": {
+    "count": 31,
+    "max_interval_s": 0.068,
+    "median_interval_s": 0.066,
+    "rate_hz": 15.15151515151515
+  },
+  "clock_timing": {
+    "count": 1868,
+    "max_interval_s": 0.002,
+    "median_interval_s": 0.002,
+    "rate_hz": 500.0
+  },
+  "contract_passed": true,
+  "expected_perception_subscriber_topics": [
+    "/camera/image_raw",
+    "/camera/camera_info",
+    "/clock"
+  ],
+  "free_memory_snapshot": "               total        used        free      shared  buff/cache   available\nMem:           3.5Gi       1.3Gi       1.4Gi        62Mi       930Mi       2.2Gi\nSwap:          1.0Gi          0B       1.0Gi\n",
+  "gazebo_truth_subscribed_by_perception": false,
+  "health_sample_count": 44,
+  "health_samples_file": "runtime-health.jsonl",
+  "health_timing_csv": "runtime-health.csv",
+  "launch_command": [
+    "ros2",
+    "launch",
+    "anc_perception",
+    "realistic_perception.launch.py",
+    "world_file:=/home/ashish/AutonomousNavigationCar/docs/evidence/phase7/dataset/accepted-phase7-complete/s04-seed202-rgb-only/world.sdf",
+    "start_x:=-2.570240",
+    "start_y:=-0.399685",
+    "start_yaw:=-2.390039"
+  ],
+  "nav2_started": false,
+  "observed_perception_subscriber_topics": [
+    "/camera/camera_info",
+    "/camera/image_raw",
+    "/clock"
+  ],
+  "perception_node_info": "Node: /anc_rgb_perception\nSubscriptions:\n  /camera/camera_info: sensor_msgs/msg/CameraInfo\n  /camera/image_raw: sensor_msgs/msg/Image\n  /clock: rosgraph_msgs/msg/Clock\n",
+  "process_rss_sampled": [
+    {
+      "command": "/opt/ros/jazzy/lib/ros_gz_sim/gzserver --ros-args --params-file /tmp/launch_params_495ajqci ",
+      "pid": 62752,
+      "rss_kib": 529120
+    },
+    {
+      "command": "/usr/bin/python3 /home/ashish/AutonomousNavigationCar/simulation/ros2_ws/install/anc_perception/lib/anc_perception/rgb_perception_node --ros-args -r __node:=anc_rgb_perception --pa",
+      "pid": 62759,
+      "rss_kib": 183752
+    }
+  ],
+  "profile": "REALISTIC_RGB_ONLY",
+  "reference_map_loaded": false
+}

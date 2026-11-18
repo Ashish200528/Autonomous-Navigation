@@ -1,0 +1,53 @@
+{
+  "slam_toolbox": {
+    "scan_topic": "/realistic/scan/slam_hits",
+    "use_scan_matching": true,
+    "do_loop_closing": true,
+    "distance_variance_penalty": 0.5,
+    "minimum_travel_distance": 0.02,
+    "minimum_time_interval": 0.25,
+    "max_laser_range": 6.0,
+    "base_frame": "base_footprint",
+    "odom_frame": "odom"
+  },
+  "controller_server": {
+    "FollowPath.max_angular_accel": 3.2,
+    "FollowPath.rotate_to_heading_min_angle": 0.01,
+    "FollowPath.rotate_to_heading_angular_vel": 0.1,
+    "FollowPath.lookahead_dist": 0.35,
+    "FollowPath.min_lookahead_dist": 0.35,
+    "progress_checker.required_movement_angle": 0.5,
+    "progress_checker.movement_time_allowance": 12.0,
+    "goal_checker.xy_goal_tolerance": 0.15,
+    "goal_checker.yaw_goal_tolerance": 0.08
+  },
+  "velocity_smoother": {
+    "max_accel": [
+      0.2,
+      0.0,
+      0.12
+    ],
+    "max_decel": [
+      -0.25,
+      0.0,
+      -0.12
+    ],
+    "max_velocity": [
+      0.12,
+      0.0,
+      0.1
+    ],
+    "deadband_velocity": [
+      0.0,
+      0.0,
+      0.015
+    ]
+  },
+  "anc_lidar_scan_conditioner": {
+    "publish_slam_hits_only": true,
+    "input_topic": "/realistic/scan/raw",
+    "output_topic": "/realistic/scan",
+    "range_min_m": 0.12,
+    "range_max_m": 6.0
+  }
+}

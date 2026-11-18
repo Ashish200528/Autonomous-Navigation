@@ -3,6 +3,7 @@
   <xacro:property name="cfg" value="${xacro.load_yaml('$(find anc_description)/config/robot_parameters.yaml')}"/>
   <xacro:property name="sim" value="${cfg['robot']['simulation_model']}"/>
   <xacro:arg name="camera_enabled" default="true"/>
+  <xacro:arg name="lidar_enabled" default="false"/>
   <xacro:arg name="wheel_surface_mu" default="${sim['wheel_surface_mu']}"/>
   <xacro:property name="L" value="${sim['chassis_length_m']}"/>
   <xacro:property name="W" value="${sim['chassis_width_m']}"/>
@@ -22,6 +23,17 @@
   <xacro:property name="CM" value="${sim['caster_mass_kg']}"/>
   <xacro:property name="CAM_CFG" value="${cfg['sensors']['camera']}"/>
   <xacro:property name="IMU_CFG" value="${cfg['sensors']['imu']}"/>
+  <xacro:property name="LIDAR_CFG" value="${cfg['sensors']['lidar']}"/>
+  <xacro:property name="LXYZ" value="${LIDAR_CFG['mount_xyz_m']}"/>
+  <xacro:property name="LRPY" value="${LIDAR_CFG['mount_rpy_rad']}"/>
+  <xacro:property name="LIDAR_FRAME" value="${LIDAR_CFG['frame_id']}"/>
+  <xacro:property name="LIDAR_SAMPLES" value="${LIDAR_CFG['horizontal_samples']}"/>
+  <xacro:property name="LIDAR_MIN_ANGLE" value="${LIDAR_CFG['scan_angle_min_rad']}"/>
+  <xacro:property name="LIDAR_MAX_ANGLE" value="${LIDAR_CFG['scan_angle_max_rad']}"/>
+  <xacro:property name="LIDAR_RATE" value="${LIDAR_CFG['update_rate_hz']}"/>
+  <xacro:property name="LIDAR_MIN_RANGE" value="${LIDAR_CFG['range_min_m']}"/>
+  <xacro:property name="LIDAR_MAX_RANGE" value="${LIDAR_CFG['range_max_m']}"/>
+  <xacro:property name="LIDAR_NOISE" value="${LIDAR_CFG['distance_noise_stddev_m']}"/>
   <xacro:property name="CXYZ" value="${CAM_CFG['mount_xyz_m']}"/>
   <xacro:property name="CRPY" value="${CAM_CFG['mount_rpy_rad']}"/>
   <xacro:property name="CAM_FRAME" value="${CAM_CFG['optical_frame_id']}"/>
@@ -34,6 +46,16 @@
   <xacro:property name="CAM_FORMAT" value="${CAM_CFG['pixel_format']}"/>
   <xacro:arg name="camera_mount_z_m" default="${CXYZ[2]}"/>
   <xacro:arg name="camera_pitch_down_rad" default="${CRPY[1]}"/>
+  <xacro:arg name="camera_update_rate_hz" default="${CAM_RATE}"/>
+  <xacro:arg name="camera_hfov_rad" default="${CAM_FOV}"/>
+  <xacro:arg name="camera_width_px" default="${CAM_WIDTH}"/>
+  <xacro:arg name="camera_height_px" default="${CAM_HEIGHT}"/>
+  <xacro:arg name="pan_servo_enabled" default="false"/>
+  <xacro:arg name="ultrasonic_enabled" default="false"/>
+  <xacro:property name="SERVO_CFG" value="${cfg['sensors']['pan_servo']}"/>
+  <xacro:property name="US_CFG" value="${cfg['sensors']['ultrasonic']}"/>
+  <xacro:property name="USXYZ" value="${US_CFG['mount_xyz_m']}"/>
+  <xacro:property name="US_HALF" value="${US_CFG['field_of_view_rad'] / 2.0}"/>
   <xacro:property name="IMU_XYZ" value="${IMU_CFG['mount_xyz_m']}"/>
   <xacro:property name="IMU_RPY" value="${IMU_CFG['mount_rpy_rad']}"/>
   <xacro:property name="IMU_FRAME" value="${IMU_CFG['frame_id']}"/>
@@ -52,13 +74,42 @@
   <material name="blue"><color rgba="0.08 0.28 0.72 1.0"/></material>
   <material name="black"><color rgba="0.08 0.08 0.08 1.0"/></material>
   <material name="gray"><color rgba="0.3 0.3 0.3 1.0"/></material>
+  <!-- robot_style palette (visual only) -->
+  <xacro:arg name="robot_style" default="false"/>
+  <material name="shell"><color rgba="0.93 0.94 0.96 1.0"/></material>
+  <material name="graphite"><color rgba="0.13 0.14 0.16 1.0"/></material>
+  <material name="accent"><color rgba="0.0 0.78 1.0 1.0"/></material>
+  <material name="silver"><color rgba="0.72 0.74 0.78 1.0"/></material>
+  <material name="pcb"><color rgba="0.05 0.42 0.18 1.0"/></material>
+  <material name="led_white"><color rgba="1.0 1.0 0.92 1.0"/></material>
+  <material name="led_red"><color rgba="1.0 0.08 0.06 1.0"/></material>
+  <material name="hc_blue"><color rgba="0.05 0.25 0.75 1.0"/></material>
 
   <link name="base_footprint"/>
   <link name="base_link">
     <inertial><mass value="${M}"/>
       <inertia ixx="${IXX}" ixy="0" ixz="0" iyy="${IYY}" iyz="0" izz="${IZZ}"/>
     </inertial>
+    <xacro:unless value="$(arg robot_style)">
     <visual><geometry><box size="${L} ${W} ${H}"/></geometry><material name="blue"/></visual>
+    </xacro:unless>
+    <xacro:if value="$(arg robot_style)">
+    <!-- Robot-car look. Visual only: collision/inertia are unchanged. Everything stays
+         below the camera's lowest sight line so lane detection is unaffected. -->
+    <visual name="deck"><origin xyz="0 0 -0.025"/><geometry><box size="0.33 0.22 0.03"/></geometry><material name="graphite"/></visual>
+    <visual name="shell"><origin xyz="-0.03 0 0.01"/><geometry><box size="0.24 0.20 0.05"/></geometry><material name="shell"/></visual>
+    <visual name="nose"><origin xyz="0.10 0 0.0"/><geometry><box size="0.06 0.18 0.03"/></geometry><material name="shell"/></visual>
+    <visual name="accent_band"><origin xyz="-0.03 0 -0.012"/><geometry><box size="0.246 0.206 0.008"/></geometry><material name="accent"/></visual>
+    <visual name="bumper"><origin xyz="0.155 0 -0.02"/><geometry><box size="0.02 0.22 0.035"/></geometry><material name="graphite"/></visual>
+    <visual name="headlight_l"><origin xyz="0.166 0.07 -0.015"/><geometry><box size="0.004 0.04 0.012"/></geometry><material name="led_white"/></visual>
+    <visual name="headlight_r"><origin xyz="0.166 -0.07 -0.015"/><geometry><box size="0.004 0.04 0.012"/></geometry><material name="led_white"/></visual>
+    <visual name="taillight_l"><origin xyz="-0.166 0.07 -0.015"/><geometry><box size="0.004 0.05 0.012"/></geometry><material name="led_red"/></visual>
+    <visual name="taillight_r"><origin xyz="-0.166 -0.07 -0.015"/><geometry><box size="0.004 0.05 0.012"/></geometry><material name="led_red"/></visual>
+    <visual name="pi_board"><origin xyz="-0.07 0 0.037"/><geometry><box size="0.085 0.056 0.004"/></geometry><material name="pcb"/></visual>
+    <visual name="pi_soc"><origin xyz="-0.065 0.008 0.042"/><geometry><box size="0.015 0.015 0.006"/></geometry><material name="graphite"/></visual>
+    <visual name="pi_ports"><origin xyz="-0.112 0 0.046"/><geometry><box size="0.02 0.05 0.014"/></geometry><material name="silver"/></visual>
+    <visual name="mast"><origin xyz="${CXYZ[0]} 0 0.05"/><geometry><cylinder radius="0.007" length="0.07"/></geometry><material name="graphite"/></visual>
+    </xacro:if>
     <collision name="chassis_collision"><geometry><box size="${L} ${W} ${H}"/></geometry></collision>
   </link>
   <joint name="base_footprint_to_base_link" type="fixed">
@@ -74,6 +125,11 @@
       <visual><origin rpy="1.57079632679 0 0"/>
         <geometry><cylinder radius="${R}" length="${WW}"/></geometry><material name="black"/>
       </visual>
+      <xacro:if value="$(arg robot_style)">
+      <visual name="hub"><origin rpy="1.57079632679 0 0"/>
+        <geometry><cylinder radius="${R * 0.6}" length="${WW + 0.003}"/></geometry><material name="silver"/>
+      </visual>
+      </xacro:if>
       <!-- Unnamed wheel collision lets libsdformat apply the link-level friction extension. -->
       <collision><origin rpy="1.57079632679 0 0"/>
         <geometry><cylinder radius="${R}" length="${WW}"/></geometry>
@@ -106,18 +162,109 @@
     <inertial><mass value="0.01"/>
       <inertia ixx="0.000001" ixy="0" ixz="0" iyy="0.000001" iyz="0" izz="0.000001"/>
     </inertial>
+    <xacro:unless value="$(arg robot_style)">
     <visual><geometry><box size="0.04 0.04 0.025"/></geometry><material name="gray"/></visual>
+    </xacro:unless>
+    <xacro:if value="$(arg robot_style)">
+    <!-- Camera "head"; parts sit inside the camera's 5 cm near clip, so it never sees itself. -->
+    <visual name="head"><geometry><box size="0.035 0.05 0.03"/></geometry><material name="shell"/></visual>
+    <visual name="lens_ring"><origin xyz="0.0185 0 0" rpy="0 1.5708 0"/><geometry><cylinder radius="0.012" length="0.004"/></geometry><material name="accent"/></visual>
+    <visual name="lens"><origin xyz="0.021 0 0" rpy="0 1.5708 0"/><geometry><cylinder radius="0.008" length="0.006"/></geometry><material name="black"/></visual>
+    </xacro:if>
   </link>
+  <xacro:unless value="$(arg pan_servo_enabled)">
   <joint name="camera_fixed_joint" type="fixed">
     <parent link="base_link"/><child link="camera_link"/>
     <origin xyz="${CXYZ[0]} ${CXYZ[1]} $(arg camera_mount_z_m)" rpy="${CRPY[0]} $(arg camera_pitch_down_rad) ${CRPY[2]}"/>
   </joint>
+  </xacro:unless>
+  <xacro:if value="$(arg pan_servo_enabled)">
+  <!-- Servo horn: rotates about Z; the camera rides on top of it. -->
+  <link name="camera_pan_link">
+    <inertial><mass value="0.02"/>
+      <inertia ixx="0.00001" ixy="0" ixz="0" iyy="0.00001" iyz="0" izz="0.00001"/>
+    </inertial>
+    <visual><origin xyz="0 0 -0.02"/><geometry><box size="0.023 0.012 0.03"/></geometry><material name="black"/></visual>
+  </link>
+  <joint name="${SERVO_CFG['joint_name']}" type="revolute">
+    <parent link="base_link"/><child link="camera_pan_link"/>
+    <origin xyz="${CXYZ[0]} ${CXYZ[1]} $(arg camera_mount_z_m)"/>
+    <axis xyz="0 0 1"/>
+    <limit lower="${-SERVO_CFG['limit_rad']}" upper="${SERVO_CFG['limit_rad']}" effort="1.0" velocity="${SERVO_CFG['max_speed_radps']}"/>
+    <dynamics damping="0.01"/>
+  </joint>
+  <joint name="camera_fixed_joint" type="fixed">
+    <parent link="camera_pan_link"/><child link="camera_link"/>
+    <origin xyz="0 0 0" rpy="${CRPY[0]} $(arg camera_pitch_down_rad) ${CRPY[2]}"/>
+  </joint>
+  <gazebo>
+    <plugin filename="gz-sim-joint-position-controller-system" name="gz::sim::systems::JointPositionController">
+      <joint_name>${SERVO_CFG['joint_name']}</joint_name>
+      <topic>/model/anc_robot/servo/pan</topic>
+      <use_velocity_commands>true</use_velocity_commands>
+      <p_gain>6.0</p_gain>
+      <cmd_max>${SERVO_CFG['max_speed_radps']}</cmd_max>
+      <cmd_min>${-SERVO_CFG['max_speed_radps']}</cmd_min>
+    </plugin>
+  </gazebo>
+  </xacro:if>
+
+  <xacro:if value="$(arg ultrasonic_enabled)">
+  <link name="${US_CFG['frame_id']}">
+    <inertial><mass value="0.01"/>
+      <inertia ixx="0.000001" ixy="0" ixz="0" iyy="0.000001" iyz="0" izz="0.000001"/>
+    </inertial>
+    <!-- Two "eyes" of an HC-SR04 board. -->
+    <visual><origin xyz="0.001 0 0"/><geometry><box size="0.004 0.045 0.02"/></geometry><material name="hc_blue"/></visual>
+    <visual><origin xyz="0.008 0.013 0" rpy="0 1.5708 0"/><geometry><cylinder radius="0.008" length="0.012"/></geometry><material name="silver"/></visual>
+    <visual><origin xyz="0.008 -0.013 0" rpy="0 1.5708 0"/><geometry><cylinder radius="0.008" length="0.012"/></geometry><material name="silver"/></visual>
+  </link>
+  <joint name="ultrasonic_fixed_joint" type="fixed">
+    <parent link="base_link"/><child link="${US_CFG['frame_id']}"/>
+    <origin xyz="${USXYZ[0]} ${USXYZ[1]} ${USXYZ[2]}"/>
+  </joint>
+  <gazebo reference="${US_CFG['frame_id']}">
+    <!-- Gazebo has no sonar sensor; a narrow 5x3-ray cone approximates the HC-SR04 beam.
+         Rays only go level/upward: at 7 cm height a downward ray would report the floor.
+         The ROS adapter reduces it to one sensor_msgs/Range like the real driver. -->
+    <sensor name="anc_ultrasonic" type="gpu_lidar">
+      <always_on>true</always_on>
+      <visualize>false</visualize>
+      <update_rate>${US_CFG['update_rate_hz']}</update_rate>
+      <topic>/ultrasonic/scan</topic>
+      <gz_frame_id>${US_CFG['frame_id']}</gz_frame_id>
+      <lidar>
+        <scan>
+          <horizontal><samples>5</samples><resolution>1</resolution>
+            <min_angle>${-US_HALF}</min_angle><max_angle>${US_HALF}</max_angle></horizontal>
+          <vertical><samples>3</samples><resolution>1</resolution>
+            <min_angle>0.0</min_angle><max_angle>${US_HALF}</max_angle></vertical>
+        </scan>
+        <range><min>${US_CFG['range_min_m']}</min><max>${US_CFG['range_max_m']}</max><resolution>0.003</resolution></range>
+        <noise><type>gaussian</type><mean>0.0</mean><stddev>${US_CFG['distance_noise_stddev_m']}</stddev></noise>
+      </lidar>
+    </sensor>
+  </gazebo>
+  </xacro:if>
 
   <link name="camera_optical_frame"/>
   <joint name="camera_link_to_camera_optical_frame" type="fixed">
     <parent link="camera_link"/><child link="camera_optical_frame"/>
     <origin xyz="0 0 0" rpy="-1.57079632679 0 -1.57079632679"/>
   </joint>
+
+  <xacro:if value="$(arg lidar_enabled)">
+  <link name="lidar_link">
+    <inertial><mass value="0.03"/>
+      <inertia ixx="0.00001" ixy="0" ixz="0" iyy="0.00001" iyz="0" izz="0.00001"/>
+    </inertial>
+    <visual><geometry><cylinder radius="0.035" length="0.045"/></geometry><material name="gray"/></visual>
+  </link>
+  <joint name="lidar_fixed_joint" type="fixed">
+    <parent link="base_link"/><child link="lidar_link"/>
+    <origin xyz="${LXYZ[0]} ${LXYZ[1]} ${LXYZ[2]}" rpy="${LRPY[0]} ${LRPY[1]} ${LRPY[2]}"/>
+  </joint>
+  </xacro:if>
 
   <link name="imu_link">
     <inertial>
@@ -135,14 +282,14 @@
     <sensor name="anc_rgb_camera" type="camera">
       <always_on>true</always_on>
       <visualize>false</visualize>
-      <update_rate>${CAM_RATE}</update_rate>
+      <update_rate>$(arg camera_update_rate_hz)</update_rate>
       <topic>/camera/image_raw</topic>
       <gz_frame_id>${CAM_FRAME}</gz_frame_id>
       <camera name="anc_rgb_camera">
-        <horizontal_fov>${CAM_FOV}</horizontal_fov>
+        <horizontal_fov>$(arg camera_hfov_rad)</horizontal_fov>
         <image>
-          <width>${CAM_WIDTH}</width>
-          <height>${CAM_HEIGHT}</height>
+          <width>$(arg camera_width_px)</width>
+          <height>$(arg camera_height_px)</height>
           <format>${CAM_FORMAT}</format>
         </image>
         <clip><near>${CAM_NEAR}</near><far>${CAM_FAR}</far></clip>
@@ -151,6 +298,44 @@
           <k1>0.0</k1><k2>0.0</k2><k3>0.0</k3><p1>0.0</p1><p2>0.0</p2>
         </distortion>
       </camera>
+    </sensor>
+  </gazebo>
+  </xacro:if>
+
+  <xacro:if value="$(arg lidar_enabled)">
+  <gazebo reference="lidar_link">
+    <sensor name="anc_planar_lidar" type="gpu_lidar">
+      <always_on>true</always_on>
+      <visualize>false</visualize>
+      <update_rate>${LIDAR_RATE}</update_rate>
+      <topic>/realistic/scan/raw</topic>
+      <gz_frame_id>${LIDAR_FRAME}</gz_frame_id>
+      <lidar>
+        <scan>
+          <horizontal>
+            <samples>${LIDAR_SAMPLES}</samples>
+            <resolution>1</resolution>
+            <min_angle>${LIDAR_MIN_ANGLE}</min_angle>
+            <max_angle>${LIDAR_MAX_ANGLE}</max_angle>
+          </horizontal>
+          <vertical>
+            <samples>1</samples>
+            <resolution>1</resolution>
+            <min_angle>0.0</min_angle>
+            <max_angle>0.0</max_angle>
+          </vertical>
+        </scan>
+        <range>
+          <min>${LIDAR_MIN_RANGE}</min>
+          <max>${LIDAR_MAX_RANGE}</max>
+          <resolution>0.01</resolution>
+        </range>
+        <noise>
+          <type>gaussian</type>
+          <mean>0.0</mean>
+          <stddev>${LIDAR_NOISE}</stddev>
+        </noise>
+      </lidar>
     </sensor>
   </gazebo>
   </xacro:if>

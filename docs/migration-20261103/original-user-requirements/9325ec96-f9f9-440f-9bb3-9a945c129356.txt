@@ -1,0 +1,143 @@
+Continue the existing **Autonomous Navigation Car** project with **Phase 7 — Class-Agnostic RGB FREE / OCCUPIED / UNKNOWN Perception**.
+
+Repository: https://github.com/Ashish200528/Autonomous-Navigation
+
+Local WSL project: `/home/ashish/AutonomousNavigationCar`
+
+Latest reviewed commit: `17999c4e34bc144640d1e680e4b459fae64c95f7`
+
+Phases 0–6 are implemented. Phase 6 is PASS WITH LIMITS, with Nav2 reference navigation successfully reaching goals in S00–S04 and aborting the unreachable S09 case.
+
+**Objective:** Create an RGB-only, class-agnostic perception pipeline that identifies visible traversable space, visible occupied regions, and uncertain/unknown regions. Do not implement Phase 8 autonomous realistic navigation yet.
+
+## A — Preserve and verify the baseline
+
+Inspect the latest Git status, commits, roadmap, Phase 6 code, accepted navigation results and existing sensors.
+
+Safely synchronize with GitHub while preserving uncommitted changes.
+
+Rebuild the existing ROS workspace and rerun representative Phase 3 camera and Phase 6 reference-navigation checks.
+
+Keep the successful ORACLE_REFERENCE navigation pipeline intact as a separate experimental baseline.
+
+## B — Create a realistic RGB perception profile
+
+Add an `anc_perception` ROS 2 package.
+
+Create a distinct REALISTIC launch/configuration profile that enables the Phase 3 RGB camera, sanitized IMU and existing EKF odometry.
+
+Do not expose the ORACLE_REFERENCE occupancy map, exact scenario geometry, Gazebo entity state, ideal depth, synthetic lidar or perfect robot pose to realistic perception nodes.
+
+The reference-only navigation system must remain runnable separately.
+
+Record and verify exactly which ROS topics each perception node subscribes to.
+
+## C — Build class-agnostic image interpretation
+
+Implement a conservative visual pipeline using `/camera/image_raw` and `/camera/camera_info`.
+
+The pipeline should produce explicit FREE, OCCUPIED and UNKNOWN outputs, ideally as:
+
+- A pixel-level three-state mask.
+- An associated confidence/uncertainty output.
+- A visualization overlay.
+- An optional robot-relative local traversability representation, but only where its geometry is justified.
+
+Do not require YOLO or semantic classification of chairs, bottles, boxes, people or other named categories.
+
+Do not claim metric depth or obstacle distance merely from an ordinary monocular RGB frame.
+
+If a ground-plane projection is used, explicitly document camera mounting assumptions, planar-floor assumptions, distortion/FOV effects, validity range, and uncertainty. Treat unobservable or geometrically ambiguous regions as UNKNOWN.
+
+Start with simple, explainable methods suitable for the existing low-memory laptop. Use machine learning only if justified and if data, compute and reproducibility requirements can be met.
+
+## D — Test on existing Phase 5 environments
+
+Use the established scenario generator and fixed seeds.
+
+Capture real Gazebo RGB frames in S00, S01, S02, S03 and S04 from different feasible viewpoints.
+
+Evaluate whether the algorithm can distinguish visible open floor from visible obstacle regions and appropriately mark uncertain regions.
+
+Add challenging cases involving partial occlusion, weak texture, visual ambiguity and objects without familiar semantic categories, while keeping scene complexity manageable.
+
+For evaluation only, the test harness may compare predicted regions against withheld Gazebo geometry or other evaluator-only reference labels.
+
+This reference data must never enter the runtime perception algorithm.
+
+Separate offline evaluation truth from the actual camera-based prediction.
+
+## E — Define quantitative acceptance criteria
+
+Record at least:
+
+- Pixel or region-level FREE / OCCUPIED / UNKNOWN counts.
+- False-FREE error rate on known occupied regions.
+- Occupied-region precision and recall where ground-truth labeling is defensible.
+- UNKNOWN coverage.
+- Image-processing latency and achieved frame rate.
+- Camera timestamp age and sensor-dropout handling.
+- Failure cases under shadows, occlusion and uncertain geometry.
+
+Avoid reporting high accuracy from a trivial all-UNKNOWN mask. Evaluate both safety and useful free-space coverage.
+
+Explicitly test missing/stale RGB data. The perception output must become invalid or UNKNOWN instead of retaining stale FREE observations.
+
+Preserve false-positive, false-negative and uncertain examples for review.
+
+## F — Safety and architectural rules
+
+Never equate UNKNOWN with FREE.
+
+Never use simulator object identities, hidden obstacle coordinates, scene generator manifests, rendered depth buffers or exact Gazebo pose to compute runtime classifications.
+
+Do not use wheel odometry or IMU as a hidden source of obstacle geometry.
+
+Do not modify the existing Arduino UNO Q application.
+
+Do not replace the Phase 6 Nav2 reference costmaps or silently switch the reference navigation profile to realistic mode.
+
+Avoid claiming autonomous obstacle avoidance, online mapping or safe goal-reaching until those are actually implemented and tested.
+
+Preserve the known limitation that monocular RGB does not reliably recover metric depth for arbitrary obstacles.
+
+## G — Engineering and validation
+
+Run on Ubuntu 24.04 WSL2 on E:, with ROS 2 Jazzy and Gazebo Harmonic.
+
+The laptop has 8 GB RAM and NVIDIA GTX 1650 4 GB VRAM.
+
+Prefer headless Gazebo and CPU-friendly processing initially. Monitor memory, frame rate and disk consumption.
+
+Use bounded tests, save actual camera frames, masks and overlays, and ensure all processes terminate cleanly.
+
+Perform meaningful ROS topic, timestamp, TF, sensor-rate and launch validation.
+
+Do not install large neural-network dependencies or models without clear justification.
+
+## H — Deliverables
+
+Provide working code, launch files and configuration for `anc_perception`.
+
+Save evidence including:
+
+- Actual RGB input images.
+- FREE/OCCUPIED/UNKNOWN masks.
+- Visual overlays.
+- Quantitative JSON/CSV results.
+- Reproducible test scripts and exact tested seeds.
+- Processing latency/frame-rate measurements.
+- Failure and uncertainty examples.
+- Verified ROS input/output topic contracts.
+
+Update the README, `docs/PHASE_REPORT.md`, `docs/issues.md`, `docs/evidence/README.md`, the test registry and the relevant architectural documentation.
+
+Commit and safely push validated changes to the existing GitHub repository.
+
+Final report must distinguish implemented code, tests actually executed, successes, limitations and unresolved blockers.
+
+Assign Phase 7 a justified PASS / PASS WITH LIMITS / FAIL / BLOCKED assessment.
+
+**Stop after Phase 7. Do not automatically begin Phase 8 path planning, realistic autonomous obstacle avoidance or parking.**
+
+Work autonomously within existing permissions and request my input only for genuine blockers, credentials or consequential system changes.

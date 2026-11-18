@@ -1,0 +1,4260 @@
+{
+  "all_trials_pass": false,
+  "authoritative_topic": "/cmd_vel",
+  "classification": "BOUNDED_PURE_YAW_CALIBRATION_ONLY",
+  "duration_per_trial_s": 1.2,
+  "launch_cap_radps": 0.1,
+  "preflight_gate": {
+    "angular_motion_status": "calibration_only_swept_disk_clear",
+    "angular_stopping_model": {
+      "measured": false,
+      "note": "Calibration-only capped pulses; production yaw remains disabled pending measured stopping bound and review.",
+      "production_authorized": false
+    },
+    "authorized": true,
+    "combined_motion_authorized": false,
+    "corridor_m": 3.6000000536441803,
+    "failures": [],
+    "footprint_width_m": 0.345,
+    "forward_distance_reference": "front_footprint_boundary",
+    "localization_allowance_m": 0.4705050313257851,
+    "map_counts": {
+      "free": 4210,
+      "occupied": 260,
+      "unknown": 27930
+    },
+    "map_frame": "base_link",
+    "max_angular_speed_radps": 0.1,
+    "max_linear_speed_mps": 0.0,
+    "motion_mode": "rotation_calibration_only",
+    "node": "anc_lidar_safety_gate",
+    "profile": "REALISTIC_RGB_LIDAR",
+    "reason": "pass",
+    "rotation_calibration_speed_cap_radps": 0.1,
+    "rotation_clearance": {
+      "authorized": true,
+      "center_drift_allowance_m": 0.14,
+      "checked_cells": 112,
+      "footprint_circumradius_m": 0.263592962728522,
+      "inside_grid": true,
+      "occupied_cells": 0,
+      "reason": "swept_disk_clear",
+      "required_radius_m": 0.5235929627285221,
+      "safety_margin_m": 0.1,
+      "sensor_mount_uncertainty_m": 0.02,
+      "unknown_cells": 0
+    },
+    "runtime_uses_world_map_or_truth": false,
+    "safety_margin_m": 0.1,
+    "speed_gate": {
+      "max_linear_speed_mps": 0.18,
+      "reaction_time_s": 0.4608,
+      "reason": "measured_speed_bound_fits_corridor",
+      "selected": {
+        "passes": true,
+        "reaction_distance_m": 0.08294399999999999,
+        "required_corridor_m": 0.656429031325785,
+        "speed_mps": 0.18,
+        "stop_distance_m": 0.00298
+      },
+      "tested_speeds": [
+        {
+          "passes": true,
+          "reaction_distance_m": 0.009216,
+          "required_corridor_m": 0.5827010313257851,
+          "speed_mps": 0.02,
+          "stop_distance_m": 0.00298
+        },
+        {
+          "passes": true,
+          "reaction_distance_m": 0.02304,
+          "required_corridor_m": 0.596525031325785,
+          "speed_mps": 0.05,
+          "stop_distance_m": 0.00298
+        },
+        {
+          "passes": true,
+          "reaction_distance_m": 0.04608,
+          "required_corridor_m": 0.6195650313257851,
+          "speed_mps": 0.1,
+          "stop_distance_m": 0.00298
+        },
+        {
+          "passes": true,
+          "reaction_distance_m": 0.08294399999999999,
+          "required_corridor_m": 0.656429031325785,
+          "speed_mps": 0.18,
+          "stop_distance_m": 0.00298
+        }
+      ],
+      "valid": true
+    },
+    "speed_gate_inputs": {
+      "connected_full_footprint_corridor_m": 3.6000000536441803,
+      "lidar_map_wall_age_s": 0.08348372199998266,
+      "measured_scan_rate_hz": 4.912507305179659,
+      "odom_sim_age_s": 0.010000000000005116,
+      "scan_sim_age_s": 0.14000000000000057,
+      "usable_beam_fraction": 0.9944444444444445
+    },
+    "stopping_model": {
+      "friction_conditions": [
+        0.5,
+        1.2
+      ],
+      "hardware_bound": false,
+      "source": "Phase 8B isolated simulator stopping test",
+      "tested_speeds_mps": [
+        0.02,
+        0.05,
+        0.1,
+        0.18
+      ],
+      "worst_stop_distance_m": 0.00298
+    },
+    "truth_used_only_by_evaluator": true,
+    "valid": true
+  },
+  "production_angular_authority_enabled": false,
+  "requested_speeds_radps": [
+    0.02,
+    -0.02,
+    0.05,
+    -0.05,
+    0.1,
+    -0.1
+  ],
+  "requested_topic": "/cmd_vel_nav",
+  "runtime_navigation_receives_no_gazebo_truth": true,
+  "trials": [
+    {
+      "center_drift_m": 0.0008667005663716847,
+      "contact_events": 2578,
+      "final_truth": {
+        "angular_z_radps": 0.0183636,
+        "evaluator_only": true,
+        "linear_x_mps": 3.93912e-07,
+        "linear_y_mps": 0.000734512,
+        "sim_stamp_s": 59.274,
+        "wall_s": 509.511714619,
+        "x_m": -1.93686e-05,
+        "y_m": 0.000866657,
+        "yaw_rad": 0.021669
+      },
+      "gate_snapshot": {
+        "angular_motion_status": "calibration_only_swept_disk_clear",
+        "angular_stopping_model": {
+          "measured": false,
+          "note": "Calibration-only capped pulses; production yaw remains disabled pending measured stopping bound and review.",
+          "production_authorized": false
+        },
+        "authorized": true,
+        "combined_motion_authorized": false,
+        "corridor_m": 3.6000000536441803,
+        "failures": [],
+        "footprint_width_m": 0.345,
+        "forward_distance_reference": "front_footprint_boundary",
+        "localization_allowance_m": 0.4705050313257851,
+        "map_counts": {
+          "free": 4192,
+          "occupied": 257,
+          "unknown": 27951
+        },
+        "map_frame": "base_link",
+        "max_angular_speed_radps": 0.1,
+        "max_linear_speed_mps": 0.0,
+        "motion_mode": "rotation_calibration_only",
+        "node": "anc_lidar_safety_gate",
+        "profile": "REALISTIC_RGB_LIDAR",
+        "reason": "pass",
+        "rotation_calibration_speed_cap_radps": 0.1,
+        "rotation_clearance": {
+          "authorized": true,
+          "center_drift_allowance_m": 0.14,
+          "checked_cells": 112,
+          "footprint_circumradius_m": 0.263592962728522,
+          "inside_grid": true,
+          "occupied_cells": 0,
+          "reason": "swept_disk_clear",
+          "required_radius_m": 0.5235929627285221,
+          "safety_margin_m": 0.1,
+          "sensor_mount_uncertainty_m": 0.02,
+          "unknown_cells": 0
+        },
+        "runtime_uses_world_map_or_truth": false,
+        "safety_margin_m": 0.1,
+        "speed_gate": {
+          "max_linear_speed_mps": 0.18,
+          "reaction_time_s": 0.4608,
+          "reason": "measured_speed_bound_fits_corridor",
+          "selected": {
+            "passes": true,
+            "reaction_distance_m": 0.08294399999999999,
+            "required_corridor_m": 0.656429031325785,
+            "speed_mps": 0.18,
+            "stop_distance_m": 0.00298
+          },
+          "tested_speeds": [
+            {
+              "passes": true,
+              "reaction_distance_m": 0.009216,
+              "required_corridor_m": 0.5827010313257851,
+              "speed_mps": 0.02,
+              "stop_distance_m": 0.00298
+            },
+            {
+              "passes": true,
+              "reaction_distance_m": 0.02304,
+              "required_corridor_m": 0.596525031325785,
+              "speed_mps": 0.05,
+              "stop_distance_m": 0.00298
+            },
+            {
+              "passes": true,
+              "reaction_distance_m": 0.04608,
+              "required_corridor_m": 0.6195650313257851,
+              "speed_mps": 0.1,
+              "stop_distance_m": 0.00298
+            },
+            {
+              "passes": true,
+              "reaction_distance_m": 0.08294399999999999,
+              "required_corridor_m": 0.656429031325785,
+              "speed_mps": 0.18,
+              "stop_distance_m": 0.00298
+            }
+          ],
+          "valid": true
+        },
+        "speed_gate_inputs": {
+          "connected_full_footprint_corridor_m": 3.6000000536441803,
+          "lidar_map_wall_age_s": 0.07111764799998355,
+          "measured_scan_rate_hz": 4.9116388284452395,
+          "odom_sim_age_s": 0.030000000000001137,
+          "scan_sim_age_s": 0.13000000000000256,
+          "usable_beam_fraction": 0.9944444444444445
+        },
+        "stopping_model": {
+          "friction_conditions": [
+            0.5,
+            1.2
+          ],
+          "hardware_bound": false,
+          "source": "Phase 8B isolated simulator stopping test",
+          "tested_speeds_mps": [
+            0.02,
+            0.05,
+            0.1,
+            0.18
+          ],
+          "worst_stop_distance_m": 0.00298
+        },
+        "truth_used_only_by_evaluator": true,
+        "valid": true
+      },
+      "max_abs_actual_angular_radps": 0.02,
+      "max_abs_actual_linear_mps": 0.0,
+      "measured_average_yaw_rate_radps": 0.01820924369747903,
+      "output_samples": [
+        {
+          "angular_z_radps": 0.02,
+          "linear_x_mps": -0.0,
+          "wall_s": 504.303082236
+        },
+        {
+          "angular_z_radps": 0.02,
+          "linear_x_mps": -0.0,
+          "wall_s": 504.35350524
+        },
+        {
+          "angular_z_radps": 0.02,
+          "linear_x_mps": -0.0,
+          "wall_s": 504.402534538
+        },
+        {
+          "angular_z_radps": 0.02,
+          "linear_x_mps": -0.0,
+          "wall_s": 504.452558013
+        },
+        {
+          "angular_z_radps": 0.02,
+          "linear_x_mps": -0.0,
+          "wall_s": 504.502712086
+        },
+        {
+          "angular_z_radps": 0.02,
+          "linear_x_mps": -0.0,
+          "wall_s": 504.556024531
+        },
+        {
+          "angular_z_radps": 0.02,
+          "linear_x_mps": -0.0,
+          "wall_s": 504.602847441
+        },
+        {
+          "angular_z_radps": 0.02,
+          "linear_x_mps": -0.0,
+          "wall_s": 504.652900062
+        },
+        {
+          "angular_z_radps": 0.02,
+          "linear_x_mps": -0.0,
+          "wall_s": 504.702677755
+        },
+        {
+          "angular_z_radps": 0.02,
+          "linear_x_mps": -0.0,
+          "wall_s": 504.754061302
+        },
+        {
+          "angular_z_radps": 0.02,
+          "linear_x_mps": -0.0,
+          "wall_s": 504.802678993
+        },
+        {
+          "angular_z_radps": 0.02,
+          "linear_x_mps": -0.0,
+          "wall_s": 504.852691463
+        },
+        {
+          "angular_z_radps": 0.02,
+          "linear_x_mps": -0.0,
+          "wall_s": 504.90262887
+        },
+        {
+          "angular_z_radps": 0.02,
+          "linear_x_mps": -0.0,
+          "wall_s": 504.956697877
+        },
+        {
+          "angular_z_radps": 0.02,
+          "linear_x_mps": -0.0,
+          "wall_s": 505.002974857
+        },
+        {
+          "angular_z_radps": 0.02,
+          "linear_x_mps": -0.0,
+          "wall_s": 505.052857022
+        },
+        {
+          "angular_z_radps": 0.02,
+          "linear_x_mps": -0.0,
+          "wall_s": 505.102724682
+        },
+        {
+          "angular_z_radps": 0.02,
+          "linear_x_mps": -0.0,
+          "wall_s": 505.154249718
+        },
+        {
+          "angular_z_radps": 0.02,
+          "linear_x_mps": -0.0,
+          "wall_s": 505.202672537
+        },
+        {
+          "angular_z_radps": 0.02,
+          "linear_x_mps": -0.0,
+          "wall_s": 505.252719732
+        },
+        {
+          "angular_z_radps": 0.02,
+          "linear_x_mps": -0.0,
+          "wall_s": 505.302988066
+        },
+        {
+          "angular_z_radps": 0.02,
+          "linear_x_mps": -0.0,
+          "wall_s": 505.353159603
+        },
+        {
+          "angular_z_radps": 0.02,
+          "linear_x_mps": -0.0,
+          "wall_s": 505.403023256
+        },
+        {
+          "angular_z_radps": 0.02,
+          "linear_x_mps": -0.0,
+          "wall_s": 505.452656711
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": -0.0,
+          "wall_s": 505.502836375
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": -0.0,
+          "wall_s": 505.55296102
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": -0.0,
+          "wall_s": 505.602868093
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": -0.0,
+          "wall_s": 505.653546254
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": -0.0,
+          "wall_s": 505.703479944
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": -0.0,
+          "wall_s": 505.753264254
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 505.802830266
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 505.852735867
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 505.902699865
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 505.952755341
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 506.002800329
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 506.052774655
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 506.102783312
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 506.15328967
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 506.202854035
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 506.252739569
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 506.302711051
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 506.352695249
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 506.402957748
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 506.452828199
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 506.502932831
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 506.552842845
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 506.603504367
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 506.652755806
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 506.702729782
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 506.752687953
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 506.80280547
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 506.852811289
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 506.902825791
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 506.95284647
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 507.003724828
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 507.052897427
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 507.102749201
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 507.152756541
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 507.202873675
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 507.252788506
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 507.302698977
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 507.353208069
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 507.402944853
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 507.452729729
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 507.502756012
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 507.552699651
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 507.602983319
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 507.652823835
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 507.702753146
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 507.753517479
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 507.802784789
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 507.852760488
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 507.902737075
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 507.95275589
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 508.003501524
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 508.052762827
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 508.10284707
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 508.152787745
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 508.203261079
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 508.252783274
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 508.30276011
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 508.352724739
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 508.403023301
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 508.452692434
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 508.502913113
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 508.552753548
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 508.603693392
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 508.652822352
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 508.702811035
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 508.752770598
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 508.803965448
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 508.85286182
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 508.902810016
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 508.952683118
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 509.00295212
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 509.052708444
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 509.102726154
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 509.152736161
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 509.20280768
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 509.252760237
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 509.302694718
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 509.352718977
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 509.402775438
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 509.452973496
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 509.502777648
+        }
+      ],
+      "requested_angular_speed_radps": 0.02,
+      "requested_duration_s": 1.2,
+      "residual_yaw_after_zero_output_rad": 0.0,
+      "settled_within_4s": false,
+      "sim_seconds_after_zero_output_to_settled": 3.986000000000004,
+      "start_truth": {
+        "angular_z_radps": -1.23247e-18,
+        "evaluator_only": true,
+        "linear_x_mps": 4.13909e-09,
+        "linear_y_mps": -3.7628e-18,
+        "sim_stamp_s": 54.098,
+        "wall_s": 504.28650006,
+        "x_m": -1.06786e-05,
+        "y_m": 4.91331e-19,
+        "yaw_rad": -3.9142500000000006e-18
+      },
+      "trial_pass": false,
+      "truth_after_first_zero_output": {
+        "angular_z_radps": 0.0183636,
+        "evaluator_only": true,
+        "linear_x_mps": 3.93912e-07,
+        "linear_y_mps": 0.000734512,
+        "sim_stamp_s": 55.288,
+        "wall_s": 505.50542556,
+        "x_m": -1.93686e-05,
+        "y_m": 0.000866657,
+        "yaw_rad": 0.021669
+      },
+      "yaw_change_until_zero_rad": 0.021669000000000004,
+      "zero_output_to_settled_wall_s": 4.008895926999969,
+      "zero_request_to_settled_wall_s": 4.024598786000013,
+      "zero_request_to_zero_output_wall_s": 0.015702859000043645
+    },
+    {
+      "center_drift_m": 0.0008681694605081001,
+      "contact_events": 2587,
+      "final_truth": {
+        "angular_z_radps": -0.0183636,
+        "evaluator_only": true,
+        "linear_x_mps": 1.5279e-05,
+        "linear_y_mps": -0.000734342,
+        "sim_stamp_s": 64.848,
+        "wall_s": 515.171034852,
+        "x_m": -1.06479e-05,
+        "y_m": -1.46866e-06,
+        "yaw_rad": -3.672450000000002e-05
+      },
+      "gate_snapshot": {
+        "angular_motion_status": "calibration_only_swept_disk_clear",
+        "angular_stopping_model": {
+          "measured": false,
+          "note": "Calibration-only capped pulses; production yaw remains disabled pending measured stopping bound and review.",
+          "production_authorized": false
+        },
+        "authorized": true,
+        "combined_motion_authorized": false,
+        "corridor_m": 3.6000000536441803,
+        "failures": [],
+        "footprint_width_m": 0.345,
+        "forward_distance_reference": "front_footprint_boundary",
+        "localization_allowance_m": 0.4705050313257851,
+        "map_counts": {
+          "free": 4152,
+          "occupied": 269,
+          "unknown": 27979
+        },
+        "map_frame": "base_link",
+        "max_angular_speed_radps": 0.1,
+        "max_linear_speed_mps": 0.0,
+        "motion_mode": "rotation_calibration_only",
+        "node": "anc_lidar_safety_gate",
+        "profile": "REALISTIC_RGB_LIDAR",
+        "reason": "pass",
+        "rotation_calibration_speed_cap_radps": 0.1,
+        "rotation_clearance": {
+          "authorized": true,
+          "center_drift_allowance_m": 0.14,
+          "checked_cells": 112,
+          "footprint_circumradius_m": 0.263592962728522,
+          "inside_grid": true,
+          "occupied_cells": 0,
+          "reason": "swept_disk_clear",
+          "required_radius_m": 0.5235929627285221,
+          "safety_margin_m": 0.1,
+          "sensor_mount_uncertainty_m": 0.02,
+          "unknown_cells": 0
+        },
+        "runtime_uses_world_map_or_truth": false,
+        "safety_margin_m": 0.1,
+        "speed_gate": {
+          "max_linear_speed_mps": 0.18,
+          "reaction_time_s": 0.49302215300005564,
+          "reason": "measured_speed_bound_fits_corridor",
+          "selected": {
+            "passes": true,
+            "reaction_distance_m": 0.08874398754001,
+            "required_corridor_m": 0.6622290188657951,
+            "speed_mps": 0.18,
+            "stop_distance_m": 0.00298
+          },
+          "tested_speeds": [
+            {
+              "passes": true,
+              "reaction_distance_m": 0.009860443060001113,
+              "required_corridor_m": 0.5833454743857862,
+              "speed_mps": 0.02,
+              "stop_distance_m": 0.00298
+            },
+            {
+              "passes": true,
+              "reaction_distance_m": 0.024651107650002783,
+              "required_corridor_m": 0.5981361389757879,
+              "speed_mps": 0.05,
+              "stop_distance_m": 0.00298
+            },
+            {
+              "passes": true,
+              "reaction_distance_m": 0.049302215300005565,
+              "required_corridor_m": 0.6227872466257907,
+              "speed_mps": 0.1,
+              "stop_distance_m": 0.00298
+            },
+            {
+              "passes": true,
+              "reaction_distance_m": 0.08874398754001,
+              "required_corridor_m": 0.6622290188657951,
+              "speed_mps": 0.18,
+              "stop_distance_m": 0.00298
+            }
+          ],
+          "valid": true
+        },
+        "speed_gate_inputs": {
+          "connected_full_footprint_corridor_m": 3.6000000536441803,
+          "lidar_map_wall_age_s": 0.20622215300005564,
+          "measured_scan_rate_hz": 4.918937509294905,
+          "odom_sim_age_s": 0.018000000000000682,
+          "scan_sim_age_s": 0.04800000000000182,
+          "usable_beam_fraction": 0.9916666666666667
+        },
+        "stopping_model": {
+          "friction_conditions": [
+            0.5,
+            1.2
+          ],
+          "hardware_bound": false,
+          "source": "Phase 8B isolated simulator stopping test",
+          "tested_speeds_mps": [
+            0.02,
+            0.05,
+            0.1,
+            0.18
+          ],
+          "worst_stop_distance_m": 0.00298
+        },
+        "truth_used_only_by_evaluator": true,
+        "valid": true
+      },
+      "max_abs_actual_angular_radps": 0.02,
+      "max_abs_actual_linear_mps": 0.0,
+      "measured_average_yaw_rate_radps": -0.018148599080267593,
+      "output_samples": [
+        {
+          "angular_z_radps": -0.02,
+          "linear_x_mps": -0.0,
+          "wall_s": 509.952647293
+        },
+        {
+          "angular_z_radps": -0.02,
+          "linear_x_mps": -0.0,
+          "wall_s": 510.002622958
+        },
+        {
+          "angular_z_radps": -0.02,
+          "linear_x_mps": -0.0,
+          "wall_s": 510.052845683
+        },
+        {
+          "angular_z_radps": -0.02,
+          "linear_x_mps": -0.0,
+          "wall_s": 510.102738596
+        },
+        {
+          "angular_z_radps": -0.02,
+          "linear_x_mps": -0.0,
+          "wall_s": 510.152895336
+        },
+        {
+          "angular_z_radps": -0.02,
+          "linear_x_mps": -0.0,
+          "wall_s": 510.202838654
+        },
+        {
+          "angular_z_radps": -0.02,
+          "linear_x_mps": -0.0,
+          "wall_s": 510.252815273
+        },
+        {
+          "angular_z_radps": -0.02,
+          "linear_x_mps": -0.0,
+          "wall_s": 510.302688776
+        },
+        {
+          "angular_z_radps": -0.02,
+          "linear_x_mps": -0.0,
+          "wall_s": 510.35266159
+        },
+        {
+          "angular_z_radps": -0.02,
+          "linear_x_mps": -0.0,
+          "wall_s": 510.402615972
+        },
+        {
+          "angular_z_radps": -0.02,
+          "linear_x_mps": -0.0,
+          "wall_s": 510.452790678
+        },
+        {
+          "angular_z_radps": -0.02,
+          "linear_x_mps": -0.0,
+          "wall_s": 510.502657686
+        },
+        {
+          "angular_z_radps": -0.02,
+          "linear_x_mps": -0.0,
+          "wall_s": 510.552682788
+        },
+        {
+          "angular_z_radps": -0.02,
+          "linear_x_mps": -0.0,
+          "wall_s": 510.602687006
+        },
+        {
+          "angular_z_radps": -0.02,
+          "linear_x_mps": -0.0,
+          "wall_s": 510.652899229
+        },
+        {
+          "angular_z_radps": -0.02,
+          "linear_x_mps": -0.0,
+          "wall_s": 510.702912589
+        },
+        {
+          "angular_z_radps": -0.02,
+          "linear_x_mps": -0.0,
+          "wall_s": 510.754075264
+        },
+        {
+          "angular_z_radps": -0.02,
+          "linear_x_mps": -0.0,
+          "wall_s": 510.802967353
+        },
+        {
+          "angular_z_radps": -0.02,
+          "linear_x_mps": -0.0,
+          "wall_s": 510.852782043
+        },
+        {
+          "angular_z_radps": -0.02,
+          "linear_x_mps": -0.0,
+          "wall_s": 510.902597304
+        },
+        {
+          "angular_z_radps": -0.02,
+          "linear_x_mps": -0.0,
+          "wall_s": 510.952537857
+        },
+        {
+          "angular_z_radps": -0.02,
+          "linear_x_mps": -0.0,
+          "wall_s": 511.002657232
+        },
+        {
+          "angular_z_radps": -0.02,
+          "linear_x_mps": -0.0,
+          "wall_s": 511.053341269
+        },
+        {
+          "angular_z_radps": -0.02,
+          "linear_x_mps": -0.0,
+          "wall_s": 511.10263176
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": -0.0,
+          "wall_s": 511.152871726
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": -0.0,
+          "wall_s": 511.202820995
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": -0.0,
+          "wall_s": 511.252991576
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": -0.0,
+          "wall_s": 511.302761462
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": -0.0,
+          "wall_s": 511.352769371
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": -0.0,
+          "wall_s": 511.403173787
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 511.453093131
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 511.502806124
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 511.552739224
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 511.602752324
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 511.653320687
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 511.702777625
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 511.752717142
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 511.802925668
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 511.856733381
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 511.902723236
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 511.952737427
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 512.002700152
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 512.0528164
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 512.102733781
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 512.15280827
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 512.202852013
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 512.252924484
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 512.302662595
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 512.352867296
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 512.402807888
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 512.452838255
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 512.50272745
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 512.552745159
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 512.602648671
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 512.652674521
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 512.702805738
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 512.752828734
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 512.803078755
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 512.853920696
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 512.903531763
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 512.953364232
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 513.002875045
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 513.052998558
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 513.102766904
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 513.152922167
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 513.20276316
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 513.252803991
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 513.302787818
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 513.352895975
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 513.402745081
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 513.452983593
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 513.50307876
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 513.55326599
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 513.60286668
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 513.653837245
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 513.703437121
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 513.753039694
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 513.803070448
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 513.852775839
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 513.902792724
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 513.952752999
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 514.00284078
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 514.052800911
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 514.103868585
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 514.152801815
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 514.202735921
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 514.252718974
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 514.302805816
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 514.352732762
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 514.4027304
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 514.452715085
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 514.502862983
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 514.552697088
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 514.602810952
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 514.652927972
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 514.703830023
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 514.752752862
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 514.802739897
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 514.852722062
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 514.904289709
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 514.952722556
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 515.002753271
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 515.052693708
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 515.105115442
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 515.153313339
+        }
+      ],
+      "requested_angular_speed_radps": -0.02,
+      "requested_duration_s": 1.2,
+      "residual_yaw_after_zero_output_rad": 0.0,
+      "settled_within_4s": false,
+      "sim_seconds_after_zero_output_to_settled": 3.9780000000000015,
+      "start_truth": {
+        "angular_z_radps": 0.0183636,
+        "evaluator_only": true,
+        "linear_x_mps": 3.93912e-07,
+        "linear_y_mps": 0.000734512,
+        "sim_stamp_s": 59.674,
+        "wall_s": 509.925161737,
+        "x_m": -1.93686e-05,
+        "y_m": 0.000866657,
+        "yaw_rad": 0.021669
+      },
+      "trial_pass": false,
+      "truth_after_first_zero_output": {
+        "angular_z_radps": -0.0183636,
+        "evaluator_only": true,
+        "linear_x_mps": 1.5279e-05,
+        "linear_y_mps": -0.000734342,
+        "sim_stamp_s": 60.87,
+        "wall_s": 511.166449559,
+        "x_m": -1.06479e-05,
+        "y_m": -1.46866e-06,
+        "yaw_rad": -3.672450000000002e-05
+      },
+      "yaw_change_until_zero_rad": -0.021705724500000002,
+      "zero_output_to_settled_wall_s": 4.018178178000028,
+      "zero_request_to_settled_wall_s": 4.044302794000032,
+      "zero_request_to_zero_output_wall_s": 0.026124616000004153
+    },
+    {
+      "center_drift_m": 0.002170043924730372,
+      "contact_events": 2589,
+      "final_truth": {
+        "angular_z_radps": 0.0459046,
+        "evaluator_only": true,
+        "linear_x_mps": -6.9839e-07,
+        "linear_y_mps": 0.00183615,
+        "sim_stamp_s": 70.432,
+        "wall_s": 520.825927492,
+        "x_m": -6.86489e-05,
+        "y_m": 0.0021678,
+        "yaw_rad": 0.0542225
+      },
+      "gate_snapshot": {
+        "angular_motion_status": "calibration_only_swept_disk_clear",
+        "angular_stopping_model": {
+          "measured": false,
+          "note": "Calibration-only capped pulses; production yaw remains disabled pending measured stopping bound and review.",
+          "production_authorized": false
+        },
+        "authorized": true,
+        "combined_motion_authorized": false,
+        "corridor_m": 3.6000000536441803,
+        "failures": [],
+        "footprint_width_m": 0.345,
+        "forward_distance_reference": "front_footprint_boundary",
+        "localization_allowance_m": 0.4705050313257851,
+        "map_counts": {
+          "free": 4186,
+          "occupied": 258,
+          "unknown": 27956
+        },
+        "map_frame": "base_link",
+        "max_angular_speed_radps": 0.1,
+        "max_linear_speed_mps": 0.0,
+        "motion_mode": "rotation_calibration_only",
+        "node": "anc_lidar_safety_gate",
+        "profile": "REALISTIC_RGB_LIDAR",
+        "reason": "pass",
+        "rotation_calibration_speed_cap_radps": 0.1,
+        "rotation_clearance": {
+          "authorized": true,
+          "center_drift_allowance_m": 0.14,
+          "checked_cells": 112,
+          "footprint_circumradius_m": 0.263592962728522,
+          "inside_grid": true,
+          "occupied_cells": 0,
+          "reason": "swept_disk_clear",
+          "required_radius_m": 0.5235929627285221,
+          "safety_margin_m": 0.1,
+          "sensor_mount_uncertainty_m": 0.02,
+          "unknown_cells": 0
+        },
+        "runtime_uses_world_map_or_truth": false,
+        "safety_margin_m": 0.1,
+        "speed_gate": {
+          "max_linear_speed_mps": 0.18,
+          "reaction_time_s": 0.4608,
+          "reason": "measured_speed_bound_fits_corridor",
+          "selected": {
+            "passes": true,
+            "reaction_distance_m": 0.08294399999999999,
+            "required_corridor_m": 0.656429031325785,
+            "speed_mps": 0.18,
+            "stop_distance_m": 0.00298
+          },
+          "tested_speeds": [
+            {
+              "passes": true,
+              "reaction_distance_m": 0.009216,
+              "required_corridor_m": 0.5827010313257851,
+              "speed_mps": 0.02,
+              "stop_distance_m": 0.00298
+            },
+            {
+              "passes": true,
+              "reaction_distance_m": 0.02304,
+              "required_corridor_m": 0.596525031325785,
+              "speed_mps": 0.05,
+              "stop_distance_m": 0.00298
+            },
+            {
+              "passes": true,
+              "reaction_distance_m": 0.04608,
+              "required_corridor_m": 0.6195650313257851,
+              "speed_mps": 0.1,
+              "stop_distance_m": 0.00298
+            },
+            {
+              "passes": true,
+              "reaction_distance_m": 0.08294399999999999,
+              "required_corridor_m": 0.656429031325785,
+              "speed_mps": 0.18,
+              "stop_distance_m": 0.00298
+            }
+          ],
+          "valid": true
+        },
+        "speed_gate_inputs": {
+          "connected_full_footprint_corridor_m": 3.6000000536441803,
+          "lidar_map_wall_age_s": 0.016503237999927478,
+          "measured_scan_rate_hz": 4.921291855291948,
+          "odom_sim_age_s": 0.02599999999999625,
+          "scan_sim_age_s": 0.055999999999997385,
+          "usable_beam_fraction": 0.9916666666666667
+        },
+        "stopping_model": {
+          "friction_conditions": [
+            0.5,
+            1.2
+          ],
+          "hardware_bound": false,
+          "source": "Phase 8B isolated simulator stopping test",
+          "tested_speeds_mps": [
+            0.02,
+            0.05,
+            0.1,
+            0.18
+          ],
+          "worst_stop_distance_m": 0.00298
+        },
+        "truth_used_only_by_evaluator": true,
+        "valid": true
+      },
+      "max_abs_actual_angular_radps": 0.05,
+      "max_abs_actual_linear_mps": 0.0,
+      "measured_average_yaw_rate_radps": 0.04529150626043431,
+      "output_samples": [
+        {
+          "angular_z_radps": 0.05,
+          "linear_x_mps": -0.0,
+          "wall_s": 515.602742856
+        },
+        {
+          "angular_z_radps": 0.05,
+          "linear_x_mps": -0.0,
+          "wall_s": 515.65259829
+        },
+        {
+          "angular_z_radps": 0.05,
+          "linear_x_mps": -0.0,
+          "wall_s": 515.702580776
+        },
+        {
+          "angular_z_radps": 0.05,
+          "linear_x_mps": -0.0,
+          "wall_s": 515.752685219
+        },
+        {
+          "angular_z_radps": 0.05,
+          "linear_x_mps": -0.0,
+          "wall_s": 515.802604174
+        },
+        {
+          "angular_z_radps": 0.05,
+          "linear_x_mps": -0.0,
+          "wall_s": 515.852622993
+        },
+        {
+          "angular_z_radps": 0.05,
+          "linear_x_mps": -0.0,
+          "wall_s": 515.902624575
+        },
+        {
+          "angular_z_radps": 0.05,
+          "linear_x_mps": -0.0,
+          "wall_s": 515.952801215
+        },
+        {
+          "angular_z_radps": 0.05,
+          "linear_x_mps": -0.0,
+          "wall_s": 516.002643337
+        },
+        {
+          "angular_z_radps": 0.05,
+          "linear_x_mps": -0.0,
+          "wall_s": 516.05263828
+        },
+        {
+          "angular_z_radps": 0.05,
+          "linear_x_mps": -0.0,
+          "wall_s": 516.102664635
+        },
+        {
+          "angular_z_radps": 0.05,
+          "linear_x_mps": -0.0,
+          "wall_s": 516.152983799
+        },
+        {
+          "angular_z_radps": 0.05,
+          "linear_x_mps": -0.0,
+          "wall_s": 516.203224484
+        },
+        {
+          "angular_z_radps": 0.05,
+          "linear_x_mps": -0.0,
+          "wall_s": 516.2531079
+        },
+        {
+          "angular_z_radps": 0.05,
+          "linear_x_mps": -0.0,
+          "wall_s": 516.302761825
+        },
+        {
+          "angular_z_radps": 0.05,
+          "linear_x_mps": -0.0,
+          "wall_s": 516.353651244
+        },
+        {
+          "angular_z_radps": 0.05,
+          "linear_x_mps": -0.0,
+          "wall_s": 516.40270309
+        },
+        {
+          "angular_z_radps": 0.05,
+          "linear_x_mps": -0.0,
+          "wall_s": 516.452679683
+        },
+        {
+          "angular_z_radps": 0.05,
+          "linear_x_mps": -0.0,
+          "wall_s": 516.502694836
+        },
+        {
+          "angular_z_radps": 0.05,
+          "linear_x_mps": -0.0,
+          "wall_s": 516.55270336
+        },
+        {
+          "angular_z_radps": 0.05,
+          "linear_x_mps": -0.0,
+          "wall_s": 516.602731381
+        },
+        {
+          "angular_z_radps": 0.05,
+          "linear_x_mps": -0.0,
+          "wall_s": 516.653282551
+        },
+        {
+          "angular_z_radps": 0.05,
+          "linear_x_mps": -0.0,
+          "wall_s": 516.702668784
+        },
+        {
+          "angular_z_radps": 0.05,
+          "linear_x_mps": -0.0,
+          "wall_s": 516.752777311
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": -0.0,
+          "wall_s": 516.80286192
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": -0.0,
+          "wall_s": 516.853504822
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": -0.0,
+          "wall_s": 516.902815341
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": -0.0,
+          "wall_s": 516.95356178
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": -0.0,
+          "wall_s": 517.002773194
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": -0.0,
+          "wall_s": 517.05278234
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 517.102798197
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 517.152855045
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 517.202933206
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 517.252789156
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 517.302792354
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 517.353441969
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 517.403409932
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 517.452709893
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 517.503162313
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 517.553062739
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 517.602745847
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 517.65267821
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 517.702651312
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 517.753127163
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 517.802701735
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 517.85274853
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 517.90270764
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 517.953909384
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 518.002786057
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 518.052858409
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 518.102794886
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 518.155441836
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 518.202813557
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 518.252749636
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 518.302777132
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 518.356443861
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 518.402741144
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 518.452730921
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 518.50275395
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 518.55484348
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 518.602713386
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 518.652698469
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 518.702710209
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 518.756180451
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 518.802865906
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 518.852974009
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 518.902818515
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 518.952966718
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 519.002716262
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 519.052764963
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 519.102775126
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 519.153045429
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 519.202888048
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 519.252846317
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 519.302807844
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 519.352822495
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 519.402788486
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 519.452723683
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 519.502809473
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 519.552734576
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 519.602933212
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 519.653235174
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 519.702858606
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 519.752904256
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 519.80282692
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 519.853411487
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 519.903168486
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 519.952873595
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 520.002825464
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 520.052737401
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 520.102980569
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 520.152719555
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 520.202979368
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 520.252776681
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 520.302769211
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 520.352718882
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 520.402892799
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 520.452913804
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 520.502832594
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 520.552813418
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 520.602974261
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 520.653048212
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 520.703039364
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 520.752812349
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 520.802798454
+        }
+      ],
+      "requested_angular_speed_radps": 0.05,
+      "requested_duration_s": 1.2,
+      "residual_yaw_after_zero_output_rad": 0.0,
+      "settled_within_4s": false,
+      "sim_seconds_after_zero_output_to_settled": 3.9920000000000044,
+      "start_truth": {
+        "angular_z_radps": -0.0183636,
+        "evaluator_only": true,
+        "linear_x_mps": 1.5279e-05,
+        "linear_y_mps": -0.000734342,
+        "sim_stamp_s": 65.242,
+        "wall_s": 515.587146124,
+        "x_m": -1.06479e-05,
+        "y_m": -1.46866e-06,
+        "yaw_rad": -3.672450000000002e-05
+      },
+      "trial_pass": false,
+      "truth_after_first_zero_output": {
+        "angular_z_radps": 0.0459046,
+        "evaluator_only": true,
+        "linear_x_mps": -6.9839e-07,
+        "linear_y_mps": 0.00183615,
+        "sim_stamp_s": 66.44,
+        "wall_s": 516.817187703,
+        "x_m": -6.86489e-05,
+        "y_m": 0.0021678,
+        "yaw_rad": 0.0542225
+      },
+      "yaw_change_until_zero_rad": 0.0542592245,
+      "zero_output_to_settled_wall_s": 4.023080785999923,
+      "zero_request_to_settled_wall_s": 4.037088159999939,
+      "zero_request_to_zero_output_wall_s": 0.01400737400001617
+    },
+    {
+      "center_drift_m": 0.002173714796475152,
+      "contact_events": 2595,
+      "final_truth": {
+        "angular_z_radps": -0.0459046,
+        "evaluator_only": true,
+        "linear_x_mps": 9.87637e-05,
+        "linear_y_mps": -0.00183346,
+        "sim_stamp_s": 76.018,
+        "wall_s": 526.477537705,
+        "x_m": -1.045e-05,
+        "y_m": -5.13555e-06,
+        "yaw_rad": -0.00012853300000000007
+      },
+      "gate_snapshot": {
+        "angular_motion_status": "calibration_only_swept_disk_clear",
+        "angular_stopping_model": {
+          "measured": false,
+          "note": "Calibration-only capped pulses; production yaw remains disabled pending measured stopping bound and review.",
+          "production_authorized": false
+        },
+        "authorized": true,
+        "combined_motion_authorized": false,
+        "corridor_m": 3.6000000536441803,
+        "failures": [],
+        "footprint_width_m": 0.345,
+        "forward_distance_reference": "front_footprint_boundary",
+        "localization_allowance_m": 0.4705050313257851,
+        "map_counts": {
+          "free": 4150,
+          "occupied": 271,
+          "unknown": 27979
+        },
+        "map_frame": "base_link",
+        "max_angular_speed_radps": 0.1,
+        "max_linear_speed_mps": 0.0,
+        "motion_mode": "rotation_calibration_only",
+        "node": "anc_lidar_safety_gate",
+        "profile": "REALISTIC_RGB_LIDAR",
+        "reason": "pass",
+        "rotation_calibration_speed_cap_radps": 0.1,
+        "rotation_clearance": {
+          "authorized": true,
+          "center_drift_allowance_m": 0.14,
+          "checked_cells": 112,
+          "footprint_circumradius_m": 0.263592962728522,
+          "inside_grid": true,
+          "occupied_cells": 0,
+          "reason": "swept_disk_clear",
+          "required_radius_m": 0.5235929627285221,
+          "safety_margin_m": 0.1,
+          "sensor_mount_uncertainty_m": 0.02,
+          "unknown_cells": 0
+        },
+        "runtime_uses_world_map_or_truth": false,
+        "safety_margin_m": 0.1,
+        "speed_gate": {
+          "max_linear_speed_mps": 0.18,
+          "reaction_time_s": 0.4608,
+          "reason": "measured_speed_bound_fits_corridor",
+          "selected": {
+            "passes": true,
+            "reaction_distance_m": 0.08294399999999999,
+            "required_corridor_m": 0.656429031325785,
+            "speed_mps": 0.18,
+            "stop_distance_m": 0.00298
+          },
+          "tested_speeds": [
+            {
+              "passes": true,
+              "reaction_distance_m": 0.009216,
+              "required_corridor_m": 0.5827010313257851,
+              "speed_mps": 0.02,
+              "stop_distance_m": 0.00298
+            },
+            {
+              "passes": true,
+              "reaction_distance_m": 0.02304,
+              "required_corridor_m": 0.596525031325785,
+              "speed_mps": 0.05,
+              "stop_distance_m": 0.00298
+            },
+            {
+              "passes": true,
+              "reaction_distance_m": 0.04608,
+              "required_corridor_m": 0.6195650313257851,
+              "speed_mps": 0.1,
+              "stop_distance_m": 0.00298
+            },
+            {
+              "passes": true,
+              "reaction_distance_m": 0.08294399999999999,
+              "required_corridor_m": 0.656429031325785,
+              "speed_mps": 0.18,
+              "stop_distance_m": 0.00298
+            }
+          ],
+          "valid": true
+        },
+        "speed_gate_inputs": {
+          "connected_full_footprint_corridor_m": 3.6000000536441803,
+          "lidar_map_wall_age_s": 0.13836463299992374,
+          "measured_scan_rate_hz": 4.935665737754389,
+          "odom_sim_age_s": 0.036000000000001364,
+          "scan_sim_age_s": 0.16600000000001103,
+          "usable_beam_fraction": 0.9972222222222222
+        },
+        "stopping_model": {
+          "friction_conditions": [
+            0.5,
+            1.2
+          ],
+          "hardware_bound": false,
+          "source": "Phase 8B isolated simulator stopping test",
+          "tested_speeds_mps": [
+            0.02,
+            0.05,
+            0.1,
+            0.18
+          ],
+          "worst_stop_distance_m": 0.00298
+        },
+        "truth_used_only_by_evaluator": true,
+        "valid": true
+      },
+      "max_abs_actual_angular_radps": 0.05,
+      "max_abs_actual_linear_mps": 0.0,
+      "measured_average_yaw_rate_radps": -0.04552012814070342,
+      "output_samples": [
+        {
+          "angular_z_radps": -0.05,
+          "linear_x_mps": -0.0,
+          "wall_s": 521.253223666
+        },
+        {
+          "angular_z_radps": -0.05,
+          "linear_x_mps": -0.0,
+          "wall_s": 521.302872011
+        },
+        {
+          "angular_z_radps": -0.05,
+          "linear_x_mps": -0.0,
+          "wall_s": 521.352578476
+        },
+        {
+          "angular_z_radps": -0.05,
+          "linear_x_mps": -0.0,
+          "wall_s": 521.402969199
+        },
+        {
+          "angular_z_radps": -0.05,
+          "linear_x_mps": -0.0,
+          "wall_s": 521.453087537
+        },
+        {
+          "angular_z_radps": -0.05,
+          "linear_x_mps": -0.0,
+          "wall_s": 521.502870532
+        },
+        {
+          "angular_z_radps": -0.05,
+          "linear_x_mps": -0.0,
+          "wall_s": 521.552953659
+        },
+        {
+          "angular_z_radps": -0.05,
+          "linear_x_mps": -0.0,
+          "wall_s": 521.603268469
+        },
+        {
+          "angular_z_radps": -0.05,
+          "linear_x_mps": -0.0,
+          "wall_s": 521.652806558
+        },
+        {
+          "angular_z_radps": -0.05,
+          "linear_x_mps": -0.0,
+          "wall_s": 521.702893018
+        },
+        {
+          "angular_z_radps": -0.05,
+          "linear_x_mps": -0.0,
+          "wall_s": 521.752863638
+        },
+        {
+          "angular_z_radps": -0.05,
+          "linear_x_mps": -0.0,
+          "wall_s": 521.802840413
+        },
+        {
+          "angular_z_radps": -0.05,
+          "linear_x_mps": -0.0,
+          "wall_s": 521.852600538
+        },
+        {
+          "angular_z_radps": -0.05,
+          "linear_x_mps": -0.0,
+          "wall_s": 521.902590663
+        },
+        {
+          "angular_z_radps": -0.05,
+          "linear_x_mps": -0.0,
+          "wall_s": 521.952567115
+        },
+        {
+          "angular_z_radps": -0.05,
+          "linear_x_mps": -0.0,
+          "wall_s": 522.002557507
+        },
+        {
+          "angular_z_radps": -0.05,
+          "linear_x_mps": -0.0,
+          "wall_s": 522.052665043
+        },
+        {
+          "angular_z_radps": -0.05,
+          "linear_x_mps": -0.0,
+          "wall_s": 522.102553814
+        },
+        {
+          "angular_z_radps": -0.05,
+          "linear_x_mps": -0.0,
+          "wall_s": 522.152680936
+        },
+        {
+          "angular_z_radps": -0.05,
+          "linear_x_mps": -0.0,
+          "wall_s": 522.202664295
+        },
+        {
+          "angular_z_radps": -0.05,
+          "linear_x_mps": -0.0,
+          "wall_s": 522.252769341
+        },
+        {
+          "angular_z_radps": -0.05,
+          "linear_x_mps": -0.0,
+          "wall_s": 522.302582211
+        },
+        {
+          "angular_z_radps": -0.05,
+          "linear_x_mps": -0.0,
+          "wall_s": 522.352741927
+        },
+        {
+          "angular_z_radps": -0.05,
+          "linear_x_mps": -0.0,
+          "wall_s": 522.402567289
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": -0.0,
+          "wall_s": 522.45304745
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": -0.0,
+          "wall_s": 522.502925702
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": -0.0,
+          "wall_s": 522.552982438
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": -0.0,
+          "wall_s": 522.602980437
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": -0.0,
+          "wall_s": 522.652675654
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": -0.0,
+          "wall_s": 522.70277291
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 522.752796245
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 522.80269472
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 522.852898827
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 522.902865454
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 522.95263428
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 523.002672209
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 523.052785469
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 523.102681292
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 523.152648595
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 523.202662672
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 523.252859696
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 523.302959132
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 523.3527458
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 523.403358756
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 523.453289238
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 523.502791023
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 523.553078403
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 523.602793547
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 523.65322777
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 523.703131741
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 523.752765545
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 523.803017997
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 523.852982602
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 523.902757497
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 523.952779207
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 524.002936084
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 524.054140395
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 524.102727645
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 524.152770894
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 524.20277119
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 524.253657027
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 524.302642395
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 524.352798723
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 524.402944482
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 524.453342854
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 524.502946875
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 524.55327408
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 524.603122283
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 524.653163433
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 524.703022831
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 524.752863645
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 524.80274814
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 524.852779684
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 524.902648351
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 524.952883967
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 525.002742069
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 525.053061436
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 525.102752603
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 525.152653246
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 525.202622473
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 525.252867789
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 525.302718322
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 525.352641803
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 525.402655633
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 525.453092934
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 525.502836391
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 525.552731601
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 525.60265618
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 525.656651844
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 525.702715875
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 525.752702384
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 525.802665711
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 525.853964554
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 525.90265477
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 525.952655986
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 526.002654527
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 526.053506609
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 526.102676369
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 526.152660315
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 526.202739314
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 526.252727262
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 526.302755284
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 526.353032707
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 526.402932165
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 526.452731046
+        }
+      ],
+      "requested_angular_speed_radps": -0.05,
+      "requested_duration_s": 1.2,
+      "residual_yaw_after_zero_output_rad": 0.0,
+      "settled_within_4s": false,
+      "sim_seconds_after_zero_output_to_settled": 4.001999999999995,
+      "start_truth": {
+        "angular_z_radps": 0.0459046,
+        "evaluator_only": true,
+        "linear_x_mps": -6.9839e-07,
+        "linear_y_mps": 0.00183615,
+        "sim_stamp_s": 70.822,
+        "wall_s": 521.240294137,
+        "x_m": -6.86489e-05,
+        "y_m": 0.0021678,
+        "yaw_rad": 0.0542225
+      },
+      "trial_pass": false,
+      "truth_after_first_zero_output": {
+        "angular_z_radps": -0.0459046,
+        "evaluator_only": true,
+        "linear_x_mps": 9.87637e-05,
+        "linear_y_mps": -0.00183346,
+        "sim_stamp_s": 72.016,
+        "wall_s": 522.465124103,
+        "x_m": -1.045e-05,
+        "y_m": -5.13555e-06,
+        "yaw_rad": -0.00012853300000000007
+      },
+      "yaw_change_until_zero_rad": -0.054351033,
+      "zero_output_to_settled_wall_s": 4.024514421000049,
+      "zero_request_to_settled_wall_s": 4.036709566000013,
+      "zero_request_to_zero_output_wall_s": 0.012195144999964214
+    },
+    {
+      "center_drift_m": 0.004345683538961944,
+      "contact_events": 2592,
+      "final_truth": {
+        "angular_z_radps": 0.0918062,
+        "evaluator_only": true,
+        "linear_x_mps": -4.33609e-06,
+        "linear_y_mps": 0.00367221,
+        "sim_stamp_s": 81.518,
+        "wall_s": 532.124858389,
+        "x_m": -0.000244883,
+        "y_m": 0.00433422,
+        "yaw_rad": 0.10856900000000001
+      },
+      "gate_snapshot": {
+        "angular_motion_status": "calibration_only_swept_disk_clear",
+        "angular_stopping_model": {
+          "measured": false,
+          "note": "Calibration-only capped pulses; production yaw remains disabled pending measured stopping bound and review.",
+          "production_authorized": false
+        },
+        "authorized": true,
+        "combined_motion_authorized": false,
+        "corridor_m": 3.6000000536441803,
+        "failures": [],
+        "footprint_width_m": 0.345,
+        "forward_distance_reference": "front_footprint_boundary",
+        "localization_allowance_m": 0.4705050313257851,
+        "map_counts": {
+          "free": 4204,
+          "occupied": 259,
+          "unknown": 27937
+        },
+        "map_frame": "base_link",
+        "max_angular_speed_radps": 0.1,
+        "max_linear_speed_mps": 0.0,
+        "motion_mode": "rotation_calibration_only",
+        "node": "anc_lidar_safety_gate",
+        "profile": "REALISTIC_RGB_LIDAR",
+        "reason": "pass",
+        "rotation_calibration_speed_cap_radps": 0.1,
+        "rotation_clearance": {
+          "authorized": true,
+          "center_drift_allowance_m": 0.14,
+          "checked_cells": 112,
+          "footprint_circumradius_m": 0.263592962728522,
+          "inside_grid": true,
+          "occupied_cells": 0,
+          "reason": "swept_disk_clear",
+          "required_radius_m": 0.5235929627285221,
+          "safety_margin_m": 0.1,
+          "sensor_mount_uncertainty_m": 0.02,
+          "unknown_cells": 0
+        },
+        "runtime_uses_world_map_or_truth": false,
+        "safety_margin_m": 0.1,
+        "speed_gate": {
+          "max_linear_speed_mps": 0.18,
+          "reaction_time_s": 0.4907999999999935,
+          "reason": "measured_speed_bound_fits_corridor",
+          "selected": {
+            "passes": true,
+            "reaction_distance_m": 0.08834399999999883,
+            "required_corridor_m": 0.6618290313257839,
+            "speed_mps": 0.18,
+            "stop_distance_m": 0.00298
+          },
+          "tested_speeds": [
+            {
+              "passes": true,
+              "reaction_distance_m": 0.00981599999999987,
+              "required_corridor_m": 0.5833010313257849,
+              "speed_mps": 0.02,
+              "stop_distance_m": 0.00298
+            },
+            {
+              "passes": true,
+              "reaction_distance_m": 0.024539999999999677,
+              "required_corridor_m": 0.5980250313257848,
+              "speed_mps": 0.05,
+              "stop_distance_m": 0.00298
+            },
+            {
+              "passes": true,
+              "reaction_distance_m": 0.04907999999999935,
+              "required_corridor_m": 0.6225650313257844,
+              "speed_mps": 0.1,
+              "stop_distance_m": 0.00298
+            },
+            {
+              "passes": true,
+              "reaction_distance_m": 0.08834399999999883,
+              "required_corridor_m": 0.6618290313257839,
+              "speed_mps": 0.18,
+              "stop_distance_m": 0.00298
+            }
+          ],
+          "valid": true
+        },
+        "speed_gate_inputs": {
+          "connected_full_footprint_corridor_m": 3.6000000536441803,
+          "lidar_map_wall_age_s": 0.16623608600002626,
+          "measured_scan_rate_hz": 4.939008203625752,
+          "odom_sim_age_s": 0.003999999999990678,
+          "scan_sim_age_s": 0.20399999999999352,
+          "usable_beam_fraction": 1.0
+        },
+        "stopping_model": {
+          "friction_conditions": [
+            0.5,
+            1.2
+          ],
+          "hardware_bound": false,
+          "source": "Phase 8B isolated simulator stopping test",
+          "tested_speeds_mps": [
+            0.02,
+            0.05,
+            0.1,
+            0.18
+          ],
+          "worst_stop_distance_m": 0.00298
+        },
+        "truth_used_only_by_evaluator": true,
+        "valid": true
+      },
+      "max_abs_actual_angular_radps": 0.1,
+      "max_abs_actual_linear_mps": 0.0,
+      "measured_average_yaw_rate_radps": 0.0905812774999998,
+      "output_samples": [
+        {
+          "angular_z_radps": 0.1,
+          "linear_x_mps": -0.0,
+          "wall_s": 526.9025634
+        },
+        {
+          "angular_z_radps": 0.1,
+          "linear_x_mps": -0.0,
+          "wall_s": 526.952548857
+        },
+        {
+          "angular_z_radps": 0.1,
+          "linear_x_mps": -0.0,
+          "wall_s": 527.002707877
+        },
+        {
+          "angular_z_radps": 0.1,
+          "linear_x_mps": -0.0,
+          "wall_s": 527.052647512
+        },
+        {
+          "angular_z_radps": 0.1,
+          "linear_x_mps": -0.0,
+          "wall_s": 527.102530752
+        },
+        {
+          "angular_z_radps": 0.1,
+          "linear_x_mps": -0.0,
+          "wall_s": 527.15277241
+        },
+        {
+          "angular_z_radps": 0.1,
+          "linear_x_mps": -0.0,
+          "wall_s": 527.202624021
+        },
+        {
+          "angular_z_radps": 0.1,
+          "linear_x_mps": -0.0,
+          "wall_s": 527.252614131
+        },
+        {
+          "angular_z_radps": 0.1,
+          "linear_x_mps": -0.0,
+          "wall_s": 527.302796636
+        },
+        {
+          "angular_z_radps": 0.1,
+          "linear_x_mps": -0.0,
+          "wall_s": 527.352553253
+        },
+        {
+          "angular_z_radps": 0.1,
+          "linear_x_mps": -0.0,
+          "wall_s": 527.40297132
+        },
+        {
+          "angular_z_radps": 0.1,
+          "linear_x_mps": -0.0,
+          "wall_s": 527.45270561
+        },
+        {
+          "angular_z_radps": 0.1,
+          "linear_x_mps": -0.0,
+          "wall_s": 527.50266435
+        },
+        {
+          "angular_z_radps": 0.1,
+          "linear_x_mps": -0.0,
+          "wall_s": 527.552620088
+        },
+        {
+          "angular_z_radps": 0.1,
+          "linear_x_mps": -0.0,
+          "wall_s": 527.60255035
+        },
+        {
+          "angular_z_radps": 0.1,
+          "linear_x_mps": -0.0,
+          "wall_s": 527.652577732
+        },
+        {
+          "angular_z_radps": 0.1,
+          "linear_x_mps": -0.0,
+          "wall_s": 527.703592342
+        },
+        {
+          "angular_z_radps": 0.1,
+          "linear_x_mps": -0.0,
+          "wall_s": 527.752594283
+        },
+        {
+          "angular_z_radps": 0.1,
+          "linear_x_mps": -0.0,
+          "wall_s": 527.802627229
+        },
+        {
+          "angular_z_radps": 0.1,
+          "linear_x_mps": -0.0,
+          "wall_s": 527.852515458
+        },
+        {
+          "angular_z_radps": 0.1,
+          "linear_x_mps": -0.0,
+          "wall_s": 527.903022194
+        },
+        {
+          "angular_z_radps": 0.1,
+          "linear_x_mps": -0.0,
+          "wall_s": 527.952745964
+        },
+        {
+          "angular_z_radps": 0.1,
+          "linear_x_mps": -0.0,
+          "wall_s": 528.002652594
+        },
+        {
+          "angular_z_radps": 0.1,
+          "linear_x_mps": -0.0,
+          "wall_s": 528.052766592
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": -0.0,
+          "wall_s": 528.102770784
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": -0.0,
+          "wall_s": 528.152647366
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": -0.0,
+          "wall_s": 528.202661836
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": -0.0,
+          "wall_s": 528.252879579
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": -0.0,
+          "wall_s": 528.30327386
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": -0.0,
+          "wall_s": 528.352702469
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 528.402675819
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 528.452730533
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 528.50313393
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 528.552795978
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 528.603180639
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 528.653140658
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 528.702871644
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 528.752713015
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 528.80274658
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 528.852678311
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 528.90277833
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 528.952671622
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 529.0026927
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 529.052717126
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 529.102880816
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 529.152722805
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 529.203007047
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 529.2527551
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 529.302898226
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 529.353122539
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 529.402888949
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 529.45293835
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 529.503525849
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 529.552725156
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 529.602668344
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 529.652672494
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 529.70296517
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 529.752743139
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 529.802669812
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 529.852977329
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 529.903378508
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 529.952714113
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 530.002738051
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 530.052784532
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 530.10451544
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 530.152773786
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 530.202743756
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 530.253086487
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 530.305648455
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 530.352773196
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 530.403222192
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 530.452814836
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 530.506545224
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 530.552760309
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 530.602834076
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 530.652706971
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 530.70341269
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 530.753154624
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 530.802829184
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 530.852878167
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 530.902801903
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 530.952669141
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 531.002739979
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 531.052653686
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 531.102672377
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 531.152689941
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 531.202633421
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 531.252643228
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 531.302625463
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 531.352637733
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 531.402659151
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 531.452645684
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 531.50270708
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 531.552748773
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 531.602668331
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 531.652593803
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 531.702756548
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 531.75307077
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 531.802895004
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 531.853230523
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 531.902687921
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 531.952749625
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 532.003102121
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 532.052706792
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 532.103016528
+        }
+      ],
+      "requested_angular_speed_radps": 0.1,
+      "requested_duration_s": 1.2,
+      "residual_yaw_after_zero_output_rad": 0.0,
+      "settled_within_4s": false,
+      "sim_seconds_after_zero_output_to_settled": 3.897999999999996,
+      "start_truth": {
+        "angular_z_radps": -0.0459046,
+        "evaluator_only": true,
+        "linear_x_mps": 9.87637e-05,
+        "linear_y_mps": -0.00183346,
+        "sim_stamp_s": 76.42,
+        "wall_s": 526.889072925,
+        "x_m": -1.045e-05,
+        "y_m": -5.13555e-06,
+        "yaw_rad": -0.00012853300000000007
+      },
+      "trial_pass": false,
+      "truth_after_first_zero_output": {
+        "angular_z_radps": 0.0918062,
+        "evaluator_only": true,
+        "linear_x_mps": -4.33609e-06,
+        "linear_y_mps": 0.00367221,
+        "sim_stamp_s": 77.62,
+        "wall_s": 528.10979224,
+        "x_m": -0.000244883,
+        "y_m": 0.00433422,
+        "yaw_rad": 0.10856900000000001
+      },
+      "yaw_change_until_zero_rad": 0.10869753300000001,
+      "zero_output_to_settled_wall_s": 4.022203461999993,
+      "zero_request_to_settled_wall_s": 4.035251417999916,
+      "zero_request_to_zero_output_wall_s": 0.013047955999923033
+    },
+    {
+      "center_drift_m": 0.004373397116295419,
+      "contact_events": 2602,
+      "final_truth": {
+        "angular_z_radps": -0.091806,
+        "evaluator_only": true,
+        "linear_x_mps": 0.000392063,
+        "linear_y_mps": -0.00365115,
+        "sim_stamp_s": 87.13,
+        "wall_s": 537.780528219,
+        "x_m": -1.3552e-05,
+        "y_m": -3.30547e-05,
+        "yaw_rad": -0.0008381930000000001
+      },
+      "gate_snapshot": {
+        "angular_motion_status": "calibration_only_swept_disk_clear",
+        "angular_stopping_model": {
+          "measured": false,
+          "note": "Calibration-only capped pulses; production yaw remains disabled pending measured stopping bound and review.",
+          "production_authorized": false
+        },
+        "authorized": true,
+        "combined_motion_authorized": false,
+        "corridor_m": 3.6000000536441803,
+        "failures": [],
+        "footprint_width_m": 0.345,
+        "forward_distance_reference": "front_footprint_boundary",
+        "localization_allowance_m": 0.4705050313257851,
+        "map_counts": {
+          "free": 4163,
+          "occupied": 269,
+          "unknown": 27968
+        },
+        "map_frame": "base_link",
+        "max_angular_speed_radps": 0.1,
+        "max_linear_speed_mps": 0.0,
+        "motion_mode": "rotation_calibration_only",
+        "node": "anc_lidar_safety_gate",
+        "profile": "REALISTIC_RGB_LIDAR",
+        "reason": "pass",
+        "rotation_calibration_speed_cap_radps": 0.1,
+        "rotation_clearance": {
+          "authorized": true,
+          "center_drift_allowance_m": 0.14,
+          "checked_cells": 112,
+          "footprint_circumradius_m": 0.263592962728522,
+          "inside_grid": true,
+          "occupied_cells": 0,
+          "reason": "swept_disk_clear",
+          "required_radius_m": 0.5235929627285221,
+          "safety_margin_m": 0.1,
+          "sensor_mount_uncertainty_m": 0.02,
+          "unknown_cells": 0
+        },
+        "runtime_uses_world_map_or_truth": false,
+        "safety_margin_m": 0.1,
+        "speed_gate": {
+          "max_linear_speed_mps": 0.18,
+          "reaction_time_s": 0.4608,
+          "reason": "measured_speed_bound_fits_corridor",
+          "selected": {
+            "passes": true,
+            "reaction_distance_m": 0.08294399999999999,
+            "required_corridor_m": 0.656429031325785,
+            "speed_mps": 0.18,
+            "stop_distance_m": 0.00298
+          },
+          "tested_speeds": [
+            {
+              "passes": true,
+              "reaction_distance_m": 0.009216,
+              "required_corridor_m": 0.5827010313257851,
+              "speed_mps": 0.02,
+              "stop_distance_m": 0.00298
+            },
+            {
+              "passes": true,
+              "reaction_distance_m": 0.02304,
+              "required_corridor_m": 0.596525031325785,
+              "speed_mps": 0.05,
+              "stop_distance_m": 0.00298
+            },
+            {
+              "passes": true,
+              "reaction_distance_m": 0.04608,
+              "required_corridor_m": 0.6195650313257851,
+              "speed_mps": 0.1,
+              "stop_distance_m": 0.00298
+            },
+            {
+              "passes": true,
+              "reaction_distance_m": 0.08294399999999999,
+              "required_corridor_m": 0.656429031325785,
+              "speed_mps": 0.18,
+              "stop_distance_m": 0.00298
+            }
+          ],
+          "valid": true
+        },
+        "speed_gate_inputs": {
+          "connected_full_footprint_corridor_m": 3.6000000536441803,
+          "lidar_map_wall_age_s": 0.10425406699994255,
+          "measured_scan_rate_hz": 4.946766997001301,
+          "odom_sim_age_s": 0.007999999999995566,
+          "scan_sim_age_s": 0.1419999999999959,
+          "usable_beam_fraction": 0.9944444444444445
+        },
+        "stopping_model": {
+          "friction_conditions": [
+            0.5,
+            1.2
+          ],
+          "hardware_bound": false,
+          "source": "Phase 8B isolated simulator stopping test",
+          "tested_speeds_mps": [
+            0.02,
+            0.05,
+            0.1,
+            0.18
+          ],
+          "worst_stop_distance_m": 0.00298
+        },
+        "truth_used_only_by_evaluator": true,
+        "valid": true
+      },
+      "max_abs_actual_angular_radps": 0.1,
+      "max_abs_actual_linear_mps": 0.0,
+      "measured_average_yaw_rate_radps": -0.08390122162576766,
+      "output_samples": [
+        {
+          "angular_z_radps": -0.1,
+          "linear_x_mps": -0.0,
+          "wall_s": 532.552698583
+        },
+        {
+          "angular_z_radps": -0.1,
+          "linear_x_mps": -0.0,
+          "wall_s": 532.602573413
+        },
+        {
+          "angular_z_radps": -0.1,
+          "linear_x_mps": -0.0,
+          "wall_s": 532.652792839
+        },
+        {
+          "angular_z_radps": -0.1,
+          "linear_x_mps": -0.0,
+          "wall_s": 532.702590871
+        },
+        {
+          "angular_z_radps": -0.1,
+          "linear_x_mps": -0.0,
+          "wall_s": 532.752664532
+        },
+        {
+          "angular_z_radps": -0.1,
+          "linear_x_mps": -0.0,
+          "wall_s": 532.802796253
+        },
+        {
+          "angular_z_radps": -0.1,
+          "linear_x_mps": -0.0,
+          "wall_s": 532.852577661
+        },
+        {
+          "angular_z_radps": -0.1,
+          "linear_x_mps": -0.0,
+          "wall_s": 532.902657035
+        },
+        {
+          "angular_z_radps": -0.1,
+          "linear_x_mps": -0.0,
+          "wall_s": 532.952723438
+        },
+        {
+          "angular_z_radps": -0.1,
+          "linear_x_mps": -0.0,
+          "wall_s": 533.002874757
+        },
+        {
+          "angular_z_radps": -0.1,
+          "linear_x_mps": -0.0,
+          "wall_s": 533.052584104
+        },
+        {
+          "angular_z_radps": -0.1,
+          "linear_x_mps": -0.0,
+          "wall_s": 533.102579235
+        },
+        {
+          "angular_z_radps": -0.1,
+          "linear_x_mps": -0.0,
+          "wall_s": 533.152777722
+        },
+        {
+          "angular_z_radps": -0.1,
+          "linear_x_mps": -0.0,
+          "wall_s": 533.202645375
+        },
+        {
+          "angular_z_radps": -0.1,
+          "linear_x_mps": -0.0,
+          "wall_s": 533.252561265
+        },
+        {
+          "angular_z_radps": -0.1,
+          "linear_x_mps": -0.0,
+          "wall_s": 533.302780859
+        },
+        {
+          "angular_z_radps": -0.1,
+          "linear_x_mps": -0.0,
+          "wall_s": 533.354143574
+        },
+        {
+          "angular_z_radps": -0.1,
+          "linear_x_mps": -0.0,
+          "wall_s": 533.402524278
+        },
+        {
+          "angular_z_radps": -0.1,
+          "linear_x_mps": -0.0,
+          "wall_s": 533.452718664
+        },
+        {
+          "angular_z_radps": -0.1,
+          "linear_x_mps": -0.0,
+          "wall_s": 533.502602199
+        },
+        {
+          "angular_z_radps": -0.1,
+          "linear_x_mps": -0.0,
+          "wall_s": 533.552785929
+        },
+        {
+          "angular_z_radps": -0.1,
+          "linear_x_mps": -0.0,
+          "wall_s": 533.602936742
+        },
+        {
+          "angular_z_radps": -0.1,
+          "linear_x_mps": -0.0,
+          "wall_s": 533.652830374
+        },
+        {
+          "angular_z_radps": -0.1,
+          "linear_x_mps": -0.0,
+          "wall_s": 533.702601045
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": -0.0,
+          "wall_s": 533.752880801
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": -0.0,
+          "wall_s": 533.802971125
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": -0.0,
+          "wall_s": 533.852801877
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": -0.0,
+          "wall_s": 533.902853904
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": -0.0,
+          "wall_s": 533.953453812
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": -0.0,
+          "wall_s": 534.003021292
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 534.053113807
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 534.103068228
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 534.152676516
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 534.202687089
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 534.252654419
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 534.302680714
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 534.352751891
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 534.402716922
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 534.452699304
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 534.502846163
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 534.554244708
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 534.602766876
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 534.652782618
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 534.702687495
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 534.753945114
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 534.802648473
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 534.852674429
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 534.902728293
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 534.9554675
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 535.00276697
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 535.052660758
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 535.102705077
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 535.155913554
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 535.20267112
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 535.252670145
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 535.302691522
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 535.356938071
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 535.402736598
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 535.452669598
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 535.502667999
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 535.553699882
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 535.602652924
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 535.652625636
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 535.702753787
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 535.753005978
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 535.802775066
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 535.852678332
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 535.902889486
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 535.953049611
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 536.00287905
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 536.052741129
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 536.102877442
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 536.152813756
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 536.202827363
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 536.253030971
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 536.302937061
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 536.353120698
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 536.403134538
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 536.452843515
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 536.503066972
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 536.552911637
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 536.603192855
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 536.652650383
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 536.702676987
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 536.752614823
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 536.802676695
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 536.852635382
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 536.902653452
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 536.952624034
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 537.002711989
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 537.052711736
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 537.102692992
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 537.152609377
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 537.202681042
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 537.252644257
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 537.302684368
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 537.352623733
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 537.40314236
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 537.452645951
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 537.502684928
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 537.552630678
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 537.602851633
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 537.653294167
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 537.70295852
+        },
+        {
+          "angular_z_radps": 0.0,
+          "linear_x_mps": 0.0,
+          "wall_s": 537.752992841
+        }
+      ],
+      "requested_angular_speed_radps": -0.1,
+      "requested_duration_s": 1.2,
+      "residual_yaw_after_zero_output_rad": 0.0,
+      "settled_within_4s": false,
+      "sim_seconds_after_zero_output_to_settled": 3.9080000000000013,
+      "start_truth": {
+        "angular_z_radps": 0.0918062,
+        "evaluator_only": true,
+        "linear_x_mps": -4.33609e-06,
+        "linear_y_mps": 0.00367221,
+        "sim_stamp_s": 81.918,
+        "wall_s": 532.537094671,
+        "x_m": -0.000244883,
+        "y_m": 0.00433422,
+        "yaw_rad": 0.10856900000000001
+      },
+      "trial_pass": false,
+      "truth_after_first_zero_output": {
+        "angular_z_radps": -0.091806,
+        "evaluator_only": true,
+        "linear_x_mps": 0.000392063,
+        "linear_y_mps": -0.00365115,
+        "sim_stamp_s": 83.222,
+        "wall_s": 533.76098557,
+        "x_m": -1.3552e-05,
+        "y_m": -3.30547e-05,
+        "yaw_rad": -0.0008381930000000001
+      },
+      "yaw_change_until_zero_rad": -0.10940719300000001,
+      "zero_output_to_settled_wall_s": 4.0276853870000195,
+      "zero_request_to_settled_wall_s": 4.039135230999932,
+      "zero_request_to_zero_output_wall_s": 0.011449843999912446
+    }
+  ],
+  "truth_service_evaluator_only": "/gzserver/get_entity_state"
+}

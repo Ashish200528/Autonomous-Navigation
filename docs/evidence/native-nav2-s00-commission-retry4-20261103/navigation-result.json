@@ -1,0 +1,880 @@
+{
+  "classification": "REALISTIC_RGB_LIDAR_NAV2_GOAL_TRIAL",
+  "status": "FAIL",
+  "scenario_id": "S00",
+  "seed": 101,
+  "route_expected": true,
+  "runtime_navigation_receives_no_gazebo_truth": true,
+  "localization_mode": "known-start online SLAM",
+  "start_world_pose": [
+    0.0,
+    0.0,
+    0.0
+  ],
+  "goal_world_pose": [
+    0.75,
+    0.0,
+    0.0
+  ],
+  "start_map_pose": [
+    -0.00017181092119191878,
+    -1.0066508301131365e-08,
+    0.00041283194432173437
+  ],
+  "goal_map_pose": [
+    0.7498281251674788,
+    0.00030961388293812016,
+    0.00041283194432173437
+  ],
+  "start_truth": {
+    "sim_s": 7.17,
+    "x_m": -1.0678604620445583e-05,
+    "y_m": 4.9133079644757e-19,
+    "yaw_rad": -3.91425161528935e-18,
+    "wall_s": 8402.046756131,
+    "linear_x_mps": 0.0,
+    "angular_z_radps": 0.0
+  },
+  "final_truth": {
+    "sim_s": 33.718,
+    "x_m": -1.0646877133282706e-05,
+    "y_m": -3.632443763956969e-05,
+    "yaw_rad": -0.0009081731822423455,
+    "wall_s": 8428.586594142,
+    "linear_x_mps": 1.9260048513103794e-05,
+    "angular_z_radps": -0.00048153403088141053
+  },
+  "final_xy_error_m": 0.750010647756764,
+  "final_heading_error_rad": 0.0009081731822423455,
+  "truth_path_length_m": 3.632445149571381e-05,
+  "min_evaluator_clearance_m": 2.5859636755623603,
+  "nav2_action_status": "TIMEOUT",
+  "travel_limit_exceeded": false,
+  "elapsed_wall_s": 28.746735541999442,
+  "simulated_elapsed_s": 26.548000000000002,
+  "sensor_integrity": {
+    "rgb_frame_count": 144,
+    "rgb_fresh": false,
+    "scan_fresh": false,
+    "map_fresh": true,
+    "filtered_odom_received": true
+  },
+  "sole_authoritative_cmd_vel_publisher": true,
+  "sensor_summary": {
+    "scan_count": 144,
+    "rgb_frames": 144,
+    "map_updates": 29,
+    "global_costmap_updates": 19,
+    "plan_messages": 23,
+    "scan_rate_hz": 5.00209878270603
+  },
+  "safety_state": {
+    "angular_motion_status": "evidence_bounded_production_turn",
+    "angular_stopping_model": {
+      "angular_cap_radps": 0.1,
+      "confirmation_window_s": 0.5,
+      "manifest_sha256": "79739d9b422649246431b8847abd6668c7a89d2a08f9b081ce94a8957723ddbd",
+      "measured": true,
+      "physical_stop_time_bound_s": 0.75,
+      "production_authorized": true,
+      "production_validation_active": false,
+      "stopping_angle_bound_rad": 0.05,
+      "validated_for": "production"
+    },
+    "authorized": true,
+    "combined_motion_authorized": false,
+    "corridor_m": 3.6000000536441803,
+    "decision_monotonic_s": 8428.521173385,
+    "failures": [],
+    "footprint_width_m": 0.345,
+    "forward_distance_reference": "front_footprint_boundary",
+    "localization_allowance_m": 0.4705050313257851,
+    "map_counts": {
+      "free": 4200,
+      "occupied": 256,
+      "unknown": 27944
+    },
+    "map_frame": "base_link",
+    "max_angular_speed_radps": 0.1,
+    "max_linear_speed_mps": 0.18,
+    "motion_mode": "production_sequential",
+    "node": "anc_lidar_safety_gate",
+    "profile": "REALISTIC_RGB_LIDAR",
+    "reason": "pass",
+    "rotation_calibration_speed_cap_radps": 0.1,
+    "rotation_clearance": {
+      "authorized": true,
+      "center_drift_allowance_m": 0.14,
+      "checked_cells": 112,
+      "footprint_circumradius_m": 0.263592962728522,
+      "inside_grid": true,
+      "occupied_cells": 0,
+      "reason": "swept_disk_clear",
+      "required_radius_m": 0.5235929627285221,
+      "safety_margin_m": 0.1,
+      "sensor_mount_uncertainty_m": 0.02,
+      "unknown_cells": 0
+    },
+    "runtime_uses_world_map_or_truth": false,
+    "safety_margin_m": 0.1,
+    "speed_gate": {
+      "max_linear_speed_mps": 0.18,
+      "reaction_time_s": 0.4608,
+      "reason": "measured_speed_bound_fits_corridor",
+      "selected": {
+        "passes": true,
+        "reaction_distance_m": 0.08294399999999999,
+        "required_corridor_m": 0.656429031325785,
+        "speed_mps": 0.18,
+        "stop_distance_m": 0.00298
+      },
+      "tested_speeds": [
+        {
+          "passes": true,
+          "reaction_distance_m": 0.009216,
+          "required_corridor_m": 0.5827010313257851,
+          "speed_mps": 0.02,
+          "stop_distance_m": 0.00298
+        },
+        {
+          "passes": true,
+          "reaction_distance_m": 0.02304,
+          "required_corridor_m": 0.596525031325785,
+          "speed_mps": 0.05,
+          "stop_distance_m": 0.00298
+        },
+        {
+          "passes": true,
+          "reaction_distance_m": 0.04608,
+          "required_corridor_m": 0.6195650313257851,
+          "speed_mps": 0.1,
+          "stop_distance_m": 0.00298
+        },
+        {
+          "passes": true,
+          "reaction_distance_m": 0.08294399999999999,
+          "required_corridor_m": 0.656429031325785,
+          "speed_mps": 0.18,
+          "stop_distance_m": 0.00298
+        }
+      ],
+      "valid": true
+    },
+    "speed_gate_inputs": {
+      "connected_full_footprint_corridor_m": 3.6000000536441803,
+      "lidar_map_wall_age_s": 0.029980524001075537,
+      "measured_scan_rate_hz": 5.001546548374852,
+      "odom_sim_age_s": 0.03200000000000358,
+      "scan_sim_age_s": 0.0519999999999996,
+      "usable_beam_fraction": 0.9944444444444445
+    },
+    "stopping_model": {
+      "friction_conditions": [
+        0.5,
+        1.2
+      ],
+      "hardware_bound": false,
+      "source": "Phase 8B isolated simulator stopping test",
+      "tested_speeds_mps": [
+        0.02,
+        0.05,
+        0.1,
+        0.18
+      ],
+      "worst_stop_distance_m": 0.00298
+    },
+    "truth_used_only_by_evaluator": true,
+    "valid": true
+  },
+  "guard_state": {
+    "authorized": false,
+    "command_age_s": 0.8703252309987874,
+    "command_count": 254,
+    "decision_monotonic_s": 8428.537551045,
+    "node": "anc_safety_command_guard",
+    "output": {
+      "angular_z_radps": 0.0,
+      "is_zero": true,
+      "linear_x_mps": 0.0
+    },
+    "output_count": 707,
+    "reason": "command_stale",
+    "request_received_monotonic_s": 8427.667225814,
+    "requested": {
+      "angular_z_radps": 0.0,
+      "linear_x_mps": 0.0
+    },
+    "safety_received_monotonic_s": 8428.521931754,
+    "safety_state": {
+      "angular_motion_status": "evidence_bounded_production_turn",
+      "angular_stopping_model": {
+        "angular_cap_radps": 0.1,
+        "confirmation_window_s": 0.5,
+        "manifest_sha256": "79739d9b422649246431b8847abd6668c7a89d2a08f9b081ce94a8957723ddbd",
+        "measured": true,
+        "physical_stop_time_bound_s": 0.75,
+        "production_authorized": true,
+        "production_validation_active": false,
+        "stopping_angle_bound_rad": 0.05,
+        "validated_for": "production"
+      },
+      "authorized": true,
+      "combined_motion_authorized": false,
+      "corridor_m": 3.6000000536441803,
+      "decision_monotonic_s": 8428.521173385,
+      "failures": [],
+      "footprint_width_m": 0.345,
+      "forward_distance_reference": "front_footprint_boundary",
+      "localization_allowance_m": 0.4705050313257851,
+      "map_counts": {
+        "free": 4200,
+        "occupied": 256,
+        "unknown": 27944
+      },
+      "map_frame": "base_link",
+      "max_angular_speed_radps": 0.1,
+      "max_linear_speed_mps": 0.18,
+      "motion_mode": "production_sequential",
+      "node": "anc_lidar_safety_gate",
+      "profile": "REALISTIC_RGB_LIDAR",
+      "reason": "pass",
+      "rotation_calibration_speed_cap_radps": 0.1,
+      "rotation_clearance": {
+        "authorized": true,
+        "center_drift_allowance_m": 0.14,
+        "checked_cells": 112,
+        "footprint_circumradius_m": 0.263592962728522,
+        "inside_grid": true,
+        "occupied_cells": 0,
+        "reason": "swept_disk_clear",
+        "required_radius_m": 0.5235929627285221,
+        "safety_margin_m": 0.1,
+        "sensor_mount_uncertainty_m": 0.02,
+        "unknown_cells": 0
+      },
+      "runtime_uses_world_map_or_truth": false,
+      "safety_margin_m": 0.1,
+      "speed_gate": {
+        "max_linear_speed_mps": 0.18,
+        "reaction_time_s": 0.4608,
+        "reason": "measured_speed_bound_fits_corridor",
+        "selected": {
+          "passes": true,
+          "reaction_distance_m": 0.08294399999999999,
+          "required_corridor_m": 0.656429031325785,
+          "speed_mps": 0.18,
+          "stop_distance_m": 0.00298
+        },
+        "tested_speeds": [
+          {
+            "passes": true,
+            "reaction_distance_m": 0.009216,
+            "required_corridor_m": 0.5827010313257851,
+            "speed_mps": 0.02,
+            "stop_distance_m": 0.00298
+          },
+          {
+            "passes": true,
+            "reaction_distance_m": 0.02304,
+            "required_corridor_m": 0.596525031325785,
+            "speed_mps": 0.05,
+            "stop_distance_m": 0.00298
+          },
+          {
+            "passes": true,
+            "reaction_distance_m": 0.04608,
+            "required_corridor_m": 0.6195650313257851,
+            "speed_mps": 0.1,
+            "stop_distance_m": 0.00298
+          },
+          {
+            "passes": true,
+            "reaction_distance_m": 0.08294399999999999,
+            "required_corridor_m": 0.656429031325785,
+            "speed_mps": 0.18,
+            "stop_distance_m": 0.00298
+          }
+        ],
+        "valid": true
+      },
+      "speed_gate_inputs": {
+        "connected_full_footprint_corridor_m": 3.6000000536441803,
+        "lidar_map_wall_age_s": 0.029980524001075537,
+        "measured_scan_rate_hz": 5.001546548374852,
+        "odom_sim_age_s": 0.03200000000000358,
+        "scan_sim_age_s": 0.0519999999999996,
+        "usable_beam_fraction": 0.9944444444444445
+      },
+      "stopping_model": {
+        "friction_conditions": [
+          0.5,
+          1.2
+        ],
+        "hardware_bound": false,
+        "source": "Phase 8B isolated simulator stopping test",
+        "tested_speeds_mps": [
+          0.02,
+          0.05,
+          0.1,
+          0.18
+        ],
+        "worst_stop_distance_m": 0.00298
+      },
+      "truth_used_only_by_evaluator": true,
+      "valid": true
+    },
+    "safety_state_age_s": 0.015619290999893565
+  },
+  "nav2_lifecycle_states": {
+    "planner_server": "active",
+    "controller_server": "active",
+    "behavior_server": "active",
+    "bt_navigator": "active",
+    "velocity_smoother": "active",
+    "collision_monitor": "active"
+  },
+  "command_summary": {
+    "/cmd_vel_nav_raw": {
+      "count": 196,
+      "nonzero": 194,
+      "max_v": 0.18,
+      "max_w": 0.07008196213026646
+    },
+    "/cmd_vel_smoothed": {
+      "count": 254,
+      "nonzero": 249,
+      "max_v": 0.12,
+      "max_w": 0.07008196213026646
+    },
+    "/cmd_vel_nav": {
+      "count": 254,
+      "nonzero": 249,
+      "max_v": 0.12,
+      "max_w": 0.07008196213026646
+    },
+    "/cmd_vel": {
+      "count": 666,
+      "nonzero": 2,
+      "max_v": 0.0,
+      "max_w": 0.009889423160761156
+    }
+  },
+  "cmd_vel_publisher_audit": {
+    "/cmd_vel": {
+      "count": 1,
+      "publisher_names": [
+        "anc_safety_command_guard"
+      ],
+      "exit_code": 0,
+      "output": "Type: geometry_msgs/msg/Twist\n\nPublisher count: 1\n\nNode name: anc_safety_command_guard\nNode namespace: /\nTopic type: geometry_msgs/msg/Twist\nTopic type hash: RIHS01_9c45bf16fe0983d80e3cfe750d6835843d265a9a6c46bd2e609fcddde6fb8d2a\nEndpoint type: PUBLISHER\nGID: 01.0f.09.56.2b.f9.80.5f.00.00.00.00.00.00.13.03\nQoS profile:\n  Reliability: RELIABLE\n  History (Depth): UNKNOWN\n  Durability: VOLATILE\n  Lifespan: Infinite\n  Deadline: Infinite\n  Liveliness: AUTOMATIC\n  Liveliness lease duration: Infinite\n\nSubscription count: 2\n\nNode name: anc_parameter_bridge\nNode namespace: /\nTopic type: geometry_msgs/msg/Twist\nTopic type hash: RIHS01_9c45bf16fe0983d80e3cfe750d6835843d265a9a6c46bd2e609fcddde6fb8d2a\nEndpoint type: SUBSCRIPTION\nGID: 01.0f.09.56.18.f9.35.b1.00.00.00.00.00.00.15.04\nQoS profile:\n  Reliability: RELIABLE\n  History (Depth): UNKNOWN\n  Durability: VOLATILE\n  Lifespan: Infinite\n  Deadline: Infinite\n  Liveliness: AUTOMATIC\n  Liveliness lease duration: Infinite\n\nNode name: phase8c_lidar_nav_evaluator\nNode namespace: /\nTopic type: geometry_msgs/msg/Twist\nTopic type hash: RIHS01_9c45bf16fe0983d80e3cfe750d6835843d265a9a6c46bd2e609fcddde6fb8d2a\nEndpoint type: SUBSCRIPTION\nGID: 01.0f.09.56.ef.f8.a9.2a.00.00.00.00.00.00.38.04\nQoS profile:\n  Reliability: RELIABLE\n  History (Depth): UNKNOWN\n  Durability: VOLATILE\n  Lifespan: Infinite\n  Deadline: Infinite\n  Liveliness: AUTOMATIC\n  Liveliness lease duration: Infinite\n\n"
+    },
+    "/cmd_vel_nav": {
+      "count": 1,
+      "publisher_names": [
+        "collision_monitor"
+      ],
+      "exit_code": 0,
+      "output": "Type: geometry_msgs/msg/Twist\n\nPublisher count: 1\n\nNode name: collision_monitor\nNode namespace: /\nTopic type: geometry_msgs/msg/Twist\nTopic type hash: RIHS01_9c45bf16fe0983d80e3cfe750d6835843d265a9a6c46bd2e609fcddde6fb8d2a\nEndpoint type: PUBLISHER\nGID: 01.0f.09.56.3f.f9.89.e8.00.00.00.00.00.00.25.03\nQoS profile:\n  Reliability: RELIABLE\n  History (Depth): UNKNOWN\n  Durability: VOLATILE\n  Lifespan: Infinite\n  Deadline: Infinite\n  Liveliness: AUTOMATIC\n  Liveliness lease duration: Infinite\n\nSubscription count: 2\n\nNode name: anc_safety_command_guard\nNode namespace: /\nTopic type: geometry_msgs/msg/Twist\nTopic type hash: RIHS01_9c45bf16fe0983d80e3cfe750d6835843d265a9a6c46bd2e609fcddde6fb8d2a\nEndpoint type: SUBSCRIPTION\nGID: 01.0f.09.56.2b.f9.80.5f.00.00.00.00.00.00.15.04\nQoS profile:\n  Reliability: RELIABLE\n  History (Depth): UNKNOWN\n  Durability: VOLATILE\n  Lifespan: Infinite\n  Deadline: Infinite\n  Liveliness: AUTOMATIC\n  Liveliness lease duration: Infinite\n\nNode name: phase8c_lidar_nav_evaluator\nNode namespace: /\nTopic type: geometry_msgs/msg/Twist\nTopic type hash: RIHS01_9c45bf16fe0983d80e3cfe750d6835843d265a9a6c46bd2e609fcddde6fb8d2a\nEndpoint type: SUBSCRIPTION\nGID: 01.0f.09.56.ef.f8.a9.2a.00.00.00.00.00.00.37.04\nQoS profile:\n  Reliability: RELIABLE\n  History (Depth): UNKNOWN\n  Durability: VOLATILE\n  Lifespan: Infinite\n  Deadline: Infinite\n  Liveliness: AUTOMATIC\n  Liveliness lease duration: Infinite\n\n"
+    },
+    "/cmd_vel_nav_raw": {
+      "count": 5,
+      "publisher_names": [
+        "controller_server",
+        "behavior_server",
+        "behavior_server",
+        "behavior_server",
+        "behavior_server"
+      ],
+      "exit_code": 0,
+      "output": " UNKNOWN\n  Durability: VOLATILE\n  Lifespan: Infinite\n  Deadline: Infinite\n  Liveliness: AUTOMATIC\n  Liveliness lease duration: Infinite\n\nNode name: behavior_server\nNode namespace: /\nTopic type: geometry_msgs/msg/Twist\nTopic type hash: RIHS01_9c45bf16fe0983d80e3cfe750d6835843d265a9a6c46bd2e609fcddde6fb8d2a\nEndpoint type: PUBLISHER\nGID: 01.0f.09.56.36.f9.5a.10.00.00.00.00.00.00.48.03\nQoS profile:\n  Reliability: RELIABLE\n  History (Depth): UNKNOWN\n  Durability: VOLATILE\n  Lifespan: Infinite\n  Deadline: Infinite\n  Liveliness: AUTOMATIC\n  Liveliness lease duration: Infinite\n\nSubscription count: 2\n\nNode name: velocity_smoother\nNode namespace: /\nTopic type: geometry_msgs/msg/Twist\nTopic type hash: RIHS01_9c45bf16fe0983d80e3cfe750d6835843d265a9a6c46bd2e609fcddde6fb8d2a\nEndpoint type: SUBSCRIPTION\nGID: 01.0f.09.56.3e.f9.3c.4f.00.00.00.00.00.00.21.04\nQoS profile:\n  Reliability: RELIABLE\n  History (Depth): UNKNOWN\n  Durability: VOLATILE\n  Lifespan: Infinite\n  Deadline: Infinite\n  Liveliness: AUTOMATIC\n  Liveliness lease duration: Infinite\n\nNode name: phase8c_lidar_nav_evaluator\nNode namespace: /\nTopic type: geometry_msgs/msg/Twist\nTopic type hash: RIHS01_9c45bf16fe0983d80e3cfe750d6835843d265a9a6c46bd2e609fcddde6fb8d2a\nEndpoint type: SUBSCRIPTION\nGID: 01.0f.09.56.ef.f8.a9.2a.00.00.00.00.00.00.35.04\nQoS profile:\n  Reliability: RELIABLE\n  History (Depth): UNKNOWN\n  Durability: VOLATILE\n  Lifespan: Infinite\n  Deadline: Infinite\n  Liveliness: AUTOMATIC\n  Liveliness lease duration: Infinite\n\n"
+    },
+    "/cmd_vel_smoothed": {
+      "count": 1,
+      "publisher_names": [
+        "velocity_smoother"
+      ],
+      "exit_code": 0,
+      "output": "Type: geometry_msgs/msg/Twist\n\nPublisher count: 1\n\nNode name: velocity_smoother\nNode namespace: /\nTopic type: geometry_msgs/msg/Twist\nTopic type hash: RIHS01_9c45bf16fe0983d80e3cfe750d6835843d265a9a6c46bd2e609fcddde6fb8d2a\nEndpoint type: PUBLISHER\nGID: 01.0f.09.56.3e.f9.3c.4f.00.00.00.00.00.00.20.03\nQoS profile:\n  Reliability: RELIABLE\n  History (Depth): UNKNOWN\n  Durability: VOLATILE\n  Lifespan: Infinite\n  Deadline: Infinite\n  Liveliness: AUTOMATIC\n  Liveliness lease duration: Infinite\n\nSubscription count: 2\n\nNode name: collision_monitor\nNode namespace: /\nTopic type: geometry_msgs/msg/Twist\nTopic type hash: RIHS01_9c45bf16fe0983d80e3cfe750d6835843d265a9a6c46bd2e609fcddde6fb8d2a\nEndpoint type: SUBSCRIPTION\nGID: 01.0f.09.56.3f.f9.89.e8.00.00.00.00.00.00.24.04\nQoS profile:\n  Reliability: RELIABLE\n  History (Depth): UNKNOWN\n  Durability: VOLATILE\n  Lifespan: Infinite\n  Deadline: Infinite\n  Liveliness: AUTOMATIC\n  Liveliness lease duration: Infinite\n\nNode name: phase8c_lidar_nav_evaluator\nNode namespace: /\nTopic type: geometry_msgs/msg/Twist\nTopic type hash: RIHS01_9c45bf16fe0983d80e3cfe750d6835843d265a9a6c46bd2e609fcddde6fb8d2a\nEndpoint type: SUBSCRIPTION\nGID: 01.0f.09.56.ef.f8.a9.2a.00.00.00.00.00.00.36.04\nQoS profile:\n  Reliability: RELIABLE\n  History (Depth): UNKNOWN\n  Durability: VOLATILE\n  Lifespan: Infinite\n  Deadline: Infinite\n  Liveliness: AUTOMATIC\n  Liveliness lease duration: Infinite\n\n"
+    }
+  },
+  "non_ground_contact_events": [],
+  "resource_samples": [
+    {
+      "wall_s": 8403.085598328,
+      "memavailable_kib": 1627404,
+      "swapfree_kib": 2130128,
+      "target_process_count": 21,
+      "target_process_rss_mib": 1717.54,
+      "target_process_cpu_percent": 0.0,
+      "wsl_cpu_percent": 29.2
+    },
+    {
+      "wall_s": 8404.084009929,
+      "memavailable_kib": 1629840,
+      "swapfree_kib": 2130128,
+      "target_process_count": 21,
+      "target_process_rss_mib": 1717.64,
+      "target_process_cpu_percent": 329.5,
+      "wsl_cpu_percent": 36.4
+    },
+    {
+      "wall_s": 8405.08326106,
+      "memavailable_kib": 1624368,
+      "swapfree_kib": 2130128,
+      "target_process_count": 21,
+      "target_process_rss_mib": 1719.89,
+      "target_process_cpu_percent": 334.0,
+      "wsl_cpu_percent": 38.0
+    },
+    {
+      "wall_s": 8406.082844928,
+      "memavailable_kib": 1631344,
+      "swapfree_kib": 2130128,
+      "target_process_count": 21,
+      "target_process_rss_mib": 1716.51,
+      "target_process_cpu_percent": 337.0,
+      "wsl_cpu_percent": 38.8
+    },
+    {
+      "wall_s": 8407.084691513,
+      "memavailable_kib": 1627512,
+      "swapfree_kib": 2130128,
+      "target_process_count": 21,
+      "target_process_rss_mib": 1719.79,
+      "target_process_cpu_percent": 336.5,
+      "wsl_cpu_percent": 38.4
+    },
+    {
+      "wall_s": 8408.084495764,
+      "memavailable_kib": 1627636,
+      "swapfree_kib": 2130128,
+      "target_process_count": 21,
+      "target_process_rss_mib": 1717.45,
+      "target_process_cpu_percent": 337.0,
+      "wsl_cpu_percent": 38.7
+    },
+    {
+      "wall_s": 8409.08285637,
+      "memavailable_kib": 1611332,
+      "swapfree_kib": 2130128,
+      "target_process_count": 21,
+      "target_process_rss_mib": 1717.28,
+      "target_process_cpu_percent": 342.5,
+      "wsl_cpu_percent": 38.9
+    },
+    {
+      "wall_s": 8410.084936897,
+      "memavailable_kib": 1611384,
+      "swapfree_kib": 2130128,
+      "target_process_count": 21,
+      "target_process_rss_mib": 1717.57,
+      "target_process_cpu_percent": 335.4,
+      "wsl_cpu_percent": 38.5
+    },
+    {
+      "wall_s": 8411.085823204,
+      "memavailable_kib": 1614508,
+      "swapfree_kib": 2130128,
+      "target_process_count": 21,
+      "target_process_rss_mib": 1717.66,
+      "target_process_cpu_percent": 334.0,
+      "wsl_cpu_percent": 38.2
+    },
+    {
+      "wall_s": 8412.084667065,
+      "memavailable_kib": 1618544,
+      "swapfree_kib": 2130128,
+      "target_process_count": 21,
+      "target_process_rss_mib": 1716.98,
+      "target_process_cpu_percent": 345.4,
+      "wsl_cpu_percent": 40.7
+    },
+    {
+      "wall_s": 8413.085102414,
+      "memavailable_kib": 1624804,
+      "swapfree_kib": 2130128,
+      "target_process_count": 21,
+      "target_process_rss_mib": 1719.99,
+      "target_process_cpu_percent": 344.0,
+      "wsl_cpu_percent": 41.1
+    },
+    {
+      "wall_s": 8414.084357619,
+      "memavailable_kib": 1612204,
+      "swapfree_kib": 2130128,
+      "target_process_count": 21,
+      "target_process_rss_mib": 1720.27,
+      "target_process_cpu_percent": 340.0,
+      "wsl_cpu_percent": 40.2
+    },
+    {
+      "wall_s": 8415.085932831,
+      "memavailable_kib": 1605104,
+      "swapfree_kib": 2130128,
+      "target_process_count": 21,
+      "target_process_rss_mib": 1720.72,
+      "target_process_cpu_percent": 343.6,
+      "wsl_cpu_percent": 40.6
+    },
+    {
+      "wall_s": 8416.08418052,
+      "memavailable_kib": 1619584,
+      "swapfree_kib": 2130128,
+      "target_process_count": 21,
+      "target_process_rss_mib": 1720.45,
+      "target_process_cpu_percent": 348.4,
+      "wsl_cpu_percent": 42.2
+    },
+    {
+      "wall_s": 8417.085643552,
+      "memavailable_kib": 1610136,
+      "swapfree_kib": 2130128,
+      "target_process_count": 21,
+      "target_process_rss_mib": 1720.48,
+      "target_process_cpu_percent": 347.7,
+      "wsl_cpu_percent": 42.0
+    },
+    {
+      "wall_s": 8418.083944631,
+      "memavailable_kib": 1606416,
+      "swapfree_kib": 2130128,
+      "target_process_count": 21,
+      "target_process_rss_mib": 1720.54,
+      "target_process_cpu_percent": 341.5,
+      "wsl_cpu_percent": 40.7
+    },
+    {
+      "wall_s": 8419.08436037,
+      "memavailable_kib": 1604112,
+      "swapfree_kib": 2130128,
+      "target_process_count": 21,
+      "target_process_rss_mib": 1719.55,
+      "target_process_cpu_percent": 353.0,
+      "wsl_cpu_percent": 44.5
+    },
+    {
+      "wall_s": 8420.086744496,
+      "memavailable_kib": 1613756,
+      "swapfree_kib": 2130128,
+      "target_process_count": 21,
+      "target_process_rss_mib": 1720.57,
+      "target_process_cpu_percent": 350.4,
+      "wsl_cpu_percent": 43.1
+    },
+    {
+      "wall_s": 8421.085963212,
+      "memavailable_kib": 1609344,
+      "swapfree_kib": 2130128,
+      "target_process_count": 21,
+      "target_process_rss_mib": 1720.64,
+      "target_process_cpu_percent": 341.1,
+      "wsl_cpu_percent": 42.3
+    },
+    {
+      "wall_s": 8422.084652456,
+      "memavailable_kib": 1615344,
+      "swapfree_kib": 2130128,
+      "target_process_count": 21,
+      "target_process_rss_mib": 1720.6,
+      "target_process_cpu_percent": 347.0,
+      "wsl_cpu_percent": 40.4
+    },
+    {
+      "wall_s": 8423.084492153,
+      "memavailable_kib": 1618032,
+      "swapfree_kib": 2130128,
+      "target_process_count": 21,
+      "target_process_rss_mib": 1720.25,
+      "target_process_cpu_percent": 343.0,
+      "wsl_cpu_percent": 39.9
+    },
+    {
+      "wall_s": 8424.084385506,
+      "memavailable_kib": 1604544,
+      "swapfree_kib": 2130128,
+      "target_process_count": 21,
+      "target_process_rss_mib": 1720.43,
+      "target_process_cpu_percent": 345.0,
+      "wsl_cpu_percent": 41.3
+    },
+    {
+      "wall_s": 8425.083970456,
+      "memavailable_kib": 1613332,
+      "swapfree_kib": 2130128,
+      "target_process_count": 21,
+      "target_process_rss_mib": 1719.73,
+      "target_process_cpu_percent": 341.0,
+      "wsl_cpu_percent": 40.9
+    },
+    {
+      "wall_s": 8426.086504402,
+      "memavailable_kib": 1619864,
+      "swapfree_kib": 2130128,
+      "target_process_count": 21,
+      "target_process_rss_mib": 1720.63,
+      "target_process_cpu_percent": 345.4,
+      "wsl_cpu_percent": 40.2
+    },
+    {
+      "wall_s": 8427.085324797,
+      "memavailable_kib": 1614632,
+      "swapfree_kib": 2130128,
+      "target_process_count": 21,
+      "target_process_rss_mib": 1720.95,
+      "target_process_cpu_percent": 342.0,
+      "wsl_cpu_percent": 41.4
+    }
+  ],
+  "resource_summary": {
+    "scope": "best-effort processes matching the ROS/Gazebo/Nav2 command-name patterns; excludes Windows-only processes",
+    "psutil_available": true,
+    "target_process_peak_rss_mib": 1720.95,
+    "target_process_mean_rss_mib": 1719.36,
+    "target_process_mean_cpu_percent": 328.18,
+    "wsl_mean_cpu_percent": 39.86,
+    "sample_count": 25
+  },
+  "runtime_rtf": 0.9879505617319271,
+  "acceptance": {
+    "xy_error_limit_m": 0.3,
+    "heading_error_limit_rad": 0.3,
+    "zero_collisions": true,
+    "unknown_not_plannable": true
+  },
+  "pre_goal_cmd_vel_publishers": [
+    "anc_safety_command_guard"
+  ],
+  "post_goal_stop_confirmed": true,
+  "stop_samples": [
+    {
+      "sim_s": 35.928,
+      "x_m": -1.0646877133282706e-05,
+      "y_m": -3.632443763956969e-05,
+      "yaw_rad": -0.0009081731822423455,
+      "wall_s": 8430.796565839,
+      "linear_x_mps": 0.0,
+      "angular_z_radps": 0.0
+    },
+    {
+      "sim_s": 35.998,
+      "x_m": -1.0646877133282706e-05,
+      "y_m": -3.632443763956969e-05,
+      "yaw_rad": -0.0009081731822423455,
+      "wall_s": 8430.877676511,
+      "linear_x_mps": 0.0,
+      "angular_z_radps": 0.0
+    },
+    {
+      "sim_s": 36.088,
+      "x_m": -1.0646877133282706e-05,
+      "y_m": -3.632443763956969e-05,
+      "yaw_rad": -0.0009081731822423455,
+      "wall_s": 8430.958559492,
+      "linear_x_mps": 0.0,
+      "angular_z_radps": 0.0
+    },
+    {
+      "sim_s": 36.16,
+      "x_m": -1.0646877133282706e-05,
+      "y_m": -3.632443763956969e-05,
+      "yaw_rad": -0.0009081731822423455,
+      "wall_s": 8431.03973517,
+      "linear_x_mps": 0.0,
+      "angular_z_radps": 0.0
+    },
+    {
+      "sim_s": 36.25,
+      "x_m": -1.0646877133282706e-05,
+      "y_m": -3.632443763956969e-05,
+      "yaw_rad": -0.0009081731822423455,
+      "wall_s": 8431.121620914,
+      "linear_x_mps": 0.0,
+      "angular_z_radps": 0.0
+    },
+    {
+      "sim_s": 36.322,
+      "x_m": -1.0646877133282706e-05,
+      "y_m": -3.632443763956969e-05,
+      "yaw_rad": -0.0009081731822423455,
+      "wall_s": 8431.202171531,
+      "linear_x_mps": 0.0,
+      "angular_z_radps": 0.0
+    },
+    {
+      "sim_s": 36.41,
+      "x_m": -1.0646877133282706e-05,
+      "y_m": -3.632443763956969e-05,
+      "yaw_rad": -0.0009081731822423455,
+      "wall_s": 8431.28366792,
+      "linear_x_mps": 0.0,
+      "angular_z_radps": 0.0
+    },
+    {
+      "sim_s": 36.484,
+      "x_m": -1.0646877133282706e-05,
+      "y_m": -3.632443763956969e-05,
+      "yaw_rad": -0.0009081731822423455,
+      "wall_s": 8431.365582249,
+      "linear_x_mps": 0.0,
+      "angular_z_radps": 0.0
+    }
+  ],
+  "final_localization_error_m": 3.790513042168606e-05,
+  "final_localization_heading_error_rad": 0.0007832430092259435,
+  "final_stopped_truth": {
+    "sim_s": 36.484,
+    "x_m": -1.0646877133282706e-05,
+    "y_m": -3.632443763956969e-05,
+    "yaw_rad": -0.0009081731822423455,
+    "wall_s": 8431.365582249,
+    "linear_x_mps": 0.0,
+    "angular_z_radps": 0.0
+  },
+  "commissioning_goal_distance_m": 0.75,
+  "planned_path_points": [
+    [
+      -0.02476174634129702,
+      -0.023279535461210088
+    ],
+    [
+      0.02523825440376104,
+      -0.023279535461210088
+    ],
+    [
+      0.05023825477629007,
+      -0.023279535461210088
+    ],
+    [
+      0.0752382551488191,
+      -0.023279535461210088
+    ],
+    [
+      0.10023825552134813,
+      -0.023279535461210088
+    ],
+    [
+      0.12523825589387716,
+      -0.023279535461210088
+    ],
+    [
+      0.1502382562664062,
+      -0.023279535461210088
+    ],
+    [
+      0.17523825663893522,
+      -0.023279535461210088
+    ],
+    [
+      0.20023825701146425,
+      -0.023279535461210088
+    ],
+    [
+      0.22523825738399328,
+      -0.023279535461210088
+    ],
+    [
+      0.2502382577565223,
+      -0.023279535461210088
+    ],
+    [
+      0.27523825812905134,
+      -0.023279535461210088
+    ],
+    [
+      0.30023825850158037,
+      -0.023279535461210088
+    ],
+    [
+      0.3252382588741094,
+      -0.023279535461210088
+    ],
+    [
+      0.35023825924663843,
+      -0.023279535461210088
+    ],
+    [
+      0.37523825961916746,
+      -0.023279535461210088
+    ],
+    [
+      0.4002382599916965,
+      -0.023279535461210088
+    ],
+    [
+      0.4252382603642255,
+      -0.023279535461210088
+    ],
+    [
+      0.45023826073675455,
+      -0.023279535461210088
+    ],
+    [
+      0.4752382611092836,
+      -0.023279535461210088
+    ],
+    [
+      0.5002382614818126,
+      -0.023279535461210088
+    ],
+    [
+      0.5252382618543416,
+      -0.023279535461210088
+    ],
+    [
+      0.5502382622268707,
+      -0.023279535461210088
+    ],
+    [
+      0.5752382625993997,
+      -0.023279535461210088
+    ],
+    [
+      0.6002382629719287,
+      -0.023279535461210088
+    ],
+    [
+      0.6252382633444578,
+      -0.023279535461210088
+    ],
+    [
+      0.6752382640895158,
+      -0.023279535461210088
+    ],
+    [
+      0.7252382648345739,
+      -0.023279535461210088
+    ],
+    [
+      0.7498281251674788,
+      0.00030961388293812016
+    ]
+  ],
+  "predefined_map_used": false,
+  "commissioning_prerequisites": {
+    "turn_envelope": {
+      "angular_cap_radps": 0.1,
+      "physical_stop_time_bound_s": 0.75,
+      "stopping_angle_bound_rad": 0.05,
+      "confirmation_window_s": 0.5,
+      "manifest_sha256": "79739d9b422649246431b8847abd6668c7a89d2a08f9b081ce94a8957723ddbd",
+      "validated_for": "production"
+    },
+    "moving_slam": [
+      {
+        "path": "docs/evidence/native-slam-map1s-20261103/trial0-summary.json",
+        "sha256": "0c8ee63b5c98b96e9a11b3f23add6e1694ee1396602db1d7bdb75be6c74590f8",
+        "trial_id": "3c4a2144-83de-473a-a18b-eca6e7293636"
+      },
+      {
+        "path": "docs/evidence/native-slam-map1s-20261103/trial1-summary.json",
+        "sha256": "853fdc6d999f13e700ee7b07bc027808b490c3e91217c065586029c552b7a007",
+        "trial_id": "e991f1f4-27eb-487d-96f3-72af820edbf1"
+      },
+      {
+        "path": "docs/evidence/native-slam-map1s-20261103/trial2-summary.json",
+        "sha256": "df645484304c7762dad69eb7757f79048468dd79294c49b83ab8e45cbd24e7d5",
+        "trial_id": "2a805754-a96a-4289-88f4-9f51fd42760e"
+      }
+    ]
+  }
+}

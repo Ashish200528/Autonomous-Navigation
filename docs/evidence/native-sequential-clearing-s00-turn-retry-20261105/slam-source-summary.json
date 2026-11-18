@@ -1,0 +1,49 @@
+{
+  "evaluator_only": true,
+  "publishes_no_messages": true,
+  "counts": {
+    "tf_static": 2,
+    "guard_decision": 1122,
+    "truth_evaluator_only": 1517,
+    "imu": 545,
+    "wheel_odom": 1580,
+    "raw_scan": 272,
+    "conditioned_scan": 272,
+    "slam_hit_scan": 272,
+    "nav2_clearing_scan": 272,
+    "filtered_odom": 1606,
+    "tf": 2701,
+    "slam_pose": 22,
+    "graph": 55,
+    "sequential_controller": 380
+  },
+  "uncompressed_bytes": 6732432,
+  "truncated": false,
+  "publishers": {
+    "/tf": [
+      "robot_state_publisher",
+      "anc_ekf_filter",
+      "slam_toolbox",
+      "slam_toolbox"
+    ],
+    "/tf_static": [
+      "robot_state_publisher"
+    ],
+    "/pose": [
+      "slam_toolbox"
+    ],
+    "/realistic/scan": [
+      "anc_lidar_scan_conditioner"
+    ],
+    "/realistic/scan/raw": [
+      "anc_lidar_parameter_bridge"
+    ],
+    "/odom": [
+      "anc_parameter_bridge"
+    ],
+    "/odometry/filtered": [
+      "anc_ekf_filter"
+    ]
+  },
+  "ranges_encoding": "finite values rounded to 1 micrometre; +inf/-inf strings, NaN null"
+}

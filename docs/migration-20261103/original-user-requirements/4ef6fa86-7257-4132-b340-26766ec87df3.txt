@@ -1,0 +1,112 @@
+Continue the Autonomous Navigation Car simulation project with **Phase 4 — Odometry, State Estimation and Initial Localization**.
+
+Repository: https://github.com/Ashish200528/Autonomous-Navigation
+
+Local workspace: `/home/ashish/AutonomousNavigationCar`
+
+Latest reviewed commit: `0e019ac38e0747b3856d474c93ad00c124631cb3`
+
+The project has completed Phases 0–3. Phase 3 is marked PASS WITH LIMITS, with verified RGB/CameraInfo, IMU, odometry, TF, wheel joint states and contact telemetry.
+
+Read the original Simulation Master Roadmap, `docs/PHASE_REPORT.md`, `docs/issues.md`, sensor configurations and recorded evidence.
+
+## Task A — Verify the existing baseline
+
+Inspect Git status and safely synchronize with GitHub. Preserve all local changes. Build the existing ROS workspace and reproduce the core Phase 3 sensor checks. Confirm that the current source code matches the latest accepted GitHub commit.
+
+Do not reinstall already working dependencies.
+
+## Task B — Implement Phase 4 localization
+
+Create the `anc_localization` ROS 2 package, consistent with the existing architecture.
+
+Use ROS 2 Jazzy's `robot_localization` EKF to fuse hardware-plausible measurements from wheel odometry and the sanitized `/imu/data` interface.
+
+Configure planar differential-drive estimation, appropriate sensor variables, covariances and timestamps.
+
+The sanitized IMU does not provide absolute orientation. Fuse suitable angular velocity measurements without treating its unavailable orientation as a valid pose estimate.
+
+Establish a consistent localization output such as `/odometry/filtered`.
+
+Ensure exactly one publisher owns each required dynamic TF edge. Plan the estimator's ownership of `odom -> base_footprint` carefully, avoiding conflicts with the Gazebo DiffDrive transform already used in Phase 3.
+
+Maintain `map -> odom -> base_footprint -> base_link` consistently.
+
+For the initial baseline, use a documented known-start map-frame initialization. Do not continuously inject Gazebo ground truth into localization.
+
+Keep unknown-initial-pose acquisition as a later experiment.
+
+## Task C — Validate accuracy and drift
+
+Create repeatable tests for:
+
+- Straight-line travel.
+- In-place rotation.
+- Rectangular trajectories.
+- Return-to-start.
+- Stationary behavior with IMU noise.
+- Wheel-slip and physical-wall-stall behavior.
+
+Compare raw odometry, filtered estimation and withheld Gazebo truth.
+
+Gazebo truth must be accessible only to the evaluation scripts, never the localization or navigation nodes.
+
+Quantify position error, yaw error, drift, timing and covariance consistency. Record both improvements and cases where fusion performs worse.
+
+Investigate the existing wall-stall error of approximately 0.461 m and the Phase 2 yaw discrepancy of approximately 0.10 rad.
+
+Do not hide these errors by using simulator-perfect pose. If the existing sensor configuration cannot correct certain errors, document that limitation explicitly.
+
+## Task D — Tests and visualization
+
+Run headless Gazebo whenever possible.
+
+Verify:
+
+- Correct ROS topics and timestamps.
+- Stable estimator output.
+- Consistent TF frames with no duplicate ownership.
+- Proper covariance configuration.
+- No pose jumps caused by launch/reset issues.
+- Valid behavior under missing or stale required inputs.
+- Continuous pose estimation during normal driving.
+
+Capture quantitative CSV data, plots, test logs and an RViz visualization where feasible.
+
+Update the test registry and phase evidence directory.
+
+## Resource and safety constraints
+
+The laptop has Windows 11, 8 GB RAM, an NVIDIA GTX 1650 and WSL2 Ubuntu 24.04 on E:.
+
+Avoid unnecessary system-wide installations, full upgrades and concurrent heavy graphical applications.
+
+Preserve the original Arduino UNO Q application.
+
+Maintain REFERENCE and REALISTIC sensing separation. Never permit the EKF to consume raw Gazebo orientation, perfect world pose or evaluator-only truth.
+
+Use small, verified changes and rerun baseline tests to detect regressions.
+
+## Deliverables
+
+Implement and test the Phase 4 localization package and associated launch/configuration files.
+
+Update:
+
+- `docs/PHASE_REPORT.md`
+- `docs/issues.md`
+- `docs/evidence/README.md`
+- `tests/test_case_registry.yaml`
+- Repository README and relevant configuration documentation.
+
+Save logs, CSV measurements, plots and other evidence. Record the actual commands executed and commit hashes.
+
+Fix the README's Phase 4 description if it incorrectly groups localization with perception/navigation; follow the original roadmap's phase numbering.
+
+After verification, commit and push the validated changes to GitHub.
+
+Provide a final Phase 4 **PASS / PASS WITH LIMITS / FAIL / BLOCKED** decision supported by test evidence.
+
+Explain clearly what works, which errors remain, and whether Phase 5 is ready.
+
+**Implement and test Phase 4 now. Do not start Phase 5 automatically.** Ask for input only if computer permissions, consequential system changes or genuine blockers require it.

@@ -1,0 +1,56 @@
+{
+  "camera_header_timing": {
+    "count": 49,
+    "max_interval_s": 0.068,
+    "median_interval_s": 0.066,
+    "rate_hz": 15.15151515151515
+  },
+  "clock_timing": {
+    "count": 2754,
+    "max_interval_s": 0.204,
+    "median_interval_s": 0.002,
+    "rate_hz": 500.0
+  },
+  "contract_passed": true,
+  "expected_perception_subscriber_topics": [
+    "/camera/image_raw",
+    "/camera/camera_info",
+    "/clock"
+  ],
+  "free_memory_snapshot": "               total        used        free      shared  buff/cache   available\nMem:           3.5Gi       1.3Gi       1.6Gi        66Mi       788Mi       2.2Gi\nSwap:          1.0Gi          0B       1.0Gi\n",
+  "gazebo_truth_subscribed_by_perception": false,
+  "health_sample_count": 56,
+  "health_samples_file": "runtime-health.jsonl",
+  "health_timing_csv": "runtime-health.csv",
+  "launch_command": [
+    "ros2",
+    "launch",
+    "anc_perception",
+    "realistic_perception.launch.py",
+    "world_file:=/home/ashish/AutonomousNavigationCar/docs/evidence/phase7/dataset/phase8-rgb-s00-20261102/s00-seed101-rgb-only/world.sdf",
+    "start_x:=0.000000",
+    "start_y:=0.000000",
+    "start_yaw:=0.000000"
+  ],
+  "nav2_started": false,
+  "observed_perception_subscriber_topics": [
+    "/camera/camera_info",
+    "/camera/image_raw",
+    "/clock"
+  ],
+  "perception_node_info": "Node: /anc_rgb_perception\nSubscriptions:\n  /camera/camera_info: sensor_msgs/msg/CameraInfo\n  /camera/image_raw: sensor_msgs/msg/Image\n  /clock: rosgraph_msgs/msg/Clock\n",
+  "process_rss_sampled": [
+    {
+      "command": "/opt/ros/jazzy/lib/ros_gz_sim/gzserver --ros-args --params-file /tmp/launch_params_0qdpx0zh ",
+      "pid": 67577,
+      "rss_kib": 499712
+    },
+    {
+      "command": "/usr/bin/python3 /home/ashish/AutonomousNavigationCar/simulation/ros2_ws/install/anc_perception/lib/anc_perception/rgb_perception_node --ros-args -r __node:=anc_rgb_perception --pa",
+      "pid": 67584,
+      "rss_kib": 184036
+    }
+  ],
+  "profile": "REALISTIC_RGB_ONLY",
+  "reference_map_loaded": false
+}

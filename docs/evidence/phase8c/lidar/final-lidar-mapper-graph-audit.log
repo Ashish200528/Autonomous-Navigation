@@ -1,0 +1,26 @@
+/anc_local_scan_mapper
+  Subscribers:
+    /clock: rosgraph_msgs/msg/Clock
+    /realistic/scan: sensor_msgs/msg/LaserScan
+    /realistic/scan/health: std_msgs/msg/String
+    /tf: tf2_msgs/msg/TFMessage
+    /tf_static: tf2_msgs/msg/TFMessage
+  Publishers:
+    /parameter_events: rcl_interfaces/msg/ParameterEvent
+    /realistic/local_map/lidar: nav_msgs/msg/OccupancyGrid
+    /realistic/local_map/lidar/health: std_msgs/msg/String
+    /realistic/local_map/lidar_inflated: nav_msgs/msg/OccupancyGrid
+    /rosout: rcl_interfaces/msg/Log
+  Service Servers:
+    /anc_local_scan_mapper/describe_parameters: rcl_interfaces/srv/DescribeParameters
+    /anc_local_scan_mapper/get_parameter_types: rcl_interfaces/srv/GetParameterTypes
+    /anc_local_scan_mapper/get_parameters: rcl_interfaces/srv/GetParameters
+    /anc_local_scan_mapper/get_type_description: type_description_interfaces/srv/GetTypeDescription
+    /anc_local_scan_mapper/list_parameters: rcl_interfaces/srv/ListParameters
+    /anc_local_scan_mapper/set_parameters: rcl_interfaces/srv/SetParameters
+    /anc_local_scan_mapper/set_parameters_atomically: rcl_interfaces/srv/SetParametersAtomically
+  Service Clients:
+
+  Action Servers:
+
+  Action Clients:

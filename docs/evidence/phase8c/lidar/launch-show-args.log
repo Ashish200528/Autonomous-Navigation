@@ -1,0 +1,125 @@
+Arguments (pass arguments as '<name>:=<value>'):
+
+    'world_file':
+        World geometry is provided to Gazebo only, never to runtime navigation nodes.
+        (default: PathJoinSubstitution('FindPackageShare(pkg='anc_gazebo'), 'worlds', 'phase2_test_world.sdf''))
+
+    'start_x':
+        no description given
+        (default: '0.0')
+
+    'start_y':
+        no description given
+        (default: '0.0')
+
+    'start_yaw':
+        no description given
+        (default: '0.0')
+
+    'enable_slam':
+        Enable scan-matching localization/mapping without Gazebo truth.
+        (default: 'true')
+
+    'enable_nav2':
+        Enable Nav2 after scan, SLAM and command-guard validation.
+        (default: 'false')
+
+    'wheel_surface_mu':
+        Test-only Gazebo wheel surface friction coefficient.
+        (default: '1.2')
+
+    'camera_enabled':
+        Enable RGB camera sensor; Phase 6 reference navigation disables it to reduce headless rendering load.
+        (default: 'true')
+
+    'lidar_enabled':
+        Enable the parameterized planar LiDAR and its ROS bridge only in the LiDAR profile.
+        (default: 'false')
+
+    'camera_mount_z_m':
+        Provisional camera mount Z relative to base_link, meters.
+        (default: '0.10')
+
+    'camera_pitch_down_rad':
+        Positive provisional downward camera pitch in radians.
+        (default: '0.0')
+
+    'camera_update_rate_hz':
+        Camera update rate in Hz; default preserves existing profiles.
+        (default: '15.0')
+
+    'publish_known_start_tf':
+        Publish the test-only known-start map-to-odom transform.
+        (default: 'true')
+
+    'world_sdf_file':
+        Path to the SDF world file
+        (default: '')
+
+    'world_sdf_string':
+        SDF world string
+        (default: '')
+
+    'container_name':
+        Name of container that nodes will load in if use composition
+        (default: 'ros_gz_container')
+
+    'create_own_container':
+        Whether we should start our own ROS container when using composition.
+        (default: 'False')
+
+    'use_composition':
+        Use composed bringup if True
+        (default: 'False')
+
+    'initial_sim_time':
+        The initial simulation time
+        (default: '0.0')
+
+    'verbosity_level':
+        The verbosity level of the Gazebo server (0=FATAL, 4=DEBUG)
+        (default: '4')
+
+    'use_sim_time':
+        no description given
+        (default: 'true')
+
+    'known_start_x':
+        no description given
+        (default: '0.0')
+
+    'known_start_y':
+        no description given
+        (default: '0.0')
+
+    'known_start_yaw':
+        no description given
+        (default: '0.0')
+
+    'autostart':
+        Automatically startup the slamtoolbox. Ignored when use_lifecycle_manager is true.
+        (default: 'true')
+
+    'use_lifecycle_manager':
+        Enable bond connection during node activation
+        (default: 'false')
+
+    'slam_params_file':
+        Full path to the ROS2 parameters file to use for the slam_toolbox node
+        (default: '/opt/ros/jazzy/share/slam_toolbox/config/mapper_params_online_async.yaml')
+
+    'namespace':
+        Top-level namespace
+        (default: '')
+
+    'params_file':
+        Full path to the ROS2 parameters file to use for all launched nodes
+        (default: '/opt/ros/jazzy/share/nav2_bringup/params/nav2_params.yaml')
+
+    'use_respawn':
+        Whether to respawn if a node crashes. Applied when composition is disabled.
+        (default: 'False')
+
+    'log_level':
+        log level
+        (default: 'info')

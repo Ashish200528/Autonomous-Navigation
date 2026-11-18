@@ -1,0 +1,518 @@
+{
+  "authoritative_output_topic": "/cmd_vel",
+  "classification": "S00_BOUNDED_FORWARD_SLAM_AND_COMMAND_TIMEOUT_PROBE",
+  "command_timeout_reaction_s": 0.3202062810000825,
+  "displacement_limit_m": 0.5,
+  "drive_duration_limit_s": 4.0,
+  "drive_speed_request_mps": 0.05,
+  "evaluator_service": "/gzserver/get_entity_state",
+  "final_map_to_odom": {
+    "stamp_s": 9.3,
+    "wall_s": 2209.186655082,
+    "x_m": -0.019999999999999962,
+    "y_m": 9.447534443131345e-18,
+    "yaw_rad": 1.3552527156068805e-20
+  },
+  "final_odom_pose": {
+    "stamp_s": 8.92,
+    "wall_s": 2209.194554305,
+    "x_m": 0.21436115162817662,
+    "y_m": -1.0514905552158718e-05,
+    "yaw_rad": 4.9665259951758856e-05
+  },
+  "final_slam_map": {
+    "frame_id": "map",
+    "free_cells": 16766,
+    "height": 115,
+    "occupied_cells": 617,
+    "resolution_m": 0.05000000074505806,
+    "stamp_s": 6.6,
+    "unknown_cells": 557,
+    "width": 156
+  },
+  "final_slam_map_pose": {
+    "stamp_s": 7.6,
+    "wall_s": 2207.904145029,
+    "x_m": 0.1865958725420105,
+    "y_m": -1.0608556972844752e-05,
+    "yaw_rad": 8.073138452946439e-05
+  },
+  "final_truth": {
+    "angular_z_radps": -2.9796e-17,
+    "evaluator_only": true,
+    "linear_x_mps": 0.0107996,
+    "pose_derived_linear_speed_mps": 0.0,
+    "pose_derived_yaw_rate_radps": 0.0,
+    "sim_stamp_s": 8.924,
+    "wall_s": 2209.207626197,
+    "x_m": 0.214578,
+    "y_m": -3.87622e-16,
+    "yaw_rad": -2.56343e-15
+  },
+  "gate_at_start": {
+    "angular_motion_status": "disabled_unmeasured_yaw_stopping",
+    "angular_stopping_model": {
+      "measured": false,
+      "note": "Calibration-only capped pulses; production yaw remains disabled pending measured stopping bound and review.",
+      "production_authorized": false
+    },
+    "authorized": true,
+    "combined_motion_authorized": false,
+    "corridor_m": 3.6000000536441803,
+    "failures": [],
+    "footprint_width_m": 0.345,
+    "forward_distance_reference": "front_footprint_boundary",
+    "localization_allowance_m": 0.4705050313257851,
+    "map_counts": {
+      "free": 4175,
+      "occupied": 255,
+      "unknown": 27970
+    },
+    "map_frame": "base_link",
+    "max_angular_speed_radps": 0.0,
+    "max_linear_speed_mps": 0.18,
+    "motion_mode": "forward_only",
+    "node": "anc_lidar_safety_gate",
+    "profile": "REALISTIC_RGB_LIDAR",
+    "reason": "pass",
+    "rotation_calibration_speed_cap_radps": 0.0,
+    "rotation_clearance": {
+      "authorized": true,
+      "center_drift_allowance_m": 0.14,
+      "checked_cells": 112,
+      "footprint_circumradius_m": 0.263592962728522,
+      "inside_grid": true,
+      "occupied_cells": 0,
+      "reason": "swept_disk_clear",
+      "required_radius_m": 0.5235929627285221,
+      "safety_margin_m": 0.1,
+      "sensor_mount_uncertainty_m": 0.02,
+      "unknown_cells": 0
+    },
+    "runtime_uses_world_map_or_truth": false,
+    "safety_margin_m": 0.1,
+    "speed_gate": {
+      "max_linear_speed_mps": 0.18,
+      "reaction_time_s": 0.49879999999999974,
+      "reason": "measured_speed_bound_fits_corridor",
+      "selected": {
+        "passes": true,
+        "reaction_distance_m": 0.08978399999999995,
+        "required_corridor_m": 0.663269031325785,
+        "speed_mps": 0.18,
+        "stop_distance_m": 0.00298
+      },
+      "tested_speeds": [
+        {
+          "passes": true,
+          "reaction_distance_m": 0.009975999999999995,
+          "required_corridor_m": 0.5834610313257851,
+          "speed_mps": 0.02,
+          "stop_distance_m": 0.00298
+        },
+        {
+          "passes": true,
+          "reaction_distance_m": 0.02493999999999999,
+          "required_corridor_m": 0.5984250313257851,
+          "speed_mps": 0.05,
+          "stop_distance_m": 0.00298
+        },
+        {
+          "passes": true,
+          "reaction_distance_m": 0.04987999999999998,
+          "required_corridor_m": 0.623365031325785,
+          "speed_mps": 0.1,
+          "stop_distance_m": 0.00298
+        },
+        {
+          "passes": true,
+          "reaction_distance_m": 0.08978399999999995,
+          "required_corridor_m": 0.663269031325785,
+          "speed_mps": 0.18,
+          "stop_distance_m": 0.00298
+        }
+      ],
+      "valid": true
+    },
+    "speed_gate_inputs": {
+      "connected_full_footprint_corridor_m": 3.6000000536441803,
+      "lidar_map_wall_age_s": 0.18933305000018663,
+      "measured_scan_rate_hz": 5.669802202225427,
+      "odom_sim_age_s": 0.029999999999999805,
+      "scan_sim_age_s": 0.21199999999999974,
+      "usable_beam_fraction": 0.9861111111111112
+    },
+    "stopping_model": {
+      "friction_conditions": [
+        0.5,
+        1.2
+      ],
+      "hardware_bound": false,
+      "source": "Phase 8B isolated simulator stopping test",
+      "tested_speeds_mps": [
+        0.02,
+        0.05,
+        0.1,
+        0.18
+      ],
+      "worst_stop_distance_m": 0.00298
+    },
+    "truth_used_only_by_evaluator": true,
+    "valid": true
+  },
+  "guard_state_at_timeout_zero": {
+    "authorized": false,
+    "command_age_s": 0.319372354999814,
+    "command_count": 4489,
+    "node": "anc_safety_command_guard",
+    "output": {
+      "angular_z_radps": 0.0,
+      "is_zero": true,
+      "linear_x_mps": 0.0
+    },
+    "output_count": 190,
+    "reason": "command_stale",
+    "requested": {
+      "angular_z_radps": 0.0,
+      "linear_x_mps": 0.05
+    },
+    "safety_state": {
+      "angular_motion_status": "disabled_unmeasured_yaw_stopping",
+      "angular_stopping_model": {
+        "measured": false,
+        "note": "Calibration-only capped pulses; production yaw remains disabled pending measured stopping bound and review.",
+        "production_authorized": false
+      },
+      "authorized": true,
+      "combined_motion_authorized": false,
+      "corridor_m": 3.400000050663948,
+      "failures": [],
+      "footprint_width_m": 0.345,
+      "forward_distance_reference": "front_footprint_boundary",
+      "localization_allowance_m": 0.4705050313257851,
+      "map_counts": {
+        "free": 4218,
+        "occupied": 261,
+        "unknown": 27921
+      },
+      "map_frame": "base_link",
+      "max_angular_speed_radps": 0.0,
+      "max_linear_speed_mps": 0.18,
+      "motion_mode": "forward_only",
+      "node": "anc_lidar_safety_gate",
+      "profile": "REALISTIC_RGB_LIDAR",
+      "reason": "pass",
+      "rotation_calibration_speed_cap_radps": 0.0,
+      "rotation_clearance": {
+        "authorized": true,
+        "center_drift_allowance_m": 0.14,
+        "checked_cells": 112,
+        "footprint_circumradius_m": 0.263592962728522,
+        "inside_grid": true,
+        "occupied_cells": 0,
+        "reason": "swept_disk_clear",
+        "required_radius_m": 0.5235929627285221,
+        "safety_margin_m": 0.1,
+        "sensor_mount_uncertainty_m": 0.02,
+        "unknown_cells": 0
+      },
+      "runtime_uses_world_map_or_truth": false,
+      "safety_margin_m": 0.1,
+      "speed_gate": {
+        "max_linear_speed_mps": 0.18,
+        "reaction_time_s": 0.4608,
+        "reason": "measured_speed_bound_fits_corridor",
+        "selected": {
+          "passes": true,
+          "reaction_distance_m": 0.08294399999999999,
+          "required_corridor_m": 0.656429031325785,
+          "speed_mps": 0.18,
+          "stop_distance_m": 0.00298
+        },
+        "tested_speeds": [
+          {
+            "passes": true,
+            "reaction_distance_m": 0.009216,
+            "required_corridor_m": 0.5827010313257851,
+            "speed_mps": 0.02,
+            "stop_distance_m": 0.00298
+          },
+          {
+            "passes": true,
+            "reaction_distance_m": 0.02304,
+            "required_corridor_m": 0.596525031325785,
+            "speed_mps": 0.05,
+            "stop_distance_m": 0.00298
+          },
+          {
+            "passes": true,
+            "reaction_distance_m": 0.04608,
+            "required_corridor_m": 0.6195650313257851,
+            "speed_mps": 0.1,
+            "stop_distance_m": 0.00298
+          },
+          {
+            "passes": true,
+            "reaction_distance_m": 0.08294399999999999,
+            "required_corridor_m": 0.656429031325785,
+            "speed_mps": 0.18,
+            "stop_distance_m": 0.00298
+          }
+        ],
+        "valid": true
+      },
+      "speed_gate_inputs": {
+        "connected_full_footprint_corridor_m": 3.400000050663948,
+        "lidar_map_wall_age_s": 0.07641427199996542,
+        "measured_scan_rate_hz": 5.1000077683888065,
+        "odom_sim_age_s": 0.02400000000000002,
+        "scan_sim_age_s": 0.10400000000000009,
+        "usable_beam_fraction": 0.9972222222222222
+      },
+      "stopping_model": {
+        "friction_conditions": [
+          0.5,
+          1.2
+        ],
+        "hardware_bound": false,
+        "source": "Phase 8B isolated simulator stopping test",
+        "tested_speeds_mps": [
+          0.02,
+          0.05,
+          0.1,
+          0.18
+        ],
+        "worst_stop_distance_m": 0.00298
+      },
+      "truth_used_only_by_evaluator": true,
+      "valid": true
+    },
+    "safety_state_age_s": 0.025892607000059797
+  },
+  "guard_zero_truth": {
+    "angular_z_radps": -2.9796e-17,
+    "evaluator_only": true,
+    "linear_x_mps": 0.0107996,
+    "sim_stamp_s": 7.712,
+    "wall_s": 2208.020890533,
+    "x_m": 0.214578,
+    "y_m": -3.87622e-16,
+    "yaw_rad": -2.56343e-15
+  },
+  "localization_comparison_limit": "single short straight S00 run; no turn, return path, loop closure, or multi-seed drift claim",
+  "maximum_linear_output_mps": 0.05,
+  "moving_sensor_counts": {
+    "map_to_odom_updates": 110,
+    "scan_messages": 28,
+    "slam_map_updates": 2,
+    "slam_pose_updates": 10
+  },
+  "moving_slam_evaluation": {
+    "checks": {
+      "bounded_forward_motion": true,
+      "map_free_cells": true,
+      "map_occupied_cells": true,
+      "map_to_odom_updates": true,
+      "map_updates": true,
+      "no_non_ground_contacts": true,
+      "scan_messages": true,
+      "slam_pose_updates": true,
+      "slam_position_error": true,
+      "slam_yaw_error": true,
+      "truth_pose_samples": true
+    },
+    "failures": [],
+    "limits": {
+      "maximum_slam_position_error_m": 0.1,
+      "maximum_slam_yaw_error_rad": 0.1,
+      "minimum_map_to_odom_updates": 2,
+      "minimum_map_updates": 2,
+      "minimum_scan_messages": 8,
+      "minimum_slam_pose_updates": 2,
+      "minimum_truth_pose_samples": 3,
+      "truth_forward_displacement_m": [
+        0.1,
+        0.5
+      ]
+    },
+    "measurements": {
+      "map_free_cells": 16766,
+      "map_occupied_cells": 617,
+      "map_to_odom_updates": 110,
+      "map_updates": 2,
+      "non_ground_contact_events": 0,
+      "scan_messages": 28,
+      "slam_pose_updates": 10,
+      "slam_relative_displacement_error_m": 0.027843651451897627,
+      "slam_relative_yaw_error_rad": 0.00020510730617400035,
+      "truth_forward_displacement_m": 0.2145886786,
+      "truth_pose_samples": 10
+    },
+    "status": "PASS"
+  },
+  "non_ground_contact_pairs": [],
+  "nonzero_output_samples": 86,
+  "odom_forward_displacement_m": 0.21453295008762338,
+  "odom_relative_displacement_error_m": 5.5728512376618244e-05,
+  "post_zero_stopping_distance_m": 0.0,
+  "post_zero_stopping_limit_m": 0.10298,
+  "pretimeout_gate_invalid": null,
+  "real_time_factor": 0.99864739644271,
+  "request_topic": "/cmd_vel_nav",
+  "runtime_received_no_simulator_truth": true,
+  "safety_state_at_end": {
+    "angular_motion_status": "disabled_unmeasured_yaw_stopping",
+    "angular_stopping_model": {
+      "measured": false,
+      "note": "Calibration-only capped pulses; production yaw remains disabled pending measured stopping bound and review.",
+      "production_authorized": false
+    },
+    "authorized": true,
+    "combined_motion_authorized": false,
+    "corridor_m": 3.400000050663948,
+    "failures": [],
+    "footprint_width_m": 0.345,
+    "forward_distance_reference": "front_footprint_boundary",
+    "localization_allowance_m": 0.4705050313257851,
+    "map_counts": {
+      "free": 4188,
+      "occupied": 257,
+      "unknown": 27955
+    },
+    "map_frame": "base_link",
+    "max_angular_speed_radps": 0.0,
+    "max_linear_speed_mps": 0.18,
+    "motion_mode": "forward_only",
+    "node": "anc_lidar_safety_gate",
+    "profile": "REALISTIC_RGB_LIDAR",
+    "reason": "pass",
+    "rotation_calibration_speed_cap_radps": 0.0,
+    "rotation_clearance": {
+      "authorized": true,
+      "center_drift_allowance_m": 0.14,
+      "checked_cells": 112,
+      "footprint_circumradius_m": 0.263592962728522,
+      "inside_grid": true,
+      "occupied_cells": 0,
+      "reason": "swept_disk_clear",
+      "required_radius_m": 0.5235929627285221,
+      "safety_margin_m": 0.1,
+      "sensor_mount_uncertainty_m": 0.02,
+      "unknown_cells": 0
+    },
+    "runtime_uses_world_map_or_truth": false,
+    "safety_margin_m": 0.1,
+    "speed_gate": {
+      "max_linear_speed_mps": 0.18,
+      "reaction_time_s": 0.4608,
+      "reason": "measured_speed_bound_fits_corridor",
+      "selected": {
+        "passes": true,
+        "reaction_distance_m": 0.08294399999999999,
+        "required_corridor_m": 0.656429031325785,
+        "speed_mps": 0.18,
+        "stop_distance_m": 0.00298
+      },
+      "tested_speeds": [
+        {
+          "passes": true,
+          "reaction_distance_m": 0.009216,
+          "required_corridor_m": 0.5827010313257851,
+          "speed_mps": 0.02,
+          "stop_distance_m": 0.00298
+        },
+        {
+          "passes": true,
+          "reaction_distance_m": 0.02304,
+          "required_corridor_m": 0.596525031325785,
+          "speed_mps": 0.05,
+          "stop_distance_m": 0.00298
+        },
+        {
+          "passes": true,
+          "reaction_distance_m": 0.04608,
+          "required_corridor_m": 0.6195650313257851,
+          "speed_mps": 0.1,
+          "stop_distance_m": 0.00298
+        },
+        {
+          "passes": true,
+          "reaction_distance_m": 0.08294399999999999,
+          "required_corridor_m": 0.656429031325785,
+          "speed_mps": 0.18,
+          "stop_distance_m": 0.00298
+        }
+      ],
+      "valid": true
+    },
+    "speed_gate_inputs": {
+      "connected_full_footprint_corridor_m": 3.400000050663948,
+      "lidar_map_wall_age_s": 0.08188652300032118,
+      "measured_scan_rate_hz": 4.9958193798933985,
+      "odom_sim_age_s": 0.023999999999999133,
+      "scan_sim_age_s": 0.1039999999999992,
+      "usable_beam_fraction": 0.9861111111111112
+    },
+    "stopping_model": {
+      "friction_conditions": [
+        0.5,
+        1.2
+      ],
+      "hardware_bound": false,
+      "source": "Phase 8B isolated simulator stopping test",
+      "tested_speeds_mps": [
+        0.02,
+        0.05,
+        0.1,
+        0.18
+      ],
+      "worst_stop_distance_m": 0.00298
+    },
+    "truth_used_only_by_evaluator": true,
+    "valid": true
+  },
+  "settled": true,
+  "slam_forward_displacement_m": 0.18674502714810237,
+  "slam_map_to_odom_delta": {
+    "x_m": -0.019999999999999962,
+    "y_m": 9.44753609749257e-18,
+    "yaw_rad": 1.3552527156068805e-20
+  },
+  "slam_relative_displacement_error_m": 0.027843651451897627,
+  "slam_relative_yaw_error_rad": 0.00020510730617400035,
+  "start_map_to_odom": {
+    "stamp_s": 3.7,
+    "wall_s": 2203.686676958,
+    "x_m": 2.710505431213761e-20,
+    "y_m": -1.6543612251060553e-24,
+    "yaw_rad": 0.0
+  },
+  "start_odom_pose": {
+    "stamp_s": 3.42,
+    "wall_s": 2203.687602087,
+    "x_m": -0.00017179845944674535,
+    "y_m": 1.6635075813818215e-08,
+    "yaw_rad": -0.00022732559131322108
+  },
+  "start_slam_map_pose": {
+    "stamp_s": 2.4,
+    "wall_s": 2202.692048372,
+    "x_m": -0.00014915460609187626,
+    "y_m": 9.29311123533944e-09,
+    "yaw_rad": -0.0001243759216419764
+  },
+  "start_truth": {
+    "angular_z_radps": -1.23247e-18,
+    "evaluator_only": true,
+    "linear_x_mps": 4.13909e-09,
+    "sim_stamp_s": 3.374,
+    "wall_s": 2203.690276241,
+    "x_m": -1.06786e-05,
+    "y_m": 4.91331e-19,
+    "yaw_rad": -3.9142500000000006e-18
+  },
+  "status": "PASS",
+  "total_forward_displacement_m": 0.2145886786,
+  "trial_id": "e8a47a15-2819-43bd-ac12-0551c8e5c307",
+  "truth_forward_displacement_m": 0.2145886786
+}

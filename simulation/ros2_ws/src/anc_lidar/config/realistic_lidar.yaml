@@ -1,0 +1,86 @@
+anc_lidar_scan_conditioner:
+  ros__parameters:
+    input_topic: /realistic/scan/raw
+    output_topic: /realistic/scan
+    health_topic: /realistic/scan/health
+    expected_frame: lidar_link
+    expected_samples: 360
+    angle_min_rad: -3.141592653589793
+    angle_max_rad: 3.141592653589793
+    range_min_m: 0.12
+    range_max_m: 6.0
+    expected_rate_hz: 5.0
+    minimum_rate_hz: 4.0
+    minimum_usable_fraction: 0.90
+    missed_probability: 0.005
+    invalid_probability: 0.002
+    random_seed: 20261102
+    max_wall_age_s: 0.35
+    max_sim_age_s: 0.35
+
+anc_local_scan_mapper:
+  ros__parameters:
+    scan_topic: /realistic/scan
+    map_topic: /realistic/local_map/lidar
+    inflated_map_topic: /realistic/local_map/lidar_inflated
+    health_topic: /realistic/local_map/lidar/health
+    base_frame: base_link
+    scan_frame: lidar_link
+    grid_width: 180
+    grid_height: 180
+    resolution_m: 0.10
+    origin_x_m: -9.0
+    origin_y_m: -9.0
+    inflation_radius_m: 0.28
+    expected_lidar_z_in_base_m: 0.08
+    mount_tolerance_m: 0.02
+    max_wall_age_s: 0.35
+    max_sim_age_s: 0.35
+
+anc_rgb_lidar_grid_fuser:
+  ros__parameters:
+    lidar_map_topic: /realistic/local_map/lidar
+    rgb_map_topic: /realistic/local_traversability
+    fused_map_topic: /realistic/local_map/fused
+    mode: rgb_lidar
+    allow_projected_rgb_free: true
+    max_wall_age_s: 0.40
+
+anc_lidar_safety_gate:
+  ros__parameters:
+    max_scan_health_wall_age_s: 0.35
+    max_map_wall_age_s: 0.35
+    max_rgb_wall_age_s: 0.35
+    max_odom_wall_age_s: 0.20
+    max_clock_wall_age_s: 0.20
+    max_scan_sim_age_s: 0.35
+    max_odom_sim_age_s: 0.25
+    minimum_scan_rate_hz: 4.0
+    minimum_usable_beam_fraction: 0.90
+    maximum_odom_xy_sigma_m: 0.50
+    maximum_odom_yaw_sigma_rad: 0.50
+    max_linear_speed_mps: 0.18
+    localization_allowance_m: 0.4705050313257851
+    explicit_safety_margin_m: 0.10
+    measured_stop_distance_m: 0.00298
+    camera_age_bound_s: 0.174
+    perception_latency_bound_s: 0.2368
+    supervisor_period_s: 0.05
+    publish_rate_hz: 10.0
+    rotation_calibration_max_radps: 0.0
+    turn_footprint_vertices_xy_m: [0.215, 0.1525, 0.215, -0.1525, -0.16, -0.1525, -0.16, 0.1525]
+    turn_center_drift_allowance_m: 0.14
+    turn_sensor_mount_uncertainty_m: 0.02
+    turn_safety_margin_m: 0.10
+
+safety_command_guard:
+  ros__parameters:
+    requested_topic: /cmd_vel_nav
+    safety_state_topic: /realistic/safety_state
+    output_topic: /cmd_vel
+    guard_state_topic: /realistic/command_guard_state
+    publish_rate_hz: 10.0
+    command_timeout_s: 0.30
+    safety_timeout_s: 0.25
+    hard_max_linear_speed_mps: 0.18
+    hard_max_angular_speed_radps: 0.0

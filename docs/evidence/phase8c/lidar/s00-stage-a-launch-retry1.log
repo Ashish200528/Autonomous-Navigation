@@ -1,0 +1,188 @@
+[INFO] [launch]: All log files can be found below /home/ashish/.ros/log/2026-11-02-09-12-02-458322-Ashish-618
+[INFO] [launch]: Default logging verbosity is set to INFO
+[INFO] [gzserver-1]: process started with pid [623]
+[INFO] [robot_state_publisher-2]: process started with pid [624]
+[INFO] [parameter_bridge-3]: process started with pid [625]
+[INFO] [parameter_bridge-4]: process started with pid [626]
+[INFO] [imu_sanitizer-5]: process started with pid [627]
+[INFO] [wheel_odometry_covariance-6]: process started with pid [628]
+[INFO] [ekf_node-7]: process started with pid [629]
+[INFO] [rgb_perception_node-8]: process started with pid [630]
+[INFO] [local_traversability_node-9]: process started with pid [631]
+[INFO] [scan_conditioner-10]: process started with pid [636]
+[INFO] [local_scan_mapper-11]: process started with pid [637]
+[INFO] [local_grid_fuser-12]: process started with pid [638]
+[INFO] [lidar_safety_gate-13]: process started with pid [639]
+[INFO] [safety_command_guard-14]: process started with pid [640]
+[ekf_node-7] [INFO] [1793610723.330510266] [anc_ekf_filter]: Waiting for clock to start...
+[parameter_bridge-4] [INFO] [1793610723.339074609] [anc_lidar_parameter_bridge]: Creating GZ->ROS Bridge: [/realistic/scan/raw (gz.msgs.LaserScan) -> /realistic/scan/raw (sensor_msgs/msg/LaserScan)] (Lazy 0)
+[robot_state_publisher-2] [INFO] [1793610723.352128003] [robot_state_publisher]: Robot initialized
+[safety_command_guard-14] [WARN] [1793610723.968968942] [anc_safety_command_guard]: Guard owns authoritative cmd_vel; stale or invalid inputs produce zero.
+[lidar_safety_gate-13] Traceback (most recent call last):
+[lidar_safety_gate-13]   File "/home/ashish/AutonomousNavigationCar/simulation/ros2_ws/install/anc_lidar/lib/anc_lidar/lidar_safety_gate", line 33, in <module>
+[lidar_safety_gate-13]     sys.exit(load_entry_point('anc-lidar', 'console_scripts', 'lidar_safety_gate')())
+[lidar_safety_gate-13]              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[lidar_safety_gate-13]   File "/home/ashish/AutonomousNavigationCar/simulation/ros2_ws/build/anc_lidar/anc_lidar/safety_gate_node.py", line 326, in main
+[lidar_safety_gate-13]     node = LidarSafetyGate()
+[lidar_safety_gate-13]            ^^^^^^^^^^^^^^^^^
+[lidar_safety_gate-13]   File "/home/ashish/AutonomousNavigationCar/simulation/ros2_ws/build/anc_lidar/anc_lidar/safety_gate_node.py", line 78, in __init__
+[lidar_safety_gate-13]     self.create_timer(1.0/float(self.p["publish_rate_hz"]), self.tick, clock=Clock(clock_type=ClockType.STEADY_TIME))
+[lidar_safety_gate-13]   File "/opt/ros/jazzy/lib/python3.12/site-packages/rclpy/node.py", line 1779, in create_timer
+[lidar_safety_gate-13]     timer = Timer(
+[lidar_safety_gate-13]             ^^^^^^
+[lidar_safety_gate-13]   File "/opt/ros/jazzy/lib/python3.12/site-packages/rclpy/timer.py", line 59, in __init__
+[lidar_safety_gate-13]     with self._clock.handle, self._context.handle:
+[lidar_safety_gate-13]          ^^^^^^^^^^^^^^^^^^
+[lidar_safety_gate-13] AttributeError: 'Clock' object has no attribute 'handle'
+[gzserver-1] [1;32m[Msg] [0m[1;32mLoading SDF world file[[0m[1;32m/home/ashish/AutonomousNavigationCar/simulation/scenarios/worlds/s00_empty_open_arena.sdf[0m[1;32m].[0m
+[gzserver-1] [1;32m[Msg] [0m[1;32mServing entity system service on [[0m[1;32m/[0m[1;32mentity/system/add[0m[1;32m][0m[1;32m[0m
+[gzserver-1] [1;32m[Msg] [0m[1;32mCreate[0m[1;32m service on [[0m[1;32m/world/anc_phase2_test/create_multiple[0m[1;32m] (async)[0m[1;32m[0m
+[gzserver-1] [1;32m[Msg] [0m[1;32mCreate[0m[1;32m service on [[0m[1;32m/world/anc_phase2_test/create_multiple/blocking[0m[1;32m] (blocking)[0m[1;32m[0m
+[gzserver-1] [1;32m[Msg] [0m[1;32mRemove[0m[1;32m service on [[0m[1;32m/world/anc_phase2_test/remove[0m[1;32m] (async)[0m[1;32m[0m
+[gzserver-1] [1;32m[Msg] [0m[1;32mRemove[0m[1;32m service on [[0m[1;32m/world/anc_phase2_test/remove/blocking[0m[1;32m] (blocking)[0m[1;32m[0m
+[gzserver-1] [1;32m[Msg] [0m[1;32mPose[0m[1;32m service on [[0m[1;32m/world/anc_phase2_test/set_pose[0m[1;32m] (async)[0m[1;32m[0m
+[gzserver-1] [1;32m[Msg] [0m[1;32mPose[0m[1;32m service on [[0m[1;32m/world/anc_phase2_test/set_pose/blocking[0m[1;32m] (blocking)[0m[1;32m[0m
+[gzserver-1] [1;32m[Msg] [0m[1;32mPose[0m[1;32m service on [[0m[1;32m/world/anc_phase2_test/set_pose_vector[0m[1;32m] (async)[0m[1;32m[0m
+[gzserver-1] [1;32m[Msg] [0m[1;32mPose[0m[1;32m service on [[0m[1;32m/world/anc_phase2_test/set_pose_vector/blocking[0m[1;32m] (blocking)[0m[1;32m[0m
+[gzserver-1] [1;32m[Msg] [0m[1;32mLight configuration[0m[1;32m service on [[0m[1;32m/world/anc_phase2_test/light_config[0m[1;32m] (async)[0m[1;32m[0m
+[gzserver-1] [1;32m[Msg] [0m[1;32mLight configuration[0m[1;32m service on [[0m[1;32m/world/anc_phase2_test/light_config/blocking[0m[1;32m] (blocking)[0m[1;32m[0m
+[gzserver-1] [1;32m[Msg] [0m[1;32mPhysics[0m[1;32m service on [[0m[1;32m/world/anc_phase2_test/set_physics[0m[1;32m] (async)[0m[1;32m[0m
+[gzserver-1] [1;32m[Msg] [0m[1;32mPhysics[0m[1;32m service on [[0m[1;32m/world/anc_phase2_test/set_physics/blocking[0m[1;32m] (blocking)[0m[1;32m[0m
+[gzserver-1] [1;32m[Msg] [0m[1;32mSphericalCoordinates[0m[1;32m service on [[0m[1;32m/world/anc_phase2_test/set_spherical_coordinates[0m[1;32m] (async)[0m[1;32m[0m
+[gzserver-1] [1;32m[Msg] [0m[1;32mSphericalCoordinates[0m[1;32m service on [[0m[1;32m/world/anc_phase2_test/set_spherical_coordinates/blocking[0m[1;32m] (blocking)[0m[1;32m[0m
+[gzserver-1] [1;32m[Msg] [0m[1;32mEnable collision[0m[1;32m service on [[0m[1;32m/world/anc_phase2_test/enable_collision[0m[1;32m] (async)[0m[1;32m[0m
+[gzserver-1] [1;32m[Msg] [0m[1;32mEnable collision[0m[1;32m service on [[0m[1;32m/world/anc_phase2_test/enable_collision/blocking[0m[1;32m] (blocking)[0m[1;32m[0m
+[gzserver-1] [1;32m[Msg] [0m[1;32mDisable collision[0m[1;32m service on [[0m[1;32m/world/anc_phase2_test/disable_collision[0m[1;32m] (async)[0m[1;32m[0m
+[gzserver-1] [1;32m[Msg] [0m[1;32mDisable collision[0m[1;32m service on [[0m[1;32m/world/anc_phase2_test/disable_collision/blocking[0m[1;32m] (blocking)[0m[1;32m[0m
+[gzserver-1] [1;32m[Msg] [0m[1;32mMaterial[0m[1;32m service on [[0m[1;32m/world/anc_phase2_test/visual_config[0m[1;32m] (async)[0m[1;32m[0m
+[gzserver-1] [1;32m[Msg] [0m[1;32mMaterial[0m[1;32m service on [[0m[1;32m/world/anc_phase2_test/visual_config/blocking[0m[1;32m] (blocking)[0m[1;32m[0m
+[gzserver-1] [1;32m[Msg] [0m[1;32mMaterial[0m[1;32m service on [[0m[1;32m/world/anc_phase2_test/wheel_slip[0m[1;32m] (async)[0m[1;32m[0m
+[gzserver-1] [1;32m[Msg] [0m[1;32mMaterial[0m[1;32m service on [[0m[1;32m/world/anc_phase2_test/wheel_slip/blocking[0m[1;32m] (blocking)[0m[1;32m[0m
+[gzserver-1] [1;32m[Msg] [0m[1;32mLoaded level [[0m[1;32mdefault[0m[1;32m][0m[1;32m[0m
+[gzserver-1] [1;32m[Msg] [0m[1;32mServing world controls on [[0m[1;32m/world/anc_phase2_test[0m[1;32m/control], [[0m[1;32m/world/anc_phase2_test[0m[1;32m/control/state] and [[0m[1;32m/world/anc_phase2_test[0m[1;32m/playback/control][0m[1;32m[0m
+[gzserver-1] [1;32m[Msg] [0m[1;32mServing GUI information on [[0m[1;32m/world/anc_phase2_test[0m[1;32m/[0m[1;32mgui/info[0m[1;32m][0m[1;32m[0m
+[local_grid_fuser-12] Traceback (most recent call last):
+[local_grid_fuser-12]   File "/home/ashish/AutonomousNavigationCar/simulation/ros2_ws/install/anc_lidar/lib/anc_lidar/local_grid_fuser", line 33, in <module>
+[local_grid_fuser-12]     sys.exit(load_entry_point('anc-lidar', 'console_scripts', 'local_grid_fuser')())
+[local_grid_fuser-12]              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[local_grid_fuser-12]   File "/home/ashish/AutonomousNavigationCar/simulation/ros2_ws/build/anc_lidar/anc_lidar/nodes.py", line 445, in local_grid_fuser_main
+[local_grid_fuser-12]     _spin(LocalGridFuser)
+[local_grid_fuser-12]   File "/home/ashish/AutonomousNavigationCar/simulation/ros2_ws/build/anc_lidar/anc_lidar/nodes.py", line 425, in _spin
+[local_grid_fuser-12]     node = node_type()
+[local_grid_fuser-12]            ^^^^^^^^^^^
+[local_grid_fuser-12]   File "/home/ashish/AutonomousNavigationCar/simulation/ros2_ws/build/anc_lidar/anc_lidar/nodes.py", line 358, in __init__
+[local_grid_fuser-12]     self.create_timer(0.20, self.publish_fused, clock=Clock(clock_type=ClockType.STEADY_TIME))
+[local_grid_fuser-12]   File "/opt/ros/jazzy/lib/python3.12/site-packages/rclpy/node.py", line 1779, in create_timer
+[local_grid_fuser-12]     timer = Timer(
+[local_grid_fuser-12]             ^^^^^^
+[local_grid_fuser-12]   File "/opt/ros/jazzy/lib/python3.12/site-packages/rclpy/timer.py", line 59, in __init__
+[local_grid_fuser-12]     with self._clock.handle, self._context.handle:
+[local_grid_fuser-12]          ^^^^^^^^^^^^^^^^^^
+[local_grid_fuser-12] AttributeError: 'Clock' object has no attribute 'handle'
+[local_scan_mapper-11] Traceback (most recent call last):
+[local_scan_mapper-11]   File "/home/ashish/AutonomousNavigationCar/simulation/ros2_ws/install/anc_lidar/lib/anc_lidar/local_scan_mapper", line 33, in <module>
+[local_scan_mapper-11]     sys.exit(load_entry_point('anc-lidar', 'console_scripts', 'local_scan_mapper')())
+[local_scan_mapper-11]              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[local_scan_mapper-11]   File "/home/ashish/AutonomousNavigationCar/simulation/ros2_ws/build/anc_lidar/anc_lidar/nodes.py", line 441, in local_scan_mapper_main
+[local_scan_mapper-11]     _spin(LocalScanMapper)
+[local_scan_mapper-11]   File "/home/ashish/AutonomousNavigationCar/simulation/ros2_ws/build/anc_lidar/anc_lidar/nodes.py", line 425, in _spin
+[local_scan_mapper-11]     node = node_type()
+[local_scan_mapper-11]            ^^^^^^^^^^^
+[local_scan_mapper-11]   File "/home/ashish/AutonomousNavigationCar/simulation/ros2_ws/build/anc_lidar/anc_lidar/nodes.py", line 249, in __init__
+[local_scan_mapper-11]     self.create_timer(0.10, self.check_stale, clock=Clock(clock_type=ClockType.STEADY_TIME))
+[local_scan_mapper-11]   File "/opt/ros/jazzy/lib/python3.12/site-packages/rclpy/node.py", line 1779, in create_timer
+[local_scan_mapper-11]     timer = Timer(
+[local_scan_mapper-11]             ^^^^^^
+[local_scan_mapper-11]   File "/opt/ros/jazzy/lib/python3.12/site-packages/rclpy/timer.py", line 59, in __init__
+[local_scan_mapper-11]     with self._clock.handle, self._context.handle:
+[local_scan_mapper-11]          ^^^^^^^^^^^^^^^^^^
+[local_scan_mapper-11] AttributeError: 'Clock' object has no attribute 'handle'
+[scan_conditioner-10] Traceback (most recent call last):
+[scan_conditioner-10]   File "/home/ashish/AutonomousNavigationCar/simulation/ros2_ws/install/anc_lidar/lib/anc_lidar/scan_conditioner", line 33, in <module>
+[scan_conditioner-10]     sys.exit(load_entry_point('anc-lidar', 'console_scripts', 'scan_conditioner')())
+[scan_conditioner-10]              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[scan_conditioner-10]   File "/home/ashish/AutonomousNavigationCar/simulation/ros2_ws/build/anc_lidar/anc_lidar/nodes.py", line 437, in scan_conditioner_main
+[scan_conditioner-10]     _spin(ScanConditioner)
+[scan_conditioner-10]   File "/home/ashish/AutonomousNavigationCar/simulation/ros2_ws/build/anc_lidar/anc_lidar/nodes.py", line 425, in _spin
+[scan_conditioner-10]     node = node_type()
+[scan_conditioner-10]            ^^^^^^^^^^^
+[scan_conditioner-10]   File "/home/ashish/AutonomousNavigationCar/simulation/ros2_ws/build/anc_lidar/anc_lidar/nodes.py", line 105, in __init__
+[scan_conditioner-10]     self.create_timer(0.05, self.check_stale, clock=Clock(clock_type=ClockType.STEADY_TIME))
+[scan_conditioner-10]   File "/opt/ros/jazzy/lib/python3.12/site-packages/rclpy/node.py", line 1779, in create_timer
+[scan_conditioner-10]     timer = Timer(
+[scan_conditioner-10]             ^^^^^^
+[scan_conditioner-10]   File "/opt/ros/jazzy/lib/python3.12/site-packages/rclpy/timer.py", line 59, in __init__
+[scan_conditioner-10]     with self._clock.handle, self._context.handle:
+[scan_conditioner-10]          ^^^^^^^^^^^^^^^^^^
+[scan_conditioner-10] AttributeError: 'Clock' object has no attribute 'handle'
+[local_traversability_node-9] [INFO] [1793610724.281035233] [anc_local_traversability]: Fresh-snapshot RGB local map; inputs are mask, confidence, perception health, CameraInfo, /clock timestamp, filtered odometry and TF only. No global map, Gazebo truth, obstacle geometry, depth or Nav2 path.
+[parameter_bridge-3] [INFO] [1793610724.340113341] [anc_parameter_bridge]: Creating GZ->ROS Bridge: [/clock (gz.msgs.Clock) -> /clock (rosgraph_msgs/msg/Clock)] (Lazy 0)
+[parameter_bridge-3] [INFO] [1793610724.344904530] [anc_parameter_bridge]: Creating ROS->GZ Bridge: [/cmd_vel (geometry_msgs/msg/Twist) -> /model/anc_robot/cmd_vel (gz.msgs.Twist)] (Lazy 0)
+[parameter_bridge-3] [INFO] [1793610724.353684083] [anc_parameter_bridge]: Creating GZ->ROS Bridge: [/camera/image_raw (gz.msgs.Image) -> /camera/image_raw (sensor_msgs/msg/Image)] (Lazy 0)
+[parameter_bridge-3] [INFO] [1793610724.358495106] [anc_parameter_bridge]: Creating GZ->ROS Bridge: [/camera/camera_info (gz.msgs.CameraInfo) -> /camera/camera_info (sensor_msgs/msg/CameraInfo)] (Lazy 0)
+[parameter_bridge-3] [INFO] [1793610724.362492171] [anc_parameter_bridge]: Creating GZ->ROS Bridge: [/imu/data (gz.msgs.IMU) -> /anc_internal/imu_raw (sensor_msgs/msg/Imu)] (Lazy 0)
+[parameter_bridge-3] [INFO] [1793610724.366294510] [anc_parameter_bridge]: Creating GZ->ROS Bridge: [/world/anc_phase2_test/model/anc_robot/joint_state (gz.msgs.Model) -> /joint_states (sensor_msgs/msg/JointState)] (Lazy 0)
+[parameter_bridge-3] [INFO] [1793610724.369199433] [anc_parameter_bridge]: Creating GZ->ROS Bridge: [/model/anc_robot/odom (gz.msgs.Odometry) -> /odom (nav_msgs/msg/Odometry)] (Lazy 0)
+[parameter_bridge-3] [INFO] [1793610724.376147032] [anc_parameter_bridge]: Creating GZ->ROS Bridge: [/world/anc_phase2_test/model/anc_robot/link/base_footprint/sensor/chassis_contact/contact (gz.msgs.Contacts) -> /contacts (ros_gz_interfaces/msg/Contacts)] (Lazy 0)
+[ERROR] [lidar_safety_gate-13]: process has died [pid 639, exit code 1, cmd '/home/ashish/AutonomousNavigationCar/simulation/ros2_ws/install/anc_lidar/lib/anc_lidar/lidar_safety_gate --ros-args -r __node:=anc_lidar_safety_gate --params-file /home/ashish/AutonomousNavigationCar/simulation/ros2_ws/install/anc_lidar/share/anc_lidar/config/realistic_lidar.yaml'].
+[parameter_bridge-3] [INFO] [1793610724.391138947] [anc_parameter_bridge]: Passing message from ROS geometry_msgs/msg/Twist to Gazebo gz.msgs.Twist (showing msg only once per type)
+[ERROR] [local_grid_fuser-12]: process has died [pid 638, exit code 1, cmd '/home/ashish/AutonomousNavigationCar/simulation/ros2_ws/install/anc_lidar/lib/anc_lidar/local_grid_fuser --ros-args -r __node:=anc_rgb_lidar_grid_fuser --params-file /home/ashish/AutonomousNavigationCar/simulation/ros2_ws/install/anc_lidar/share/anc_lidar/config/realistic_lidar.yaml'].
+[ERROR] [scan_conditioner-10]: process has died [pid 636, exit code 1, cmd '/home/ashish/AutonomousNavigationCar/simulation/ros2_ws/install/anc_lidar/lib/anc_lidar/scan_conditioner --ros-args -r __node:=anc_lidar_scan_conditioner --params-file /home/ashish/AutonomousNavigationCar/simulation/ros2_ws/install/anc_lidar/share/anc_lidar/config/realistic_lidar.yaml'].
+[ERROR] [local_scan_mapper-11]: process has died [pid 637, exit code 1, cmd '/home/ashish/AutonomousNavigationCar/simulation/ros2_ws/install/anc_lidar/lib/anc_lidar/local_scan_mapper --ros-args -r __node:=anc_local_scan_mapper --params-file /home/ashish/AutonomousNavigationCar/simulation/ros2_ws/install/anc_lidar/share/anc_lidar/config/realistic_lidar.yaml'].
+[rgb_perception_node-8] [INFO] [1793610724.831996365] [anc_rgb_perception]: RGB-only inputs: /camera/image_raw, /camera/camera_info, /clock (time validity only); no odometry, IMU, Gazebo truth, depth, map, or scenario geometry.
+[ekf_node-7] [INFO] [1793610725.498251268] [anc_ekf_filter]: Detected a initial_estimate_covariance parameter with length 15. Assuming diagonal values specified.
+[gzserver-1] [INFO] [1793610725.658185191] [gzserver]: InitializeCanonicalLinks
+[gzserver-1] [INFO] [1793610725.658468379] [gzserver]: Creating services on gzserver
+[gzserver-1] [INFO] [1793610725.667053924] [gzserver]: Created service /gzserver/delete_entity
+[gzserver-1] [INFO] [1793610725.668657777] [gzserver]: Created service /gzserver/get_entities
+[gzserver-1] [INFO] [1793610725.670919477] [gzserver]: Created service /gzserver/get_entity_info
+[gzserver-1] [INFO] [1793610725.676181052] [gzserver]: Created service /gzserver/get_entity_state
+[gzserver-1] [INFO] [1793610725.678690934] [gzserver]: Created service /gzserver/get_entities_states
+[gzserver-1] [INFO] [1793610725.680579745] [gzserver]: Created service /gzserver/get_simulation_state
+[gzserver-1] [INFO] [1793610725.682459639] [gzserver]: Created service /gzserver/get_simulator_features
+[gzserver-1] [INFO] [1793610725.684545886] [gzserver]: Created service /gzserver/reset_simulation
+[gzserver-1] [INFO] [1793610725.686649586] [gzserver]: Created service /gzserver/set_entity_state
+[gzserver-1] [INFO] [1793610725.688794073] [gzserver]: Created service /gzserver/set_simulation_state
+[gzserver-1] [INFO] [1793610725.691160882] [gzserver]: Created service /gzserver/spawn_entity
+[gzserver-1] [INFO] [1793610725.693418205] [gzserver]: Created service /gzserver/step_simulation
+[gzserver-1] [INFO] [1793610725.712398843] [gzserver]: Created action /gzserver/simulate_steps
+[INFO] [create-15]: process started with pid [871]
+[create-15] [INFO] [1793610727.172517967] [spawn_anc_robot]: Waiting messages on topic [robot_description].
+[create-15] [INFO] [1793610728.172749470] [spawn_anc_robot]: Waiting messages on topic [robot_description].
+[gzserver-1] [1;32m[Msg] [0m[1;32mWorld [[0m[1;32manc_phase2_test[0m[1;32m] initialized with [[0m[1;32mphase2_physics[0m[1;32m] physics profile.[0m[1;32m[0m
+[gzserver-1] [1;32m[Msg] [0m[1;32mServing world SDF generation service on [[0m[1;32m/world/anc_phase2_test[0m[1;32m/[0m[1;32mgenerate_world_sdf[0m[1;32m][0m[1;32m[0m
+[gzserver-1] [1;32m[Msg] [0m[1;32mServing world names on [[0m[1;32m/gazebo/worlds[0m[1;32m][0m[1;32m[0m
+[gzserver-1] [1;32m[Msg] [0m[1;32mResource path add service on [[0m[1;32m/gazebo/resource_paths/add[0m[1;32m].[0m[1;32m[0m
+[gzserver-1] [1;32m[Msg] [0m[1;32mResource path get service on [[0m[1;32m/gazebo/resource_paths/get[0m[1;32m].[0m[1;32m[0m
+[gzserver-1] [1;32m[Msg] [0m[1;32mResource path resolve service on [[0m[1;32m/gazebo/resource_paths/resolve[0m[1;32m].[0m[1;32m[0m
+[gzserver-1] [1;32m[Msg] [0m[1;32mResource paths published on [[0m[1;32m/gazebo/resource_paths[0m[1;32m].[0m[1;32m[0m
+[gzserver-1] [1;32m[Msg] [0m[1;32mServer control service on [[0m[1;32m/server_control[0m[1;32m].[0m[1;32m[0m
+[gzserver-1] [1;32m[Msg] [0m[1;32mFound no publishers on /stats, adding root stats topic[0m[1;32m[0m
+[gzserver-1] [1;32m[Msg] [0m[1;32mFound no publishers on /clock, adding root clock topic[0m[1;32m[0m
+[gzserver-1] [1;32m[Msg] [0m[1;32mServing scene information on [[0m[1;32m/world/anc_phase2_test[0m[1;32m/[0m[1;32mscene/info[0m[1;32m][0m[1;32m[0m
+[gzserver-1] [1;32m[Msg] [0m[1;32mServing graph information on [[0m[1;32m/world/anc_phase2_test[0m[1;32m/[0m[1;32mscene/graph[0m[1;32m][0m[1;32m[0m
+[gzserver-1] [1;32m[Msg] [0m[1;32mServing full state on [[0m[1;32m/world/anc_phase2_test[0m[1;32m/[0m[1;32mstate[0m[1;32m][0m[1;32m[0m
+[gzserver-1] [1;32m[Msg] [0m[1;32mServing full state (async) on [[0m[1;32m/world/anc_phase2_test[0m[1;32m/[0m[1;32mstate_async[0m[1;32m][0m[1;32m[0m
+[gzserver-1] [1;32m[Msg] [0m[1;32mPublishing scene information on [[0m[1;32m/world/anc_phase2_test/scene/info[0m[1;32m][0m[1;32m[0m
+[gzserver-1] [1;32m[Msg] [0m[1;32mPublishing entity deletions on [[0m[1;32m/world/anc_phase2_test/scene/deletion[0m[1;32m][0m[1;32m[0m
+[gzserver-1] [1;32m[Msg] [0m[1;32mPublishing state changes on [[0m[1;32m/world/anc_phase2_test/state[0m[1;32m][0m[1;32m[0m
+[gzserver-1] [1;32m[Msg] [0m[1;32mPublishing pose messages on [[0m[1;32m/world/anc_phase2_test[0m[1;32m/[0m[1;32mpose/info[0m[1;32m][0m[1;32m[0m
+[gzserver-1] [1;32m[Msg] [0m[1;32mPublishing dynamic pose messages on [[0m[1;32m/world/anc_phase2_test[0m[1;32m/[0m[1;32mdynamic_pose/info[0m[1;32m][0m[1;32m[0m
+[create-15] [INFO] [1793610729.172932692] [spawn_anc_robot]: Waiting messages on topic [robot_description].
+[create-15] [INFO] [1793610730.214356582] [spawn_anc_robot]: Entity creation successful.
+[gzserver-1] [1;33mWarning [Utils.cc:132][0m [/sdf/model[@name="anc_robot"]/link[@name="base_footprint"]/sensor[@name="anc_rgb_camera"]/gz_frame_id:<urdf-string>:L0]: XML Element[gz_frame_id], child of element[sensor], not defined in SDF. Copying[gz_frame_id] as children of [sensor].
+[gzserver-1] [1;33mWarning [Utils.cc:132][0m [/sdf/model[@name="anc_robot"]/link[@name="base_footprint"]/sensor[@name="anc_imu"]/gz_frame_id:<urdf-string>:L0]: XML Element[gz_frame_id], child of element[sensor], not defined in SDF. Copying[gz_frame_id] as children of [sensor].
+[gzserver-1] [1;33mWarning [Utils.cc:132][0m [/sdf/model[@name="anc_robot"]/link[@name="base_footprint"]/sensor[@name="anc_planar_lidar"]/gz_frame_id:<urdf-string>:L0]: XML Element[gz_frame_id], child of element[sensor], not defined in SDF. Copying[gz_frame_id] as children of [sensor].
+[gzserver-1] [INFO] [1793610730.310700002] [gzserver]: InitializeCanonicalLinks
+[gzserver-1] [1;33m[Wrn] [Component.hh:127] [0m[1;33mTrying to serialize component with data type [[0m[1;33mSt10shared_ptrIN3sdf3v147ElementEE[0m[1;33m], which doesn't have [0m[1;33m`operator<<`. Component will not be serialized.[0m[1;33m[0m
+[INFO] [create-15]: process has finished cleanly [pid 871]
+[imu_sanitizer-5] [INFO] [1793610730.337285550] [anc_imu_sanitizer]: Publishing /imu/data with orientation unavailable; retaining simulated gyro and acceleration.
+[gzserver-1] [1;32m[Msg] [0m[1;32mDiffDrive subscribing to twist messages on [[0m[1;32m/model/anc_robot/cmd_vel[0m[1;32m][0m[1;32m[0m
+[gzserver-1] [1;32m[Msg] [0m[1;32mContact system publishing on [0m[1;32mworld/anc_phase2_test/model/anc_robot/link/base_footprint/sensor/chassis_contact/contact[0m[1;32m[0m
+[gzserver-1] [1;32m[Msg] [0m[1;32mLoading plugin [[0m[1;32mgz-rendering-ogre2[0m[1;32m][0m[1;32m[0m
+[gzserver-1] [1;33mWarning [Utils.cc:132][0m [/sdf/model[@name="anc_robot"]/link[@name="base_footprint"]/sensor[@name="anc_rgb_camera"]/gz_frame_id:<data-string>:L130]: XML Element[gz_frame_id], child of element[sensor], not defined in SDF. Copying[gz_frame_id] as children of [sensor].
+[gzserver-1] [1;33mWarning [Utils.cc:132][0m [/sdf/model[@name="anc_robot"]/link[@name="base_footprint"]/sensor[@name="anc_imu"]/gz_frame_id:<data-string>:L192]: XML Element[gz_frame_id], child of element[sensor], not defined in SDF. Copying[gz_frame_id] as children of [sensor].
+[gzserver-1] [1;33mWarning [Utils.cc:132][0m [/sdf/model[@name="anc_robot"]/link[@name="base_footprint"]/sensor[@name="anc_planar_lidar"]/gz_frame_id:<data-string>:L226]: XML Element[gz_frame_id], child of element[sensor], not defined in SDF. Copying[gz_frame_id] as children of [sensor].
+[gzserver-1] [1;33m[Wrn] [Component.hh:172] [0m[1;33mTrying to deserialize component with data type [[0m[1;33mSt10shared_ptrIN3sdf3v147ElementEE[0m[1;33m], which doesn't have [0m[1;33m`operator>>`. Component will not be deserialized.[0m[1;33m[0m
+[gzserver-1] [1;33m[Wrn] [Ogre2Camera.cc:423] [0m[1;33mOgre2Camera::SetVisibilityMask: Mask bits [0m[1;33mc0000000[0m[1;33m are set but will be ignored as they conflict with the [0m[1;33mreserved bits used internally by the ogre2 backend.[0m[1;33m[0m
+[wheel_odometry_covariance-6] [INFO] [1793610731.585688111] [anc_wheel_odometry_covariance]: Relaying /odom to /odometry/wheel; stamp/frame preserved, pose disabled, vx variance=0.0004, vy variance=0.01.

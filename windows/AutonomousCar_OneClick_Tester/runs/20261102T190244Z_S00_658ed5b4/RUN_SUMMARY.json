@@ -1,0 +1,504 @@
+{
+  "metrics": {
+    "camera_frames": 47,
+    "filtered_odom_messages": 278,
+    "imu_messages": 926,
+    "lidar_local_map": {
+      "frame_id": "base_link",
+      "free": 4181,
+      "height": 180,
+      "occupied": 257,
+      "origin_xy_m": [
+        -9.0,
+        -9.0
+      ],
+      "resolution_m": 0.10000000149011612,
+      "stamp_s": 11.6,
+      "total": 32400,
+      "unknown": 27962,
+      "width": 180
+    },
+    "lidar_scan_messages": 47,
+    "lidar_scan_rate_hz": 5.03281356259074,
+    "moving_slam_trials": [
+      {
+        "reason": "live safety/guard did not explicitly authorize motion",
+        "slam_relative_displacement_error_m": null,
+        "slam_relative_yaw_error_rad": null,
+        "status": "BLOCKED",
+        "trial_id": "20261102T190244Z_S00_658ed5b4-S00-moving-1",
+        "truth_forward_displacement_m": null
+      },
+      {
+        "reason": "live safety/guard did not explicitly authorize motion",
+        "slam_relative_displacement_error_m": null,
+        "slam_relative_yaw_error_rad": null,
+        "status": "BLOCKED",
+        "trial_id": "20261102T190244Z_S00_658ed5b4-S00-moving-2",
+        "truth_forward_displacement_m": null
+      },
+      {
+        "reason": "live safety/guard did not explicitly authorize motion",
+        "slam_relative_displacement_error_m": null,
+        "slam_relative_yaw_error_rad": null,
+        "status": "BLOCKED",
+        "trial_id": "20261102T190244Z_S00_658ed5b4-S00-moving-3",
+        "truth_forward_displacement_m": null
+      }
+    ],
+    "nav2": {
+      "nav2_launched": false
+    },
+    "rgb_fused_map": {
+      "frame_id": "base_link",
+      "free": 4204,
+      "height": 180,
+      "occupied": 257,
+      "resolution_m": 0.10000000149011612,
+      "unknown": 27939,
+      "width": 180
+    },
+    "stationary_slam": {
+      "diagnostic_pass": true,
+      "error": null,
+      "map_messages": 6,
+      "map_snapshot": {
+        "frame_id": "map",
+        "free_cells": 1491,
+        "height": 115,
+        "occupied_cells": 10,
+        "resolution_m": 0.05000000074505806,
+        "sim_stamp_s": 35.6,
+        "unknown_cells": 16324,
+        "width": 155
+      },
+      "map_to_odom_tf_messages": 404,
+      "scan_messages": 96,
+      "slam_pose_messages": 0
+    },
+    "windows_min_available_mib": 1937
+  },
+  "run": {
+    "branch": "feature/phase8c-lidar",
+    "cleanup": {
+      "details": "SIGINT only; no WSL shutdown or broad process termination",
+      "status": "PASS"
+    },
+    "commit": "567ac430544fe7fb945f8fb9c7aac4f47e779804",
+    "environment": {
+      "gazebo_version": "8.15.0",
+      "git_branch": "feature/phase8c-lidar",
+      "git_commit": "567ac430544fe7fb945f8fb9c7aac4f47e779804",
+      "graphics": {
+        "capture_file": "environment/windows_gpu.txt",
+        "output": "command=nvidia-smi --query-gpu=name,memory.total,memory.free --format=csv,noheader\nexit_code=0\nNVIDIA GeForce GTX 1650, 4096 MiB, 3935 MiB"
+      },
+      "pytest_version": "pytest 7.4.4",
+      "resource_gate": {
+        "checks": [
+          {
+            "snapshot_age_s": 9.397596,
+            "utc": "2026-11-02T19:03:01Z",
+            "windows_available_mib": 3515,
+            "windows_load_percent": 53,
+            "wsl_available_mib": 3037
+          }
+        ],
+        "first_snapshot": {
+          "_age_s": 9.393979,
+          "timestampUtc": "2026-11-02T19:02:52.5710820Z",
+          "vmmemWslWorkingSetMiB": 207.62,
+          "windowsAvailableMiB": 3515,
+          "windowsMemoryLoadPercent": 53,
+          "windowsRunVolumeAvailableMiB": 35554,
+          "windowsSystemCpuPercent": 17,
+          "windowsTotalMiB": 7521,
+          "wslAvailableMiB": 3005,
+          "wslProcesses": [],
+          "wslSwapTotalMiB": 1024,
+          "wslSwapUsedMiB": 0,
+          "wslTotalMiB": 3583
+        },
+        "minimum_windows_mib": 2048,
+        "minimum_wsl_mib": 1536,
+        "status": "PASS"
+      },
+      "ros_packages": {
+        "anc_gazebo": {
+          "prefix": "/home/ashish/AutonomousNavigationCar/simulation/ros2_ws/install/anc_gazebo",
+          "present": true
+        },
+        "anc_lidar": {
+          "prefix": "/home/ashish/AutonomousNavigationCar/simulation/ros2_ws/install/anc_lidar",
+          "present": true
+        },
+        "anc_navigation": {
+          "prefix": "/home/ashish/AutonomousNavigationCar/simulation/ros2_ws/install/anc_navigation",
+          "present": true
+        },
+        "nav2_bringup": {
+          "prefix": "/opt/ros/jazzy",
+          "present": true
+        },
+        "nav2_map_server": {
+          "prefix": "/opt/ros/jazzy",
+          "present": true
+        },
+        "ros_gz_sim": {
+          "prefix": "/opt/ros/jazzy",
+          "present": true
+        },
+        "slam_toolbox": {
+          "prefix": "/opt/ros/jazzy",
+          "present": true
+        }
+      },
+      "system_file": "environment/system.json",
+      "windows": {
+        "_age_s": 9.655861,
+        "timestampUtc": "2026-11-02T19:02:47.3122974Z",
+        "vmmemWslWorkingSetMiB": 99.32,
+        "windowsAvailableMiB": 3758,
+        "windowsMemoryLoadPercent": 50,
+        "windowsRunVolumeAvailableMiB": 35554,
+        "windowsSystemCpuPercent": 24,
+        "windowsTotalMiB": 7521,
+        "wslAvailableMiB": 3046,
+        "wslProcesses": [],
+        "wslSwapTotalMiB": 1024,
+        "wslSwapUsedMiB": 0,
+        "wslTotalMiB": 3583
+      },
+      "wsl": {
+        "disk_free_mib": 35554,
+        "timestamp_utc": "2026-11-02T19:02:56Z",
+        "wsl_available_mib": 3035,
+        "wsl_swap_total_mib": 1024,
+        "wsl_swap_used_mib": 0,
+        "wsl_total_mib": 3583
+      }
+    },
+    "execution_mode": "FULL",
+    "finished_utc": "2026-11-02T19:04:18Z",
+    "notes": [],
+    "overall_reason": "one or more tests failed",
+    "overall_status": "FAIL",
+    "project_path": "/home/ashish/AutonomousNavigationCar",
+    "run_id": "20261102T190244Z_S00_658ed5b4",
+    "scenario": "S00",
+    "schema_version": 1,
+    "seed": 101,
+    "started_utc": "2026-11-02T19:02:55Z",
+    "tests": {
+      "additional_fault_injection": {
+        "artifacts": [
+          "tests/additional_fault_injection/result.json",
+          "tests/additional_fault_injection/output.log"
+        ],
+        "exit_code": null,
+        "log_file": "tests/additional_fault_injection/output.log",
+        "reason": "disabled by safe defaults",
+        "result_file": "tests/additional_fault_injection/result.json",
+        "status": "SKIPPED",
+        "trial_id": null,
+        "updated_utc": "2026-11-02T19:04:17Z"
+      },
+      "environment": {
+        "artifacts": [
+          "tests/environment/result.json",
+          "tests/environment/output.log"
+        ],
+        "exit_code": 0,
+        "log_file": "tests/environment/output.log",
+        "reason": "ROS 2 Jazzy, Gazebo, project workspace and required packages verified",
+        "result_file": "tests/environment/result.json",
+        "status": "PASS",
+        "trial_id": null,
+        "updated_utc": "2026-11-02T19:02:59Z"
+      },
+      "lidar_sensors": {
+        "artifacts": [
+          "tests/lidar_sensors/result.json",
+          "tests/lidar_sensors/output.log"
+        ],
+        "exit_code": 0,
+        "log_file": "tests/lidar_sensors/output.log",
+        "reason": "live sensor checks passed",
+        "result_file": "tests/lidar_sensors/result.json",
+        "status": "PASS",
+        "trial_id": null,
+        "updated_utc": "2026-11-02T19:03:20Z"
+      },
+      "map_save": {
+        "artifacts": [
+          "tests/map_save/result.json",
+          "tests/map_save/output.log"
+        ],
+        "exit_code": 1,
+        "log_file": "tests/map_save/output.log",
+        "reason": "YAML/PGM map evidence missing",
+        "result_file": "tests/map_save/result.json",
+        "status": "FAIL",
+        "trial_id": null,
+        "updated_utc": "2026-11-02T19:03:49Z"
+      },
+      "moving_slam_trial_1": {
+        "artifacts": [
+          "tests/moving_slam_trial_1/result.json",
+          "tests/moving_slam_trial_1/output.log"
+        ],
+        "exit_code": null,
+        "log_file": "tests/moving_slam_trial_1/output.log",
+        "reason": "live safety/guard did not explicitly authorize motion",
+        "result_file": "tests/moving_slam_trial_1/result.json",
+        "status": "BLOCKED",
+        "trial_id": "20261102T190244Z_S00_658ed5b4-S00-moving-1",
+        "updated_utc": "2026-11-02T19:04:17Z"
+      },
+      "moving_slam_trial_2": {
+        "artifacts": [
+          "tests/moving_slam_trial_2/result.json",
+          "tests/moving_slam_trial_2/output.log"
+        ],
+        "exit_code": null,
+        "log_file": "tests/moving_slam_trial_2/output.log",
+        "reason": "live safety/guard did not explicitly authorize motion",
+        "result_file": "tests/moving_slam_trial_2/result.json",
+        "status": "BLOCKED",
+        "trial_id": "20261102T190244Z_S00_658ed5b4-S00-moving-2",
+        "updated_utc": "2026-11-02T19:04:17Z"
+      },
+      "moving_slam_trial_3": {
+        "artifacts": [
+          "tests/moving_slam_trial_3/result.json",
+          "tests/moving_slam_trial_3/output.log"
+        ],
+        "exit_code": null,
+        "log_file": "tests/moving_slam_trial_3/output.log",
+        "reason": "live safety/guard did not explicitly authorize motion",
+        "result_file": "tests/moving_slam_trial_3/result.json",
+        "status": "BLOCKED",
+        "trial_id": "20261102T190244Z_S00_658ed5b4-S00-moving-3",
+        "updated_utc": "2026-11-02T19:04:17Z"
+      },
+      "nav2": {
+        "artifacts": [
+          "tests/nav2/result.json",
+          "tests/nav2/output.log"
+        ],
+        "exit_code": null,
+        "log_file": "tests/nav2/output.log",
+        "reason": "evidence-backed readiness is not READY",
+        "result_file": "tests/nav2/result.json",
+        "status": "BLOCKED",
+        "trial_id": null,
+        "updated_utc": "2026-11-02T19:04:17Z"
+      },
+      "offline_common_infrastructure_test": {
+        "artifacts": [
+          "tests/offline_common_infrastructure_test/result.json",
+          "tests/offline_common_infrastructure_test/output.log"
+        ],
+        "exit_code": 0,
+        "log_file": "tests/offline_common_infrastructure_test/output.log",
+        "reason": "existing offline pytest (no simulator/motion)",
+        "result_file": "tests/offline_common_infrastructure_test/result.json",
+        "status": "PASS",
+        "trial_id": null,
+        "updated_utc": "2026-11-02T19:02:59Z"
+      },
+      "offline_lidar_model_test": {
+        "artifacts": [
+          "tests/offline_lidar_model_test/result.json",
+          "tests/offline_lidar_model_test/output.log"
+        ],
+        "exit_code": 0,
+        "log_file": "tests/offline_lidar_model_test/output.log",
+        "reason": "existing offline pytest (no simulator/motion)",
+        "result_file": "tests/offline_lidar_model_test/result.json",
+        "status": "PASS",
+        "trial_id": null,
+        "updated_utc": "2026-11-02T19:02:59Z"
+      },
+      "offline_nav2_config_test": {
+        "artifacts": [
+          "tests/offline_nav2_config_test/result.json",
+          "tests/offline_nav2_config_test/output.log"
+        ],
+        "exit_code": 0,
+        "log_file": "tests/offline_nav2_config_test/output.log",
+        "reason": "existing offline pytest (no simulator/motion)",
+        "result_file": "tests/offline_nav2_config_test/result.json",
+        "status": "PASS",
+        "trial_id": null,
+        "updated_utc": "2026-11-02T19:03:00Z"
+      },
+      "offline_nav2_runner_test": {
+        "artifacts": [
+          "tests/offline_nav2_runner_test/result.json",
+          "tests/offline_nav2_runner_test/output.log"
+        ],
+        "exit_code": 0,
+        "log_file": "tests/offline_nav2_runner_test/output.log",
+        "reason": "existing offline pytest (no simulator/motion)",
+        "result_file": "tests/offline_nav2_runner_test/result.json",
+        "status": "PASS",
+        "trial_id": null,
+        "updated_utc": "2026-11-02T19:03:01Z"
+      },
+      "offline_readiness_test": {
+        "artifacts": [
+          "tests/offline_readiness_test/result.json",
+          "tests/offline_readiness_test/output.log"
+        ],
+        "exit_code": 0,
+        "log_file": "tests/offline_readiness_test/output.log",
+        "reason": "existing offline pytest (no simulator/motion)",
+        "result_file": "tests/offline_readiness_test/result.json",
+        "status": "PASS",
+        "trial_id": null,
+        "updated_utc": "2026-11-02T19:03:01Z"
+      },
+      "offline_tests": {
+        "artifacts": [
+          "tests/offline_tests/result.json",
+          "tests/offline_tests/output.log"
+        ],
+        "exit_code": null,
+        "log_file": "tests/offline_tests/output.log",
+        "reason": "all selected offline tests passed",
+        "result_file": "tests/offline_tests/result.json",
+        "status": "PASS",
+        "trial_id": null,
+        "updated_utc": "2026-11-02T19:03:01Z"
+      },
+      "production_turning": {
+        "artifacts": [
+          "tests/production_turning/result.json",
+          "tests/production_turning/output.log"
+        ],
+        "exit_code": null,
+        "log_file": "tests/production_turning/output.log",
+        "reason": "production turning remains disabled; no angular request",
+        "result_file": "tests/production_turning/result.json",
+        "status": "SKIPPED",
+        "trial_id": null,
+        "updated_utc": "2026-11-02T19:04:17Z"
+      },
+      "readiness": {
+        "artifacts": [
+          "tests/readiness/result.json",
+          "tests/readiness/output.log"
+        ],
+        "exit_code": null,
+        "log_file": "tests/readiness/output.log",
+        "reason": "BLOCKED\tproduction_turning_verified:evidence_reference_missing; moving_slam_verified:evidence_reference_missing; moving_slam_verified:three_distinct_moving_trials_required; guarded_command_chain_verified:evidence_reference_missing; guarded_command_chain_verified:at_least_one_S00_navigation_trial_required",
+        "result_file": "tests/readiness/result.json",
+        "status": "BLOCKED",
+        "trial_id": null,
+        "updated_utc": "2026-11-02T19:04:17Z"
+      },
+      "readiness_after_trials": {
+        "artifacts": [
+          "tests/readiness_after_trials/result.json",
+          "tests/readiness_after_trials/output.log"
+        ],
+        "exit_code": 0,
+        "log_file": "tests/readiness_after_trials/output.log",
+        "reason": "readiness validator: BLOCKED\tproduction_turning_verified:evidence_reference_missing; moving_slam_verified:evidence_reference_missing; moving_slam_verified:three_distinct_moving_trials_required; guarded_command_chain_verified:evidence_reference_missing; guarded_command_chain_verified:at_least_one_S00_navigation_trial_required",
+        "result_file": "tests/readiness_after_trials/result.json",
+        "status": "BLOCKED",
+        "trial_id": null,
+        "updated_utc": "2026-11-02T19:04:17Z"
+      },
+      "resource_gate": {
+        "artifacts": [
+          "tests/resource_gate/result.json",
+          "tests/resource_gate/output.log"
+        ],
+        "exit_code": null,
+        "log_file": "tests/resource_gate/output.log",
+        "reason": "RAM thresholds met",
+        "result_file": "tests/resource_gate/result.json",
+        "status": "PASS",
+        "trial_id": null,
+        "updated_utc": "2026-11-02T19:03:01Z"
+      },
+      "rgb_camera_pair": {
+        "artifacts": [
+          "tests/rgb_camera_pair/result.json",
+          "tests/rgb_camera_pair/output.log"
+        ],
+        "exit_code": 0,
+        "log_file": "tests/rgb_camera_pair/output.log",
+        "reason": "camera pair evidence missing or >100 ms",
+        "result_file": "tests/rgb_camera_pair/result.json",
+        "status": "FAIL",
+        "trial_id": null,
+        "updated_utc": "2026-11-02T19:03:25Z"
+      },
+      "session_safety": {
+        "artifacts": [
+          "tests/session_safety/result.json",
+          "tests/session_safety/output.log"
+        ],
+        "exit_code": 0,
+        "log_file": "tests/session_safety/output.log",
+        "reason": "no existing matching simulation session",
+        "result_file": "tests/session_safety/result.json",
+        "status": "PASS",
+        "trial_id": null,
+        "updated_utc": "2026-11-02T19:03:01Z"
+      },
+      "simulation_cleanup": {
+        "artifacts": [
+          "tests/simulation_cleanup/result.json",
+          "tests/simulation_cleanup/output.log"
+        ],
+        "exit_code": null,
+        "log_file": "tests/simulation_cleanup/output.log",
+        "reason": "test-owned launcher stopped by SIGINT",
+        "result_file": "tests/simulation_cleanup/result.json",
+        "status": "PASS",
+        "trial_id": null,
+        "updated_utc": "2026-11-02T19:04:18Z"
+      },
+      "stationary_slam": {
+        "artifacts": [
+          "tests/stationary_slam/result.json",
+          "tests/stationary_slam/output.log"
+        ],
+        "exit_code": 0,
+        "log_file": "tests/stationary_slam/output.log",
+        "reason": "stationary no-command SLAM diagnostic passed",
+        "result_file": "tests/stationary_slam/result.json",
+        "status": "PASS",
+        "trial_id": null,
+        "updated_utc": "2026-11-02T19:03:47Z"
+      },
+      "turning_clearance_probe": {
+        "artifacts": [
+          "tests/turning_clearance_probe/result.json",
+          "tests/turning_clearance_probe/output.log"
+        ],
+        "exit_code": 1,
+        "log_file": "tests/turning_clearance_probe/output.log",
+        "reason": "expected denial evidence missing",
+        "result_file": "tests/turning_clearance_probe/result.json",
+        "status": "FAIL",
+        "trial_id": null,
+        "updated_utc": "2026-11-02T19:04:16Z"
+      }
+    },
+    "windows_run_path": "C:\\Users\\ajayk\\Desktop\\AutonomousCar_OneClick_Tester\\runs\\20261102T190244Z_S00_658ed5b4"
+  },
+  "schema_version": 1,
+  "test_status_counts": {
+    "BLOCKED": 6,
+    "FAIL": 3,
+    "NOT TESTED": 0,
+    "PASS": 12,
+    "SKIPPED": 2,
+    "TIMEOUT": 0
+  }
+}

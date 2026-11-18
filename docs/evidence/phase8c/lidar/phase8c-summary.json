@@ -1,0 +1,60 @@
+{
+  "assessments": {
+    "actual_movement": "PASS_WITH_LIMITS",
+    "local_mapping_and_fusion": "PASS_WITH_LIMITS",
+    "obstacle_avoidance_and_goal_navigation": "BLOCKED_NOT_RUN",
+    "safety_gate": "PASS_WITH_LIMITS",
+    "sensor_integration": "PASS_WITH_LIMITS"
+  },
+  "base_commit": "61c59790ad36194c86e5db86f5a56be170dd6e42",
+  "branch": "feature/phase8c-lidar",
+  "fused_map_matches_lidar_in_tested_s00_corridor": true,
+  "lidar_map": {
+    "frame_id": "base_link",
+    "free": 4206,
+    "height": 180,
+    "occupied": 267,
+    "resolution_m": 0.1,
+    "unknown": 27927,
+    "width": 180
+  },
+  "nav2_goal_navigation_demonstrated": false,
+  "phase": "8C Branch 1",
+  "phase8_zero_command_profile_regression": "PASS",
+  "rgb_map": {
+    "free": 617,
+    "occupied_metric": 0,
+    "unknown": 5008
+  },
+  "safety": {
+    "authority": "single /cmd_vel publisher anc_safety_command_guard",
+    "max_angular_speed_radps": 0.0,
+    "max_forward_speed_mps": 0.18,
+    "observed_forward_corridor_m": 3.2,
+    "required_corridor_at_0_18_mps": 0.656429
+  },
+  "sensor": {
+    "beams": 360,
+    "frame_id": "lidar_link",
+    "measured_rate_hz": 4.94,
+    "range_m": [
+      0.12,
+      6.0
+    ],
+    "scan_plane_height_above_ground_m": 0.16,
+    "topic": "/realistic/scan",
+    "usable_beams": 358,
+    "usable_fraction": 0.9944
+  },
+  "slam_drift_improvement_demonstrated": false,
+  "stage_c": {
+    "lidar_loss_post_zero_m": 8.2e-05,
+    "lidar_loss_total_displacement_m": 0.046981,
+    "localization_loss_post_zero_m": 0.0,
+    "localization_loss_total_displacement_m": 0.04939,
+    "rgb_loss_post_zero_m": 0.0,
+    "rgb_loss_total_displacement_m": 0.05699,
+    "watchdog_post_zero_displacement_m": 0.0,
+    "watchdog_total_displacement_m": 0.212189
+  }
+}

@@ -1,0 +1,89 @@
+{
+  "camera_info": {
+    "d": [
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "distortion_model": "plumb_bob",
+    "frame_id": "camera_optical_frame",
+    "height": 240,
+    "k": [
+      277.128,
+      0,
+      160,
+      0,
+      277.128,
+      120,
+      0,
+      0,
+      1
+    ],
+    "width": 320
+  },
+  "camera_transform_assumption": {
+    "quaternion_base": [
+      -0.5,
+      0.5,
+      -0.5,
+      0.5
+    ],
+    "translation_base_m": [
+      0.1,
+      0.0,
+      0.1
+    ]
+  },
+  "checks": [
+    {
+      "detail": "projected=5120, cells=164",
+      "name": "free_pixels_project_to_metric_cells",
+      "status": "PASS"
+    },
+    {
+      "detail": "unknown=5461, free=164",
+      "name": "outside_observed_floor_remains_unknown",
+      "status": "PASS"
+    },
+    {
+      "detail": "no RGB OCCUPIED pixel is assigned an arbitrary metric range",
+      "name": "occupancy_semantics_never_fabricate_obstacles",
+      "status": "PASS"
+    },
+    {
+      "detail": "first cell x=0.6; gap=0.385",
+      "name": "free_patch_disconnected_from_robot_front",
+      "status": "PASS"
+    },
+    {
+      "detail": "occupied pixels=14000; metric occupied cells=0",
+      "name": "unlocalized_occupied_evidence_stays_unknown",
+      "status": "PASS"
+    },
+    {
+      "detail": "free grid cells=0",
+      "name": "low_confidence_free_does_not_enter_grid",
+      "status": "PASS"
+    },
+    {
+      "detail": "nonzero CameraInfo distortion rejected",
+      "name": "nonzero_distortion_invalidates_projection",
+      "status": "PASS"
+    }
+  ],
+  "grid_state_counts": {
+    "free_grid_cells": 164,
+    "free_image_pixels": 5120,
+    "grid_occupied_cells": 0,
+    "grid_unknown_cells": 5461,
+    "high_confidence_free_pixels": 5120,
+    "occupied_image_pixels_unlocalized": 0,
+    "projected_free_pixels": 5120,
+    "unknown_image_pixels": 71680
+  },
+  "interpretation": "Synthetic unit fixtures validate projection invariants only; live Gazebo evidence is reported separately.",
+  "phase": 8,
+  "status": "PASS"
+}

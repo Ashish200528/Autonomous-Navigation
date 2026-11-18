@@ -1,0 +1,26 @@
+/anc_lidar_safety_gate
+  Subscribers:
+    /clock: rosgraph_msgs/msg/Clock
+    /odometry/filtered: nav_msgs/msg/Odometry
+    /realistic/local_map/lidar: nav_msgs/msg/OccupancyGrid
+    /realistic/local_map/lidar/health: std_msgs/msg/String
+    /realistic/local_traversability: nav_msgs/msg/OccupancyGrid
+    /realistic/navigation_state: std_msgs/msg/String
+    /realistic/scan/health: std_msgs/msg/String
+  Publishers:
+    /parameter_events: rcl_interfaces/msg/ParameterEvent
+    /realistic/safety_state: std_msgs/msg/String
+    /rosout: rcl_interfaces/msg/Log
+  Service Servers:
+    /anc_lidar_safety_gate/describe_parameters: rcl_interfaces/srv/DescribeParameters
+    /anc_lidar_safety_gate/get_parameter_types: rcl_interfaces/srv/GetParameterTypes
+    /anc_lidar_safety_gate/get_parameters: rcl_interfaces/srv/GetParameters
+    /anc_lidar_safety_gate/get_type_description: type_description_interfaces/srv/GetTypeDescription
+    /anc_lidar_safety_gate/list_parameters: rcl_interfaces/srv/ListParameters
+    /anc_lidar_safety_gate/set_parameters: rcl_interfaces/srv/SetParameters
+    /anc_lidar_safety_gate/set_parameters_atomically: rcl_interfaces/srv/SetParametersAtomically
+  Service Clients:
+
+  Action Servers:
+
+  Action Clients:

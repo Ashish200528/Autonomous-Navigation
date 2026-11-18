@@ -1,0 +1,10 @@
+Traceback (most recent call last):
+  File "/home/ashish/AutonomousNavigationCar/scripts/phase9/evaluate.py", line 32, in <module>
+    ap=argparse.ArgumentParser();ap.add_argument('checkpoint',type=Path);ap.add_argument('dataset',type=Path);ap.add_argument('output',type=Path);a=ap.parse_args();evaluate(a.checkpoint,a.dataset,a.output)
+                                                                                                                                                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ashish/AutonomousNavigationCar/scripts/phase9/evaluate.py", line 22, in evaluate
+    t=time.perf_counter();raw,_,_=classify_rgb(rgb,info,cfg);times['classical'].append((time.perf_counter()-t)*1000)
+                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ashish/AutonomousNavigationCar/simulation/ros2_ws/install/anc_perception/lib/python3.12/site-packages/anc_perception/classifier.py", line 98, in classify_rgb
+    raise ValueError("floor_seed_unobservable")
+ValueError: floor_seed_unobservable

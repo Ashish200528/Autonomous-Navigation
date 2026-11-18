@@ -1,0 +1,725 @@
+# AUTONOMOUS NAVIGATION CAR — CREATE A COMPLETE STANDALONE ONE-CLICK TESTING SYSTEM
+
+## MAIN OBJECTIVE
+
+I want you to create a completely standalone Windows-based testing system for my existing Autonomous Navigation Car project.
+
+My laptop has 8 GB RAM. Running Codex, ChatGPT, Windows, WSL, Gazebo, SLAM and Nav2 together creates memory pressure.
+
+Therefore, I want to separate the engineering workflow into two parts:
+
+**Part 1 — Codex prepares the testing system.**
+
+**Part 2 — I close Codex, double-click one Windows BAT file, and the system runs independently, saves all results, and shuts down safely.**
+
+After the testing finishes, I will reopen Codex and ask you to analyze the saved results.
+
+The testing system must work WITHOUT ChatGPT, Codex, VS Code or another AI agent running.
+
+Do not begin developing new navigation algorithms in this assignment. Your job is to build a reliable, reusable, standalone execution and evidence-collection system using the code and tests already present.
+
+---
+
+# 1. Existing project information
+
+GitHub repository:
+https://github.com/Ashish200528/Autonomous-Navigation
+
+WSL project:
+`/home/ashish/AutonomousNavigationCar`
+
+Branch:
+`feature/phase8c-lidar`
+
+Last reviewed commit:
+`567ac430544fe7fb945f8fb9c7aac4f47e779804`
+
+Use the latest actual branch state.
+
+Operating environment:
+
+- Windows 11
+- 8 GB physical RAM
+- AMD Ryzen 5 5600H, 6 cores / 12 threads
+- NVIDIA GTX 1650, 4 GB VRAM
+- WSL2 Ubuntu 24.04
+- ROS 2 Jazzy
+- Gazebo Harmonic
+- SLAM Toolbox
+- Nav2
+- Existing Python ROS scripts and evaluators
+- Approximately 3.5 GiB WSL memory
+- 1 GiB WSL swap
+
+The working Phase 6 predefined-map navigation must remain unchanged.
+
+The realistic RGB + LiDAR system is still under development.
+
+Current limitations include:
+- Production turning unvalidated.
+- Moving SLAM unvalidated.
+- Autonomous LiDAR Nav2 goals not yet passed.
+- Obstacle avoidance and parking unvalidated.
+- Windows RAM availability sometimes below 2 GiB.
+
+Preserve all safety checks and readiness requirements.
+
+---
+
+# 2. Create one dedicated Windows Desktop folder
+
+Find my actual Windows Desktop using the Windows Known Folder API.
+
+Do not assume a hardcoded `C:\Users\...` path, because the Desktop may be redirected.
+
+Create a folder named:
+
+`AutonomousCar_OneClick_Tester`
+
+Inside that folder, create the following structure:
+
+```text
+AutonomousCar_OneClick_Tester/
+│
+├── RUN_AUTONOMOUS_CAR_TESTS.bat
+│
+├── config/
+│   └── test_settings.json
+│
+├── tools/
+│   ├── run_tests.ps1
+│   ├── wsl_test_runner.sh
+│   ├── collect_results.py
+│   ├── resource_monitor.ps1
+│   └── any_other_required_helpers
+│
+├── runs/
+│   ├── [automatically generated run folders]
+│   └── ...
+│
+├── latest/
+│   └── [latest result summary or pointer]
+│
+└── README_FIRST.txt
+```
+
+These names are suggested. Adjust internal helper names where technically justified.
+
+**There must be exactly ONE main BAT file that I need to double-click.**
+
+All required helper scripts should be kept inside this same folder, except for the existing ROS project scripts and installed dependencies.
+
+The BAT file must invoke the helpers automatically.
+
+Do not require me to run Python, PowerShell, Bash or ROS commands manually.
+
+Do not create dependencies on temporary files that disappear when Codex closes.
+
+The launcher must work after a Windows restart, provided the existing ROS/WSL installation is available.
+
+---
+
+# 3. Main BAT-file behavior
+
+File:
+
+`RUN_AUTONOMOUS_CAR_TESTS.bat`
+
+When double-clicked, it should automatically:
+
+1. Start a readable Windows terminal.
+2. Identify the actual Windows Desktop test folder.
+3. Find the registered `Ubuntu-24.04` WSL distribution.
+4. Locate the existing Autonomous Navigation Car repository.
+5. Verify the required ROS 2 and Gazebo installations.
+6. Check Windows physical memory.
+7. Check WSL available RAM and swap.
+8. Check for stale project-owned simulation processes.
+9. Safely clean up stale project sessions.
+10. Verify that enough resources are available.
+11. Create a unique timestamped result folder.
+12. Start the selected existing test experiments.
+13. Monitor their execution.
+14. Automatically capture stdout, stderr and ROS/Gazebo logs.
+15. Collect all machine-readable evidence.
+16. Record each test's actual pass/fail/block result.
+17. Stop Gazebo and ROS processes cleanly.
+18. Save final results.
+19. Display a clear final summary.
+20. Keep the terminal open so I can read the result.
+
+I should not need to interact with the BAT file while its automated tests execute.
+
+Use fully qualified paths, correct Windows/WSL path translation and safe command quoting.
+
+Never depend on Codex or ChatGPT processes remaining alive.
+
+---
+
+# 4. Automatically prepare memory before running
+
+I will close Codex and other unnecessary applications before double-clicking the BAT file.
+
+Therefore, the BAT file should take advantage of the additional available memory.
+
+At startup:
+
+- Measure actual Windows available RAM.
+- Measure WSL memory.
+- Record current CPU load.
+- Identify previous Gazebo/ROS processes.
+- Stop only confirmed stale project-owned simulation sessions.
+- Recheck available memory.
+
+Do not automatically close unrelated Windows applications or terminate Windows services.
+
+Do not kill Windows Explorer, Defender, the desktop manager, WSLg, graphics drivers or another user's processes.
+
+Do not perform a blanket `taskkill` or `killall`.
+
+Do not automatically restart Windows or shut down the entire WSL VM.
+
+Preserve other WSL sessions.
+
+If insufficient memory remains, use a bounded recheck period and then report a clear BLOCKED result. Do not retry indefinitely or bypass resource checks.
+
+The test runner should support:
+
+**HEADLESS TEST MODE — default**
+
+Run Gazebo without opening the 3D GUI, to prioritize physics, sensors, mapping and navigation experiments.
+
+**GUI DEMONSTRATION MODE — optional**
+
+Allow Gazebo's graphical interface when there is sufficient memory, without requiring Codex to be open.
+
+Make the default test mode configurable through `config/test_settings.json`.
+
+Do not start Gazebo and RViz together by default.
+
+Never change WSL's global memory configuration without explicit approval.
+
+---
+
+# 5. Execute the existing LiDAR test workflow automatically
+
+Use the test tools already present in the repository.
+
+Inspect and reuse the relevant code, especially:
+
+- `scripts/phase8c_slam_timeout_probe.py`
+- `scripts/phase8c_navigation_runner.py`
+- `scripts/phase8c_readiness.py`
+- `scripts/run_lidar_demo.sh`
+- Existing Phase 8C rotation test scripts.
+- Existing fault-stop tests.
+- Existing LiDAR mapping/model tests.
+- Existing scenario generator.
+- Existing ROS launch files.
+
+Do not duplicate an existing test runner unnecessarily.
+
+Design a safe test sequence.
+
+## Test A — Environment verification
+
+Verify:
+
+- ROS 2 Jazzy available.
+- Gazebo available.
+- Required packages installed.
+- Workspace sourced.
+- WSL clock and ROS simulation time.
+- Relevant executable permissions.
+- Available memory and storage.
+
+Report PASS or BLOCKED.
+
+## Test B — LiDAR sensor verification
+
+Run a bounded headless S00 simulation.
+
+Measure:
+
+- Actual LaserScan publication.
+- Scan rate.
+- Valid range measurements.
+- Sensor frame and TF.
+- Camera messages.
+- Local occupancy map.
+- FREE/OCCUPIED/UNKNOWN coverage.
+- Safety-gate state.
+
+Save results.
+
+## Test C — Stationary SLAM
+
+Run the existing stationary online-SLAM experiment.
+
+Verify:
+
+- Live `/map` updates.
+- LiDAR scans.
+- `map → odom` transforms.
+- TF consistency.
+- Sensor timestamps.
+- Map cell counts.
+- Runtime warnings.
+
+Save the resulting sensor-generated map if successful.
+
+## Test D — Guarded forward movement and moving SLAM
+
+This is the highest-priority live experiment.
+
+Use the existing safe bounded forward-motion test.
+
+Request movement only through the guarded command interface.
+
+Measure:
+
+- Actual robot displacement.
+- Actual commanded velocity.
+- LiDAR scans during motion.
+- SLAM map updates.
+- SLAM pose updates.
+- Map-to-odom updates.
+- Wheel/IMU odometry.
+- Evaluator-only Gazebo truth.
+- Relative position error.
+- Heading error.
+- Sensor freshness.
+- Command timeout stopping.
+- Non-ground collisions.
+
+Use the existing moving-SLAM acceptance checks.
+
+Do not fake required SLAM pose updates or replace odometry with Gazebo truth.
+
+If the trial is safely supported, run the required repeat trials with distinct IDs and evidence files.
+
+If the current system refuses movement, save the precise reason and mark the experiment BLOCKED.
+
+## Test E — Rotation and turning checks
+
+Run only those calibration and safety experiments already authorized by the current code.
+
+Test clockwise and anticlockwise calibration, clearance denials and safe stopping.
+
+Do not enable production angular authority simply because a test expects it.
+
+Do not bypass UNKNOWN-space constraints.
+
+If the complete production turning matrix cannot run safely, mark it BLOCKED and preserve the completed calibration evidence.
+
+## Test F — Readiness evaluation
+
+Call the actual Phase 8C readiness validator.
+
+Record:
+
+- Production turning readiness.
+- Moving SLAM readiness.
+- Guarded command-chain readiness.
+- Missing evidence.
+- Failed thresholds.
+- Exact blocker messages.
+
+Do not edit flags to force a READY result.
+
+## Test G — Nav2 navigation, only when safe
+
+If and only if validated readiness and the existing runtime safety conditions permit it, run a bounded S00 sensor-derived navigation test.
+
+Use a sensor-built map, not the Phase 6 predefined map.
+
+Save:
+
+- Nav2 action result.
+- Robot trajectory.
+- Position and heading error.
+- Actual movement.
+- Path messages.
+- Costmap observations.
+- Collision records.
+- Safety states.
+- Command-publisher audit.
+
+If readiness is BLOCKED, skip the motion test and record BLOCKED rather than forcing Nav2 to start.
+
+Do not attempt unvalidated obstacle avoidance, exploration or parking.
+
+The runner must remain truthful about current project capabilities.
+
+---
+
+# 6. Test execution must be bounded and reliable
+
+Every experiment must have:
+
+- A unique test ID.
+- A scenario and seed.
+- An explicit configuration.
+- A bounded timeout.
+- A separate log file.
+- An exit code.
+- A reported status.
+- A cleanup step.
+- Saved result metadata.
+
+Do not allow a frozen Gazebo process to run forever.
+
+Implement watchdogs for launch startup, readiness, trial execution and shutdown.
+
+Distinguish:
+
+- PASS
+- FAIL
+- BLOCKED
+- TIMEOUT
+- SKIPPED
+- NOT TESTED
+
+A timeout is not PASS.
+
+A skipped test is not PASS.
+
+A test that never launched is not PASS.
+
+A successful command invocation is not proof of successful robot movement.
+
+Use an independent Windows-side watchdog if needed so cleanup does not depend solely on a WSL Python process.
+
+Do not issue broad process termination commands.
+
+Stop only the processes and process groups owned by the test run.
+
+Ensure that a failed test does not prevent independent safe tests from running.
+
+---
+
+# 7. Save absolutely all useful evidence
+
+Each execution should create a unique run directory, such as:
+
+```text
+runs/
+└── 2026-11-02_23-00-00_S00/
+    │
+    ├── RUN_SUMMARY.txt
+    ├── RUN_SUMMARY.json
+    ├── ANALYZE_ME_FIRST.txt
+    │
+    ├── environment/
+    │   ├── windows_resources.json
+    │   ├── wsl_resources.json
+    │   ├── versions.txt
+    │   └── git_commit.txt
+    │
+    ├── tests/
+    │   ├── sensor/
+    │   ├── stationary_slam/
+    │   ├── moving_slam/
+    │   ├── turning/
+    │   ├── safety/
+    │   └── nav2/
+    │
+    ├── ros_logs/
+    ├── gazebo_logs/
+    ├── trajectories/
+    ├── maps/
+    ├── screenshots/
+    │
+    └── resource_monitoring/
+        ├── windows_memory.csv
+        ├── wsl_memory.csv
+        └── process_usage.csv
+```
+
+This is an illustrative structure. Use appropriate actual files for the performed experiments.
+
+Create folders for successful, failed and blocked tests.
+
+Save the complete logs, not only the last few lines.
+
+Capture Python exceptions, ROS warnings, startup errors, invalid sensor data, safety denials and exit codes.
+
+Where an experiment has a ROS bag or video output, save it only if generated by the actual run and useful for analysis.
+
+Do not manufacture empty evidence that looks like a completed experiment.
+
+Ensure Windows can open and inspect the results directly.
+
+Keep large logs and recordings reasonably bounded. Do not fill the disk with unlimited recordings.
+
+---
+
+# 8. Automatic resource monitoring
+
+While each test executes, record Windows and WSL resource usage periodically.
+
+Include:
+
+- Windows available RAM.
+- Windows total memory pressure.
+- WSL available memory.
+- WSL swap consumption.
+- CPU utilization.
+- Gazebo process memory.
+- Relevant ROS process memory.
+- Peak memory.
+- Simulation real-time factor when obtainable.
+- Test duration.
+- Relevant process exit codes.
+
+The monitoring process must not consume excessive resources itself.
+
+If host memory approaches an unsafe level, stop the test gracefully and record RESOURCE_BLOCKED or RESOURCE_ABORTED.
+
+Do not let the machine freeze merely to finish a simulation experiment.
+
+---
+
+# 9. Automatically generate a final test report
+
+After all eligible experiments have finished, generate:
+
+`RUN_SUMMARY.txt`
+
+This should be understandable without reading raw ROS logs.
+
+Include:
+
+1. Date and time.
+2. Git branch and commit.
+3. Windows and WSL specifications.
+4. Available memory at startup.
+5. Minimum available memory during tests.
+6. Experiments executed.
+7. Experiments passed.
+8. Experiments failed.
+9. Experiments blocked.
+10. Actual robot displacement where measured.
+11. SLAM updates and localization error.
+12. Safety-stop behavior.
+13. Nav2 status.
+14. Total test duration.
+15. Important runtime warnings.
+16. Exact file paths to the evidence.
+17. Recommended next engineering action.
+
+Also generate `RUN_SUMMARY.json` for programmatic analysis.
+
+The summary must distinguish observed robot behavior from offline test results.
+
+Do not mark moving SLAM as PASS because only a stationary map was generated.
+
+Do not mark navigation as PASS because the Nav2 nodes successfully launched.
+
+---
+
+# 10. Make it easy to hand results back to Codex
+
+Inside each completed run, create:
+
+`ANALYZE_ME_FIRST.txt`
+
+This file should explain:
+
+- What was executed.
+- What passed and failed.
+- Which files contain the strongest evidence.
+- Which results require engineering attention.
+- Whether production turning or moving SLAM passed.
+- Whether realistic Nav2 navigation was attempted.
+- The exact project version that generated the results.
+
+Also create a latest-results reference at:
+
+`AutonomousCar_OneClick_Tester/latest/`
+
+This should clearly identify the newest completed run without deleting previous runs.
+
+Optionally create one ZIP archive containing the small reports, JSON/CSV evidence and relevant logs for easy sharing. Large videos or ROS bags can remain in the full run directory and be referenced.
+
+Provide an easy-to-copy follow-up message in `ANALYZE_ME_FIRST.txt`:
+
+"I have run the standalone Autonomous Navigation Car tests while Codex was closed. Review the latest run folder, analyze the recorded Gazebo, LiDAR, SLAM, localization, turning, safety and navigation results, identify the exact blockers, and implement the next justified corrections on feature/phase8c-lidar."
+
+The future Codex session must be able to read the saved evidence directly from the Desktop folder.
+
+---
+
+# 11. Clean shutdown and repeatability
+
+When the test suite finishes:
+
+1. Stop all motor commands.
+2. Shut down the test-owned ROS nodes.
+3. Shut down the test-owned Gazebo server.
+4. Close test-owned GUI processes if used.
+5. Wait for process termination.
+6. Collect final logs.
+7. Save the summary.
+8. Confirm no orphan test-owned processes remain.
+9. Preserve all files.
+10. Return the Windows terminal to a final summary screen.
+
+If I run the BAT file again, it should create a fresh run directory rather than overwrite old results.
+
+If I stop the BAT file with Ctrl+C, it must attempt safe cleanup and record the interrupted run.
+
+If Windows restarts unexpectedly, previous evidence files should remain recoverable.
+
+---
+
+# 12. Configuration
+
+Create `config/test_settings.json` with sensible safe defaults.
+
+It should support:
+
+- Default headless mode.
+- Optional Gazebo GUI mode.
+- S00 as the default scenario.
+- Scenario seed.
+- Test duration limits.
+- Number of safe repeat trials.
+- Resource monitoring interval.
+- Log retention limits.
+- Whether optional reference-navigation tests are included.
+- Whether to generate screenshots or videos where supported.
+
+The normal default must run the currently supported realistic LiDAR tests safely.
+
+Do not enable unvalidated navigation just because a configuration option says `true`.
+
+Safety readiness takes precedence over user-interface settings.
+
+Avoid requiring me to edit the configuration for ordinary operation.
+
+---
+
+# 13. Test the standalone launcher before delivering it
+
+After implementing the files, Codex must verify:
+
+1. The Desktop folder exists.
+2. The BAT file exists.
+3. All helpers exist.
+4. Windows paths are resolved correctly.
+5. WSL invocation works.
+6. ROS project paths resolve.
+7. PowerShell and Bash syntax are valid.
+8. Python helpers import successfully.
+9. Dry-run resource checks work.
+10. A simulated failed test produces the correct report.
+11. A simulated blocked test produces the correct report.
+12. Cleanup works for processes owned by a test session.
+13. Running the launcher does not require Codex.
+14. Running it repeatedly does not overwrite previous results.
+
+Perform a safe dry run that creates actual report files without launching Gazebo.
+
+Do not claim live Gazebo validation unless you actually perform it.
+
+If current Windows memory is insufficient while Codex is open, do not force a live test.
+
+Instead complete all offline checks, save the files, and leave the real full-system execution for me to trigger after closing Codex.
+
+---
+
+# 14. Project protection and Git management
+
+Do not modify the navigation algorithms as part of creating this standalone runner.
+
+Do not alter:
+
+- Phase 6 reference maps.
+- LiDAR safety bounds.
+- Production turning authorization.
+- SLAM uncertainty.
+- Nav2 readiness results.
+- Collision monitoring.
+- Arduino UNO Q application.
+- The future ToF or RGB-only branches.
+
+Use existing ROS packages and evaluators.
+
+If a small project-side adapter is unavoidable, isolate it and explain its purpose.
+
+Commit validated project-side changes to `feature/phase8c-lidar` only.
+
+Do not merge into main.
+
+Do not force-push.
+
+The standalone Windows Desktop folder must not depend on uncommitted, temporary agent files.
+
+---
+
+# 15. Final deliverables
+
+At the end of your current Codex session, provide:
+
+**A. Desktop folder**
+
+The actual path to:
+
+`AutonomousCar_OneClick_Tester`
+
+**B. Main launcher**
+
+The exact path to:
+
+`RUN_AUTONOMOUS_CAR_TESTS.bat`
+
+**C. Helper files**
+
+Confirm that PowerShell, Bash, Python and configuration files were created.
+
+**D. Validation**
+
+Report which offline tests and dry-run checks passed.
+
+**E. Instructions**
+
+Tell me exactly:
+
+1. Close Codex.
+2. Open the Desktop folder.
+3. Double-click `RUN_AUTONOMOUS_CAR_TESTS.bat`.
+4. Let the automated test suite finish.
+5. Review the final summary.
+6. Reopen Codex.
+7. Ask Codex to analyze the latest results.
+
+**F. Evidence location**
+
+Explain where I can find:
+- Latest summary.
+- Individual test logs.
+- SLAM map files.
+- Robot trajectories.
+- Resource statistics.
+- Any failed or blocked test records.
+
+---
+
+# FINAL EXECUTION INSTRUCTION
+
+The entire purpose is to **remove Codex from the runtime resource burden while retaining Codex as the developer and analyst**.
+
+I want you to prepare the complete standalone testing environment now.
+
+After you finish, I will close Codex and run the single BAT file.
+
+That BAT file must independently perform all eligible safe experiments, monitor resources, save results, shut down safely and leave a complete evidence package.
+
+When I reopen Codex, it must be able to inspect the saved results and decide the exact next changes required for moving SLAM, production turning and autonomous LiDAR navigation.
+
+Do not require me to enter terminal commands or keep an AI agent open during the simulation.
+
+Do not bypass safety gates or falsely declare unfinished autonomous navigation complete.
+
+**Create and verify the Desktop folder, all helper scripts, the single BAT launcher, and the complete automatic evidence-collection workflow in this assignment.**

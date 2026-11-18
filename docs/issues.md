@@ -1,4 +1,4 @@
-# Open issues after Phase 8B feasibility assessment
+# Open issues after Phase 8C Branch 1 assessment
 
 ## Resolved through Phase 3
 
@@ -42,6 +42,15 @@
 - Calculated a 0.656429 m forward-corridor requirement including measured camera age/latency, stop distance, Phase 4 slip-derived localization allowance, and explicit safety margin. The 0.48 m best corridor fails the gate; Phase 8 remains locked to zero velocity.
 - Final seven-package build and Phase 6/7/8 regression evidence passed. No autonomous movement or Phase 9 work was performed.
 
+## Resolved through Phase 8C Branch 1
+
+- Added an opt-in planar LiDAR/ROS bridge, scan validation/fault handling, one-scan FREE/OCCUPIED/UNKNOWN map, conservative optional RGB fusion, and separate REALISTIC_RGB_LIDAR profile.
+- Added a measured forward-only gate and sole authoritative command guard. Invalid/stale scan, map, localization, RGB perception and command inputs fail closed; bounded S00 motion and fault stops passed.
+- Phase 8 remains stop-only and shared launch keeps LiDAR disabled by default in older profiles.
+- Fresh Phase 3/4 regressions and Phase 5/6/7/8 static tests, Phase 8 live stop-only check, and one Phase 8B brake repeat are indexed in docs/evidence/phase8c/lidar/README.md.
+- SLAM did not demonstrate drift reduction; Nav2 was not enabled. Stage D remains untested.
+- Follow-up hardening: the bounded forward SLAM probe now requires live map/pose/TF updates and truth-relative error measurements before PASS. The Nav2 gate parses and validates evidence contents, including lifecycle, costmap, plan, goal, and publisher audit results. No live run has yet met these prerequisites.
+
 ## P0 before hardware-faithful claims or transfer
 
 - Measure chassis footprint, height, mass, wheel radius, wheel separation, and center of mass. Current simulation values are placeholders.
@@ -67,4 +76,14 @@
 - Define parking tolerance and dwell using measured footprint, then test stationary pose error.
 - Plan UNO Q adapters only after simulation interfaces and regression checks are stable.
 
-Phase 4 localization, Phase 5 scenario validation, Phase 6 selected reference navigation, Phase 7 RGB-only perception, and the Phase 8B feasibility assessment are complete with stated limits. Phase 8 remains a stop-only baseline. RGB-only movement, unknown-pose acquisition, parking, and hardware transfer remain unimplemented; the gate is blocked by insufficient connected corridor, poor occupied recall, and slip-derived localization uncertainty.
+Earlier phases remain complete only within their stated limits. Phase 8 remains an independent RGB-only stop-only baseline. Phase 8C Branch 1 permits bounded forward motion in clear S00, but angular motion, obstacle avoidance and goal navigation remain blocked or unrun. Drift correction, low-obstacle coverage, broader scenarios, unknown-pose acquisition, parking and hardware transfer remain unresolved.
+
+
+## Phase 8C Stage 9 status (2026-11-02)
+
+- Nav2/GUI/evaluator integration and a memory/readiness-gated launcher are implemented and pass offline checks. Live navigation remains blocked: Windows RAM was 619 MiB available at preflight; production turning and moving SLAM are not validated. The launcher correctly stopped before Gazebo. Do not enable its Nav2 gate until all three prerequisite evidence files exist and the turning/localization checks pass.
+
+
+## Phase 8C Stage 9 evidence-gate follow-up (2026-11-02)
+
+The moving-SLAM and readiness checks were strengthened and their offline tests passed. The post-build host-memory probe measured 926 MiB available on Windows and 3134 MiB in WSL; Windows remains below the headless resource threshold, so no live simulation was run. Production turning, moving SLAM, Nav2 S00, and S01 avoidance remain open blockers. See docs/phase8c-stage9-report.md and the final offline evidence log.

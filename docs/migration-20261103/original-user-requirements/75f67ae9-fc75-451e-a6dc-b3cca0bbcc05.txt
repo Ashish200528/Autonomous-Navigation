@@ -1,0 +1,154 @@
+Continue the existing **Autonomous Navigation Car** project with **Phase 5 — Reproducible Simulation Worlds and Scenario Harness**.
+
+Repository: https://github.com/Ashish200528/Autonomous-Navigation
+
+Local WSL workspace: `/home/ashish/AutonomousNavigationCar`
+
+Latest reviewed commit: `3efb8c32eaed27190a0c3ea967987ea7c8305b65`
+
+The project has completed Phases 0–4. Phase 4 is PASS WITH LIMITS, with functioning known-start EKF localization using wheel odometry and sanitized IMU measurements.
+
+Read the original Simulation Master Roadmap and existing Phase 4 code, reports and test evidence before proceeding.
+
+## TASK A — Verify and preserve the existing baseline
+
+1. Inspect Git status and synchronize safely with the latest GitHub main branch. Preserve uncommitted changes.
+2. Rebuild the existing ROS 2 workspace.
+3. Verify the robot can spawn and that the Phase 3 sensor test and Phase 4 localization baseline remain operational.
+4. Confirm the existing EKF, TF hierarchy, camera, IMU and odometry topics are not regressed.
+5. Keep the Phase 4 limitations documented, especially wheel-slip error, incomplete rectangle closure and provisional covariances.
+
+Do not reinstall the working ROS/Gazebo environment or restart WSL unnecessarily.
+
+## TASK B — Create repeatable Gazebo worlds
+
+Implement at least four lightweight worlds for the custom ANC robot:
+
+- Empty open indoor arena.
+- Open arena with one box blocking a direct route.
+- Open arena with several arbitrary geometric obstacles resembling boxes, bags, chairs and bottles.
+- More difficult arena with constricted free corridors and partial occlusion.
+
+Include a separate no-traversable-route scenario to test scenario validity and future safe-failure behavior.
+
+Make the environment look like an open indoor floor rather than a scripted maze.
+
+Use physically valid collision and visual geometry. Avoid high-polygon models and excessive textures because this laptop has 8 GB system RAM.
+
+Do not implement object classification or autonomous obstacle avoidance in Phase 5.
+
+## TASK C — Implement the scenario registry and generator
+
+Build a YAML- or JSON-based scenario system containing:
+
+- Scenario ID.
+- Random seed.
+- World configuration.
+- Robot starting position and orientation.
+- Goal position and orientation.
+- Obstacle shapes, positions and orientations.
+- Static/dynamic obstacle flags.
+- Expected free corridors and scenario validity constraints.
+- Reference and realistic sensing profile designation.
+
+Follow the existing roadmap scenario IDs, including S00, S01, S02, S03, S04 and S09.
+
+Generate reproducible obstacle arrangements using fixed seeds.
+
+Check that robot/obstacle geometry does not overlap at spawn and that the start and goal have adequate clearance. For intentionally impossible scenarios, label the lack of a traversable route explicitly.
+
+## TASK D — Create an automated scenario runner
+
+Implement a repeatable runner that can:
+
+1. Select a scenario ID and seed.
+2. Generate or select the appropriate Gazebo world.
+3. Launch the simulation headlessly.
+4. Spawn the custom ANC robot at the configured pose.
+5. Initialize the known-start localization transform consistently with the spawn pose and odometry convention.
+6. Expose the selected map-frame goal through the scenario configuration.
+7. Capture the run's metadata, start pose, goal pose, obstacle layout and key ROS topics.
+8. Collect evaluator-only Gazebo truth for test analysis.
+9. Stop the simulation and clean up all processes reliably.
+10. Repeat the same scenario and seed without changing its generated layout.
+
+Pay particular attention to the current bringup launch, which uses a hard-coded robot spawn at (0,0,0) and known-start initialization. Parameterize this safely without introducing inconsistent map/odom transforms.
+
+A known initial pose may be supplied as controlled initialization. Do not continuously feed simulator truth into localization or navigation.
+
+Use Gazebo state only in the test evaluator, not as navigation/perception input.
+
+## TASK E — Reproducibility and validation
+
+Implement automated checks for:
+
+- Same scenario ID and seed generates the same obstacle layout and spawn pose.
+- Different seeds can produce different valid layouts.
+- All spawned entities are present and physically valid.
+- Robot and obstacles do not overlap at initialization.
+- Robot and goal are inside world boundaries.
+- Valid-route scenarios have a geometrically feasible corridor for the configured robot footprint.
+- No-route scenarios are correctly labeled.
+- TF and localization initialize correctly for different known starting poses.
+- Camera and IMU continue publishing in generated worlds.
+- Simulation shutdown leaves no unnecessary Gazebo/ROS processes running.
+
+Run at least two repeated trials with the same seed and verify reproducibility.
+
+The scenario runner must be reusable by later Phases 6–10.
+
+## TASK F — Preserve scientific integrity
+
+Maintain strict separation between:
+
+- Scenario generation and withheld evaluator truth.
+- REFERENCE navigation sensing.
+- REALISTIC RGB/odometry/IMU sensing.
+
+Never make world geometry, perfect obstacle positions, simulator pose, ideal depth or hidden obstacle coordinates available as inputs to realistic perception or navigation nodes.
+
+Scenario manifests and evaluator files may contain ground truth for offline testing, but the navigation process must not subscribe to them.
+
+Do not claim autonomous navigation success in Phase 5. Creating reproducible worlds is not equivalent to obstacle avoidance or reaching a goal.
+
+## RESOURCE CONSTRAINTS
+
+The machine has Windows 11, 8 GB RAM, NVIDIA GTX 1650 and WSL2 Ubuntu 24.04 on E:.
+
+- Prefer headless Gazebo.
+- Keep scene geometry simple.
+- Monitor actual E: host-drive free space, not only WSL's virtual Linux filesystem capacity.
+- Avoid large video/rosbag files unless needed for verification.
+- Keep test output bounded.
+- Do not modify the Arduino UNO Q hardware application.
+- Do not run destructive operations or system-wide upgrades without authorization.
+
+## REQUIRED DELIVERABLES
+
+1. Gazebo world files with at least four world types.
+2. Reproducible scenario registry.
+3. Seeded scenario generator.
+4. Automated scenario launch/reset runner.
+5. Geometry and spawn-validation checks.
+6. Repeatability test evidence showing identical configurations for identical seeds.
+7. At least one saved screenshot or visualization if graphical rendering is feasible.
+8. Saved logs and concise structured result files.
+9. Updated README, `docs/PHASE_REPORT.md`, `docs/issues.md`, `docs/evidence/README.md` and `tests/test_case_registry.yaml`.
+10. Git commits and a safe push to the existing repository.
+
+Also reconcile any documentation discrepancy between the Phase 4 accepted `final7` trajectory results and older issue summaries.
+
+Finish with:
+
+- Files created/changed.
+- Exact commands executed.
+- Test results and saved evidence paths.
+- Random scenario IDs/seeds tested.
+- Git commit hash.
+- Phase 5 PASS / PASS WITH LIMITS / FAIL / BLOCKED.
+- Outstanding limitations.
+- Readiness assessment for Phase 6.
+
+**Implement and test Phase 5 only. Do not automatically begin Phase 6, Nav2 integration or RGB perception.**
+
+Work autonomously within existing permissions. Request user input only for genuine blockers, credentials or consequential system changes.

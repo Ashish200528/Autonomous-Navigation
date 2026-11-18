@@ -1,0 +1,122 @@
+{
+  "elapsed_s": 125.18,
+  "guard_output_command": {
+    "angular_z_radps": 0.0,
+    "linear_x_mps": 0.0
+  },
+  "guarded_forward_demo": {
+    "detail": "No velocity request was issued in this scenario.",
+    "requested": false,
+    "status": "SENSING_ONLY"
+  },
+  "lidar_local_map": {
+    "frame_id": "base_link",
+    "free": 0,
+    "height": 180,
+    "occupied": 0,
+    "unknown": 32400,
+    "width": 180
+  },
+  "nav2_goal_navigation": "DISABLED_BY_LAUNCHER; readiness flags unchanged",
+  "odometry": {
+    "angular_z_radps": -0.001102893244996028,
+    "linear_x_mps": 3.270209250414718e-08,
+    "wall_s": 1459.472643939,
+    "x_m": -0.00017162974541857302,
+    "y_m": -2.043579165656339e-09,
+    "yaw_rad": 0.0013129935986073704
+  },
+  "odometry_displacement_since_monitor_start_m": 0.0001,
+  "profile": "REALISTIC_RGB_LIDAR",
+  "requested_command": null,
+  "safety_state": {
+    "angular_motion_status": "disabled_unmeasured_yaw_stopping",
+    "angular_stopping_model": {
+      "measured": false,
+      "note": "Calibration-only capped pulses; production yaw remains disabled pending measured stopping bound and review.",
+      "production_authorized": false
+    },
+    "authorized": false,
+    "combined_motion_authorized": false,
+    "corridor_m": 0.0,
+    "failures": [
+      "lidar_map_invalid:scan_health_invalid_or_missing",
+      "rgb_input:perception_invalid_unknown:floor_seed_disconnected"
+    ],
+    "footprint_width_m": 0.345,
+    "forward_distance_reference": "front_footprint_boundary",
+    "localization_allowance_m": 0.4705050313257851,
+    "map_counts": {
+      "free": 0,
+      "occupied": 0,
+      "unknown": 32400
+    },
+    "map_frame": "base_link",
+    "max_angular_speed_radps": 0.0,
+    "max_linear_speed_mps": 0.0,
+    "motion_mode": "forward_only",
+    "node": "anc_lidar_safety_gate",
+    "profile": "REALISTIC_RGB_LIDAR",
+    "reason": "lidar_map_invalid:scan_health_invalid_or_missing",
+    "rotation_calibration_speed_cap_radps": 0.0,
+    "rotation_clearance": {
+      "authorized": false,
+      "center_drift_allowance_m": 0.14,
+      "checked_cells": 112,
+      "footprint_circumradius_m": 0.263592962728522,
+      "inside_grid": true,
+      "occupied_cells": 0,
+      "reason": "swept_disk_unknown",
+      "required_radius_m": 0.5235929627285221,
+      "safety_margin_m": 0.1,
+      "sensor_mount_uncertainty_m": 0.02,
+      "unknown_cells": 112
+    },
+    "runtime_uses_world_map_or_truth": false,
+    "safety_margin_m": 0.1,
+    "speed_gate": null,
+    "speed_gate_inputs": {
+      "connected_full_footprint_corridor_m": 0.0,
+      "lidar_map_wall_age_s": 0.06661741299990354,
+      "measured_scan_rate_hz": 4.01955651584136,
+      "odom_sim_age_s": 0.010000000000005116,
+      "scan_sim_age_s": 0.12000000000000455,
+      "usable_beam_fraction": 0.9944444444444445
+    },
+    "stopping_model": {
+      "friction_conditions": [
+        0.5,
+        1.2
+      ],
+      "hardware_bound": false,
+      "source": "Phase 8B isolated simulator stopping test",
+      "tested_speeds_mps": [
+        0.02,
+        0.05,
+        0.1,
+        0.18
+      ],
+      "worst_stop_distance_m": 0.00298
+    },
+    "truth_used_only_by_evaluator": true,
+    "valid": false
+  },
+  "safety_state_age_s": 35.315,
+  "scan_rate_hz_observed": 4.42,
+  "scenario": "S01",
+  "sensor_counts": {
+    "/camera/image_raw": 348,
+    "/map": 30,
+    "/realistic/local_map/lidar": 353,
+    "/realistic/scan": 348
+  },
+  "slam_map": {
+    "frame_id": "map",
+    "free": 1167,
+    "height": 115,
+    "occupied": 64,
+    "unknown": 14409,
+    "width": 136
+  },
+  "timestamp_unix_s": 1793634857.0606723
+}

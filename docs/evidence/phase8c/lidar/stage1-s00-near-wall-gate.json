@@ -1,0 +1,140 @@
+{
+  "after_truth_evaluator_only": {
+    "sim_stamp_s": 11.19,
+    "x_m": -3.45001,
+    "y_m": 5.2988e-19,
+    "yaw_rad": -3.801120000000001e-18
+  },
+  "before_truth_evaluator_only": {
+    "sim_stamp_s": 8.896,
+    "x_m": -3.45001,
+    "y_m": 5.2988e-19,
+    "yaw_rad": -3.801120000000001e-18
+  },
+  "cmd_vel_publisher_count": 1,
+  "cmd_vel_publishers": [
+    "anc_safety_command_guard"
+  ],
+  "gate_snapshot": {
+    "angular_motion_status": "swept_disk_occupied",
+    "angular_stopping_model": {
+      "measured": false,
+      "note": "Calibration-only capped pulses; production yaw remains disabled pending measured stopping bound and review.",
+      "production_authorized": false
+    },
+    "authorized": false,
+    "combined_motion_authorized": false,
+    "corridor_m": 5.800000086426735,
+    "failures": [],
+    "footprint_width_m": 0.345,
+    "forward_distance_reference": "front_footprint_boundary",
+    "localization_allowance_m": 0.4705050313257851,
+    "map_counts": {
+      "free": 3358,
+      "occupied": 157,
+      "unknown": 28885
+    },
+    "map_frame": "base_link",
+    "max_angular_speed_radps": 0.0,
+    "max_linear_speed_mps": 0.0,
+    "motion_mode": "rotation_calibration_only",
+    "node": "anc_lidar_safety_gate",
+    "profile": "REALISTIC_RGB_LIDAR",
+    "reason": "swept_disk_occupied",
+    "rotation_calibration_speed_cap_radps": 0.1,
+    "rotation_clearance": {
+      "authorized": false,
+      "center_drift_allowance_m": 0.14,
+      "checked_cells": 112,
+      "footprint_circumradius_m": 0.263592962728522,
+      "inside_grid": true,
+      "occupied_cells": 18,
+      "reason": "swept_disk_occupied",
+      "required_radius_m": 0.5235929627285221,
+      "safety_margin_m": 0.1,
+      "sensor_mount_uncertainty_m": 0.02,
+      "unknown_cells": 4
+    },
+    "runtime_uses_world_map_or_truth": false,
+    "safety_margin_m": 0.1,
+    "speed_gate": {
+      "max_linear_speed_mps": 0.18,
+      "reaction_time_s": 0.4867999999999993,
+      "reason": "measured_speed_bound_fits_corridor",
+      "selected": {
+        "passes": true,
+        "reaction_distance_m": 0.08762399999999987,
+        "required_corridor_m": 0.6611090313257849,
+        "speed_mps": 0.18,
+        "stop_distance_m": 0.00298
+      },
+      "tested_speeds": [
+        {
+          "passes": true,
+          "reaction_distance_m": 0.009735999999999986,
+          "required_corridor_m": 0.5832210313257851,
+          "speed_mps": 0.02,
+          "stop_distance_m": 0.00298
+        },
+        {
+          "passes": true,
+          "reaction_distance_m": 0.024339999999999966,
+          "required_corridor_m": 0.597825031325785,
+          "speed_mps": 0.05,
+          "stop_distance_m": 0.00298
+        },
+        {
+          "passes": true,
+          "reaction_distance_m": 0.04867999999999993,
+          "required_corridor_m": 0.622165031325785,
+          "speed_mps": 0.1,
+          "stop_distance_m": 0.00298
+        },
+        {
+          "passes": true,
+          "reaction_distance_m": 0.08762399999999987,
+          "required_corridor_m": 0.6611090313257849,
+          "speed_mps": 0.18,
+          "stop_distance_m": 0.00298
+        }
+      ],
+      "valid": true
+    },
+    "speed_gate_inputs": {
+      "connected_full_footprint_corridor_m": 5.800000086426735,
+      "lidar_map_wall_age_s": 0.15302934700000037,
+      "measured_scan_rate_hz": 4.835880250180603,
+      "odom_sim_age_s": 0.009999999999999787,
+      "scan_sim_age_s": 0.1999999999999993,
+      "usable_beam_fraction": 0.9944444444444445
+    },
+    "stopping_model": {
+      "friction_conditions": [
+        0.5,
+        1.2
+      ],
+      "hardware_bound": false,
+      "source": "Phase 8B isolated simulator stopping test",
+      "tested_speeds_mps": [
+        0.02,
+        0.05,
+        0.1,
+        0.18
+      ],
+      "worst_stop_distance_m": 0.00298
+    },
+    "truth_used_only_by_evaluator": true,
+    "valid": true
+  },
+  "max_abs_cmd_vel_angular_radps": 0.0,
+  "max_abs_cmd_vel_linear_mps": 0.0,
+  "observed_cmd_vel_samples": 53,
+  "probe_pass": true,
+  "probe_published_no_commands": true,
+  "profile": "REALISTIC_RGB_LIDAR",
+  "rotation_cap_radps": 0.1,
+  "scenario": "S00_near_wall",
+  "truth_xy_drift_m": 0.0,
+  "truth_yaw_change_rad": 0.0,
+  "wall_elapsed_s": 1.2475210349999983
+}

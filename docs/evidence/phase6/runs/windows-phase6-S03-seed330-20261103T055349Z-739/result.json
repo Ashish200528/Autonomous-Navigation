@@ -1,0 +1,529 @@
+{
+  "action": {
+    "error_code": 0,
+    "error_msg": "",
+    "feedback_samples": 3709,
+    "goal_accepted": true,
+    "goal_frame": "map",
+    "goal_xyyaw": [
+      3.0,
+      0.0,
+      0.0
+    ],
+    "last_feedback": {
+      "distance_remaining_m": 0.14142131805419922,
+      "navigation_time_s": 63.826,
+      "number_of_recoveries": 0,
+      "x": 2.8979295123392728,
+      "y": 0.10183732873527848
+    },
+    "name": "/navigate_to_pose",
+    "number_of_recoveries": 0,
+    "status": "SUCCEEDED",
+    "status_code": 4,
+    "timed_out": false
+  },
+  "classification": "PASS",
+  "costmap_images": {
+    "global": "/home/ashish/AutonomousNavigationCar/docs/evidence/phase6/runs/windows-phase6-S03-seed330-20261103T055349Z-739/global_costmap.png",
+    "local": "/home/ashish/AutonomousNavigationCar/docs/evidence/phase6/runs/windows-phase6-S03-seed330-20261103T055349Z-739/local_costmap.png"
+  },
+  "display_options": {
+    "gazebo_gui": true,
+    "rviz": false
+  },
+  "evidence_files": [
+    "manifest.json",
+    "world.sdf",
+    "oracle_reference_map.yaml",
+    "oracle_reference_map.pgm",
+    "layout.png",
+    "navigation_trace.png",
+    "truth_trajectory.csv",
+    "launch.log",
+    "rosbag.log",
+    "rosbag/"
+  ],
+  "goal_xyyaw": [
+    3.0,
+    0.0,
+    0.0
+  ],
+  "launch_command": [
+    "ros2",
+    "launch",
+    "anc_navigation",
+    "reference_navigation.launch.py",
+    "world_file:=/home/ashish/AutonomousNavigationCar/docs/evidence/phase6/runs/windows-phase6-S03-seed330-20261103T055349Z-739/world.sdf",
+    "map_yaml:=/home/ashish/AutonomousNavigationCar/docs/evidence/phase6/runs/windows-phase6-S03-seed330-20261103T055349Z-739/oracle_reference_map.yaml",
+    "start_x:=-3.000000",
+    "start_y:=0.000000",
+    "start_yaw:=0.000000",
+    "gui:=true",
+    "rviz:=false"
+  ],
+  "layout_sha256": "c54e94a11b8c7fc29a99bb01f22a6fba37202ddb411e9b8c5daca7ef2af32478",
+  "lifecycle_states": {
+    "behavior_server": {
+      "id": 3,
+      "label": "active"
+    },
+    "bt_navigator": {
+      "id": 3,
+      "label": "active"
+    },
+    "controller_server": {
+      "id": 3,
+      "label": "active"
+    },
+    "map_server": {
+      "id": 3,
+      "label": "active"
+    },
+    "planner_server": {
+      "id": 3,
+      "label": "active"
+    }
+  },
+  "map": {
+    "free_cells": 16672,
+    "height": 120,
+    "occupied_cells": 2528,
+    "origin_xy_m": [
+      -4.0,
+      -3.0
+    ],
+    "profile": "ORACLE_REFERENCE",
+    "resolution_m": 0.05,
+    "width": 160
+  },
+  "map_pgm_sha256": "9e4c12b36ce02935d436eb95aea3c6d5640fdb584b5920a9e6ce88ebf9959988",
+  "map_yaml_sha256": "54fded273ff0d7c14bd483c51a00b5399c2011caab4cb18ff5712a8917bc5126",
+  "metrics": {
+    "action_accepted": true,
+    "action_error_code": 0,
+    "action_error_message": "",
+    "action_result": "SUCCEEDED",
+    "command_gazebo_samples": 742,
+    "command_guard_limits_mps_radps": [
+      0.25,
+      1.0
+    ],
+    "command_nav_samples": 742,
+    "contact_collision_events": 0,
+    "contact_collision_pairs": [],
+    "evaluator_truth_errors": [],
+    "filtered_odom_path_length_m": 9.1394,
+    "filtered_odom_samples": 2116,
+    "final_estimated_map_pose": {
+      "x": 2.897888951684103,
+      "y": 0.10183215824555154,
+      "yaw_rad": -0.19334044107251325
+    },
+    "final_localization_drift_xy_m": 0.0598,
+    "final_truth_pose": {
+      "angular_z_radps": 0.00238118,
+      "frame_id": "world",
+      "linear_x_mps": -8.70006e-05,
+      "monotonic_s": 228.327964984,
+      "sim_time_s": 73.018,
+      "x": 2.84451,
+      "y": 0.0749766,
+      "yaw_rad": -0.19349500000000003,
+      "z": -3.14994e-08
+    },
+    "final_xy_goal_error_m": 0.1726,
+    "final_yaw_goal_error_rad": 0.1935,
+    "ground_contact_messages_filtered": 34838,
+    "latest_planned_path_length_m": 0.1414,
+    "max_abs_cmd_vel_angular_z_radps": 0.45,
+    "max_abs_cmd_vel_linear_x_mps": 0.18,
+    "minimum_conservative_clearance_m": 0.0127,
+    "non_ground_contact_messages": 0,
+    "peak_planned_path_length_m": 9.4552,
+    "plan_message_count": 71,
+    "post_action_filtered_odom_velocity": [
+      -0.0008569622773531913,
+      0.00040383808116957215
+    ],
+    "post_action_raw_odom_velocity": [
+      0.0,
+      0.0
+    ],
+    "post_action_robot_stopped": true,
+    "post_action_settle_time_s": 0.809,
+    "post_action_settle_window_expired": false,
+    "post_action_truth_pose_window": {
+      "duration_s": 0.81,
+      "sample_count": 5,
+      "xy_delta_m": 0.00012,
+      "yaw_delta_rad": 0.00286
+    },
+    "post_action_truth_twist_stopped": true,
+    "raw_odom_path_length_m": 9.1369,
+    "raw_odom_samples": 2083,
+    "sensor_counts": {
+      "camera_image_raw": 0,
+      "clock": 36081,
+      "imu_data": 7016,
+      "map": 1,
+      "odom": 2083,
+      "odometry_filtered": 2116
+    },
+    "sim_elapsed_s": 64.662,
+    "truth_path_length_m": 9.0929,
+    "truth_samples": 373,
+    "wall_elapsed_s": 88.84
+  },
+  "navigation_inputs": {
+    "gazebo_truth_used_by_navigation": false,
+    "localization": "Phase 4 wheel/IMU EKF odometry plus known-start map->odom",
+    "map": "run-specific geometry-derived static occupancy map from scenario layout",
+    "obstacle_geometry_sent_to_navigation": false,
+    "reference_map_available_to_realistic_profile": false,
+    "rgb_camera": "Disabled for this headless reference profile; RGB is not a navigation input."
+  },
+  "navigation_profile": "ORACLE_REFERENCE",
+  "obstacle_count": 2,
+  "original_phase5_sensor_profile": "REALISTIC",
+  "phase": 6,
+  "published_map": {
+    "data_count": 19200,
+    "frame_id": "map",
+    "free_cells": 16672,
+    "height": 120,
+    "occupied_cells": 2528,
+    "origin_xy_m": [
+      -4.0,
+      -3.0
+    ],
+    "resolution_m": 0.05000000074505806,
+    "unknown_cells": 0,
+    "width": 160
+  },
+  "ros_domain_id": 61,
+  "rosbag": {
+    "command": [
+      "ros2",
+      "bag",
+      "record",
+      "--storage",
+      "mcap",
+      "-o",
+      "/home/ashish/AutonomousNavigationCar/docs/evidence/phase6/runs/windows-phase6-S03-seed330-20261103T055349Z-739/rosbag",
+      "/clock",
+      "/tf",
+      "/tf_static",
+      "/map",
+      "/global_costmap/costmap",
+      "/local_costmap/costmap",
+      "/global_costmap/costmap_raw",
+      "/local_costmap/costmap_raw",
+      "/odom",
+      "/odometry/filtered",
+      "/plan",
+      "/cmd_vel_nav",
+      "/cmd_vel",
+      "/contacts",
+      "/navigate_to_pose/_action/feedback",
+      "/navigate_to_pose/_action/status"
+    ],
+    "path": "/home/ashish/AutonomousNavigationCar/docs/evidence/phase6/runs/windows-phase6-S03-seed330-20261103T055349Z-739/rosbag",
+    "requested": true,
+    "shutdown": {
+      "returncode": 0,
+      "stopped": true
+    }
+  },
+  "route_expected": true,
+  "route_found_by_geometry_validator": true,
+  "run_id": "windows-phase6-S03-seed330-20261103T055349Z-739",
+  "runtime_graph": {
+    "cmd_vel_publishers": {
+      "output_file": "graph-cmd_vel_publishers.log",
+      "returncode": 0,
+      "summary": "Type: geometry_msgs/msg/Twist\n\nPublisher count: 1\n\nNode name: anc_navigation_cmd_vel_guard\nNode namespace: /\nTopic type: geometry_msgs/msg/Twist\nTopic type hash: RIHS01_9c45bf16fe0983d80e3cfe750d6835843d265a9a6c46bd2e609fcddde6fb8d2a\nEndpoint type: PUBLISHER\nGID: 01.0f.fc.f3.1b.03.c4.15.00.00.00.00.00.00.13.03\nQoS profile:\n  Reliability: RELIABLE\n  History (Depth): UNKNOWN\n  Durability: VOLATILE\n  Lifespan: Infinite\n  Deadline: Infinite\n  Liveliness: AUTOMATIC\n  Liveliness lease duration: Infinite\n\nSubscription count: 3\n\nNode name: anc_phase6_navigation_evaluator\nNode namespace: /\nTopic type: geometry_msgs/msg/Twist\nTopic type hash: RIHS01_9c45bf16fe0983d80e3cfe750d6835843d265a9a6c46bd2e609fcddde6fb8d2a\nEndpoint type: SUBSCRIPTION\nGID: 01.0f.fc.f3.05.03.65.a2.00.00.00.00.00.00.29.04\nQoS profile:\n  Reliability: RELIABLE\n  History (Depth): UNKNOWN\n  Durability: VOLATILE\n  Lifespan: Infinite\n  Deadline: Infinite\n  Liveliness: AUTOMATIC\n  Liveliness lease duration: Infinite\n\nNode name: anc_parameter_bridge\nNode namespace: /\nTopic type: geometry_msgs/msg/Twist\nTopic type hash: RIHS01_9c45bf16fe0983d80e3cfe750d6835843d265a9a6c46bd2e609fcddde6fb8d2a\nEndpoint type: SUBSCRIPTION\nGID: 01.0f.fc.f3.1f.03.d1.a0.00.00.00.00.00.00.15.04\nQoS profile:\n  Reliability: RELIABLE\n  History (Depth): UNKNOWN\n  Durability: VOLATILE\n  Lifespan: Infinite\n  Deadline: Infinite\n  Liveliness: AUTOMATIC\n  Liveliness lease duration: Infinite\n\nNode name: rosbag2_recorder\nNode namespace: /\nTopic type: geometry_msgs/msg/Twist\nTopic type hash: RIHS01_9c45bf16fe0983d80e3cfe750d6835843d265a9a6c46bd2e609fcddde6fb8d2a\nEndpoint type: SUBSCRIPTION\nGID: 01.0f.fc.f3.bc.04.26.1c.00.00.00.00.00.00.33.04\nQoS profile:\n  Reliability: RELIABLE\n  History (Depth): UNKNOWN\n  Durability: VOLATILE\n  Lifespan: Infinite\n  Deadline: Infinite\n  Liveliness: AUTOMATIC\n  Liveliness lease duration: Infinite\n\n"
+    },
+    "nodes": {
+      "output_file": "graph-nodes.log",
+      "returncode": 0,
+      "summary": "/anc_ekf_filter\n/anc_imu_sanitizer\n/anc_known_start_map_to_odom\n/anc_navigation_cmd_vel_guard\n/anc_parameter_bridge\n/anc_phase6_navigation_evaluator\n/anc_wheel_odometry_covariance\n/behavior_server\n/bt_navigator\n/bt_navigator_navigate_to_pose_rclcpp_node\n/controller_server\n/global_costmap/global_costmap\n/gzserver\n/lifecycle_manager_map\n/lifecycle_manager_navigation\n/local_costmap/local_costmap\n/map_server\n/planner_server\n/robot_state_publisher\n/rosbag2_recorder\n/transform_listener_impl_59ad58e5a950\n/transform_listener_impl_5b350fe14400\n/transform_listener_impl_5f7bd725b730\n"
+    },
+    "tf_publishers": {
+      "output_file": "graph-tf_publishers.log",
+      "returncode": 0,
+      "summary": "Type: tf2_msgs/msg/TFMessage\n\nPublisher count: 2\n\nNode name: robot_state_publisher\nNode namespace: /\nTopic type: tf2_msgs/msg/TFMessage\nTopic type hash: RIHS01_e369d0f05a23ae52508854b66f6aa0437f3449d652e8cbf22d5abe85d020f087\nEndpoint type: PUBLISHER\nGID: 01.0f.fc.f3.1e.03.9c.07.00.00.00.00.00.00.15.03\nQoS profile:\n  Reliability: RELIABLE\n  History (Depth): UNKNOWN\n  Durability: VOLATILE\n  Lifespan: Infinite\n  Deadline: Infinite\n  Liveliness: AUTOMATIC\n  Liveliness lease duration: Infinite\n\nNode name: anc_ekf_filter\nNode namespace: /\nTopic type: tf2_msgs/msg/TFMessage\nTopic type hash: RIHS01_e369d0f05a23ae52508854b66f6aa0437f3449d652e8cbf22d5abe85d020f087\nEndpoint type: PUBLISHER\nGID: 01.0f.fc.f3.24.03.76.22.00.00.00.00.00.00.1d.03\nQoS profile:\n  Reliability: RELIABLE\n  History (Depth): UNKNOWN\n  Durability: VOLATILE\n  Lifespan: Infinite\n  Deadline: Infinite\n  Liveliness: AUTOMATIC\n  Liveliness lease duration: Infinite\n\nSubscription count: 4\n\nNode name: transform_listener_impl_5f7bd725b730\nNode namespace: /\nTopic type: tf2_msgs/msg/TFMessage\nTopic type hash: RIHS01_e369d0f05a23ae52508854b66f6aa0437f3449d652e8cbf22d5abe85d020f087\nEndpoint type: SUBSCRIPTION\nGID: 01.0f.fc.f3.24.03.76.22.00.00.00.00.00.00.1a.04\nQoS profile:\n  Reliability: RELIABLE\n  History (Depth): UNKNOWN\n  Durability: VOLATILE\n  Lifespan: Infinite\n  Deadline: Infinite\n  Liveliness: AUTOMATIC\n  Liveliness lease duration: Infinite\n\nNode name: transform_listener_impl_59ad58e5a950\nNode namespace: /\nTopic type: tf2_msgs/msg/TFMessage\nTopic type hash: RIHS01_e369d0f05a23ae52508854b66f6aa0437f3449d652e8cbf22d5abe85d020f087\nEndpoint type: SUBSCRIPTION\nGID: 01.0f.fc.f3.5a.04.4b.71.00.00.00.00.00.00.41.04\nQoS profile:\n  Reliability: RELIABLE\n  History (Depth): UNKNOWN\n  Durability: VOLATILE\n  Lifespan: Infinite\n  Deadline: Infinite\n  Liveliness: AUTOMATIC\n  Liveliness lease duration: Infinite\n\nNode name: transform_listener_impl_5b350fe14400\nNode namespace: /\nTopic type: tf2_msgs/msg/TFMessage\nTopic type hash: RIHS01_e369d0f05a23ae52508854b66f6aa0437f3449d652e8cbf22d5abe85d020f087\nEndpoint type: SUBSCRIPTION\nGID: 01.0f.fc.f3.5b.04.ed.6e.00.00.00.00.00.00.41.04\nQoS profile:\n  Reliability: RELIABLE\n  History (Depth): UNKNOWN\n  Durability: VOLATILE\n  Lifespan: Infinite\n  Deadline: Infinite\n  Liveliness: AUTOMATIC\n  Liveliness lease duration: Infinite\n\nNode name: _NODE_NAME_UNKNOWN_\nNode namespace: _NODE_NAMESPACE_UNKNOWN_\nTopic type: tf2_msgs/msg/TFMessage\nTopic type hash: RIHS01_e369d0f05a23ae52508854b66f6aa0437f3449d652e8cbf22d5abe85d020f087\nEndpoint type: SUBSCRIPTION\nGID: 01.0f.fc.f3.5c.04.0c.a7.00.00.00.00.00.00.20.04\nQoS profile:\n  Reliability: RELIABLE\n  History (Depth): UNKNOWN\n  Durability: VOLATILE\n  Lifespan: Infinite\n  Deadline: Infinite\n  Liveliness: AUTOMATIC\n  Liveliness lease duration: Infinite\n\n"
+    },
+    "tf_static_publishers": {
+      "output_file": "graph-tf_static_publishers.log",
+      "returncode": 0,
+      "summary": "SHER\nGID: 01.0f.fc.f3.22.03.fd.f4.00.00.00.00.00.00.15.03\nQoS profile:\n  Reliability: RELIABLE\n  History (Depth): UNKNOWN\n  Durability: TRANSIENT_LOCAL\n  Lifespan: Infinite\n  Deadline: Infinite\n  Liveliness: AUTOMATIC\n  Liveliness lease duration: Infinite\n\nSubscription count: 7\n\nNode name: anc_phase6_navigation_evaluator\nNode namespace: /\nTopic type: tf2_msgs/msg/TFMessage\nTopic type hash: RIHS01_e369d0f05a23ae52508854b66f6aa0437f3449d652e8cbf22d5abe85d020f087\nEndpoint type: SUBSCRIPTION\nGID: 01.0f.fc.f3.05.03.65.a2.00.00.00.00.00.00.23.04\nQoS profile:\n  Reliability: RELIABLE\n  History (Depth): UNKNOWN\n  Durability: TRANSIENT_LOCAL\n  Lifespan: Infinite\n  Deadline: Infinite\n  Liveliness: AUTOMATIC\n  Liveliness lease duration: Infinite\n\nNode name: transform_listener_impl_5f7bd725b730\nNode namespace: /\nTopic type: tf2_msgs/msg/TFMessage\nTopic type hash: RIHS01_e369d0f05a23ae52508854b66f6aa0437f3449d652e8cbf22d5abe85d020f087\nEndpoint type: SUBSCRIPTION\nGID: 01.0f.fc.f3.24.03.76.22.00.00.00.00.00.00.1b.04\nQoS profile:\n  Reliability: RELIABLE\n  History (Depth): UNKNOWN\n  Durability: TRANSIENT_LOCAL\n  Lifespan: Infinite\n  Deadline: Infinite\n  Liveliness: AUTOMATIC\n  Liveliness lease duration: Infinite\n\nNode name: transform_listener_impl_59ad58e5a950\nNode namespace: /\nTopic type: tf2_msgs/msg/TFMessage\nTopic type hash: RIHS01_e369d0f05a23ae52508854b66f6aa0437f3449d652e8cbf22d5abe85d020f087\nEndpoint type: SUBSCRIPTION\nGID: 01.0f.fc.f3.5a.04.4b.71.00.00.00.00.00.00.42.04\nQoS profile:\n  Reliability: RELIABLE\n  History (Depth): UNKNOWN\n  Durability: TRANSIENT_LOCAL\n  Lifespan: Infinite\n  Deadline: Infinite\n  Liveliness: AUTOMATIC\n  Liveliness lease duration: Infinite\n\nNode name: transform_listener_impl_5b350fe14400\nNode namespace: /\nTopic type: tf2_msgs/msg/TFMessage\nTopic type hash: RIHS01_e369d0f05a23ae52508854b66f6aa0437f3449d652e8cbf22d5abe85d020f087\nEndpoint type: SUBSCRIPTION\nGID: 01.0f.fc.f3.5b.04.ed.6e.00.00.00.00.00.00.42.04\nQoS profile:\n  Reliability: RELIABLE\n  History (Depth): UNKNOWN\n  Durability: TRANSIENT_LOCAL\n  Lifespan: Infinite\n  Deadline: Infinite\n  Liveliness: AUTOMATIC\n  Liveliness lease duration: Infinite\n\nNode name: behavior_server\nNode namespace: /\nTopic type: tf2_msgs/msg/TFMessage\nTopic type hash: RIHS01_e369d0f05a23ae52508854b66f6aa0437f3449d652e8cbf22d5abe85d020f087\nEndpoint type: SUBSCRIPTION\nGID: 01.0f.fc.f3.5c.04.0c.a7.00.00.00.00.00.00.21.04\nQoS profile:\n  Reliability: RELIABLE\n  History (Depth): UNKNOWN\n  Durability: TRANSIENT_LOCAL\n  Lifespan: Infinite\n  Deadline: Infinite\n  Liveliness: AUTOMATIC\n  Liveliness lease duration: Infinite\n\nNode name: bt_navigator\nNode namespace: /\nTopic type: tf2_msgs/msg/TFMessage\nTopic type hash: RIHS01_e369d0f05a23ae52508854b66f6aa0437f3449d652e8cbf22d5abe85d020f087\nEndpoint type: SUBSCRIPTION\nGID: 01.0f.fc.f3.5d.04.09.be.00.00.00.00.00.00.21.04\nQoS profile:\n  Reliability: RELIABLE\n  History (Depth): UNKNOWN\n  Durability: TRANSIENT_LOCAL\n  Lifespan: Infinite\n  Deadline: Infinite\n  Liveliness: AUTOMATIC\n  Liveliness lease duration: Infinite\n\nNode name: rosbag2_recorder\nNode namespace: /\nTopic type: tf2_msgs/msg/TFMessage\nTopic type hash: RIHS01_e369d0f05a23ae52508854b66f6aa0437f3449d652e8cbf22d5abe85d020f087\nEndpoint type: SUBSCRIPTION\nGID: 01.0f.fc.f3.bc.04.26.1c.00.00.00.00.00.00.2e.04\nQoS profile:\n  Reliability: RELIABLE\n  History (Depth): UNKNOWN\n  Durability: TRANSIENT_LOCAL\n  Lifespan: Infinite\n  Deadline: Infinite\n  Liveliness: AUTOMATIC\n  Liveliness lease duration: Infinite\n\n"
+    }
+  },
+  "scenario_id": "S03",
+  "schema_version": 1,
+  "seed": 330,
+  "sensor_profile_override": "ORACLE_REFERENCE",
+  "shutdown": {
+    "child_sigkill_escalated": false,
+    "child_sigterm_escalated": false,
+    "forced": false,
+    "gazebo_child_shutdown_clean": true,
+    "group_gone": true,
+    "returncode": 0,
+    "signal": "SIGINT"
+  },
+  "simulation_pause_before_shutdown": {
+    "detail": "waiting for service to become available...\nrequester: making request: simulation_interfaces.srv.SetSimulationState_Request(state=simulation_interfaces.msg.SimulationState(state=2))\n\nresponse:\nsimulation_interfaces.srv.SetSimulationState_Response(result=simulation_interfaces.msg.Result(result=1, error_message=''))",
+    "requested": true,
+    "returncode": 0,
+    "success": true
+  },
+  "source_commit": "567ac430544fe7fb945f8fb9c7aac4f47e779804",
+  "start_xyyaw": [
+    -3.0,
+    0.0,
+    0.0
+  ],
+  "status": "PASS",
+  "tests": [
+    {
+      "detail": "camera=0, imu=555, odom=170, filtered_odom=165, clock=3875, map=1, navigate_to_pose_server=True, lifecycle_active=True; states={'map_server': {'id': 3, 'label': 'active'}, 'planner_server': {'id': 3, 'label': 'active'}, 'controller_server': {'id': 3, 'label': 'active'}, 'behavior_server': {'id': 3, 'label': 'active'}, 'bt_navigator': {'id': 3, 'label': 'active'}}",
+      "name": "reference_navigation_graph_ready",
+      "status": "PASS"
+    },
+    {
+      "detail": "{\"behavior_server\": {\"id\": 3, \"label\": \"active\"}, \"bt_navigator\": {\"id\": 3, \"label\": \"active\"}, \"controller_server\": {\"id\": 3, \"label\": \"active\"}, \"map_server\": {\"id\": 3, \"label\": \"active\"}, \"planner_server\": {\"id\": 3, \"label\": \"active\"}}",
+      "name": "reference_navigation_lifecycle_active",
+      "status": "PASS"
+    },
+    {
+      "detail": "RGB frames observed=0; camera sensor is disabled in reference launch",
+      "name": "rgb_camera_disabled_for_headless_reference",
+      "status": "PASS"
+    },
+    {
+      "detail": "truth start error=0.0000 m / 0.0000 rad",
+      "name": "known_start_spawn_matches_scenario",
+      "status": "PASS"
+    },
+    {
+      "detail": "map_server geometry grid matched=True; {'frame_id': 'map', 'width': 160, 'height': 120, 'resolution_m': 0.05000000074505806, 'origin_xy_m': [-4.0, -3.0], 'data_count': 19200, 'occupied_cells': 2528, 'free_cells': 16672, 'unknown_cells': 0}",
+      "name": "oracle_reference_map_published",
+      "status": "PASS"
+    },
+    {
+      "detail": "MCAP /tf_static map->odom count=1; transform={'x': -3.0, 'y': 0.0, 'z': 0.0, 'yaw': 0.0}; expected known start=[-3.0, 0.0, 0.0]; configured sole broadcaster=anc_known_start_map_to_odom",
+      "name": "single_known_start_map_to_odom_transform_present",
+      "status": "PASS"
+    },
+    {
+      "detail": "MCAP /tf odom->base_footprint count=2093; active /tf publishers=['robot_state_publisher', 'anc_ekf_filter']; EKF endpoints=1, distinct GIDs=1; unexpected endpoints=[]",
+      "name": "single_ekf_odom_to_base_transform_present",
+      "status": "PASS"
+    },
+    {
+      "detail": "Dedicated launch does not start AMCL or another map->odom publisher",
+      "name": "amcl_not_in_reference_profile",
+      "status": "PASS"
+    },
+    {
+      "detail": "Action goal acceptance returned by Nav2",
+      "name": "navigate_to_pose_goal_accepted",
+      "status": "PASS"
+    },
+    {
+      "detail": "status=SUCCEEDED, error_code=0",
+      "name": "navigate_to_pose_succeeded_with_zero_error_code",
+      "status": "PASS"
+    },
+    {
+      "detail": "truth final goal error=0.17262279874790576 m / 0.19349500000000003 rad",
+      "name": "goal_reached_against_evaluator_truth",
+      "status": "PASS"
+    },
+    {
+      "detail": "truth travel=9.093 m, max command=0.180 m/s / 0.450 rad/s",
+      "name": "robot_motion_observed_with_velocity_limits",
+      "status": "PASS"
+    },
+    {
+      "detail": "contact events=0; conservative min clearance=0.012747192217012537",
+      "name": "no_obstacle_collision_and_clearance_recorded",
+      "status": "PASS"
+    },
+    {
+      "detail": "reference profile uses IMU/clock/odom; camera disabled; imu=7016, odom=2083, filtered=2116",
+      "name": "simulation_sensor_streams_present",
+      "status": "PASS"
+    },
+    {
+      "detail": "One known-start map->odom transform in /tf_static and one EKF publisher GID for odom->base_footprint in /tf.",
+      "name": "single_authority_tf_chain_present",
+      "status": "PASS"
+    },
+    {
+      "detail": "post-action truth speeds=[-8.70006e-05, 0.00238118]; latest command zero=True",
+      "name": "controller_stopped_after_action",
+      "status": "PASS"
+    },
+    {
+      "detail": "AMCL is absent; evaluator is the only Gazebo entity-state service client",
+      "name": "no_amcl_or_truth_navigation_node",
+      "status": "PASS"
+    },
+    {
+      "detail": "{\"child_sigkill_escalated\": false, \"child_sigterm_escalated\": false, \"forced\": false, \"gazebo_child_shutdown_clean\": true, \"group_gone\": true, \"returncode\": 0, \"signal\": \"SIGINT\"}",
+      "name": "simulation_shutdown_bounded",
+      "status": "PASS"
+    },
+    {
+      "detail": "{\"detail\": \"waiting for service to become available...\\nrequester: making request: simulation_interfaces.srv.SetSimulationState_Request(state=simulation_interfaces.msg.SimulationState(state=2))\\n\\nresponse:\\nsimulation_interfaces.srv.SetSimulationState_Response(result=simulation_interfaces.msg.Result(result=1, error_message=''))\", \"requested\": true, \"returncode\": 0, \"success\": true}",
+      "name": "gazebo_pause_requested_before_shutdown",
+      "status": "PASS"
+    },
+    {
+      "detail": "{\"returncode\": 0, \"stopped\": true}",
+      "name": "rosbag_closed",
+      "status": "PASS"
+    }
+  ],
+  "tf_authorities": {
+    "amcl_launched": false,
+    "gazebo_truth_in_navigation_graph": false,
+    "map_to_odom": {
+      "node": "anc_known_start_map_to_odom",
+      "topic": "/tf_static",
+      "unique_static_edge_messages": 1
+    },
+    "odom_to_base_footprint": {
+      "node": "anc_ekf_filter",
+      "publisher_gid_count": 1,
+      "publisher_node_names": [
+        "anc_ekf_filter",
+        "robot_state_publisher"
+      ],
+      "topic": "/tf",
+      "unexpected_publisher_node_names": []
+    }
+  },
+  "tf_bag_validation": {
+    "/tf:base_link->left_wheel_link": {
+      "count": 1396,
+      "latest": {
+        "x": -0.04,
+        "y": 0.14,
+        "yaw": 3.141592653589793,
+        "z": -0.04
+      }
+    },
+    "/tf:base_link->right_wheel_link": {
+      "count": 1396,
+      "latest": {
+        "x": -0.04,
+        "y": -0.14,
+        "yaw": 3.141592653589793,
+        "z": -0.04
+      }
+    },
+    "/tf:odom->base_footprint": {
+      "count": 2093,
+      "latest": {
+        "x": 5.897888951684103,
+        "y": 0.10183215824555154,
+        "yaw": -0.19334044107251325,
+        "z": 0.0
+      }
+    },
+    "/tf_static:base_footprint->base_link": {
+      "count": 1,
+      "latest": {
+        "x": 0.0,
+        "y": 0.0,
+        "yaw": 0.0,
+        "z": 0.08
+      }
+    },
+    "/tf_static:base_link->camera_link": {
+      "count": 1,
+      "latest": {
+        "x": 0.1,
+        "y": 0.0,
+        "yaw": 0.0,
+        "z": 0.1
+      }
+    },
+    "/tf_static:base_link->caster_link": {
+      "count": 1,
+      "latest": {
+        "x": 0.19,
+        "y": 0.0,
+        "yaw": 0.0,
+        "z": -0.055
+      }
+    },
+    "/tf_static:base_link->imu_link": {
+      "count": 1,
+      "latest": {
+        "x": 0.0,
+        "y": 0.0,
+        "yaw": 0.0,
+        "z": 0.0
+      }
+    },
+    "/tf_static:camera_link->camera_optical_frame": {
+      "count": 1,
+      "latest": {
+        "x": 0.0,
+        "y": 0.0,
+        "yaw": -1.57079632679,
+        "z": 0.0
+      }
+    },
+    "/tf_static:map->odom": {
+      "count": 1,
+      "latest": {
+        "x": -3.0,
+        "y": 0.0,
+        "yaw": 0.0,
+        "z": 0.0
+      }
+    }
+  },
+  "tf_dynamic_publishers": [
+    {
+      "endpoint_gid": "010ffcf31e039c070000000000001503",
+      "node_name": "robot_state_publisher",
+      "node_namespace": "/",
+      "topic_type": "tf2_msgs/msg/TFMessage"
+    },
+    {
+      "endpoint_gid": "010ffcf3240376220000000000001d03",
+      "node_name": "anc_ekf_filter",
+      "node_namespace": "/",
+      "topic_type": "tf2_msgs/msg/TFMessage"
+    }
+  ],
+  "tf_final_from_bag": {
+    "x": 2.897888951684103,
+    "y": 0.10183215824555154,
+    "yaw_rad": -0.19334044107251325
+  },
+  "tf_initial": {
+    "map_to_odom": {
+      "x": -3.0,
+      "y": 0.0,
+      "yaw": 0.0,
+      "z": 0.0
+    },
+    "odom_to_base_footprint": {
+      "x": -0.00016958688698107425,
+      "y": -3.9341029998397946e-09,
+      "yaw": 0.0016272540993127471,
+      "z": 0.0
+    }
+  },
+  "trace_image": "navigation_trace.png",
+  "truth_published_to_ros": false,
+  "world_sha256": "aaacd866ec6b63cb778998876c77d563a9ec3ec0583a2afa1d1450c792c8a496"
+}

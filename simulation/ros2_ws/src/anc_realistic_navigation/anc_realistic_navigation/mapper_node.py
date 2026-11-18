@@ -19,6 +19,17 @@ NANO = 1_000_000_000
 def stamp_seconds(stamp):
     return float(stamp.sec) + float(stamp.nanosec)/NANO
 
+def nearest_camera_info_record(records, target_stamp_s):
+    """Pick CameraInfo for the mask frame by timestamp, not arrival order."""
+    if not records:
+        return None
+    if target_stamp_s is None:
+        return records[-1]
+    target = float(target_stamp_s)
+    return min(records, key=lambda record: (
+        abs(float(record["stamp"])-target), -float(record["wall"])))
+
+
 def decode_mono8(msg):
     if msg.encoding != "mono8" or msg.width <= 0 or msg.height <= 0:
         raise ValueError("image_not_valid_mono8")
@@ -74,6 +85,7 @@ class LocalTraversabilityNode(Node):
         self.mask_records = []
         self.confidence_records = []
         self.health_records = []
+        self.camera_info_records = []
         self.mask_stamp = self.confidence_stamp = self.info_stamp = None
         self.mask_frame = self.confidence_frame = None
         self.mask_wall = self.confidence_wall = self.info_wall = None
@@ -132,6 +144,12 @@ class LocalTraversabilityNode(Node):
             selected = selected or self.health_records[-1]
             self.health = selected["message"]
             self.health_wall = selected["wall"]
+        info_record = nearest_camera_info_record(self.camera_info_records,
+                                                 self.mask_stamp)
+        if info_record is not None:
+            self.info = info_record["message"]
+            self.info_stamp = info_record["stamp"]
+            self.info_wall = info_record["wall"]
 
     def on_mask(self, msg):
         try:
@@ -169,9 +187,12 @@ class LocalTraversabilityNode(Node):
         self.synchronize_latest_inputs()
 
     def on_camera_info(self, msg):
-        self.info = msg
-        self.info_stamp = stamp_seconds(msg.header.stamp)
-        self.info_wall = time.monotonic()
+        self.camera_info_records.append({
+            "message": msg, "stamp": stamp_seconds(msg.header.stamp),
+            "wall": time.monotonic(),
+        })
+        self.camera_info_records = self.camera_info_records[-8:]
+        self.synchronize_latest_inputs()
 
     def on_clock(self, msg):
         self.clock_s = stamp_seconds(msg.clock)

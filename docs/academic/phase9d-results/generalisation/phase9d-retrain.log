@@ -1,0 +1,26 @@
+{'epoch': 1, 'training_loss': 1.0065354274378882, 'validation_loss': 0.8761890530586243}
+{'epoch': 2, 'training_loss': 0.9516105155150095, 'validation_loss': 0.6891719698905945}
+{'epoch': 3, 'training_loss': 0.8746242986785041, 'validation_loss': 0.6482493877410889}
+{'epoch': 4, 'training_loss': 0.8255357245604197, 'validation_loss': 0.5662379860877991}
+{'epoch': 5, 'training_loss': 0.7745801707108816, 'validation_loss': 0.5832760334014893}
+{'epoch': 6, 'training_loss': 0.7249368677536646, 'validation_loss': 0.4779796302318573}
+{'epoch': 7, 'training_loss': 0.6612624161773257, 'validation_loss': 0.3797355890274048}
+{'epoch': 8, 'training_loss': 0.5548418892754449, 'validation_loss': 0.28373920917510986}
+{'epoch': 9, 'training_loss': 0.4967905374036895, 'validation_loss': 0.3092784583568573}
+{'epoch': 10, 'training_loss': 0.46386056476169163, 'validation_loss': 0.2983707785606384}
+{'epoch': 11, 'training_loss': 0.4442271971040302, 'validation_loss': 0.23751050233840942}
+{'epoch': 12, 'training_loss': 0.4697134693463643, 'validation_loss': 0.333180695772171}
+{'epoch': 13, 'training_loss': 0.4555881495277087, 'validation_loss': 0.26813769340515137}
+{'epoch': 14, 'training_loss': 0.436039333542188, 'validation_loss': 0.26223814487457275}
+{'epoch': 15, 'training_loss': 0.44333550251192516, 'validation_loss': 0.34673625230789185}
+{'epoch': 16, 'training_loss': 0.43119753897190094, 'validation_loss': 0.2542222738265991}
+Traceback (most recent call last):
+  File "/home/ashish/AutonomousNavigationCar/scripts/phase9/train.py", line 58, in <module>
+    if __name__=='__main__':main()
+                            ^^^^^^
+  File "/home/ashish/AutonomousNavigationCar/scripts/phase9/train.py", line 48, in main
+    t=time.perf_counter();raw,_,_=classify_rgb(image,info,cfg);cv_times.append((time.perf_counter()-t)*1000)
+                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ashish/AutonomousNavigationCar/simulation/ros2_ws/install/anc_perception/lib/python3.12/site-packages/anc_perception/classifier.py", line 98, in classify_rgb
+    raise ValueError("floor_seed_unobservable")
+ValueError: floor_seed_unobservable

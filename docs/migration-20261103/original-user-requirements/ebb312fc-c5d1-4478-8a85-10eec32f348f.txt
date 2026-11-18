@@ -1,0 +1,554 @@
+# Autonomous Navigation Car — Create Windows One-Click Gazebo Demonstration Launchers
+
+## MAIN REQUEST — NO NEW AUTONOMOUS NAVIGATION DEVELOPMENT
+
+I want to visually see my existing Autonomous Navigation Car project working in the Gazebo graphical environment.
+
+I am tired of manually opening multiple terminals, sourcing ROS environments, running commands, switching scenarios and cleaning up background processes.
+
+**Your task is to prepare, verify and deliver 2–3 working Windows `.bat` launcher files that I can simply double-click from my Windows Desktop or Downloads folder.**
+
+I want to see the robot actually moving, reaching goals where already supported, detecting obstacles and displaying its current navigation capabilities.
+
+This is a **demonstration and usability task only**.
+
+Do not begin a new development phase, redesign the navigation architecture, implement new SLAM algorithms, create a new parking controller or change existing safety requirements.
+
+You may create minimal wrapper scripts, GUI launch configuration and process-management helpers required to run and display already implemented functionality.
+
+---
+
+## 1. Existing project
+
+Repository:
+https://github.com/Ashish200528/Autonomous-Navigation
+
+Local WSL workspace:
+`/home/ashish/AutonomousNavigationCar`
+
+Current development branch:
+`feature/phase8c-lidar`
+
+Latest previously reviewed commit:
+`e5a297be79c5e4370b13f142f1816c22b332cb73`
+
+Environment:
+
+- Windows 11
+- 8 GB physical RAM
+- WSL2 Ubuntu 24.04
+- ROS 2 Jazzy
+- Gazebo Harmonic
+- Nav2
+- RViz2
+- NVIDIA GTX 1650
+- Existing ROS workspace already built
+
+Use the existing installation. Do not reinstall ROS or Gazebo unnecessarily.
+
+Inspect the latest local and remote Git state before making changes. Do not overwrite uncommitted changes or force-push.
+
+---
+
+# 2. Understand which demonstrations are already possible
+
+The project contains three relevant capabilities.
+
+### A. Phase 6 — ORACLE_REFERENCE navigation
+
+The existing Phase 6 reference navigation completed goals in S00–S04 using a predefined reference occupancy map.
+
+This is the best starting point for an actual visual demonstration of the robot moving from a start location to a destination and avoiding obstacles.
+
+It must be labeled:
+
+**REFERENCE NAVIGATION — PREDEFINED MAP**
+
+It is not evidence of RGB-only autonomy or online LiDAR SLAM navigation.
+
+Reuse the existing Phase 6 navigation runner, map and launch configuration.
+
+Inspect the runner before adapting the GUI display.
+
+Do not replace this functioning navigation implementation.
+
+### B. Phase 8C — REALISTIC_RGB_LIDAR
+
+The LiDAR branch has demonstrated:
+
+- 360-degree LiDAR sensing.
+- Local obstacle mapping.
+- RGB camera perception.
+- Short safety-controlled forward movement.
+- Selected fault-stop behavior.
+- Short calibration-only turning.
+- Stationary online SLAM mapping.
+
+Production turning and moving-SLAM navigation have not passed their required gates.
+
+Therefore, the launcher must not enable unsupported autonomous motion or bypass the safety system.
+
+Label this demonstration:
+
+**REALISTIC RGB + LiDAR — CURRENT VERIFIED CAPABILITIES**
+
+### C. Parking
+
+The parking controller has passed unit tests but has not successfully parked the robot in Gazebo.
+
+Do not claim autonomous parking is working.
+
+If there is already an independently verified live parking implementation in a newer commit, use it and identify the evidence.
+
+Otherwise show parking as:
+
+**AUTONOMOUS PARKING — NOT YET LIVE-VALIDATED**
+
+You may visually demonstrate an existing reference robot reaching a destination and stopping, but do not label that behavior as validated precision parking.
+
+---
+
+# 3. Create exactly three user-friendly BAT files
+
+Prefer saving all three files on my Windows Desktop.
+
+Also copy them to Downloads if possible.
+
+Use the actual Windows Known Folder paths instead of assuming the Desktop is at `C:\Users\<name>\Desktop`, because it may be redirected to OneDrive.
+
+Recommended names:
+
+## FILE 1 — `01_WATCH_ROBOT_NAVIGATE.bat`
+
+This must demonstrate the **working Phase 6 ORACLE_REFERENCE navigation**.
+
+When double-clicked:
+
+1. Check Windows and WSL resources.
+2. Gracefully close approved unnecessary application processes.
+3. Clean up stale project simulation processes.
+4. Start the required Ubuntu WSL environment.
+5. Source ROS 2 Jazzy.
+6. Source the project's installed ROS workspace.
+7. Launch Gazebo with its graphical 3D interface.
+8. Load the selected Phase 6 scenario.
+9. Spawn the custom robot.
+10. Start the existing reference-map localization/Nav2 system.
+11. Display the robot moving to an actual goal.
+12. Keep the Gazebo window visible.
+13. Optionally display relevant path and robot information in RViz when memory permits.
+14. Show goal success, failure and final pose information.
+15. Allow me to inspect the final scene.
+
+Start with S00 because it is the simplest previously successful navigation scenario.
+
+Provide an easy scenario menu for S00, S01, S02, S03, S04 and S09.
+
+S01 is particularly important because I want to watch the robot navigate around the blocking box.
+
+Use the correct existing Phase 6 runner and scenario-specific start/goal/map information.
+
+Do not assume the headless test launcher automatically supports Gazebo GUI. Inspect and adapt only the demonstration wrapper as necessary.
+
+The robot must be visible and must actually move in the same simulated world whose navigation result is being measured.
+
+Do not show a static robot in one Gazebo window while a separate headless process performs the actual navigation.
+
+Do not present a recorded video as a live simulation.
+
+## FILE 2 — `02_WATCH_RGB_LIDAR.bat`
+
+This must demonstrate the current realistic RGB + LiDAR branch.
+
+When double-clicked:
+
+1. Perform the same safe preflight and process cleanup.
+2. Launch the REALISTIC_RGB_LIDAR profile.
+3. Open the Gazebo GUI.
+4. Display the simulated robot.
+5. Display LiDAR scan measurements.
+6. Display the sensor-derived local map.
+7. Display RGB camera output if practical.
+8. Display the safety-gate status.
+9. Show the actual velocity commands and robot movement.
+10. Allow me to choose from S00, S01, S02, S03, S04 and S09.
+
+For S00, provide the previously validated short guarded forward movement demonstration using the existing safe command interface.
+
+For obstacle environments, show the LiDAR sensing and safety behavior.
+
+Do not command unvalidated obstacle traversal.
+
+Keep production angular velocity disabled unless a newer, independently validated implementation authorizes it.
+
+If the current navigation readiness file remains BLOCKED, leave Nav2 goal navigation disabled.
+
+Show a clear message such as:
+
+"LiDAR sensing and guarded forward movement are available. Full LiDAR goal navigation is not yet validated."
+
+Do not bypass `/cmd_vel` safety ownership or edit readiness flags to make the robot move.
+
+## FILE 3 — `03_GAZEBO_DEMO_MENU.bat`
+
+Create one central menu for controlling the existing demonstrations.
+
+It should let me:
+
+- Launch the Phase 6 reference goal-navigation demo.
+- Launch the realistic RGB + LiDAR demonstration.
+- Choose scenario and random seed.
+- Choose GUI mode with or without RViz.
+- Inspect the status of the autonomous parking capability.
+- Open the latest available result/evidence folder.
+- Stop the project's running simulation cleanly.
+- Exit.
+
+This menu should call the first two BAT files or their shared helper scripts instead of duplicating all the launch logic.
+
+Show an explanation before each mode:
+
+REFERENCE mode uses a predefined map.
+
+REALISTIC LiDAR mode uses sensor measurements and is currently limited to validated behavior.
+
+PARKING is not yet a live demonstrated capability unless newer actual simulation evidence proves otherwise.
+
+---
+
+# 4. Critical requirement — Automatically free RAM before launching
+
+This laptop has only 8 GB RAM.
+
+The previous Work agent reported Windows available RAM as low as 619 MiB, which prevented launching Gazebo and RViz.
+
+I want the BAT files to prepare the environment automatically.
+
+Implement a safe Windows resource-preparation routine.
+
+### A. First inspect memory
+
+Use PowerShell or another supported Windows mechanism to determine:
+
+- Physical Windows RAM.
+- Available Windows RAM.
+- Current WSL allocation and memory availability.
+- Active heavy application processes.
+- Existing Gazebo, RViz, ROS, colcon and simulator processes.
+- Running WSL distributions.
+- Relevant process CPU/RAM usage.
+
+Print a short, readable summary before launching.
+
+### B. Close unnecessary applications
+
+I explicitly permit the launcher to attempt graceful closing of the following applications when I double-click the BAT file:
+
+- ChatGPT desktop application.
+- Codex desktop application or its user-facing GUI.
+- Old Gazebo GUI instances from this project.
+- Old RViz windows from this project.
+- Clearly identified stale simulator processes from this project.
+
+Handle these applications by their verified executable/process identities.
+
+Warn that ChatGPT/Codex sessions may be interrupted and that I should save unsaved work before launching.
+
+Use ordinary graceful close requests and a brief cancellation opportunity.
+
+If an application refuses to close because it has unsaved data, do not force-kill it.
+
+Do not indiscriminately terminate all Python, node, browser, terminal or WSL processes.
+
+Do not kill Git, SSH, DDS or other processes just because their names look unfamiliar.
+
+**Never terminate Windows Explorer, Windows services, display drivers, antivirus/security services, audio/input services, networking, WSLg infrastructure or unrelated user applications.**
+
+Do not kill the application/process currently executing the launcher.
+
+Do not close unrelated work sessions or discard unsaved user data.
+
+### C. Clean up existing project simulation processes
+
+Before a new scenario starts:
+
+- Detect an earlier simulation session belonging to this project.
+- Request a graceful ROS launch shutdown.
+- Stop stale Gazebo/RViz processes belonging to the old project session.
+- Remove only stale resources or PID files owned by the launcher.
+- Avoid multiple competing Gazebo servers or duplicate `/cmd_vel` publishers.
+- Verify that shutdown completed before starting the next simulation.
+
+Use PID tracking, process groups or other safe process identification.
+
+Do not broadly run `killall python3`, `taskkill /F /IM ...` against unrelated applications or a blanket `wsl --shutdown`.
+
+Only restart the WSL distribution if required, safe and not being used by unrelated tasks.
+
+### D. Memory-aware GUI operation
+
+Prefer this order:
+
+1. Release stale project processes.
+2. Gracefully close approved unnecessary desktop applications.
+3. Check Windows and WSL available memory again.
+4. Start Gazebo GUI.
+5. Start required ROS/navigation processes.
+6. Open RViz only if sufficient resources remain.
+
+If Gazebo + RViz together consumes too much memory, run Gazebo GUI alone with a lightweight diagnostic terminal or status overlay.
+
+Do not automatically weaken safety gates, navigation parameters or sensor validity requirements to reduce resource usage.
+
+Do not allocate excessive WSL memory at the expense of Windows.
+
+Do not change Windows system configuration or `.wslconfig` merely to satisfy an arbitrary memory threshold.
+
+If a safe existing launcher threshold is too conservative for a measured lightweight demonstration, investigate actual memory needs and document a justified adjustment rather than blindly bypassing the check.
+
+If there still is not enough memory, display an understandable explanation instead of freezing or crashing Windows.
+
+---
+
+# 5. The experience must be genuinely one-click
+
+I do not want to manually perform steps such as:
+
+- Opening Windows Terminal.
+- Running `wsl`.
+- Sourcing ROS.
+- Building the workspace.
+- Typing `ros2 launch`.
+- Opening a separate Gazebo client manually.
+- Running Nav2 goal commands manually.
+- Managing environment variables.
+- Killing old simulation processes.
+- Searching for log files.
+
+The BAT file must perform the appropriate existing workflow automatically.
+
+It may call Windows PowerShell and Ubuntu shell helper scripts behind the scenes.
+
+Use correct Windows-to-WSL path handling.
+
+Avoid hardcoded drive letters wherever possible.
+
+Provide understandable startup progress and error messages.
+
+Do not require administrator privileges for ordinary launch operations.
+
+If a step requires elevation, explain why rather than silently elevating.
+
+The files should work by double-clicking from Windows Explorer.
+
+---
+
+# 6. Make the Gazebo display easy to watch
+
+My primary goal is visual understanding.
+
+For the reference navigation demonstration:
+
+- Use an appropriate third-person camera view.
+- Show the entire robot and important nearby obstacles.
+- Prefer an elevated angled view or tracking view.
+- Show the goal position and planned path where practical.
+- Allow me to zoom, pan and rotate the camera.
+- Keep the final robot position visible when navigation completes.
+
+For the LiDAR demonstration:
+
+- Show the robot in its environment.
+- Show LiDAR measurements or the sensor-built occupancy map, preferably through RViz.
+- Display which sensor profile is running.
+- Show whether the safety system permits motion.
+- Show when the robot is stopped because of missing information or obstacles.
+
+A lightweight status terminal may show:
+
+- Scenario name.
+- Current mode.
+- Goal status.
+- Robot pose where available.
+- Velocity commands.
+- Safety-gate status.
+- Test success/failure.
+
+Do not require a full-screen GUI plus RViz if it causes the system to become unstable.
+
+---
+
+# 7. Repeatability and shutdown
+
+The BAT launchers must be reusable.
+
+I should be able to:
+
+1. Double-click a BAT file.
+2. Select a scenario.
+3. Watch the robot navigate or sense its surroundings.
+4. See its final result.
+5. Return to the menu or close the demonstration.
+6. Launch a different scenario.
+
+Do not automatically close the simulation immediately after goal completion.
+
+Keep the final world visible until I choose to exit or close the viewer.
+
+On exit:
+
+- Stop movement safely.
+- Stop ROS launch processes gracefully.
+- Stop only the Gazebo/RViz processes started by this launcher.
+- Reap process groups.
+- Save relevant logs.
+- Avoid orphan simulator instances.
+- Leave Windows and WSL responsive.
+
+A subsequent launch should not require a full laptop restart.
+
+---
+
+# 8. Verification before delivery
+
+Do not merely write three BAT files and claim success.
+
+Actually verify the launchers as far as your execution environment permits.
+
+### Verification A — File validation
+
+Check:
+- BAT and PowerShell syntax.
+- Correct Windows Desktop/Downloads paths.
+- Correct WSL distribution.
+- Correct ROS environment.
+- Correct project path.
+- Correct branch/workspace resolution.
+- Correct subprocess exit handling.
+- Correct logging and cleanup.
+
+### Verification B — Reference navigation
+
+Test the existing Phase 6 reference demonstration with Gazebo GUI.
+
+The robot should visibly travel toward an actual goal.
+
+If possible, test at least:
+- S00 empty arena.
+- S01 box obstacle.
+
+Verify that the same live Gazebo process provides the physical motion and navigation evidence.
+
+Use the saved navigation evaluator to check actual displacement and final goal status.
+
+If GUI operation changes performance enough to make previously passing reference navigation fail, report the difference and offer a safe lightweight configuration.
+
+### Verification C — RGB + LiDAR demonstration
+
+Verify:
+- Robot appears.
+- LiDAR publishes scans.
+- Camera publishes images.
+- Local map updates.
+- Safety state is visible.
+- Existing short guarded forward movement can be demonstrated when authorized.
+- Unsafe movement is blocked.
+
+Do not enable full LiDAR Nav2 navigation through a manual flag override.
+
+### Verification D — Resource cleanup
+
+Verify:
+- Old project processes are identified correctly.
+- Approved GUI applications receive graceful close requests.
+- Unrelated user applications are protected.
+- Windows memory is rechecked.
+- Duplicate Gazebo servers are avoided.
+- Clean shutdown works.
+- The demo can be launched again.
+
+### Verification E — GUI access
+
+If you have access to my Windows/WSLg desktop, verify that I can actually see the window.
+
+If you only have a remote/cloud computer, explain that limitation and validate the launchers as far as possible without claiming my physical laptop displayed anything.
+
+Do not claim a GUI screenshot was captured unless it genuinely was.
+
+If there is a blocker, fix the launcher-related issue where possible.
+
+Do not use this task as permission to develop missing navigation or parking functionality.
+
+---
+
+# 9. Files and delivery location
+
+Place the final working BAT files on my actual Windows Desktop:
+
+1. `01_WATCH_ROBOT_NAVIGATE.bat`
+2. `02_WATCH_RGB_LIDAR.bat`
+3. `03_GAZEBO_DEMO_MENU.bat`
+
+Also copy them to my Windows Downloads folder if available.
+
+Keep any required helper scripts in a stable location inside the existing project and ensure the BAT files reference those helpers correctly.
+
+Avoid dependencies on temporary files that will disappear after the Work session.
+
+Add a small `README_GAZEBO_DEMOS.txt` on the Desktop explaining:
+
+- Which file to double-click first.
+- Which mode uses the predefined reference map.
+- Which mode uses realistic LiDAR.
+- What the current parking limitation is.
+- How to change scenarios.
+- How to stop the simulator.
+- Where logs and results are saved.
+- What to do if Windows memory is insufficient.
+
+Preserve the existing project files and Git history.
+
+If repository-side helper changes are necessary, keep them separate from navigation algorithm changes, document them and commit safely to the LiDAR feature branch. Do not merge into `main`.
+
+---
+
+# 10. Final delivery report
+
+At the end, tell me:
+
+1. The exact Windows Desktop path to each BAT file.
+2. Whether copies exist in Downloads.
+3. Whether the files were actually created.
+4. Whether Gazebo GUI opened successfully.
+5. Whether reference navigation visibly moved the robot.
+6. Whether S00 reached its goal.
+7. Whether S01 avoided its obstacle and reached its goal.
+8. Whether the LiDAR GUI displayed live sensing.
+9. Whether any guarded forward movement was observed.
+10. Whether autonomous parking is actually available or still blocked.
+11. How much Windows/WSL memory was available before and after cleanup.
+12. Which processes were closed and which were deliberately protected.
+13. Whether repeated launches and clean shutdown were verified.
+14. Any issues I should know before double-clicking.
+
+Provide clear PASS / FAIL / BLOCKED / NOT TESTED results for each demonstration.
+
+**Do not treat a successful BAT-file creation as proof of a working navigation demonstration.**
+
+---
+
+# FINAL INSTRUCTION
+
+I want a **double-click-and-watch experience** for the functionality already developed.
+
+Prioritize a working Gazebo GUI demonstration of the previously successful Phase 6 reference goal navigation, because I want to actually see my robot moving to a destination.
+
+Separately provide the best available real RGB + LiDAR sensor demonstration without bypassing its existing safety gates.
+
+Do not falsely present goal stopping as validated autonomous parking.
+
+Automatically release safely identifiable unnecessary Windows/WSL resources before starting, including graceful attempts to close ChatGPT and Codex desktop applications after giving me a chance to cancel.
+
+No new autonomous navigation, SLAM, obstacle-avoidance or parking development is authorized in this assignment.
+
+**Deliver the three BAT files on my Windows Desktop and verify them as thoroughly as the accessible environment allows.**

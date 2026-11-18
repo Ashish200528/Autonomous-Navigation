@@ -1,0 +1,152 @@
+# Autonomous Navigation Car — Create a Working Visual Simulation and Demonstration Video
+
+I want to temporarily prioritize a working visual demonstration of my Autonomous Navigation Car project.
+
+The latest standalone test runner completed with 12 PASS, 3 FAIL, 6 BLOCKED and 2 SKIPPED. Realistic LiDAR autonomous navigation remains unvalidated.
+
+However, the existing Phase 6 predefined-map navigation has already been demonstrated successfully.
+
+**My immediate goal is to see the robot moving in Gazebo and obtain a genuine demonstration video that I can show to others.**
+
+Do not start another full development phase or block this demonstration on unfinished LiDAR navigation.
+
+## 1. Create a dedicated demonstration package
+
+Create a folder on my actual Windows Desktop:
+
+`AutonomousCar_Visual_Demo`
+
+Include:
+
+- `RUN_VISUAL_DEMO.bat`
+- Any required PowerShell/Python/Bash helpers.
+- `README.txt`
+- `videos/`
+- `screenshots/`
+- `logs/`
+- `results/`
+
+The BAT file must work after I close Codex and should automatically start the demonstrations using the existing Windows/WSL/ROS installation.
+
+## 2. Demonstration A — Working reference navigation
+
+Use the existing verified Phase 6 ORACLE_REFERENCE Nav2 system.
+
+Run actual Gazebo GUI demonstrations in:
+
+- S00 — Empty arena.
+- S01 — Box obstacle.
+
+Show:
+
+- Custom robot model.
+- Starting position.
+- Obstacle environment.
+- Destination.
+- Actual robot movement.
+- Turns and obstacle avoidance where demonstrated.
+- Arrival and stopping.
+- Navigation result.
+
+Record a real video from the simulation.
+
+Label the video clearly:
+
+**Autonomous Navigation Car — Reference-Map Nav2 Demonstration**
+
+Do not imply that this mode builds its own map.
+
+Reuse the working launchers and existing navigation code. Repair only demonstration-related integration issues if necessary.
+
+## 3. Demonstration B — RGB + LiDAR sensing
+
+Run the existing REALISTIC_RGB_LIDAR profile.
+
+Use S00 and S02 where supported.
+
+Show:
+
+- Gazebo robot and obstacles.
+- RGB camera image.
+- LiDAR LaserScan.
+- Local occupancy map.
+- Safety-gate status.
+- Any previously validated guarded forward movement.
+
+Record a separate video.
+
+Label it:
+
+**Autonomous Navigation Car — Realistic RGB + LiDAR Perception Demonstration**
+
+Do not enable Nav2 goals or production turning if their readiness requirements remain blocked.
+
+Do not replace this with reference-map navigation while labeling it as realistic LiDAR autonomy.
+
+## 4. Make video capture reliable
+
+Prefer a lightweight recording method compatible with the GTX 1650 and Windows desktop.
+
+Test whether hardware-accelerated video encoding is available, but do not require it.
+
+Target approximately 720p or 1080p at a sustainable frame rate.
+
+If video recording causes unacceptable simulation slowdown, reduce capture settings rather than changing robot safety or navigation behavior.
+
+Record actual moving Gazebo footage, not artificially generated robot movement or static images presented as live simulation.
+
+Save the video even if the final navigation status is a legitimate failure, and label the result truthfully.
+
+If practical, create a short combined presentation video with clear transitions between reference navigation and realistic LiDAR sensing.
+
+Do not claim that live autonomous parking is working.
+
+## 5. Handle resource limitations
+
+This laptop has 8 GB RAM.
+
+The main BAT file must operate independently after Codex is closed.
+
+Before launching:
+
+- Check Windows/WSL memory.
+- Stop stale project-owned simulation processes safely.
+- Avoid unnecessary simultaneous Gazebo and RViz sessions.
+- Run demonstrations sequentially rather than concurrently.
+- Prefer Gazebo GUI alone for navigation footage.
+- Open RViz only when needed for LiDAR visualization.
+- Monitor resources and stop safely if the machine becomes unstable.
+
+Do not automatically terminate unrelated applications or essential Windows services.
+
+## 6. Deliver a genuinely usable result
+
+Verify the launcher as far as possible.
+
+For each demonstration, record whether:
+
+- Gazebo opened.
+- Robot spawned.
+- Sensors published.
+- Robot moved.
+- Navigation reached the goal.
+- Video recording was saved.
+- Simulation shut down cleanly.
+
+Do not declare PASS based only on script exit codes.
+
+Store the videos in the Desktop demonstration folder.
+
+Keep the Windows terminal open with a final success/failure summary and the video file locations.
+
+## 7. Final requirement
+
+I want to double-click `RUN_VISUAL_DEMO.bat` and have the existing working project demonstrated visually.
+
+Do not let the three broken test-runner checks prevent the working reference-navigation demonstration.
+
+Do not fabricate realistic LiDAR navigation or parking results.
+
+After the visual demonstration package is working, leave the existing navigation-development branch and its safety requirements intact.
+
+**Prioritize a reliable, watchable and shareable Gazebo demonstration over additional engineering reports.**

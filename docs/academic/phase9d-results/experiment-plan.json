@@ -1,0 +1,8 @@
+{
+  "baseline_checkpoint": "docs/academic/phase9-results/best.pt",
+  "appearance_seed_offset": 1000,
+  "scenes": 30,
+  "split_policy": "scene modulo 10: 8 validation, 9 test, remainder training; exact image duplicates excluded",
+  "improvement_recipe": "one new random-initialized training run, original architecture, seed 91, Adam 0.003, batch 4, max 25 epochs, validation patience 5; no test-based parameter tuning",
+  "evaluation": "original and retrained checkpoints each evaluated once on every diverse test image; difficult scenes retained"
+}

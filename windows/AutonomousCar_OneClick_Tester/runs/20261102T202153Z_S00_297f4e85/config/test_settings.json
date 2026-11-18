@@ -1,0 +1,39 @@
+{
+  "schemaVersion": 1,
+  "mode": "headless",
+  "scenario": "S00",
+  "seed": 101,
+  "resource": {
+    "minimumWindowsAvailableMiBHeadless": 2048,
+    "minimumWindowsAvailableMiBGui": 2560,
+    "minimumWindowsAvailableMiBRviz": 3328,
+    "minimumWslAvailableMiB": 1536,
+    "abortWindowsAvailableMiB": 1024,
+    "abortWindowsMemoryLoadPercent": 96,
+    "recheckSeconds": 60,
+    "recheckIntervalSeconds": 15,
+    "monitorIntervalSeconds": 5,
+    "maximumTotalRuntimeSeconds": 600
+  },
+  "tests": {
+    "offlineTestTimeoutSeconds": 90,
+    "sensorProbeSeconds": 12,
+    "stationarySlamSeconds": 20,
+    "movingSlamRepeatTrials": 3,
+    "movingTrialTimeoutSeconds": 45,
+    "rotationClearanceTimeoutSeconds": 30,
+    "simulationDurationSeconds": 175,
+    "mapSaveTimeoutSeconds": 25,
+    "includeReferenceNavigation": false,
+    "enableNav2OnlyWhenReadinessPasses": true,
+    "runProductionTurningTrials": false,
+    "runAdditionalFaultInjectionTests": false
+  },
+  "output": {
+    "captureScreenshots": false,
+    "captureVideo": false,
+    "saveRosBags": false,
+    "copyProjectDemoEvidence": true,
+    "preservePreviousRuns": true
+  }
+}

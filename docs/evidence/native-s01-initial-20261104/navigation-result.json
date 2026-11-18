@@ -1,0 +1,639 @@
+{
+  "classification": "REALISTIC_RGB_LIDAR_NAV2_GOAL_TRIAL",
+  "status": "FAIL",
+  "scenario_id": "S01",
+  "seed": 101,
+  "route_expected": true,
+  "runtime_navigation_receives_no_gazebo_truth": true,
+  "localization_mode": "known-start online SLAM",
+  "start_world_pose": [
+    -3.0,
+    0.0,
+    0.0
+  ],
+  "goal_world_pose": [
+    3.0,
+    0.0,
+    0.0
+  ],
+  "start_map_pose": [
+    -0.00017262722669197423,
+    -4.714997977661179e-09,
+    0.0006109135065504034
+  ],
+  "goal_map_pose": [
+    5.999826253127405,
+    0.0036654760963021724,
+    0.0006109135065504034
+  ],
+  "start_truth": {
+    "sim_s": 6.514,
+    "x_m": -3.000010678604624,
+    "y_m": 6.9800097047579705e-19,
+    "yaw_rad": -4.1486676764778925e-18,
+    "wall_s": 10131.181656472,
+    "linear_x_mps": 0.0,
+    "angular_z_radps": 0.0
+  },
+  "final_truth": {
+    "sim_s": 8.312,
+    "x_m": -3.000010678604624,
+    "y_m": 6.9800097047579705e-19,
+    "yaw_rad": -4.1486676764778925e-18,
+    "wall_s": 10132.994211908,
+    "linear_x_mps": 0.0,
+    "angular_z_radps": 0.0
+  },
+  "final_xy_error_m": 6.000010678604625,
+  "final_heading_error_rad": 4.1486676764778925e-18,
+  "truth_path_length_m": 0.0,
+  "min_evaluator_clearance_m": 0.585989321395376,
+  "nav2_action_status": "ABORTED",
+  "travel_limit_exceeded": false,
+  "elapsed_wall_s": 1.803226549000101,
+  "simulated_elapsed_s": 1.7979999999999992,
+  "sensor_integrity": {
+    "rgb_frame_count": 23,
+    "rgb_fresh": true,
+    "scan_fresh": true,
+    "map_fresh": true,
+    "filtered_odom_received": true
+  },
+  "sole_authoritative_cmd_vel_publisher": true,
+  "sensor_summary": {
+    "scan_count": 25,
+    "rgb_frames": 23,
+    "map_updates": 5,
+    "global_costmap_updates": 2,
+    "plan_messages": 0,
+    "scan_rate_hz": 5.1701852649719955
+  },
+  "safety_state": {
+    "angular_motion_status": "evidence_bounded_production_turn",
+    "angular_stopping_model": {
+      "angular_cap_radps": 0.1,
+      "confirmation_window_s": 0.5,
+      "manifest_sha256": "79739d9b422649246431b8847abd6668c7a89d2a08f9b081ce94a8957723ddbd",
+      "measured": true,
+      "physical_stop_time_bound_s": 0.75,
+      "production_authorized": true,
+      "production_validation_active": false,
+      "stopping_angle_bound_rad": 0.05,
+      "validated_for": "production"
+    },
+    "authorized": true,
+    "combined_motion_authorized": false,
+    "corridor_m": 2.3000000342726707,
+    "decision_monotonic_s": 10132.90876714,
+    "failures": [],
+    "footprint_width_m": 0.345,
+    "forward_distance_reference": "front_footprint_boundary",
+    "localization_allowance_m": 0.4705050313257851,
+    "map_counts": {
+      "free": 3199,
+      "occupied": 166,
+      "unknown": 29035
+    },
+    "map_frame": "base_link",
+    "max_angular_speed_radps": 0.1,
+    "max_linear_speed_mps": 0.18,
+    "motion_mode": "production_sequential",
+    "node": "anc_lidar_safety_gate",
+    "profile": "REALISTIC_RGB_LIDAR",
+    "reason": "pass",
+    "rotation_calibration_speed_cap_radps": 0.1,
+    "rotation_clearance": {
+      "authorized": true,
+      "center_drift_allowance_m": 0.14,
+      "checked_cells": 112,
+      "footprint_circumradius_m": 0.263592962728522,
+      "inside_grid": true,
+      "occupied_cells": 0,
+      "reason": "swept_disk_clear",
+      "required_radius_m": 0.5235929627285221,
+      "safety_margin_m": 0.1,
+      "sensor_mount_uncertainty_m": 0.02,
+      "unknown_cells": 0
+    },
+    "runtime_uses_world_map_or_truth": false,
+    "safety_margin_m": 0.1,
+    "speed_gate": {
+      "max_linear_speed_mps": 0.18,
+      "reaction_time_s": 0.4608,
+      "reason": "measured_speed_bound_fits_corridor",
+      "selected": {
+        "passes": true,
+        "reaction_distance_m": 0.08294399999999999,
+        "required_corridor_m": 0.656429031325785,
+        "speed_mps": 0.18,
+        "stop_distance_m": 0.00298
+      },
+      "tested_speeds": [
+        {
+          "passes": true,
+          "reaction_distance_m": 0.009216,
+          "required_corridor_m": 0.5827010313257851,
+          "speed_mps": 0.02,
+          "stop_distance_m": 0.00298
+        },
+        {
+          "passes": true,
+          "reaction_distance_m": 0.02304,
+          "required_corridor_m": 0.596525031325785,
+          "speed_mps": 0.05,
+          "stop_distance_m": 0.00298
+        },
+        {
+          "passes": true,
+          "reaction_distance_m": 0.04608,
+          "required_corridor_m": 0.6195650313257851,
+          "speed_mps": 0.1,
+          "stop_distance_m": 0.00298
+        },
+        {
+          "passes": true,
+          "reaction_distance_m": 0.08294399999999999,
+          "required_corridor_m": 0.656429031325785,
+          "speed_mps": 0.18,
+          "stop_distance_m": 0.00298
+        }
+      ],
+      "valid": true
+    },
+    "speed_gate_inputs": {
+      "connected_full_footprint_corridor_m": 2.3000000342726707,
+      "lidar_map_wall_age_s": 0.01768007400096394,
+      "measured_scan_rate_hz": 5.142037296430953,
+      "odom_sim_age_s": 0.017999999999998906,
+      "scan_sim_age_s": 0.038000000000000256,
+      "usable_beam_fraction": 0.9944444444444445
+    },
+    "stopping_model": {
+      "friction_conditions": [
+        0.5,
+        1.2
+      ],
+      "hardware_bound": false,
+      "source": "Phase 8B isolated simulator stopping test",
+      "tested_speeds_mps": [
+        0.02,
+        0.05,
+        0.1,
+        0.18
+      ],
+      "worst_stop_distance_m": 0.00298
+    },
+    "truth_used_only_by_evaluator": true,
+    "valid": true
+  },
+  "guard_state": {
+    "authorized": false,
+    "command_age_s": null,
+    "command_count": 0,
+    "decision_monotonic_s": 10132.948067164,
+    "node": "anc_safety_command_guard",
+    "output": {
+      "angular_z_radps": 0.0,
+      "is_zero": true,
+      "linear_x_mps": 0.0
+    },
+    "output_count": 198,
+    "reason": "required_input_missing",
+    "request_received_monotonic_s": null,
+    "requested": null,
+    "safety_received_monotonic_s": 10132.909145768,
+    "safety_state": {
+      "angular_motion_status": "evidence_bounded_production_turn",
+      "angular_stopping_model": {
+        "angular_cap_radps": 0.1,
+        "confirmation_window_s": 0.5,
+        "manifest_sha256": "79739d9b422649246431b8847abd6668c7a89d2a08f9b081ce94a8957723ddbd",
+        "measured": true,
+        "physical_stop_time_bound_s": 0.75,
+        "production_authorized": true,
+        "production_validation_active": false,
+        "stopping_angle_bound_rad": 0.05,
+        "validated_for": "production"
+      },
+      "authorized": true,
+      "combined_motion_authorized": false,
+      "corridor_m": 2.3000000342726707,
+      "decision_monotonic_s": 10132.90876714,
+      "failures": [],
+      "footprint_width_m": 0.345,
+      "forward_distance_reference": "front_footprint_boundary",
+      "localization_allowance_m": 0.4705050313257851,
+      "map_counts": {
+        "free": 3199,
+        "occupied": 166,
+        "unknown": 29035
+      },
+      "map_frame": "base_link",
+      "max_angular_speed_radps": 0.1,
+      "max_linear_speed_mps": 0.18,
+      "motion_mode": "production_sequential",
+      "node": "anc_lidar_safety_gate",
+      "profile": "REALISTIC_RGB_LIDAR",
+      "reason": "pass",
+      "rotation_calibration_speed_cap_radps": 0.1,
+      "rotation_clearance": {
+        "authorized": true,
+        "center_drift_allowance_m": 0.14,
+        "checked_cells": 112,
+        "footprint_circumradius_m": 0.263592962728522,
+        "inside_grid": true,
+        "occupied_cells": 0,
+        "reason": "swept_disk_clear",
+        "required_radius_m": 0.5235929627285221,
+        "safety_margin_m": 0.1,
+        "sensor_mount_uncertainty_m": 0.02,
+        "unknown_cells": 0
+      },
+      "runtime_uses_world_map_or_truth": false,
+      "safety_margin_m": 0.1,
+      "speed_gate": {
+        "max_linear_speed_mps": 0.18,
+        "reaction_time_s": 0.4608,
+        "reason": "measured_speed_bound_fits_corridor",
+        "selected": {
+          "passes": true,
+          "reaction_distance_m": 0.08294399999999999,
+          "required_corridor_m": 0.656429031325785,
+          "speed_mps": 0.18,
+          "stop_distance_m": 0.00298
+        },
+        "tested_speeds": [
+          {
+            "passes": true,
+            "reaction_distance_m": 0.009216,
+            "required_corridor_m": 0.5827010313257851,
+            "speed_mps": 0.02,
+            "stop_distance_m": 0.00298
+          },
+          {
+            "passes": true,
+            "reaction_distance_m": 0.02304,
+            "required_corridor_m": 0.596525031325785,
+            "speed_mps": 0.05,
+            "stop_distance_m": 0.00298
+          },
+          {
+            "passes": true,
+            "reaction_distance_m": 0.04608,
+            "required_corridor_m": 0.6195650313257851,
+            "speed_mps": 0.1,
+            "stop_distance_m": 0.00298
+          },
+          {
+            "passes": true,
+            "reaction_distance_m": 0.08294399999999999,
+            "required_corridor_m": 0.656429031325785,
+            "speed_mps": 0.18,
+            "stop_distance_m": 0.00298
+          }
+        ],
+        "valid": true
+      },
+      "speed_gate_inputs": {
+        "connected_full_footprint_corridor_m": 2.3000000342726707,
+        "lidar_map_wall_age_s": 0.01768007400096394,
+        "measured_scan_rate_hz": 5.142037296430953,
+        "odom_sim_age_s": 0.017999999999998906,
+        "scan_sim_age_s": 0.038000000000000256,
+        "usable_beam_fraction": 0.9944444444444445
+      },
+      "stopping_model": {
+        "friction_conditions": [
+          0.5,
+          1.2
+        ],
+        "hardware_bound": false,
+        "source": "Phase 8B isolated simulator stopping test",
+        "tested_speeds_mps": [
+          0.02,
+          0.05,
+          0.1,
+          0.18
+        ],
+        "worst_stop_distance_m": 0.00298
+      },
+      "truth_used_only_by_evaluator": true,
+      "valid": true
+    },
+    "safety_state_age_s": 0.038921395998841035
+  },
+  "nav2_lifecycle_states": {
+    "planner_server": "active",
+    "controller_server": "active",
+    "behavior_server": "active",
+    "bt_navigator": "active",
+    "velocity_smoother": "active",
+    "collision_monitor": "active"
+  },
+  "command_summary": {
+    "/cmd_vel_nav_raw": {
+      "count": 0,
+      "nonzero": 0,
+      "max_v": 0,
+      "max_w": 0
+    },
+    "/cmd_vel_smoothed": {
+      "count": 0,
+      "nonzero": 0,
+      "max_v": 0,
+      "max_w": 0
+    },
+    "/cmd_vel_nav": {
+      "count": 0,
+      "nonzero": 0,
+      "max_v": 0,
+      "max_w": 0
+    },
+    "/cmd_vel": {
+      "count": 152,
+      "nonzero": 0,
+      "max_v": 0.0,
+      "max_w": 0.0
+    }
+  },
+  "cmd_vel_publisher_audit": {
+    "/cmd_vel": {
+      "count": 1,
+      "publisher_names": [
+        "anc_safety_command_guard"
+      ],
+      "audit_method": "rclpy_graph"
+    },
+    "/cmd_vel_nav": {
+      "count": 1,
+      "publisher_names": [
+        "collision_monitor"
+      ],
+      "audit_method": "rclpy_graph"
+    },
+    "/cmd_vel_nav_raw": {
+      "count": 5,
+      "publisher_names": [
+        "controller_server",
+        "behavior_server",
+        "behavior_server",
+        "behavior_server",
+        "behavior_server"
+      ],
+      "audit_method": "rclpy_graph"
+    },
+    "/cmd_vel_smoothed": {
+      "count": 1,
+      "publisher_names": [
+        "velocity_smoother"
+      ],
+      "audit_method": "rclpy_graph"
+    }
+  },
+  "non_ground_contact_events": [],
+  "resource_samples": [],
+  "resource_summary": {
+    "scope": "best-effort processes matching the ROS/Gazebo/Nav2 command-name patterns; excludes Windows-only processes",
+    "psutil_available": true,
+    "target_process_peak_rss_mib": null,
+    "target_process_mean_rss_mib": null,
+    "target_process_mean_cpu_percent": null,
+    "wsl_mean_cpu_percent": null,
+    "sample_count": 0
+  },
+  "runtime_rtf": 0.9447947492946747,
+  "acceptance": {
+    "xy_error_limit_m": 0.3,
+    "heading_error_limit_rad": 0.3,
+    "zero_collisions": true,
+    "unknown_not_plannable": true
+  },
+  "guarded_primitive_transitions": [],
+  "guarded_mixed_output_samples": 0,
+  "pre_goal_cmd_vel_publishers": [
+    "anc_safety_command_guard"
+  ],
+  "post_goal_stop_confirmed": true,
+  "stop_samples": [
+    {
+      "sim_s": 8.33,
+      "x_m": -3.000010678604624,
+      "y_m": 6.9800097047579705e-19,
+      "yaw_rad": -4.1486676764778925e-18,
+      "wall_s": 10132.996589279,
+      "linear_x_mps": 0.0,
+      "angular_z_radps": 0.0
+    },
+    {
+      "sim_s": 8.402,
+      "x_m": -3.000010678604624,
+      "y_m": 6.9800097047579705e-19,
+      "yaw_rad": -4.1486676764778925e-18,
+      "wall_s": 10133.077772834,
+      "linear_x_mps": 0.0,
+      "angular_z_radps": 0.0
+    },
+    {
+      "sim_s": 8.492,
+      "x_m": -3.000010678604624,
+      "y_m": 6.9800097047579705e-19,
+      "yaw_rad": -4.1486676764778925e-18,
+      "wall_s": 10133.158950678,
+      "linear_x_mps": 0.0,
+      "angular_z_radps": 0.0
+    },
+    {
+      "sim_s": 8.564,
+      "x_m": -3.000010678604624,
+      "y_m": 6.9800097047579705e-19,
+      "yaw_rad": -4.1486676764778925e-18,
+      "wall_s": 10133.23971135,
+      "linear_x_mps": 0.0,
+      "angular_z_radps": 0.0
+    },
+    {
+      "sim_s": 8.654,
+      "x_m": -3.000010678604624,
+      "y_m": 6.9800097047579705e-19,
+      "yaw_rad": -4.1486676764778925e-18,
+      "wall_s": 10133.321668944,
+      "linear_x_mps": 0.0,
+      "angular_z_radps": 0.0
+    },
+    {
+      "sim_s": 8.725999999999999,
+      "x_m": -3.000010678604624,
+      "y_m": 6.9800097047579705e-19,
+      "yaw_rad": -4.1486676764778925e-18,
+      "wall_s": 10133.403702733,
+      "linear_x_mps": 0.0,
+      "angular_z_radps": 0.0
+    },
+    {
+      "sim_s": 8.816,
+      "x_m": -3.000010678604624,
+      "y_m": 6.9800097047579705e-19,
+      "yaw_rad": -4.1486676764778925e-18,
+      "wall_s": 10133.485747434,
+      "linear_x_mps": 0.0,
+      "angular_z_radps": 0.0
+    },
+    {
+      "sim_s": 8.888,
+      "x_m": -3.000010678604624,
+      "y_m": 6.9800097047579705e-19,
+      "yaw_rad": -4.1486676764778925e-18,
+      "wall_s": 10133.566542643,
+      "linear_x_mps": 0.0,
+      "angular_z_radps": 0.0
+    }
+  ],
+  "final_localization_error_m": 1.0707979888137202e-05,
+  "final_localization_heading_error_rad": 0.0003131493591887982,
+  "final_stopped_truth": {
+    "sim_s": 8.888,
+    "x_m": -3.000010678604624,
+    "y_m": 6.9800097047579705e-19,
+    "yaw_rad": -4.1486676764778925e-18,
+    "wall_s": 10133.566542643,
+    "linear_x_mps": 0.0,
+    "angular_z_radps": 0.0
+  },
+  "commissioning_goal_distance_m": 6.0,
+  "planned_path_points": [],
+  "localization_trace": [
+    {
+      "wall_s": 10131.169328619,
+      "sim_s": 6.496,
+      "xy_error_m": 1.067860462411474e-05,
+      "heading_error_rad": 4.1486676764778925e-18,
+      "tf_age_sim_s": 0.012000000000000455
+    },
+    {
+      "wall_s": 10131.181656472,
+      "sim_s": 6.514,
+      "xy_error_m": 1.067860462411474e-05,
+      "heading_error_rad": 4.1486676764778925e-18,
+      "tf_age_sim_s": 0.03000000000000025
+    },
+    {
+      "wall_s": 10131.199013385,
+      "sim_s": 6.532,
+      "xy_error_m": 1.0679630994658991e-05,
+      "heading_error_rad": 6.896953152990974e-05,
+      "tf_age_sim_s": 0.012000000000000455
+    },
+    {
+      "wall_s": 10132.994211908,
+      "sim_s": 8.312,
+      "xy_error_m": 1.069706777559158e-05,
+      "heading_error_rad": 0.00044901873673230535,
+      "tf_age_sim_s": -0.008000000000000895
+    },
+    {
+      "wall_s": 10132.996589279,
+      "sim_s": 8.33,
+      "xy_error_m": 1.069706777559158e-05,
+      "heading_error_rad": 0.00044901873673230535,
+      "tf_age_sim_s": 0.009999999999999787
+    },
+    {
+      "wall_s": 10133.077772834,
+      "sim_s": 8.402,
+      "xy_error_m": 1.0697741341682925e-05,
+      "heading_error_rad": 0.00041746060446534305,
+      "tf_age_sim_s": 0.013999999999999346
+    },
+    {
+      "wall_s": 10133.158950678,
+      "sim_s": 8.492,
+      "xy_error_m": 1.0707007917640179e-05,
+      "heading_error_rad": 0.0004000990381980387,
+      "tf_age_sim_s": 0.012000000000000455
+    },
+    {
+      "wall_s": 10133.23971135,
+      "sim_s": 8.564,
+      "xy_error_m": 1.0708447107739773e-05,
+      "heading_error_rad": 0.000399591040706411,
+      "tf_age_sim_s": 0.013999999999999346
+    },
+    {
+      "wall_s": 10133.321668944,
+      "sim_s": 8.654,
+      "xy_error_m": 1.0709890589516308e-05,
+      "heading_error_rad": 0.00035332620823380205,
+      "tf_age_sim_s": 0.034000000000000696
+    },
+    {
+      "wall_s": 10133.403702733,
+      "sim_s": 8.725999999999999,
+      "xy_error_m": 1.0710099328765506e-05,
+      "heading_error_rad": 0.00041116872182244817,
+      "tf_age_sim_s": 0.005999999999998451
+    },
+    {
+      "wall_s": 10133.485747434,
+      "sim_s": 8.816,
+      "xy_error_m": 1.0707724696272157e-05,
+      "heading_error_rad": 0.0003806289916621311,
+      "tf_age_sim_s": 0.036000000000001364
+    },
+    {
+      "wall_s": 10133.566542643,
+      "sim_s": 8.888,
+      "xy_error_m": 1.0707979888137202e-05,
+      "heading_error_rad": 0.0003131493591887982,
+      "tf_age_sim_s": 0.007999999999999119
+    }
+  ],
+  "active_goal_guard_reason_sample_counts": {
+    "required_input_missing": 48
+  },
+  "guard_interventions": [
+    {
+      "wall_s": 10131.198989359,
+      "reason": "required_input_missing",
+      "requested": null,
+      "output": {
+        "angular_z_radps": 0.0,
+        "is_zero": true,
+        "linear_x_mps": 0.0
+      }
+    }
+  ],
+  "configured_goal_world": [
+    3.0,
+    0.0,
+    0.0
+  ],
+  "configured_travel_limit_m": 8.0,
+  "predefined_map_used": false,
+  "commissioning_prerequisites": {
+    "turn_envelope": {
+      "angular_cap_radps": 0.1,
+      "physical_stop_time_bound_s": 0.75,
+      "stopping_angle_bound_rad": 0.05,
+      "confirmation_window_s": 0.5,
+      "manifest_sha256": "79739d9b422649246431b8847abd6668c7a89d2a08f9b081ce94a8957723ddbd",
+      "validated_for": "production"
+    },
+    "moving_slam": [
+      {
+        "path": "docs/evidence/native-slam-map1s-20261103/trial0-summary.json",
+        "sha256": "0c8ee63b5c98b96e9a11b3f23add6e1694ee1396602db1d7bdb75be6c74590f8",
+        "trial_id": "3c4a2144-83de-473a-a18b-eca6e7293636"
+      },
+      {
+        "path": "docs/evidence/native-slam-map1s-20261103/trial1-summary.json",
+        "sha256": "853fdc6d999f13e700ee7b07bc027808b490c3e91217c065586029c552b7a007",
+        "trial_id": "e991f1f4-27eb-487d-96f3-72af820edbf1"
+      },
+      {
+        "path": "docs/evidence/native-slam-map1s-20261103/trial2-summary.json",
+        "sha256": "df645484304c7762dad69eb7757f79048468dd79294c49b83ab8e45cbd24e7d5",
+        "trial_id": "2a805754-a96a-4289-88f4-9f51fd42760e"
+      }
+    ]
+  }
+}

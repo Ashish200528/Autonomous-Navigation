@@ -1,0 +1,53 @@
+{
+  "reason": "guard_did_not_pass_bounded_0.05_mps_request",
+  "safety_state": {
+    "angular_motion_status": "blocked_unmeasured_yaw_stopping_and_turn_clearance",
+    "authorized": false,
+    "corridor_m": 0.0,
+    "failures": [
+      "rgb_input:camera_info_timestamp_mismatch"
+    ],
+    "footprint_width_m": 0.345,
+    "forward_distance_reference": "front_footprint_boundary",
+    "localization_allowance_m": 0.4705050313257851,
+    "map_counts": {
+      "free": 4204,
+      "occupied": 259,
+      "unknown": 27937
+    },
+    "map_frame": "base_link",
+    "max_angular_speed_radps": 0.0,
+    "max_linear_speed_mps": 0.0,
+    "node": "anc_lidar_safety_gate",
+    "profile": "REALISTIC_RGB_LIDAR",
+    "reason": "rgb_input:camera_info_timestamp_mismatch",
+    "runtime_uses_world_map_or_truth": false,
+    "safety_margin_m": 0.1,
+    "speed_gate": null,
+    "speed_gate_inputs": {
+      "connected_full_footprint_corridor_m": 0.0,
+      "measured_scan_rate_hz": 4.9529001752989,
+      "odom_sim_age_s": 0.02400000000000091,
+      "scan_sim_age_s": 0.07400000000001228,
+      "usable_beam_fraction": 0.9944444444444445
+    },
+    "stopping_model": {
+      "friction_conditions": [
+        0.5,
+        1.2
+      ],
+      "hardware_bound": false,
+      "source": "Phase 8B isolated simulator stopping test",
+      "tested_speeds_mps": [
+        0.02,
+        0.05,
+        0.1,
+        0.18
+      ],
+      "worst_stop_distance_m": 0.00298
+    },
+    "truth_used_only_by_evaluator": true,
+    "valid": false
+  },
+  "status": "FAIL"
+}

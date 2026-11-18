@@ -1,0 +1,84 @@
+START s00-seed101-rgb-only
+{"case_id": "s00-seed101-rgb-only", "error": null, "samples": 2, "shutdown": {"forced": false, "group_gone": true, "returncode": 0, "signal": "SIGINT"}, "status": "PASS"}
+START s01-seed101-rgb-only
+{"case_id": "s01-seed101-rgb-only", "error": null, "samples": 2, "shutdown": {"forced": false, "group_gone": true, "returncode": 0, "signal": "SIGINT"}, "status": "PASS"}
+START s02-seed101-rgb-only
+{"case_id": "s02-seed101-rgb-only", "error": null, "samples": 2, "shutdown": {"forced": false, "group_gone": true, "returncode": 0, "signal": "SIGINT"}, "status": "PASS"}
+START s03-seed101-rgb-only
+{"case_id": "s03-seed101-rgb-only", "error": "RuntimeError: Perception ROS input contract differs: []", "samples": null, "shutdown": null, "status": "FAIL"}
+START s04-seed202-rgb-only
+{"case_id": "s04-seed202-rgb-only", "error": null, "samples": 2, "shutdown": {"forced": false, "group_gone": true, "returncode": 0, "signal": "SIGINT"}, "status": "PASS"}
+START p7c1-seed101-rgb-only
+{"case_id": "p7c1-seed101-rgb-only", "error": null, "samples": 2, "shutdown": {"forced": false, "group_gone": true, "returncode": 0, "signal": "SIGINT"}, "status": "PASS"}
+{
+  "sample_count": 10,
+  "scenario_statuses": [
+    [
+      "s00-seed101-rgb-only",
+      "PASS"
+    ],
+    [
+      "s01-seed101-rgb-only",
+      "PASS"
+    ],
+    [
+      "s02-seed101-rgb-only",
+      "PASS"
+    ],
+    [
+      "s03-seed101-rgb-only",
+      "FAIL"
+    ],
+    [
+      "s04-seed202-rgb-only",
+      "PASS"
+    ],
+    [
+      "p7c1-seed101-rgb-only",
+      "PASS"
+    ]
+  ],
+  "aggregate_metrics": {
+    "pixel_totals": {
+      "pred_free": 231177,
+      "pred_occupied": 131372,
+      "pred_unknown": 405451,
+      "gt_free": 265216,
+      "gt_occupied": 367749,
+      "tp_free": 231177,
+      "tp_occupied": 124217,
+      "false_free": 0,
+      "total_px": 768000
+    },
+    "false_free_rate_on_known_occupied": 0.0,
+    "occupied_precision": 0.9455363395548518,
+    "occupied_recall": 0.3377765813095345,
+    "useful_free_coverage_on_known_floor": 0.8716555562258688,
+    "unknown_coverage_total": 0.5279309895833333,
+    "processing_latency_ms": {
+      "count": 325,
+      "p50": 11.835,
+      "p95": 20.3302,
+      "max": 254.563
+    },
+    "measured_wall_fps": {
+      "count": 325,
+      "p10": 13.8584,
+      "median": 14.428,
+      "min": 0.0
+    },
+    "camera_sim_timestamp_age_s": {
+      "count": 325,
+      "p50": 0.02,
+      "p95": 0.03560000000000002,
+      "max": 0.196
+    },
+    "camera_wall_age_s": {
+      "count": 325,
+      "p50": 0.0,
+      "p95": 0.0,
+      "max": 0.0
+    }
+  },
+  "report": "/home/ashish/AutonomousNavigationCar/docs/evidence/phase7/dataset/accepted-phase7-verified/dataset-results.json"
+}

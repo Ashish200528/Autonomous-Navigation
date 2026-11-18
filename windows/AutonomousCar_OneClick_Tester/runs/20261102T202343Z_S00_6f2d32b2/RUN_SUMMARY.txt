@@ -1,0 +1,123 @@
+AUTONOMOUS NAVIGATION CAR - STANDALONE TEST RUN
+========================================================
+Overall status: BLOCKED
+Reason: one or more tests were blocked by resources or readiness
+Run ID: 20261102T202343Z_S00_6f2d32b2
+Started (UTC): 2026-11-02T20:23:53Z
+Finished (UTC): 2026-11-02T20:25:05Z
+Execution mode: FULL
+Scenario / seed: S00 / 101
+Project branch: feature/phase8c-lidar
+Project commit: 567ac430544fe7fb945f8fb9c7aac4f47e779804
+Project path: /home/ashish/AutonomousNavigationCar
+
+Machine and resource summary
+----------------------------
+Windows total / available RAM at final sample: 7521 / 1883 MiB
+Minimum Windows available RAM during sampling: 1735 MiB
+Windows memory load / CPU: 74% / 21%
+WSL available RAM / swap used: 2898 / 0 MiB
+GPU: command=nvidia-smi --query-gpu=name,memory.total,memory.free --format=csv,noheader
+exit_code=0
+NVIDIA GeForce GTX 1650, 4096 MiB, 3935 MiB
+Windows run-volume free space: 34847 MiB
+
+Test outcomes
+----------------------------
+PASS=8 FAIL=0 BLOCKED=12 TIMEOUT=0 SKIPPED=2 NOT TESTED=0
+- additional_fault_injection: SKIPPED - additional fault injection is disabled by safe defaults
+- environment: PASS - ROS 2 Jazzy, Gazebo, project workspace and required packages verified
+- lidar_sensors: BLOCKED - an existing project session record exists
+- map_save: BLOCKED - an existing project session record exists
+- moving_slam_trial_1: BLOCKED - an existing project session record exists
+- moving_slam_trial_2: BLOCKED - an existing project session record exists
+- moving_slam_trial_3: BLOCKED - an existing project session record exists
+- nav2: BLOCKED - readiness validator did not return READY
+- offline_common_infrastructure_test: PASS - existing offline pytest (no simulator/motion)
+- offline_lidar_model_test: PASS - existing offline pytest (no simulator/motion)
+- offline_nav2_config_test: PASS - existing offline pytest (no simulator/motion)
+- offline_nav2_runner_test: PASS - existing offline pytest (no simulator/motion)
+- offline_readiness_test: PASS - existing offline pytest (no simulator/motion)
+- offline_tests: PASS - all selected offline tests passed
+- production_turning: SKIPPED - production turning trials are disabled; no angular request
+- readiness: BLOCKED - readiness validator: BLOCKED	production_turning_verified:evidence_reference_missing; moving_slam_verified:evidence_reference_missing; moving_slam_verified:three_distinct_moving_trials_required; guarded_command_chain_verified:evidence_reference_missing; guarded_command_chain_verified:at_least_one_S00_navigation_trial_required
+- resource_gate: BLOCKED - headless RAM thresholds were not met within bounded recheck; last sample: Windows 1948 MiB, WSL 2898 MiB
+- rgb_camera_pair: BLOCKED - an existing project session record exists
+- session_safety: BLOCKED - project launcher state exists and was left untouched
+- simulation_cleanup: PASS - no simulator was started; no cleanup was required
+- stationary_slam: BLOCKED - an existing project session record exists
+- turning_clearance_probe: BLOCKED - an existing project session record exists
+
+Observed sensor and SLAM measurements
+----------------------------
+LiDAR messages / measured wall rate: None / None Hz
+Camera frames: None
+Filtered odometry messages: None
+Stationary SLAM: {"diagnostic_pass": null, "error": null, "map_messages": null, "map_snapshot": null, "map_to_odom_tf_messages": null, "scan_messages": null, "slam_pose_messages": null}
+Bounded moving-SLAM trials:
+  {"reason": "an existing project session record exists", "slam_relative_displacement_error_m": null, "slam_relative_yaw_error_rad": null, "status": "BLOCKED", "trial_id": null, "truth_forward_displacement_m": null}
+  {"reason": "an existing project session record exists", "slam_relative_displacement_error_m": null, "slam_relative_yaw_error_rad": null, "status": "BLOCKED", "trial_id": null, "truth_forward_displacement_m": null}
+  {"reason": "an existing project session record exists", "slam_relative_displacement_error_m": null, "slam_relative_yaw_error_rad": null, "status": "BLOCKED", "trial_id": null, "truth_forward_displacement_m": null}
+Nav2 result: BLOCKED
+Nav2 measured detail: {"nav2_launched": false, "readiness": {"exit_code": 0, "validator_output": "BLOCKED\tproduction_turning_verified:evidence_reference_missing; moving_slam_verified:evidence_reference_missing; moving_slam_verified:three_distinct_moving_trials_required; guarded_command_chain_verified:evidence_reference_missing; guarded_command_chain_verified:at_least_one_S00_navigation_trial_required", "validator_status": "BLOCKED"}}
+
+Warnings and cleanup
+----------------------------
+Cleanup: PASS - SIGINT only; no WSL shutdown or broad process termination
+Notes: none
+
+Evidence files
+----------------------------
+Run directory: C:\Users\ajayk\Desktop\AutonomousCar_OneClick_Tester\runs\20261102T202343Z_S00_6f2d32b2
+WSL run path: /mnt/c/Users/ajayk/Desktop/AutonomousCar_OneClick_Tester/runs/20261102T202343Z_S00_6f2d32b2
+- tests/additional_fault_injection/result.json
+- tests/additional_fault_injection/output.log
+- tests/environment/result.json
+- tests/environment/output.log
+- tests/lidar_sensors/result.json
+- tests/lidar_sensors/output.log
+- tests/map_save/result.json
+- tests/map_save/output.log
+- tests/moving_slam_trial_1/result.json
+- tests/moving_slam_trial_1/output.log
+- tests/moving_slam_trial_2/result.json
+- tests/moving_slam_trial_2/output.log
+- tests/moving_slam_trial_3/result.json
+- tests/moving_slam_trial_3/output.log
+- tests/nav2/result.json
+- tests/nav2/output.log
+- tests/offline_common_infrastructure_test/result.json
+- tests/offline_common_infrastructure_test/output.log
+- tests/offline_lidar_model_test/result.json
+- tests/offline_lidar_model_test/output.log
+- tests/offline_nav2_config_test/result.json
+- tests/offline_nav2_config_test/output.log
+- tests/offline_nav2_runner_test/result.json
+- tests/offline_nav2_runner_test/output.log
+- tests/offline_readiness_test/result.json
+- tests/offline_readiness_test/output.log
+- tests/offline_tests/result.json
+- tests/offline_tests/output.log
+- tests/production_turning/result.json
+- tests/production_turning/output.log
+- tests/readiness/result.json
+- tests/readiness/output.log
+- tests/resource_gate/result.json
+- tests/resource_gate/output.log
+- tests/rgb_camera_pair/result.json
+- tests/rgb_camera_pair/output.log
+- tests/session_safety/result.json
+- tests/session_safety/output.log
+- tests/simulation_cleanup/result.json
+- tests/simulation_cleanup/output.log
+- tests/stationary_slam/result.json
+- tests/stationary_slam/output.log
+- tests/turning_clearance_probe/result.json
+- tests/turning_clearance_probe/output.log
+
+Interpretation
+----------------------------
+A command exit code or successful node launch is not proof of movement, SLAM quality, or autonomous navigation.
+Moving SLAM is reported only from the bounded forward trials and their sensor/pose evidence.
+Phase 6 predefined-map navigation is not part of this run.
+Recommended next action: resolve the exact resource/readiness blocker above, then run the BAT again.

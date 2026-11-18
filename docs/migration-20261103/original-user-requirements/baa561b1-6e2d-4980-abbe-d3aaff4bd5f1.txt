@@ -1,0 +1,104 @@
+Continue the existing **Autonomous Navigation Car simulation project** from the successful Phase 0/1 environment setup. Do not restart the project or repeat installations that are already verified.
+
+## Existing environment
+
+- Windows 11, 8 GB physical RAM, NVIDIA GTX 1650 (4 GB VRAM).
+- WSL2 Ubuntu 24.04 installed on E: at `E:\WSL\Ubuntu-24.04`.
+- Ubuntu username: `ashish`.
+- Project repository: `/home/ashish/AutonomousNavigationCar`.
+- ROS 2 Jazzy, Gazebo Harmonic, ros_gz, RViz2, Nav2, robot_localization and SLAM Toolbox are already installed.
+- Phase 0 completed and tagged `v0.1-phase0`.
+- Existing reports are in `docs/PHASE_REPORT.md`, `docs/environment.md`, and `docs/evidence/`.
+- WSL currently has approximately 3.5 GiB RAM and 1 GiB swap.
+
+Read the original Simulation Master Roadmap and the existing phase reports before making changes. Inspect the actual repository and environment; do not assume reported results prove the current running state.
+
+## Task A — Complete Phase 1 navigation validation
+
+1. Verify the existing WSL environment, Git working tree, ROS installation and Gazebo configuration.
+2. Reuse the installed TurtleBot3/Nav2 sample. Avoid downloading or installing large packages unless a verified missing dependency requires it.
+3. Launch the sample simulation, preferably headlessly to conserve memory.
+4. Inspect its map, TF tree, AMCL, odometry, Nav2 lifecycle nodes, costmaps and action server.
+5. Determine a valid initial pose and reachable target from the sample environment.
+6. Supply the AMCL initial pose correctly, then send a map-frame NavigateToPose goal.
+7. Verify that localization, planning, controller commands, robot movement and action result work together.
+8. Capture actual command output, relevant ROS topics, goal status, motion evidence and errors.
+9. If any test fails, diagnose it. Do not mark it PASS without objective evidence.
+10. Update the Phase 1 report with a clear PASS, FAIL or BLOCKED result.
+
+This sample test may use its existing reference sensing. Label the test REFERENCE; it is not proof of RGB-only navigation.
+
+## Task B — Begin Phase 2 only after Phase 1 passes
+
+Create the first custom differential-drive robot based on the original master roadmap.
+
+Implement:
+
+- New ROS 2 packages for robot description, Gazebo integration and bringup, consistent with the repository structure.
+- A simple two-wheel differential-drive chassis.
+- Documented configuration parameters for mass, wheel radius, wheel separation, robot footprint and inertial properties.
+- URDF/Xacro model with collision geometry.
+- Gazebo-compatible differential-drive system.
+- A minimal empty-world spawn launch.
+- Working `/cmd_vel` control.
+- Basic wheel odometry and appropriate TF, without conflicting transform publishers.
+- Motion tests for forward, reverse and in-place rotation.
+- Collision test against a simple wall or static obstacle.
+
+Keep placeholder dimensions clearly documented. Do not invent measured hardware specifications.
+
+## Resource constraints
+
+This machine has only 8 GB total RAM. Keep memory consumption under control.
+
+- Prefer headless Gazebo for automated tests.
+- Avoid running Gazebo GUI, RViz2, browsers and multiple heavy processes simultaneously.
+- Start with simple worlds and minimal rendering.
+- Reuse installed dependencies.
+- Avoid unnecessary system-wide upgrades.
+- Monitor available memory and disk space.
+- Terminate test processes cleanly and avoid leaving unnecessary background processes running.
+
+## Scientific and engineering rules
+
+- Never expose Gazebo ground-truth position or obstacle geometry to realistic perception/navigation nodes.
+- Keep REFERENCE and REALISTIC sensor profiles separate.
+- Do not claim monocular RGB can provide reliable depth for arbitrary obstacles.
+- Preserve FREE, OCCUPIED and UNKNOWN semantics in future perception work.
+- Do not overwrite or modify my existing Arduino UNO Q application.
+- Do not switch to Webots or another simulator without authorization.
+- Do not modify Windows partitions or relocate Ubuntu.
+- Do not initiate destructive operations, a reboot or system-wide configuration changes without asking for permission.
+- Never fabricate successful tests, metrics or screenshots.
+
+## Working procedure
+
+Use the actual terminal and filesystem access available in Work mode.
+
+For each task:
+1. Inspect the existing implementation.
+2. Make focused changes.
+3. Execute meaningful tests.
+4. Save the logs and evidence.
+5. Update the phase report.
+6. Commit validated changes to Git.
+
+If Task A passes, continue automatically into Task B within this Work session, without asking me to approve routine development steps.
+
+Stop after Task B and provide a clear handoff before advancing to Phase 3. If permissions, computer access, a restart or a major blocker require my intervention, explain exactly what is needed.
+
+## Final deliverables
+
+Provide:
+
+- Exact files created or modified.
+- Commands actually executed.
+- ROS/Gazebo test output and evidence locations.
+- Screenshots or recordings if available.
+- Confirmed robot motion results.
+- Git commit hashes.
+- Phase 1 and Phase 2 PASS/FAIL/BLOCKED assessments.
+- Any unresolved issues.
+- The exact next recommended task.
+
+**Important:** I want actual code implementation and verified simulation results, not merely an explanation of how I could do it manually. Continue working autonomously within the permitted scope, and request my input only when genuinely required.

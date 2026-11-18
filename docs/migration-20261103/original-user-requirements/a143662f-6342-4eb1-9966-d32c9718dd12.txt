@@ -1,0 +1,453 @@
+# AUTONOMOUS NAVIGATION CAR — FULL WINDOWS + WSL RESOURCE OPTIMIZATION FOR GAZEBO
+
+## MAIN OBJECTIVE
+
+I am currently using my Windows laptop primarily for Codex and my Autonomous Navigation Car development project.
+
+I authorize you to manage and optimize the computer's available resources so ROS 2 Jazzy, Gazebo Harmonic, SLAM Toolbox, Nav2 and the RGB + LiDAR simulation can execute reliably.
+
+**Treat the robotics simulation as the priority workload.**
+
+You may automatically identify and gracefully close unnecessary user applications, terminate confirmed stale project processes, reclaim resources, optimize resource allocation and implement reversible configuration improvements where justified.
+
+I do not want to manually inspect Task Manager, close applications, kill old ROS processes, or repeatedly manage RAM before each simulation.
+
+However, do not damage Windows, interrupt the Codex session executing this assignment, remove installed software, discard unsaved work, or disable essential services.
+
+This is a resource-management assignment. Do not begin a new navigation development phase.
+
+---
+
+## 1. Hardware and project details
+
+Laptop:
+- CPU: AMD Ryzen 5 5600H
+- Physical cores: 6
+- Logical processors: 12
+- Physical RAM: approximately 8 GB (7.35 GiB reported)
+- GPU: NVIDIA GTX 1650 with 4 GB VRAM
+- Integrated AMD Radeon Graphics
+- OS: Windows 11
+
+WSL:
+- Ubuntu 24.04
+- WSL2
+- Approximately 3.5 GiB RAM limit
+- Approximately 1 GiB swap
+- ROS 2 Jazzy
+- Gazebo Harmonic
+- Nav2
+- SLAM Toolbox
+
+Project:
+`/home/ashish/AutonomousNavigationCar`
+
+GitHub:
+https://github.com/Ashish200528/Autonomous-Navigation
+
+Branch:
+`feature/phase8c-lidar`
+
+Latest previously reviewed commit:
+`2733c0d8031f79cc0eaa5e593e3973f82e634c6e`
+
+Use the latest actual local and remote state.
+
+Previously measured:
+- Windows available RAM: approximately 926 MiB.
+- WSL available RAM: approximately 3,134 MiB.
+- Headless launcher's Windows RAM requirement: 2,048 MiB.
+- GUI launcher's Windows RAM requirement: 2,560 MiB.
+
+These are historical measurements. Collect current values before deciding what to change.
+
+---
+
+# 2. Perform a full system resource audit
+
+Before modifying anything, collect:
+
+### Windows
+
+1. Total physical memory.
+2. Available physical memory.
+3. Committed memory and commit limit.
+4. Cached and standby memory.
+5. Memory pressure and paging activity.
+6. CPU utilization.
+7. GPU utilization and available VRAM.
+8. Top memory-consuming processes.
+9. Relevant background applications.
+10. User startup applications currently running.
+11. Windows services consuming significant resources.
+12. WSL and virtualization memory consumption.
+
+Inspect process ownership, executable paths and command lines before deciding whether a process is unnecessary.
+
+### WSL
+
+Collect:
+
+- `free -h`
+- `/proc/meminfo`
+- CPU and memory usage by process.
+- Swap usage.
+- Existing ROS and Gazebo processes.
+- WSL configuration.
+- Active WSL distributions.
+- Available disk space.
+- ROS and Gazebo process trees.
+
+Distinguish unused memory, reclaimable caches and genuinely occupied memory.
+
+Do not assume that all memory marked as used is wasted.
+
+Save the results before cleanup.
+
+---
+
+# 3. Automatically close unnecessary applications
+
+I authorize you to gracefully close **verified nonessential user applications** when they are not required for the current robotics task.
+
+Candidate applications include:
+
+- Unused browser windows and background browser processes.
+- ChatGPT desktop application, if separate from the active execution session.
+- Unused Codex desktop windows or sessions, excluding the one doing this work.
+- Unused VS Code instances.
+- Unused Electron applications.
+- Game launchers.
+- Music and entertainment applications.
+- Unused communication applications.
+- Vendor utilities that are demonstrably optional.
+- Unused project-related terminal sessions.
+- Old Gazebo graphical instances.
+- Old RViz instances.
+- Stale ROS simulation processes.
+- Previous project's test runners.
+
+Before closing an application:
+
+1. Identify the exact executable and process.
+2. Verify it is not needed by this assignment.
+3. Attempt graceful shutdown.
+4. Respect unsaved-data warnings.
+5. Check whether it actually exited.
+6. Measure how much memory was recovered.
+
+You may automatically close confirmed stale ROS/Gazebo processes belonging to this project.
+
+Do not use blanket process-name termination commands that could affect unrelated work.
+
+### Important Codex protection
+
+The active Codex session must remain functional throughout this assignment.
+
+Do not terminate:
+
+- The Codex process executing this task.
+- Its required terminal or parent process.
+- Its active SSH/WSL connection.
+- Required authentication/networking components.
+- Processes needed to save results or commit code.
+
+If closing the ChatGPT or Codex application would terminate the current assignment, leave it open.
+
+If it is necessary to run Gazebo without the Codex desktop application, first prepare a verified standalone launcher that can continue independently after the agent exits. Never terminate the active session and assume the assignment will continue automatically.
+
+---
+
+# 4. Protect Windows stability
+
+Never terminate, disable or uninstall critical Windows components merely to free RAM.
+
+Protected categories include:
+
+- Windows kernel and core system processes.
+- Windows Explorer and desktop shell.
+- Window manager and graphical infrastructure.
+- Windows networking.
+- Windows security and antivirus protection.
+- Essential audio/input services.
+- Display and GPU drivers.
+- Windows memory management.
+- Storage and filesystem services.
+- Windows Update and servicing infrastructure.
+- WSL/WSLg components required by the simulation.
+- Processes managing this active Codex session.
+
+Do not attempt to free memory by disabling Defender, changing security policies, forcibly stopping essential services, editing the registry indiscriminately or deleting system files.
+
+Do not uninstall any application.
+
+Do not erase caches, projects, packages or user files as a substitute for memory optimization.
+
+Do not force-close applications with unsaved work.
+
+Only make system changes that are necessary, technically justified and reversible. Ask before disruptive changes affecting unrelated sessions or requiring administrator-level intervention.
+
+---
+
+# 5. Optimize WSL memory allocation
+
+Investigate the actual relationship between Windows memory pressure and WSL memory consumption.
+
+Evaluate:
+
+1. Current `.wslconfig`.
+2. Current WSL RAM ceiling.
+3. Current WSL swap capacity.
+4. WSL memory reclaim behavior.
+5. Whether WSL retains host memory after workloads exit.
+6. Whether Windows has sufficient memory to support a larger WSL allocation.
+7. Whether an adjusted memory limit would improve Gazebo performance.
+
+Do not blindly allocate 6–7 GB to WSL on an 8 GB laptop.
+
+Consider a conservative allocation around 3.5–4.5 GB only if measurements justify it.
+
+If a different configuration would be better, explain and use the evidence-based value.
+
+For supported versions, evaluate WSL's automatic memory reclaim settings.
+
+Preserve existing configuration entries.
+
+Back up `.wslconfig` before editing.
+
+A WSL restart may be necessary after resource-setting changes.
+
+**Do not call `wsl --shutdown` from the active WSL session if doing so would terminate Codex or unrelated work.**
+
+If a restart is required, arrange a safe Windows-side operation, preserve the session's state and obtain confirmation where required.
+
+Verify that every configuration change actually took effect.
+
+Rollback changes that worsen Windows responsiveness or simulator performance.
+
+---
+
+# 6. Prepare a dedicated Gazebo runtime
+
+Create a lightweight resource preparation procedure.
+
+The sequence should be:
+
+1. Inspect available Windows RAM.
+2. Inspect available WSL RAM.
+3. Identify previous project simulation sessions.
+4. Gracefully terminate stale project-owned simulation processes.
+5. Close approved unnecessary user applications.
+6. Recheck available RAM.
+7. Reclaim WSL memory where safely supported.
+8. Verify ROS and Gazebo are available.
+9. Launch the required Gazebo workload.
+10. Monitor memory, CPU and simulation performance.
+11. Save logs and benchmark results.
+12. Cleanly shut down the simulation.
+
+Prefer headless Gazebo for engineering experiments.
+
+Use Gazebo GUI for visual inspection.
+
+Use RViz only when sufficient RAM remains.
+
+Do not keep multiple unnecessary Gazebo servers, RViz windows or duplicate ROS launch sessions running.
+
+Do not run unnecessary `colcon build` jobs while Gazebo is executing.
+
+Use low-memory launch settings where they do not compromise essential sensing, dynamics, navigation or safety fidelity.
+
+---
+
+# 7. Improve the existing one-click Windows launchers
+
+The project already has three Windows BAT demonstration files.
+
+Preserve them.
+
+Extend the existing resource-preparation helpers so every launcher can automatically:
+
+- Check Windows and WSL memory.
+- Close safe-to-close unnecessary applications.
+- Stop stale project simulation processes.
+- Wait for cleanup to complete.
+- Recheck memory.
+- Launch the selected simulation.
+- Report resource blockers clearly.
+- Monitor the active session.
+- Cleanly exit and release resources.
+
+Prefer a shared PowerShell/WSL helper rather than duplicating cleanup logic across all three BAT files.
+
+Do not overwrite unrelated files on Desktop or Downloads.
+
+Do not weaken the existing LiDAR safety readiness checks.
+
+If current launch memory thresholds are inappropriate, measure actual usage before proposing changes.
+
+A RAM threshold must not be bypassed simply to force a simulator launch on an unstable machine.
+
+---
+
+# 8. Benchmark actual available performance
+
+After optimizing memory, perform bounded tests where safe.
+
+### Test A — Windows idle baseline
+
+Record memory and CPU usage before and after resource cleanup.
+
+### Test B — Headless Gazebo
+
+Run an existing lightweight, safe S00 simulation.
+
+Measure:
+
+- Windows remaining memory.
+- WSL memory.
+- Gazebo memory consumption.
+- CPU load.
+- Simulation real-time factor.
+- LiDAR scan rate.
+- Camera frame rate.
+- Runtime errors.
+
+### Test C — LiDAR + online SLAM
+
+If the environment is stable enough, run an existing safe sensor/SLAM configuration.
+
+Record update rates, memory use and message-processing warnings.
+
+Do not enable unsupported autonomous motion.
+
+### Test D — Gazebo GUI
+
+Run a lightweight graphical scenario.
+
+Check whether the robot renders and whether Windows remains responsive.
+
+### Test E — Gazebo + RViz
+
+Attempt this only if resources permit.
+
+If performance becomes poor, return to Gazebo-only mode.
+
+Do not risk a system crash merely to open both programs simultaneously.
+
+### Test F — Repeat launch
+
+Verify that closing one simulation and opening another does not leak memory or leave orphan processes.
+
+Measure memory recovery after shutdown.
+
+---
+
+# 9. Optimize CPU and GPU usage
+
+Inspect whether Gazebo inside WSL uses actual accelerated rendering.
+
+Determine whether OpenGL reports hardware acceleration through the available WSL graphics stack or software rendering.
+
+If software rendering is being used, investigate supported, reversible Gazebo/WSLg graphics configuration changes.
+
+Do not install or replace GPU drivers without explicit approval.
+
+Check whether unnecessary high-frequency sensor rendering is consuming CPU.
+
+Tune simulator performance only where physically reasonable and scientifically justified.
+
+Do not alter core safety checks, hide sensor faults, disable contact detection or replace realistic simulated measurements with oracle data.
+
+Use bounded build parallelism to avoid excessive RAM consumption.
+
+Prefer stable processing over maximum theoretical simulation speed.
+
+---
+
+# 10. Make memory management observable
+
+Create a concise resource report showing:
+
+- Applications and processes identified.
+- Processes gracefully closed.
+- Processes deliberately protected.
+- Windows memory before cleanup.
+- Windows memory after cleanup.
+- WSL memory before cleanup.
+- WSL memory after cleanup.
+- Any WSL configuration changes.
+- CPU/GPU status.
+- Headless Gazebo result.
+- GUI Gazebo result.
+- RAM and CPU bottlenecks remaining.
+
+Do not claim that a process was closed unless it actually exited.
+
+Do not claim RAM was recovered unless measured.
+
+If Windows reports high memory use even with no optional applications running, identify the underlying cause rather than repeatedly killing unrelated processes.
+
+---
+
+# 11. Final success conditions
+
+The task is successful when:
+
+1. Windows remains stable and responsive.
+2. The active Codex execution is preserved.
+3. Unnecessary project processes are cleaned up.
+4. Approved background applications are gracefully closed where safe.
+5. Available host memory is measurably improved where possible.
+6. WSL has a justified resource allocation.
+7. A safe headless Gazebo simulation can launch and complete.
+8. A Gazebo GUI demonstration works if resources permit.
+9. The one-click launchers perform the same cleanup automatically.
+10. Cleanup is repeatable and does not damage unrelated user work.
+
+If available physical memory cannot be increased sufficiently without compromising system stability, report that limitation and recommend the least disruptive practical remedy.
+
+Do not pretend that software cleanup can create additional physical RAM.
+
+---
+
+# 12. Important project boundaries
+
+This task is about making my existing laptop usable for robotics development.
+
+Do not:
+
+- Develop a new navigation algorithm.
+- Modify the Phase 6 predefined-map navigation behavior.
+- Enable unvalidated LiDAR autonomous movement.
+- Bypass the safety supervisor.
+- Remove the LiDAR readiness gate.
+- Change Arduino UNO Q firmware.
+- Begin the ToF or RGB-only branches.
+- Purchase software or hardware.
+- Upgrade Windows or GPU drivers.
+- Migrate to Oracle Cloud.
+
+Preserve all working project code and current Git history.
+
+Any helper-script changes must be tested, documented and committed safely to `feature/phase8c-lidar`.
+
+Do not force-push or merge into main.
+
+---
+
+# FINAL INSTRUCTION
+
+You are authorized to take the lead in managing **nonessential, safely removable Windows and WSL workloads** for the duration of the robotics simulation.
+
+The computer is currently intended primarily for Codex and the Autonomous Navigation Car project.
+
+Be proactive: inspect, identify, clean up, optimize, benchmark and integrate the resource-management procedure into the existing launchers.
+
+Do not ask me to manually perform routine resource management.
+
+However, protect essential Windows components, the current Codex session, unsaved data and unrelated active work.
+
+**The target result is a laptop that can reliably run Gazebo for this project with the maximum safely available resources, without repeated manual memory cleanup.**
+
+Give me the final measured RAM/CPU improvement, changes made, Gazebo test results, and any remaining hardware resource limitations.

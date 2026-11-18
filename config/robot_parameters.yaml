@@ -53,6 +53,22 @@ sensors:
     distortion_model: zero_distortion_provisional
     calibration_file: null
     calibration_note: CameraInfo is generated from the simulated pinhole FOV and image dimensions; this is not physical calibration.
+  pan_servo:
+    status: provisional_simulation_parameters_not_hardware_measured
+    model_assumption: hobby servo (SG90/MG90S class) panning the camera about Z
+    joint_name: camera_pan_joint
+    limit_rad: 1.5708 # +-90 deg
+    max_speed_radps: 4.0 # SG90 ~0.1 s/60 deg unloaded; slowed for stable video
+  ultrasonic:
+    status: provisional_simulation_parameters_not_hardware_measured
+    model_assumption: HC-SR04 class, fixed on the front bumper, facing forward
+    mount_xyz_m: [0.17, 0.0, -0.01] # relative to base_link
+    frame_id: ultrasonic_link
+    field_of_view_rad: 0.26 # ~15 deg beam
+    range_min_m: 0.02
+    range_max_m: 4.0
+    update_rate_hz: 15.0
+    distance_noise_stddev_m: 0.005
   imu:
     status: provisional_simulation_parameters_not_hardware_measured
     mount_xyz_m: [0.0, 0.0, 0.0]
@@ -69,6 +85,23 @@ sensors:
     linear_acceleration_bias_mean_mps2: 0.0
     linear_acceleration_bias_stddev_mps2: 0.0
     covariance_policy: ROS covariance diagonals reflect provisional SDF noise variances; they are not physically calibrated.
+  lidar:
+    status: provisional_simulation_parameters_not_hardware_measured
+    model_assumption: generic low-cost 360-degree planar scanner; not a purchased or selected hardware model
+    mount_xyz_m: [0.0, 0.0, 0.08]
+    mount_rpy_rad: [0.0, 0.0, 0.0]
+    frame_id: lidar_link
+    horizontal_samples: 360
+    scan_angle_min_rad: -3.141592653589793
+    scan_angle_max_rad: 3.141592653589793
+    update_rate_hz: 5.0
+    range_min_m: 0.12
+    range_max_m: 6.0
+    distance_noise_stddev_m: 0.01
+    missed_reading_probability: 0.005
+    invalid_reading_probability: 0.002
+    plane_height_above_ground_m: 0.16
+    scan_plane_limit: A single horizontal plane; low objects below the plane and overhead geometry are not guaranteed to be detected
 localization:
   status: provisional_known_start_not_hardware_measured
   known_start_map_pose_xyyaw: [0.0, 0.0, 0.0]

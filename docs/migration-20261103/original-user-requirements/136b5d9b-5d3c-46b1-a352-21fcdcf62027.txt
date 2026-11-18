@@ -1,0 +1,180 @@
+Continue my existing Autonomous Navigation Car project with **Phase 8 — REALISTIC RGB-Constrained Navigation, Local Traversability and Safe Stopping**.
+
+GitHub repository: https://github.com/Ashish200528/Autonomous-Navigation
+
+Local WSL workspace: `/home/ashish/AutonomousNavigationCar`
+
+Latest reviewed Phase 7 commit: `74661d71ef0f6a86f3ad37ac83a212611f953810`
+
+Phases 0–7 are implemented. Phase 6 successfully demonstrated ORACLE_REFERENCE Nav2 navigation. Phase 7 implemented `anc_perception` with RGB FREE/OCCUPIED/UNKNOWN classification and recorded PASS WITH LIMITS.
+
+**Critical Phase 7 limitations:** UNKNOWN covers approximately 81% of the image; occupied recall is about 26.7%; FREE evidence is confined to a 0.50–0.60 m ground-projection band; P7C1 produces all UNKNOWN. These limits must govern Phase 8 design.
+
+## Objective
+
+Connect the existing RGB perception system to safe robot behavior, without supplying the robot any hidden Gazebo geometry, oracle occupancy map, synthetic lidar, depth, or perfect localization.
+
+The objective is not to force successful goal navigation at any cost. It is to demonstrate that the robot can safely act on justified camera evidence and stop when safe movement cannot be established.
+
+## Task A — Baseline audit
+
+1. Inspect Git status, current source, master roadmap and Phase 7 report.
+2. Safely synchronize with GitHub without overwriting uncommitted changes.
+3. Rebuild the workspace and reproduce representative Phase 6 and Phase 7 tests.
+4. Verify the exact ROS input subscriptions, TF ownership, CameraInfo geometry, timestamps, health messages and outputs.
+5. Preserve the Phase 6 ORACLE_REFERENCE pipeline as an independently runnable benchmark.
+
+## Task B — Phase 8 feasibility gate
+
+Before implementing autonomous driving, evaluate whether the existing RGB perception provides adequate coverage and geometric information for safe motion.
+
+Measure:
+
+- Available visually supported free-space distance.
+- Camera mounting assumptions and observable floor region.
+- Perception latency and camera frame age.
+- Robot braking/stopping requirements at proposed simulation speeds.
+- Position-estimate drift and uncertainty.
+- Occupied and UNKNOWN observations that cannot be localized metrically.
+
+Compare reliable free-space visibility against stopping distance with an explicit safety margin. Do not treat a 0.50–0.60 m visual band as proof that an entire route is clear.
+
+If the existing camera orientation is unsuitable, you may implement a separately documented provisional simulation camera-pitch experiment and update the perception geometry consistently. Do not silently alter the reference baseline or pretend the changed configuration is measured hardware.
+
+If there is insufficient evidence for movement, the correct Phase 8 behavior is STOP or BLOCKED.
+
+## Task C — Conservative local traversability representation
+
+Create an `anc_realistic_navigation` package or an appropriately named equivalent.
+
+Implement a local, robot-relative representation of visual traversability.
+
+Use the explicit states:
+
+- FREE: supported by calibrated, geometrically valid image evidence.
+- OCCUPIED: supported by appropriately localized obstacle evidence.
+- UNKNOWN: unobserved or uncertain.
+
+If publishing `nav_msgs/OccupancyGrid`, preserve FREE=0, OCCUPIED=100, UNKNOWN=-1.
+
+Only project FREE image pixels onto metric ground-plane cells where camera geometry and assumptions justify that transformation.
+
+Never assign precise obstacle distances to arbitrary image pixels without defensible geometric evidence.
+
+Obstacle-like image regions without reliable metric localization must trigger conservative blocking or uncertainty handling rather than fabricated cell locations.
+
+Outside observed/validated areas, the map must remain UNKNOWN.
+
+Implement map aging, confidence handling and invalidation when image/pose inputs become stale.
+
+Do not use global world coordinates or scenario manifests as a hidden obstacle map.
+
+## Task D — Safe driving and control integration
+
+Build a separate REALISTIC navigation launch.
+
+Integrate:
+
+- Live RGB camera and CameraInfo.
+- Existing `anc_perception` image mask, confidence and health.
+- Wheel/IMU EKF localization.
+- Camera-derived local traversability.
+- A bounded navigation/controller interface.
+- A supervisory safe-stop state machine.
+
+Prefer using existing Nav2 components where appropriate, but do not force an unsafe integration if the local representation is insufficient.
+
+The robot must stop or refuse to move when:
+
+- Camera images are absent or stale.
+- Perception health is INVALID_UNKNOWN.
+- Required localization inputs are stale or unavailable.
+- Forward space cannot be justified as FREE.
+- An obstacle may lie within an unsafe stopping margin.
+- The controller or planner stops sending commands.
+
+Verify actual zero motor-command output and physical stopping in Gazebo, not just publication of a warning message.
+
+Avoid conflicting `/cmd_vel` publishers and ensure only one command path controls the simulated vehicle.
+
+## Task E — Controlled experiments
+
+Run tests in increasing difficulty:
+
+1. S00: stationary startup with no camera input — remain stopped.
+2. S00: short straight motion over camera-verified FREE space, only if the feasibility gate passes.
+3. S01: approaching an obstacle — slow/stop before unsafe contact.
+4. S02: unfamiliar geometric obstacles — classify and respond conservatively.
+5. S03: narrow passage — refuse unsafe clearance rather than forcing passage.
+6. S09: no-route situation — do not report success or bypass UNKNOWN.
+7. Camera dropout and stale timestamp during a commanded motion.
+8. Localization dropout or unacceptable uncertainty.
+9. Restart and recovery after a valid sensor feed returns.
+
+A STOP/BLOCKED outcome is acceptable where safe navigation is not demonstrable. Such cases must not be counted as successful goal navigation.
+
+Do not rely on a precomputed reference path, oracle map, or a geometry-derived route as a hidden driving input.
+
+## Task F — Quantitative verification
+
+Capture:
+
+- Distance actually traveled.
+- Final goal error if a goal is attempted.
+- Contact/collision events.
+- Minimum evaluator-only obstacle clearance.
+- Observed FREE/OCCUPIED/UNKNOWN fractions.
+- False-FREE and occupied-recall measurements.
+- Stopping distance and stop reaction delay.
+- Camera/perception/localization message freshness.
+- CPU, RAM, FPS and processing latency.
+- Planner/controller output and watchdog state.
+- Expected STOP versus actual stop outcomes.
+- Runs that fail because reliable geometry is unavailable.
+
+Use withheld Gazebo pose and obstacle geometry only in the test evaluator. They must never become runtime navigation inputs.
+
+Run bounded repeatable tests across documented scenario IDs and random seeds.
+
+## Task G — Architectural safeguards
+
+Keep ORACLE_REFERENCE and REALISTIC_RGB_ONLY completely separate.
+
+Do not quietly reuse the Phase 6 perfect occupancy grid in REALISTIC mode.
+
+Do not convert UNKNOWN to FREE or silently interpolate an unknown corridor into a traversable route.
+
+Do not assume RGB provides arbitrary metric depth.
+
+Do not hide the Phase 4 wheel-slip limitations.
+
+Do not modify the existing Arduino UNO Q application or transfer driving commands to physical hardware.
+
+Remain within WSL2's limited memory; favor headless Gazebo and lightweight algorithms.
+
+Avoid unnecessary system upgrades or large model downloads.
+
+## Deliverables and acceptance
+
+Provide:
+
+1. A documented Phase 8 feasibility assessment.
+2. A realistic sensor-constrained local traversability implementation, if physically/geometrically justified.
+3. A separate REALISTIC navigation launch and verified ROS topic contracts.
+4. A safe-stop supervisor and command-authority audit.
+5. Actual controlled robot-motion tests where justified.
+6. Sensor loss, UNKNOWN and obstruction stop tests.
+7. Quantitative JSON/CSV/log evidence, masks and trajectory plots.
+8. A comparison with Phase 6 ORACLE_REFERENCE navigation, clearly labeled.
+9. Updated roadmap status, README, documentation, evidence index and tests.
+10. Validated Git commits and a safe push to the repository.
+
+At the end, classify Phase 8 as **PASS, PASS WITH LIMITS, FAIL or BLOCKED**.
+
+Clearly distinguish successful perception, safe stopping, locally validated movement and actual goal-reaching navigation.
+
+If insufficient geometric information prevents safe motion, document the blocker and implement the stop-only baseline rather than fabricating a successful navigation demonstration.
+
+Continue autonomously through routine implementation and testing, asking for input only when permissions, consequential changes or genuine blockers require it.
+
+**Stop after Phase 8. Do not implement parking, hardware integration or later phases automatically.**

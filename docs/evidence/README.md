@@ -1,4 +1,4 @@
-# Phase 1 through Phase 8B evidence index
+# Phase 1 through Phase 8C evidence index
 
 Evidence below was captured from the E:-hosted Ubuntu-24.04 WSL distro. Phase 1 navigation used the packaged REFERENCE sensor profile. Phase 2/3/4 entity-state data appears only in test evaluators and is not an input to localization, navigation, or perception.
 
@@ -129,3 +129,22 @@ The aggregate result has zero false-FREE pixels among 465,242 evaluator-known oc
 ## Phase 8B camera geometry and stopping feasibility
 
 See [phase8b/README.md](phase8b/README.md) for the evidence index and [phase8b/phase8b-report.md](phase8b/phase8b-report.md) for candidate metrics and the BLOCKED motion-gate decision. The isolated stop-test details and calculation are recorded in [phase8b/motion-gate.json](phase8b/motion-gate.json). The Phase 8 safe-stop supervisor stayed active; no autonomous RGB navigation was run.
+
+## Phase 8C Branch 1 RGB + 2D LiDAR
+
+See [phase8c/lidar/README.md](phase8c/lidar/README.md) for S00 sensor/map measurements, graph audits, safety gate, Stage B/C faults, regressions and interpretation. Stage D obstacle avoidance and Nav2 goals were not run; angular speed remains zero.
+
+Phase 8C includes the final build, 24 unit tests, Phase 5/6/7/8 regressions, fresh Phase 3/4 records, Phase 8 zero-command run, Phase 8B stopping repeat, and sensor/fault/motion JSON and logs. Development failures and final retries are both retained; only named final results count as accepted.
+
+
+## Phase 8C remaining LiDAR development
+
+Stage report/status matrix: docs/phase8c-stage-results.md. Hardware plan: docs/phase8c-hardware-transfer.md. Operator guide: docs/phase8c-lidar-run-guide.md.
+
+- Stage 1 calibration and no-motion clearance probes: phase8c/lidar/stage1-rotation-trials-retry.json and stage1-s00-near-wall-gate.json / stage1-s01-near-box-gate.json / stage1-s03-constriction-gate.json.
+- Stage 2 stationary map: phase8c/lidar/stage2-s00-stationary-slam-tuned.json and stage2-s00-stationary-slam-map.pgm/.yaml/.png.
+- Stage 5 proposal tests: phase8c/lidar/stage5-parking-controller-tests.log.
+- Stage 6 aggregate JSON/CSV and plots: phase8c/lidar/stage6-comparative-summary.json, stage6-comparison.csv, stage6-comparison.png and stage6-resource-observations.png.
+- Stage 8 headless report: live-demo-2026-11-02/phase8c-live-demo-report.md. MP4 remains local under existing ignore rule.
+
+- Final verification: phase8c/lidar/final-common-tests-2026-11-02.log, final-lidar-model-tests-2026-11-02.log, final-parking-tests-2026-11-02.log and final-colcon-build-retry-2026-11-02.log.

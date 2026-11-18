@@ -1,0 +1,54 @@
+      1       1 /sbin/init
+      2       0 /init
+      8       0 plan9 --control-socket 7 --log-level 4 --server-fd 8 --pipe-fd 10 --log-truncate
+     47      47 /usr/lib/systemd/systemd-journald
+     97      97 /usr/lib/systemd/systemd-udevd
+    102      97 (udev-worker)
+    103      97 (udev-worker)
+    104      97 (udev-worker)
+    105      97 (udev-worker)
+    106      97 (udev-worker)
+    107      97 (udev-worker)
+    108      97 (udev-worker)
+    109      97 (udev-worker)
+    110      97 (udev-worker)
+    111      97 (udev-worker)
+    112      97 (udev-worker)
+    113      97 (udev-worker)
+    114      97 (udev-worker)
+    115      97 (udev-worker)
+    116      97 (udev-worker)
+    117      97 (udev-worker)
+    118      97 (udev-worker)
+    119      97 (udev-worker)
+    120      97 (udev-worker)
+    121      97 (udev-worker)
+    122      97 (udev-worker)
+    123      97 (udev-worker)
+    124      97 (udev-worker)
+    125      97 (udev-worker)
+    126      97 (udev-worker)
+    127      97 (udev-worker)
+    128      97 (udev-worker)
+    156     156 /usr/lib/systemd/systemd-resolved
+    157     157 /usr/lib/systemd/systemd-timesyncd
+    166     166 /usr/sbin/cron -f -P
+    167     167 @dbus-daemon --system --address=systemd: --nofork --nopidfile --systemd-activation --syslog-only
+    171     171 /usr/bin/lttng-sessiond
+    175     175 /usr/lib/systemd/systemd-logind
+    177     177 /usr/libexec/wsl-pro-service
+    179     179 /usr/sbin/rsyslogd -n -iNONE
+    185     171 /usr/bin/lttng-sessiond
+    214     214 /sbin/agetty -o -p -- \u --noclear --keep-baud - 115200,38400,9600 vt220
+    219     219 /usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal
+    226     226 /sbin/agetty -o -p -- \u --noclear - linux
+    271     271 /usr/lib/systemd/systemd-timedated
+    325     325 /bin/login -f
+    356     356 /usr/lib/systemd/systemd --user
+    357     356 (sd-pam)
+    371     371 -bash
+    405     405 /init
+    406     405 /init
+    407     407 setsid --wait bash /mnt/c/Users/ajayk/Desktop/AutonomousCar_OneClick_Tester/tools/wsl_test_runner.sh --run 20261102T184143Z_S00_42f8c896 /mnt/c/Users/ajayk/Desktop/AutonomousCar_OneClick_Tester/runs/20261102T184143Z_S00_42f8c896 /mnt/c/Users/ajayk/Desktop/AutonomousCar_OneClick_Tester/runs/20261102T184143Z_S00_42f8c896/config/test_settings.json /home/ashish/AutonomousNavigationCar 26112 true 2026-11-02T18:41:41.3292800Z /mnt/c/Users/ajayk/Desktop/AutonomousCar_OneClick_Tester/latest
+    408     408 python3 /mnt/c/Users/ajayk/Desktop/AutonomousCar_OneClick_Tester/tools/wsl_orchestrator.py run 20261102T184143Z_S00_42f8c896 /mnt/c/Users/ajayk/Desktop/AutonomousCar_OneClick_Tester/runs/20261102T184143Z_S00_42f8c896 /mnt/c/Users/ajayk/Desktop/AutonomousCar_OneClick_Tester/runs/20261102T184143Z_S00_42f8c896/config/test_settings.json /home/ashish/AutonomousNavigationCar 26112 true 2026-11-02T18:41:41.3292800Z /mnt/c/Users/ajayk/Desktop/AutonomousCar_OneClick_Tester/latest
+    487     487 ps -eo pid,pgid,args --no-headers
